@@ -6,11 +6,11 @@ SET(_HEADERS
 	SDADriver.h)
 
 
-add_library (SDALib "SDADriver.h" "SDADriver.cpp" "AIData.h")
+ADD_LIBRARY (SDALib "SDADriver.h" "SDADriver.cpp" "SDAData.h" "SDAAction.h" "SDAAction.cpp")
 
 
-find_package(IPCLIB HINTS "/libraries")
-find_library(IPCLIB_LIBRARY HINTS ${IPCLIB_LIB_DIR} NAMES IPCLib)
+FIND_PACKAGE(IPCLIB HINTS "/libraries")
+FIND_LIBRARY(IPCLIB_LIBRARY HINTS ${IPCLIB_LIB_DIR} NAMES IPCLib)
 
 IF(IPCLIB_FOUND)
 	SET(HAVE_IPCLIB 1)
@@ -26,5 +26,9 @@ ELSE(IPCLIB_FOUND)
 	MESSAGE(FATAL_ERROR "Cannot find IPCLib libraries")
 ENDIF(IPCLIB_FOUND)
 
-target_link_libraries(SDALib IPCLib)
-target_include_directories(SDALib PUBLIC ${IPCLIB_INCLUDE_DIR}) 
+SET(Boost_INCLUDE_DIR "${IPCLIB_INCLUDE_DIR}")
+
+FIND_PACKAGE(msgpack HINTS "/libraries")
+TARGET_LINK_LIBRARIES(SDALib msgpackc-cxx)
+
+TARGET_INCLUDE_DIRECTORIES(SDALib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Boost_INCLUDE_DIR}) 

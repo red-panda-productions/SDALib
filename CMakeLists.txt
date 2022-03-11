@@ -4,6 +4,8 @@
 
 cmake_minimum_required (VERSION 3.8)
 
+CMAKE_POLICY(SET CMP0012 NEW)
+CMAKE_POLICY(SET CMP0074 NEW)
 cmake_policy(SET CMP0079 NEW)
 
 project("SDALib")
