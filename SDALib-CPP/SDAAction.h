@@ -1,5 +1,6 @@
 #pragma once
-
+#include <vector>
+#include <string>
 /// @brief Struct for the actions the AI can do
 struct SDAAction
 {
@@ -10,4 +11,8 @@ public:
 	float Acceleration;
 	float Brake;
 	float Clutch;
+
+	void Serialize(char* p_buffer) const;
+
+	static void GetOrder(std::vector<std::string>& p_order);
 };
