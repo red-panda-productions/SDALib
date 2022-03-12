@@ -21,11 +21,11 @@
 	public: \
 		type getter_name(){return name;}
 
-// these directives pre-compute what is needed for the data class
+// these macros pre-compute what is needed for the SDAData class
 #ifdef SDA_SPEED_DATA
 #define SDA_SPEED_UNPACK m_speed = std::stof(resultVec[i++]);
 #define SDA_SPEED_GETTER SDADATA_GETTER(float,m_speed,Speed)
-#define SDA_SPEED_ORDER p_order.push_back("Speed");
+#define SDA_SPEED_ORDER p_order.push_back("Speed"); s_itemCount++;
 #else
 #define SDA_SPEED_UNPACK
 #define SDA_SPEED_GETTER
@@ -35,7 +35,7 @@
 #ifdef SDA_TOP_SPEED_DATA
 #define SDA_TOP_SPEED_UNPACK m_topSpeed = std::stof(resultVec[i++]);
 #define SDA_TOP_SPEED_GETTER SDADATA_GETTER(float,m_topSpeed,TopSpeed)
-#define SDA_TOP_SPEED_ORDER p_order.push_back("TopSpeed");
+#define SDA_TOP_SPEED_ORDER p_order.push_back("TopSpeed"); s_itemCount++;
 #else
 #define SDA_TOP_SPEED_UNPACK
 #define SDA_TOP_SPEED_GETTER
@@ -45,7 +45,7 @@
 #ifdef SDA_STEER_CMD_DATA
 #define SDA_STEER_CMD_UNPACK m_steerCmd = std::stof(resultVec[i++]);
 #define SDA_STEER_CMD_GETTER SDADATA_GETTER(float,m_steerCmd,SteerCmd)
-#define SDA_STEER_CMD_ORDER p_order.push_back("SteerCmd");
+#define SDA_STEER_CMD_ORDER p_order.push_back("SteerCmd"); s_itemCount++;
 #else
 #define SDA_STEER_CMD_UNPACK
 #define SDA_STEER_CMD_GETTER
@@ -55,7 +55,7 @@
 #ifdef SDA_ACCEL_CMD_DATA
 #define SDA_ACCEL_CMD_UNPACK m_accelCmd = std::stof(resultVec[i++]);
 #define SDA_ACCEL_CMD_GETTER SDADATA_GETTER(float,m_accelCmd,AccelCmd)
-#define SDA_ACCEL_CMD_ORDER p_order.push_back("AccelCmd");
+#define SDA_ACCEL_CMD_ORDER p_order.push_back("AccelCmd"); s_itemCount++;
 #else
 #define SDA_ACCEL_CMD_UNPACK
 #define SDA_ACCEL_CMD_GETTER
@@ -65,7 +65,7 @@
 #ifdef SDA_BRAKE_CMD_DATA
 #define SDA_BRAKE_CMD_UNPACK m_brakeCmd = std::stof(resultVec[i++]);
 #define SDA_BRAKE_CMD_GETTER SDADATA_GETTER(float,m_brakeCmd,BrakeCmd)
-#define SDA_BRAKE_CMD_ORDER p_order.push_back("BrakeCmd");
+#define SDA_BRAKE_CMD_ORDER p_order.push_back("BrakeCmd"); s_itemCount++;
 #else
 #define SDA_BRAKE_CMD_UNPACK
 #define SDA_BRAKE_CMD_GETTER
@@ -75,7 +75,7 @@
 #ifdef SDA_CLUTCH_CMD_DATA
 #define SDA_CLUTCH_CMD_UNPACK m_clutchCmd = std::stof(resultVec[i++]);
 #define SDA_CLUTCH_CMD_GETTER SDADATA_GETTER(float,m_clutchCmd,ClutchCmd)
-#define SDA_CLUTCH_CMD_ORDER p_order.push_back("CLUTCHCmd");
+#define SDA_CLUTCH_CMD_ORDER p_order.push_back("CLUTCHCmd"); s_itemCount++;
 #else
 #define SDA_CLUTCH_CMD_UNPACK
 #define SDA_CLUTCH_CMD_GETTER
@@ -85,7 +85,7 @@
 #ifdef SDA_TIME_LAST_STEER_DATA
 #define SDA_TIME_LAST_STEER_UNPACK m_timeLastSteer = std::stof(resultVec[i++]);
 #define SDA_TIME_LAST_STEER_GETTER SDADATA_GETTER(float,m_timeLastSteer,TimeLastSteer)
-#define SDA_TIME_LAST_STEER_ORDER p_order.push_back("TIME_LAST_STEERCmd");
+#define SDA_TIME_LAST_STEER_ORDER p_order.push_back("TIME_LAST_STEERCmd"); s_itemCount++;
 #else
 #define SDA_TIME_LAST_STEER_UNPACK
 #define SDA_TIME_LAST_STEER_GETTER
@@ -95,7 +95,7 @@
 #ifdef SDA_OFFROAD_DATA
 #define SDA_OFFROAD_UNPACK std::istringstream(resultVec[i++]) >> m_offroad;
 #define SDA_OFFROAD_GETTER SDADATA_GETTER(bool,m_offroad,Offroad)
-#define SDA_OFFROAD_ORDER p_order.push_back("OFFROADCmd");
+#define SDA_OFFROAD_ORDER p_order.push_back("OFFROADCmd"); s_itemCount++;
 #else
 #define SDA_OFFROAD_UNPACK
 #define SDA_OFFROAD_GETTER
@@ -105,7 +105,7 @@
 #ifdef SDA_TIME_OF_DAY_DATA
 #define SDA_TIME_OF_DAY_UNPACK m_timeOfDay = std::stof(resultVec[i++]);
 #define SDA_TIME_OF_DAY_GETTER SDADATA_GETTER(float,m_timeOfDay,TimeOfDay)
-#define SDA_TIME_OF_DAY_ORDER p_order.push_back("TIME_OF_DAYCmd");
+#define SDA_TIME_OF_DAY_ORDER p_order.push_back("TIME_OF_DAYCmd"); s_itemCount++;
 #else
 #define SDA_TIME_OF_DAY_UNPACK
 #define SDA_TIME_OF_DAY_GETTER
@@ -115,7 +115,7 @@
 #ifdef SDA_CLOUDS_DATA
 #define SDA_CLOUDS_UNPACK m_clouds = std::stof(resultVec[i++]);
 #define SDA_CLOUDS_GETTER SDADATA_GETTER(float,m_clouds,Clouds)
-#define SDA_CLOUDS_ORDER p_order.push_back("CLOUDSCmd");
+#define SDA_CLOUDS_ORDER p_order.push_back("CLOUDSCmd"); s_itemCount++;
 #else
 #define SDA_CLOUDS_UNPACK
 #define SDA_CLOUDS_GETTER

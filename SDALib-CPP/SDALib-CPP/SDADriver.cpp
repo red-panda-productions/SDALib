@@ -48,7 +48,7 @@ void SDADriver::Update()
 
 	const SDAAction action = UpdateAI(tickData);
 
-	action.Serialize(m_buffer);
+	action.Serialize(m_buffer, SDA_BUFFER_SIZE);
 
 	m_client.SendData(m_buffer, SDA_BUFFER_SIZE);
 }
@@ -63,11 +63,14 @@ void SDADriver::SetupSocket()
 	SDAData::GetOrder(order);
 	order.push_back("ACTIONORDER");
 	SDAAction::GetOrder(order);
+
 	m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE); // receive reply
 
-	msgpack::pack(m_buffer, order);
-	m_client.SendData(m_buffer, SDA_BUFFER_SIZE);
+	msgpack::sbuffer sbuffer;
+	msgpack::pack(sbuffer, order);
+	strcpy_s(m_buffer, SDA_BUFFER_SIZE, sbuffer.data());
 
+	m_client.SendData(m_buffer, SDA_BUFFER_SIZE);
 	m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);
 
 	msgpack::unpacked msg;

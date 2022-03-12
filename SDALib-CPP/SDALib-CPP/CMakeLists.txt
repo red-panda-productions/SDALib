@@ -6,7 +6,7 @@ SET(_HEADERS
 	SDADriver.h)
 
 
-ADD_LIBRARY (SDALib "SDADriver.h" "SDADriver.cpp" "SDAData.h" "SDAAction.h" "SDAAction.cpp")
+ADD_LIBRARY (SDALib "SDADriver.h" "SDADriver.cpp" "SDAData.h" "SDAAction.h" )
 
 
 FIND_PACKAGE(IPCLIB HINTS "/libraries")
