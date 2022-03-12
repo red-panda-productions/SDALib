@@ -28,6 +28,21 @@
 #define SDA_BRAKE_ORDER
 #endif
 
+/// @brief				   Copies a msgpack buffer
+/// @param  sbuffer		   The msgpack buffer
+/// @param  p_destination  The destination buffer
+inline void sbufferCopy(const msgpack::sbuffer& sbuffer, char* p_destination, int p_destinationSize)
+{
+	int size = sbuffer.size();
+	assert(size < p_destinationSize);
+	const char* newData = sbuffer.data();
+	for (int i = 0; i < size; i++)
+	{
+		p_destination[i] = newData[i];
+	}
+	p_destination[size] = '\0';
+}
+
 /// @brief Struct for the actions the AI can do
 struct SDALIB_EXPORT SDAAction
 {
@@ -44,12 +59,7 @@ public:
 		msgpack::sbuffer sbuffer;
 		msgpack::pack(sbuffer,data);
 
-		int size = sbuffer.size();
-		char* newData = sbuffer.data();
-		for(int i = 0; i < size; i++)
-		{
-			p_buffer[i] = newData[i];
-		}
+		sbufferCopy(sbuffer, p_buffer, p_bufferSize);
 	}
 
 	static void GetOrder(std::vector<std::string>& p_order)

@@ -1,11 +1,11 @@
 #pragma once
 #include "ClientSocket.h"
-#include "SDAData.h"
-#include "SDAAction.h"
+#include "SDAData.hpp"
+#include "SDAAction.hpp"
 #include "msgpack.hpp"
 #include "sdalib_export.h"
 
-#define SDA_BUFFER_SIZE 512
+#define SDA_BUFFER_SIZE 8192
 
 /// @brief The driver class from which the AI should inherit
 class SDALIB_EXPORT SDADriver
@@ -18,7 +18,7 @@ public:
 		Loop();
 	}
 protected:
-	SDADriver()
+	SDADriver(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888) : m_client(p_ip, p_port)
 	{
 		for (int i = 0; i < SDA_BUFFER_SIZE; i++)
 		{
@@ -40,9 +40,11 @@ protected:
 
 private:
 
-	void Update()
+	bool Update()
 	{
 		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE); // can change to GetData
+
+		if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
 		SDAData tickData(m_buffer, SDA_BUFFER_SIZE);
 
@@ -51,14 +53,17 @@ private:
 		action.Serialize(m_buffer, SDA_BUFFER_SIZE);
 
 		m_client.SendData(m_buffer, SDA_BUFFER_SIZE);
+		return true;
 	}
 
 	void Loop()
 	{
-		while (true)
+		bool run = true;
+		while (run)
 		{
-			Update();
+			run = Update();
 		}
+		m_client.Disconnect();
 	}
 
 	void SetupSocket()
@@ -66,24 +71,23 @@ private:
 		m_client.SendData("AI ACTIVE", 10);
 
 		std::vector<std::string> order;
-		order.push_back("DATAORDER");
+		order.push_back("dataorder");
 		SDAData::GetOrder(order);
-		order.push_back("ACTIONORDER");
+		order.push_back("actionorder");
 		SDAAction::GetOrder(order);
-
-		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE); // receive reply
-
 		msgpack::sbuffer sbuffer;
 		msgpack::pack(sbuffer, order);
-		strcpy_s(m_buffer, SDA_BUFFER_SIZE, sbuffer.data());
+
+		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE); // receive reply
+		if (m_buffer[0] != 'O' && m_buffer[1] != 'K') throw std::exception("Server send wrong reply");
+
+		sbufferCopy(sbuffer, m_buffer, SDA_BUFFER_SIZE);
 
 		m_client.SendData(m_buffer, SDA_BUFFER_SIZE);
 		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);
 
-		msgpack::unpacked msg;
-		msgpack::unpack(msg, m_buffer, SDA_BUFFER_SIZE);
 		std::vector<std::string> resultVec;
-		msg->convert(resultVec);
+		GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec); // CRASH
 
 		const int amountOfTests = std::stoi(resultVec[0]); //serialize test amount from server
 

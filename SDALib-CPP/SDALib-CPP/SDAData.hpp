@@ -190,19 +190,28 @@
 #define SDA_RAIN_ORDER
 #endif
 
+/// @brief				 Retrieves the msgpack vector
+/// @param  p_buffer	 The character buffer
+///	@param  p_bufferSize The buffer size
+/// @param  p_vector	 The result vector
+inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std::string>& p_vector)
+{
+	msgpack::unpacked msg;
+	msgpack::unpack(msg, p_buffer, p_bufferSize);
+	msg->convert(p_vector);
+}
+
 /// @brief The data class that contains the data from the simulation. You can ONLY have 1 version of this
 ///	class in your program
 struct SDALIB_EXPORT SDAData
 {
 public:
-	SDAData(const char* data, int dataSize)
+	SDAData(const char* p_buffer, int p_bufferSize)
 	{
-		msgpack::unpacked msg;
-		msgpack::unpack(msg, data, dataSize);
 		std::vector<std::string> resultVec;
-		msg->convert(resultVec);
-		int i = 0;
+		GetMsgVector(p_buffer, p_bufferSize, resultVec);
 
+		int i = 0;
 		SDA_SPEED_UNPACK
 		SDA_TOP_SPEED_UNPACK
 		SDA_GEAR_UNPACK

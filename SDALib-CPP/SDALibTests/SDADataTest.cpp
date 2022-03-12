@@ -1,23 +1,5 @@
-#define SDA_RAIN_DATA
-#define SDA_TO_MIDDLE_DATA
-#define SDA_TO_RIGHT_DATA
-#define SDA_TO_LEFT_DATA
-#define SDA_TO_START_DATA
-#define SDA_SPEED_DATA
-#define SDA_TOP_SPEED_DATA
-#define SDA_GEAR_DATA
-#define SDA_HEADLIGHTS_DATA
-#define SDA_STEER_CMD_DATA
-#define SDA_ACCEL_CMD_DATA
-#define SDA_BRAKE_CMD_DATA
-#define SDA_CLUTCH_CMD_DATA
-#define SDA_TIME_LAST_STEER
-#define SDA_OFFROAD_DATA
-#define SDA_TIME_OF_DAY_DATA
-#define SDA_CLOUDS_DATA
-
-#include "SDAData.hpp"
-
+#include "Mocks/SDADataMock.h"
+#include "Mocks/SDAActionMock.h"
 #include <gtest/gtest.h>
 #include "msgpack.hpp"
 #include <string>
@@ -42,8 +24,6 @@ TEST(FullDataTests,FullDataTest)
 	float clouds = 49;
 	float rain = 69;
 
-
-
 	std::string data[] = {
 		std::to_string(speed),
 		std::to_string(topspeed),
@@ -62,10 +42,13 @@ TEST(FullDataTests,FullDataTest)
 		std::to_string(clouds),
 		std::to_string(rain)
 	};
-	msgpack::sbuffer buffer;
-	msgpack::pack(buffer, data);
+	msgpack::sbuffer sbuffer;
+	msgpack::pack(sbuffer, data);
 
-	SDAData r_data(buffer.data(), buffer.size());
+	char buffer[512];
+	sbufferCopy(sbuffer, buffer, 512);
+
+	SDAData r_data(buffer, 512);
 	ASSERT_ALMOST_EQ(speed, r_data.Speed());
 	ASSERT_ALMOST_EQ(topspeed, r_data.TopSpeed());
 	ASSERT_ALMOST_EQ(gear, r_data.Gear());
