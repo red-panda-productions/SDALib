@@ -13,7 +13,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(
-  SDATests "SDADataTest.cpp"   "SDAActionTest.cpp" "Utils.h" "Source1.cpp")
+  SDATests "SDADataTest.cpp"   "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp")
 target_link_libraries(
   SDATests
   SDALib
