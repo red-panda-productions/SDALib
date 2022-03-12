@@ -29,6 +29,7 @@
 *.la
 *.a
 *.lib
+!libraries/lib/IPCLib.lib
 
 # Executables
 *.exe
