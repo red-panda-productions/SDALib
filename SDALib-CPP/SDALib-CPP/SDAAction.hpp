@@ -1,6 +1,8 @@
 #pragma once
+#include "msgpack.hpp"
 #include <vector>
 #include <string>
+#include "sdalib_export.h"
 
 //#define SDA_STEER_ACTION
 //#define SDA_BRAKE_ACTION
@@ -8,8 +10,8 @@
 // these macros pre-compute what is needed for the SDAAction class
 #ifdef SDA_STEER_ACTION
 #define SDA_STEER_VAR float Steer = 0;
-#define SDA_STEER_PACK data.push_back(Steer);
-#define SDA_STEER_ORDER p_order.push_back("Steer"); s_itemCount++;
+#define SDA_STEER_PACK data.push_back(std::to_string(Steer));
+#define SDA_STEER_ORDER p_order.push_back("Steer");
 #else
 #define SDA_STEER_VAR
 #define SDA_STEER_PACK
@@ -18,8 +20,8 @@
 
 #ifdef SDA_BRAKE_ACTION
 #define SDA_BRAKE_VAR float Brake = 0;
-#define SDA_BRAKE_PACK data.push_back(Brake);
-#define SDA_BRAKE_ORDER p_order.push_back("Brake"); s_itemCount++;
+#define SDA_BRAKE_PACK data.push_back(std::to_string(Brake));
+#define SDA_BRAKE_ORDER p_order.push_back("Brake");
 #else
 #define SDA_BRAKE_VAR
 #define SDA_BRAKE_PACK
@@ -27,7 +29,7 @@
 #endif
 
 /// @brief Struct for the actions the AI can do
-struct SDAAction
+struct SDALIB_EXPORT SDAAction
 {
 public:
 	SDA_STEER_VAR
@@ -35,22 +37,24 @@ public:
 
 	void Serialize(char* p_buffer, int p_bufferSize) const
 	{
-		if (s_itemCount == 0) return;
-		std::vector<float> data(s_itemCount);
+		std::vector<std::string> data;
 		SDA_STEER_PACK
 		SDA_BRAKE_PACK
 
 		msgpack::sbuffer sbuffer;
 		msgpack::pack(sbuffer,data);
-		strcpy_s(p_buffer, p_bufferSize,sbuffer.data());
+
+		int size = sbuffer.size();
+		char* newData = sbuffer.data();
+		for(int i = 0; i < size; i++)
+		{
+			p_buffer[i] = newData[i];
+		}
 	}
 
 	static void GetOrder(std::vector<std::string>& p_order)
 	{
-		s_itemCount = 0;
 		SDA_STEER_ORDER
 		SDA_BRAKE_ORDER
 	}
-private:
-	static int s_itemCount;
 };
