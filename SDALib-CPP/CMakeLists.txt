@@ -1,34 +1,15 @@
-﻿
-SET(_SOURCES 
-	SDADriver.cpp)
+﻿# CMakeList.txt : Top-level CMake project file, do global configuration
+# and include sub-projects here.
+#
 
-SET(_HEADERS
-	SDADriver.h)
+cmake_minimum_required (VERSION 3.8)
 
+CMAKE_POLICY(SET CMP0012 NEW)
+CMAKE_POLICY(SET CMP0074 NEW)
+cmake_policy(SET CMP0079 NEW)
 
-ADD_LIBRARY (SDALib "SDADriver.h" "SDADriver.cpp" "SDAData.h" "SDAAction.h" "SDAAction.cpp")
+project("SDALib")
 
-
-FIND_PACKAGE(IPCLIB HINTS "/libraries")
-FIND_LIBRARY(IPCLIB_LIBRARY HINTS ${IPCLIB_LIB_DIR} NAMES IPCLib)
-
-IF(IPCLIB_FOUND)
-	SET(HAVE_IPCLIB 1)
-	MESSAGE(STATUS "Looking for library IPCLib - found")
-ELSE(IPCLIB_FOUND)
-	MESSAGE(STATUS "Looking for library IPCLib - NOT found")
-ENDIF(IPCLIB_FOUND)
-
-
-IF(IPCLIB_FOUND)
-	TARGET_LINK_LIBRARIES(SDALib ${IPCLIB_LIBRARY})
-ELSE(IPCLIB_FOUND)
-	MESSAGE(FATAL_ERROR "Cannot find IPCLib libraries")
-ENDIF(IPCLIB_FOUND)
-
-SET(Boost_INCLUDE_DIR "${IPCLIB_INCLUDE_DIR}")
-
-FIND_PACKAGE(msgpack HINTS "/libraries")
-TARGET_LINK_LIBRARIES(SDALib msgpackc-cxx)
-
-TARGET_INCLUDE_DIRECTORIES(SDALib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Boost_INCLUDE_DIR}) 
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}../../libraries")
+# Include sub-projects.
+add_subdirectory ("SDALib-CPP")
