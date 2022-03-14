@@ -29,14 +29,14 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Configure CMake
-      run: cmake -S ${{github.workspace}} -B ${{runner.workspace}}/build
+      run: cmake -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/SDALib-CPP/build
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{runner.workspace}}/SDALib-CPP/build
       run: cmake --build .
 
     - name: Test
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{runner.workspace}}/SDALib-CPP/build
       run: ctest -V
 
     - name: Upload test results
@@ -44,4 +44,4 @@ jobs:
       if: failure()
       with:
         name: test_results_xml
-        path: ${{runner.workspace}}/build/SDATests/test-results/**/*.xml
+        path: ${{runner.workspace}}/SDALib-CPP/build/SDATests/test-results/**/*.xml
