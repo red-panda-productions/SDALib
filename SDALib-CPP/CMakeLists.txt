@@ -33,8 +33,8 @@ ELSE(msgpack_FOUND)
 ENDIF(msgpack_FOUND)
 
 
-
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}../../libraries")
+MESSAGE(STATUS "${CMAKE_CURRENT_LIST_DIR}")
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}../../libraries" "${CMAKE_CURRENT_LIST_DIR}../libraries")
 # Include sub-projects.
 add_subdirectory ("SDALib-CPP")
 add_subdirectory ("SDALibTests")
