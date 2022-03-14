@@ -4,6 +4,7 @@
 #include "SDADriver.hpp"
 
 
+/// @brief A driver mock
 class SDADriverMock : public SDADriver
 {
 public:

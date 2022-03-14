@@ -74,9 +74,9 @@ private:
 		m_client.SendData("AI ACTIVE", 10);
 
 		std::vector<std::string> order;
-		order.push_back("dataorder");
+		order.push_back("DATAORDER");
 		SDAData::GetOrder(order);
-		order.push_back("actionorder");
+		order.push_back("ACTIONORDER");
 		SDAAction::GetOrder(order);
 		msgpack::sbuffer sbuffer;
 		msgpack::pack(sbuffer, order);

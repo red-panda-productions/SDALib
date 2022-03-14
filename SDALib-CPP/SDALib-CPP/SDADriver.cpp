@@ -1,5 +1,5 @@
 #include "SDADriver.hpp"
-// needed to create .lib file
+// .cpp needed to create .lib file
 
 /// @brief		   Default constructor of SDA driver
 /// @param  p_ip   The server ip

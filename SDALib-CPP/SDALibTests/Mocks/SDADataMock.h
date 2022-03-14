@@ -16,4 +16,5 @@
 #define SDA_TIME_OF_DAY_DATA
 #define SDA_CLOUDS_DATA
 
+// a data class that includes all data members
 #include "SDAData.hpp"

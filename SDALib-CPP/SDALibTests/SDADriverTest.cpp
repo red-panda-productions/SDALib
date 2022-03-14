@@ -7,7 +7,7 @@
 
 #define TEST_BUFFER_SIZE 8192
 
-/// @brief Runs a mock driver
+/// @brief Runs a mock driver as the test needs to run in parallel to this
 void DriverSide()
 {
 	SDADriverMock driver;
@@ -19,7 +19,7 @@ void DriverSide()
 void TestOrder(std::vector<std::string> p_order)
 {
 	ASSERT_EQ(p_order.size(), 20);
-	ASSERT_EQ(p_order[0], "dataorder");
+	ASSERT_EQ(p_order[0], "DATAORDER");
 	ASSERT_EQ(p_order[1], "Speed");
 	ASSERT_EQ(p_order[2], "TopSpeed");
 	ASSERT_EQ(p_order[3], "Gear");
@@ -36,11 +36,12 @@ void TestOrder(std::vector<std::string> p_order)
 	ASSERT_EQ(p_order[14], "TimeOfDay");
 	ASSERT_EQ(p_order[15], "Clouds");
 	ASSERT_EQ(p_order[16], "Rain");
-	ASSERT_EQ(p_order[17], "actionorder");
+	ASSERT_EQ(p_order[17], "ACTIONORDER");
 	ASSERT_EQ(p_order[18], "Steer");
 	ASSERT_EQ(p_order[19], "Brake");
 }
 
+/// @brief Tests a full session with a server
 TEST(DriverTests, DriverTest)
 {
 	ServerSocket server;
