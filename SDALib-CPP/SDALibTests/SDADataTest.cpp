@@ -5,6 +5,7 @@
 #include <string>
 #include "Utils.h"
 
+/// @brief Tests if Deserialization works
 TEST(FullDataTests,FullDataTest)
 {
 	float speed = 2.0f;

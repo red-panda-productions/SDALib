@@ -5,7 +5,7 @@
 #include <vector>
 #include "Utils.h"
 
-
+/// @brief Tests if Serialization works
 TEST(FullActionTests,FullActionTest)
 {
 	SDAAction action;
