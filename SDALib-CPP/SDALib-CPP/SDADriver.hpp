@@ -5,7 +5,7 @@
 #include "msgpack.hpp"
 #include "sdalib_export.h"
 
-#define SDA_BUFFER_SIZE 8192
+#define SDA_BUFFER_SIZE 512
 
 /// @brief The driver class from which the AI should inherit
 class SDALIB_EXPORT SDADriver
