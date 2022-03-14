@@ -28,14 +28,15 @@
 #define SDA_BRAKE_ORDER
 #endif
 
-/// @brief				   Copies a msgpack buffer
-/// @param  sbuffer		   The msgpack buffer
-/// @param  p_destination  The destination buffer
-inline void sbufferCopy(const msgpack::sbuffer& sbuffer, char* p_destination, int p_destinationSize)
+/// @brief				      Copies a msgpack buffer
+/// @param  p_sbuffer		  The msgpack buffer
+/// @param  p_destination     The destination buffer
+///	@param  p_destinationSize The size of the destination buffer
+inline void sbufferCopy(const msgpack::sbuffer& p_sbuffer, char* p_destination, int p_destinationSize)
 {
-	int size = sbuffer.size();
+	int size = p_sbuffer.size();
 	assert(size < p_destinationSize);
-	const char* newData = sbuffer.data();
+	const char* newData = p_sbuffer.data();
 	for (int i = 0; i < size; i++)
 	{
 		p_destination[i] = newData[i];
@@ -47,10 +48,15 @@ inline void sbufferCopy(const msgpack::sbuffer& sbuffer, char* p_destination, in
 struct SDALIB_EXPORT SDAAction
 {
 public:
+	// The needed variables
 	SDA_STEER_VAR
 	SDA_BRAKE_VAR
 
-	void Serialize(char* p_buffer, int p_bufferSize) const
+	/// @brief				  Serializes the data into a buffer
+	/// @param  p_buffer	  The buffer that will store the data
+	/// @param  p_bufferSize  The size of the buffer
+	/// @param  p_sbufferSize The result size of the string
+	void Serialize(char* p_buffer, int p_bufferSize, int& p_sbufferSize) const
 	{
 		std::vector<std::string> data;
 		SDA_STEER_PACK
@@ -60,8 +66,11 @@ public:
 		msgpack::pack(sbuffer,data);
 
 		sbufferCopy(sbuffer, p_buffer, p_bufferSize);
+		p_sbufferSize = sbuffer.size();
 	}
 
+	/// @brief			Gets the order of the actions and stores it into the vector
+	/// @param  p_order The order vector
 	static void GetOrder(std::vector<std::string>& p_order)
 	{
 		SDA_STEER_ORDER

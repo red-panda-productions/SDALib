@@ -1,5 +1,5 @@
 ﻿
-ADD_LIBRARY (SDALib STATIC "SDADriver.hpp" "SDAAction.hpp" "SDAData.hpp")
+ADD_LIBRARY (SDALib STATIC "SDADriver.hpp" "SDAAction.hpp" "SDAData.hpp" "SDADriver.cpp")
 
 include(GenerateExportHeader)
 GENERATE_EXPORT_HEADER(SDALib)

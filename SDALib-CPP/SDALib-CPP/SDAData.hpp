@@ -206,12 +206,16 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 struct SDALIB_EXPORT SDAData
 {
 public:
+	/// @brief				 Deserializes the buffer and converts it into data 
+	/// @param  p_buffer     The buffer
+	/// @param  p_bufferSize The size of the buffer
 	SDAData(const char* p_buffer, int p_bufferSize)
 	{
 		std::vector<std::string> resultVec;
 		GetMsgVector(p_buffer, p_bufferSize, resultVec);
 
 		int i = 0;
+		// only unpacks the needed variables
 		SDA_SPEED_UNPACK
 		SDA_TOP_SPEED_UNPACK
 		SDA_GEAR_UNPACK
@@ -230,6 +234,7 @@ public:
 		SDA_RAIN_UNPACK
 	}
 
+	// Getters of the needed variables
 	SDA_SPEED_GETTER
 	SDA_TOP_SPEED_GETTER
 	SDA_GEAR_GETTER
@@ -247,6 +252,8 @@ public:
 	SDA_CLOUDS_GETTER
 	SDA_RAIN_GETTER
 
+	/// @brief			Gets the order of the data and stores it into the vector
+	/// @param  p_order The order vector
 	static void GetOrder(std::vector<std::string>& p_order)
 	{
 		SDA_SPEED_ORDER

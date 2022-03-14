@@ -42,7 +42,7 @@ TEST(DriverTests, DriverTest)
 	msgpack::pack(sbuffer,tests);
 	sbufferCopy(sbuffer, buffer, TEST_BUFFER_SIZE);
 
-	server.SendData(buffer,TEST_BUFFER_SIZE);
+	server.SendData(buffer,sbuffer.size());
 
 	std::string data[] = {
 		std::to_string(2.0f),
@@ -67,14 +67,14 @@ TEST(DriverTests, DriverTest)
 	msgpack::pack(sbuffer, data);
 	sbufferCopy(sbuffer, buffer, TEST_BUFFER_SIZE);
 
-	server.SendData(buffer,TEST_BUFFER_SIZE);
+	server.SendData(buffer,sbuffer.size());
 
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
 
 	std::vector<std::string> actionData;
-	GetMsgVector(buffer, TEST_BUFFER_SIZE, actionData); // crashes
-	ASSERT_EQ("1", actionData[0]);
-	ASSERT_EQ("2", actionData[1]);
+	GetMsgVector(buffer, TEST_BUFFER_SIZE, actionData); // crash?
+	ASSERT_ALMOST_EQ(1, stof(actionData[0]));
+	ASSERT_ALMOST_EQ(2, stof(actionData[1]));
 
 	server.SendData("STOP",4);
 	server.CloseServer();

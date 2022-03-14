@@ -12,7 +12,8 @@ TEST(FullActionTests,FullActionTest)
 	action.Brake = 5.0f;
 	action.Steer = 2.0f;
 	char buffer[512] = {'\0'};
-	action.Serialize(buffer, 512);
+	int size = 0;
+	action.Serialize(buffer, 512,size);
 
 	msgpack::unpacked msg;
 	msgpack::unpack(msg, buffer, 512);
