@@ -58,7 +58,7 @@ TEST(DriverTests, DriverTest)
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
 	std::vector<std::string> order;
 
-	GetMsgVector(buffer, TEST_BUFFER_SIZE, order); //Crashes for unkown reason
+	GetMsgVector(buffer, TEST_BUFFER_SIZE, order);
 	TestOrder(order);
 
 	char* tests[]{ "1" };
@@ -96,7 +96,7 @@ TEST(DriverTests, DriverTest)
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
 
 	std::vector<std::string> actionData;
-	GetMsgVector(buffer, TEST_BUFFER_SIZE, actionData); // crash?
+	GetMsgVector(buffer, TEST_BUFFER_SIZE, actionData);
 	ASSERT_ALMOST_EQ(1, stof(actionData[0]));
 	ASSERT_ALMOST_EQ(2, stof(actionData[1]));
 
