@@ -65,6 +65,7 @@ private:
 		{
 			run = Update();
 		}
+		m_client.SendData("OK",2);
 		m_client.Disconnect();
 	}
 

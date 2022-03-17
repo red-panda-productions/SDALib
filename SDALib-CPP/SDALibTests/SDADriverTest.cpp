@@ -101,5 +101,8 @@ TEST(DriverTests, DriverTest)
 	ASSERT_ALMOST_EQ(2, stof(actionData[1]));
 
 	server.SendData("STOP",4);
+	server.AwaitData(buffer, TEST_BUFFER_SIZE);
+	ASSERT_TRUE(buffer[0] == 'O' && buffer[1] == 'K' && buffer[2] == '\0');
+	std::this_thread::sleep_for(std::chrono::milliseconds(10)); // wait to disconnect client
 	server.CloseServer();
 }
