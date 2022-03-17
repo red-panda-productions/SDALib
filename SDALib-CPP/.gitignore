@@ -29,6 +29,7 @@
 *.la
 *.a
 *.lib
+!libraries/lib/IPCLib.lib
 
 # Executables
 *.exe
@@ -191,7 +192,8 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+[Bb]in/*
+![Bb]in/IPCLib.dll
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
