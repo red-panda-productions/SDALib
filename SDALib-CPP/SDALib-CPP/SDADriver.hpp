@@ -83,7 +83,7 @@ private:
 		msgpack::pack(sbuffer, order);
 
 		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE); // receive reply
-		if (m_buffer[0] != 'O' && m_buffer[1] != 'K') throw std::exception("Server send wrong reply");
+		if (m_buffer[0] != 'O' || m_buffer[1] != 'K') throw std::exception("Server send wrong reply");
 
 		sbufferCopy(sbuffer, m_buffer, SDA_BUFFER_SIZE);
 
