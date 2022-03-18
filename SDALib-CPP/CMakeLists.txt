@@ -38,3 +38,4 @@ ENDIF(msgpack_FOUND)
 # Include sub-projects.
 add_subdirectory ("SDALib-CPP")
 add_subdirectory ("SDALibTests")
+add_subdirectory ("Samples")
