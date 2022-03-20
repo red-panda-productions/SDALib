@@ -44,6 +44,7 @@ void TestOrder(std::vector<std::string> p_order)
 /// @brief Tests a full session with a server
 TEST(DriverTests, DriverTest)
 {
+	// connect server and black box
 	ServerSocket server;
 	server.ConnectAsync();
 	std::thread t = std::thread(DriverSide);
@@ -51,23 +52,28 @@ TEST(DriverTests, DriverTest)
 
 	ASSERT_DURATION_LE(1, while (!server.Connected()) {});
 	char buffer[TEST_BUFFER_SIZE];
+
+	// wait untill client sends AI ACTIVE
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
 	TestMessageEqual(buffer, "AI ACTIVE", 9);
-	server.SendData("OK",2);
 
+	// accept the connection
+	server.SendData("OK", 2);
+
+	// wait for order and test
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
 	std::vector<std::string> order;
-
 	GetMsgVector(buffer, TEST_BUFFER_SIZE, order);
 	TestOrder(order);
 
+	// send amount of tests
 	char* tests[]{ "1" };
 	msgpack::sbuffer sbuffer(TEST_BUFFER_SIZE);
-	msgpack::pack(sbuffer,tests);
+	msgpack::pack(sbuffer, tests);
 	sbufferCopy(sbuffer, buffer, TEST_BUFFER_SIZE);
+	server.SendData(buffer, sbuffer.size());
 
-	server.SendData(buffer,sbuffer.size());
-
+	// create data
 	std::string data[] = {
 		std::to_string(2.0f),
 		std::to_string(8.0f),
@@ -87,20 +93,21 @@ TEST(DriverTests, DriverTest)
 		std::to_string(69)
 	};
 
+	// send data
 	sbuffer.clear();
 	msgpack::pack(sbuffer, data);
 	sbufferCopy(sbuffer, buffer, TEST_BUFFER_SIZE);
+	server.SendData(buffer, sbuffer.size());
 
-	server.SendData(buffer,sbuffer.size());
-
+	// return result
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
-
 	std::vector<std::string> actionData;
 	GetMsgVector(buffer, TEST_BUFFER_SIZE, actionData);
 	ASSERT_ALMOST_EQ(1, stof(actionData[0]));
 	ASSERT_ALMOST_EQ(2, stof(actionData[1]));
 
-	server.SendData("STOP",4);
+	// stop the connection
+	server.SendData("STOP", 4);
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
 	ASSERT_TRUE(buffer[0] == 'O' && buffer[1] == 'K' && buffer[2] == '\0');
 	std::this_thread::sleep_for(std::chrono::milliseconds(10)); // wait to disconnect client
