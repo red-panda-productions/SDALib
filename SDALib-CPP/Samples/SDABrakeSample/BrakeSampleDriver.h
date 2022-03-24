@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 #include "BrakeSampleAction.h"
 #include "BrakeSampleData.h"
 #include "SDADriver.hpp"
@@ -24,7 +26,7 @@ protected:
 
         //full brake when going 20km/h above max speed
         action.Brake = std::max(0.0f,(p_data.Speed() - m_maxSpeed) / 20);
-
+        std::cout << p_data.Speed() << " " << action.Brake  << std::endl;
         return action;
     }
 
