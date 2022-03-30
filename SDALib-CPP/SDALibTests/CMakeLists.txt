@@ -11,13 +11,16 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+MESSAGE(STATUS "BANANEN ${SOLID_LIBRARY}")
+
 enable_testing()
 add_executable(
-  SDATests "SDADataTest.cpp" "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "Mocks/SDADriverMock.h" "Mocks/SDAActionMock.h")
+  SDATests "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "Mocks/SDADriverMock.h" "Mocks/SDAActionMock.h")
 target_link_libraries(
   SDATests
   SDALib
   gtest_main
+  ${SOLID_LIBRARY}
 )
 target_include_directories(SDATests PUBLIC "../SDALib-CPP")
 
@@ -30,6 +33,17 @@ add_custom_command(TARGET SDATests POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy "${IPCLIB_BIN_DIR}/IPCLib.dll" $<TARGET_FILE_DIR:SDATests>
        COMMAND_EXPAND_LISTS
 )
+
+add_custom_command(TARGET SDATests POST_BUILD
+       COMMAND ${CMAKE_COMMAND} -E copy "${IPCLIB_BIN_DIR}/solid2.dll" $<TARGET_FILE_DIR:SDATests>
+       COMMAND_EXPAND_LISTS
+)
+
+add_custom_command(TARGET SDATests POST_BUILD
+       COMMAND ${CMAKE_COMMAND} -E copy "${IPCLIB_BIN_DIR}/libexpat.dll" $<TARGET_FILE_DIR:SDATests>
+       COMMAND_EXPAND_LISTS
+)
+
 
 include(GoogleTest)
 gtest_discover_tests(SDATests)

@@ -35,7 +35,17 @@ ELSE(msgpack_FOUND)
 	MESSAGE(FATAL_ERROR "Looking for library msgpack - NOT found")
 ENDIF(msgpack_FOUND)
 
+SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+FIND_PACKAGE(PLIB REQUIRED)
+
+FIND_PACKAGE(SOLID REQUIRED)
+
+FIND_PACKAGE(EXPAT REQUIRED)
+
 # Include sub-projects.
 add_subdirectory ("SDALib-CPP")
 add_subdirectory ("SDALibTests")
 add_subdirectory ("Samples")
+add_subdirectory ("SpeedDreams")
+

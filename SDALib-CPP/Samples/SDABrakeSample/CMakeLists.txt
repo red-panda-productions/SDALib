@@ -2,7 +2,6 @@ project(SDABrakeSample)
 
 add_executable( SDABrakeSample
         "BrakeSampleAction.h"
-        "BrakeSampleData.h"
         "BrakeSampleDriver.h"
         "SDABrakeSample.cpp")
 
