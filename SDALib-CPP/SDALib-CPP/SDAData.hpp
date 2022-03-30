@@ -4,6 +4,7 @@
 #include <msgpack.hpp>
 #include "sdalib_export.h"
 
+//#define SDA_TIMESTAMP_DATA
 //#define SDA_RAIN_DATA
 //#define SDA_TO_MIDDLE_DATA
 //#define SDA_TO_RIGHT_DATA
@@ -30,6 +31,16 @@
 		type getter_name(){return name;}
 
 // these macros pre-compute what is needed for the SDAData class
+#ifdef SDA_TICKCOUNT_DATA
+#define SDA_TICKCOUNT_UNPACK m_tickCount = std::stoul(resultVec[i++]);
+#define SDA_TICKCOUNT_GETTER SDADATA_GETTER(unsigned long, m_tickCount, TickCount)
+#define SDA_TICKCOUNT_ORDER p_order.push_back("TickCount");
+#else
+#define SDA_TICKCOUNT_UNPACK
+#define SDA_TICKCOUNT_GETTER
+#define SDA_TICKCOUNT_ORDER
+#endif
+
 #ifdef SDA_SPEED_DATA
 #define SDA_SPEED_UNPACK m_speed = std::stof(resultVec[i++]);
 #define SDA_SPEED_GETTER SDADATA_GETTER(float,m_speed,Speed)
@@ -216,6 +227,7 @@ public:
 
 		int i = 0;
 		// only unpacks the needed variables
+        SDA_TICKCOUNT_UNPACK
 		SDA_SPEED_UNPACK
 		SDA_TOP_SPEED_UNPACK
 		SDA_GEAR_UNPACK
@@ -235,6 +247,7 @@ public:
 	}
 
 	// Getters of the needed variables
+    SDA_TICKCOUNT_GETTER
 	SDA_SPEED_GETTER
 	SDA_TOP_SPEED_GETTER
 	SDA_GEAR_GETTER
@@ -256,6 +269,7 @@ public:
 	/// @param  p_order The order vector
 	static void GetOrder(std::vector<std::string>& p_order)
 	{
+        SDA_TICKCOUNT_ORDER
 		SDA_SPEED_ORDER
 		SDA_TOP_SPEED_ORDER
 		SDA_GEAR_ORDER
