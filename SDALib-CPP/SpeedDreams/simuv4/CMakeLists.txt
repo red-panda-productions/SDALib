@@ -10,3 +10,7 @@ ADD_LIBRARY(simu ${SIMU_SOURCES} ${SIMU_HEADERS})
 TARGET_LINK_LIBRARIES(simu math tgf portability SpeedDreamsLib robottools)
 
 TARGET_INCLUDE_DIRECTORIES(simu PUBLIC ${CMAKE_SOURCE_DIR}/SpeedDreams/math ${CMAKE_SOURCE_DIR}/SpeedDreams/tgf ${CMAKE_SOURCE_DIR}/SpeedDreams/portability ${CMAKE_SOURCE_DIR}/SpeedDreams/robottools ${CMAKE_SOURCE_DIR}/SpeedDreams)
+
+
+INSTALL(TARGETS simu)
+INSTALL(FILES ${SIMU_HEADERS} DESTINATION include)

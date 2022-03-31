@@ -28,16 +28,6 @@
 
 #include "SDStructs.hpp"
 
-// DLL exported symbols declarator for Windows.
-#ifdef WIN32
-# ifdef ROBOTTOOLS_DLL
-#  define ROBOTTOOLS_API __declspec(dllexport)
-# else
-#  define ROBOTTOOLS_API __declspec(dllimport)
-# endif
-#else
-# define ROBOTTOOLS_API
-#endif
 
 
 #define RELAXATION2(target, prev, rate)			\
@@ -74,7 +64,7 @@ do {								\
  *******************/
 
 /* for variable width segments */
-ROBOTTOOLS_API tdble RtTrackGetWidth(tTrackSeg *seg, tdble toStart);
+tdble RtTrackGetWidth(tTrackSeg *seg, tdble toStart);
 
 /*
  * Convert a Local position (segment, toRight, toStart)
@@ -87,7 +77,7 @@ ROBOTTOOLS_API tdble RtTrackGetWidth(tTrackSeg *seg, tdble toStart);
  * and a length in meters for straights.
  *
  */
-ROBOTTOOLS_API void RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int flag);
+void RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int flag);
 
 /*
  * Convert a Global (segment, X, Y) position into a Local one (segment, toRight, toStart)
@@ -100,7 +90,7 @@ ROBOTTOOLS_API void RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int f
  * The sides parameters is to indicate wether to use the track sides (1) or not (0) in
  * the toRight computation.
  */
-ROBOTTOOLS_API void RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, tTrkLocPos *p, int type);
+void RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, tTrkLocPos *p, int type);
 
 /*
  * Returns the absolute height in meters of the road
@@ -123,13 +113,13 @@ ROBOTTOOLS_API void RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, tT
     track side
 
  */
-ROBOTTOOLS_API tdble RtTrackHeightL(tTrkLocPos *p);
+tdble RtTrackHeightL(tTrkLocPos *p);
 
 /*
  * Returns the absolute height in meters of the road
  * at the Global position (segment, X, Y)
  */
-ROBOTTOOLS_API tdble RtTrackHeightG(tTrackSeg *seg, tdble X, tdble Y);
+tdble RtTrackHeightG(tTrackSeg *seg, tdble X, tdble Y);
 
 /*
  * Give the normal vector of the border of the track
@@ -144,7 +134,7 @@ ROBOTTOOLS_API tdble RtTrackHeightG(tTrackSeg *seg, tdble X, tdble Y);
  *
  * The vector is normalized.
  */
-ROBOTTOOLS_API void RtTrackSideNormalG(tTrackSeg *seg, tdble X, tdble Y, int side, t3Dd *norm);
+void RtTrackSideNormalG(tTrackSeg *seg, tdble X, tdble Y, int side, t3Dd *norm);
 
 /*
  * Used to get the tangent angle for a track position
@@ -152,7 +142,7 @@ ROBOTTOOLS_API void RtTrackSideNormalG(tTrackSeg *seg, tdble X, tdble Y, int sid
  *
  * the angle 0 is parallel to the first segment start.
  */
-ROBOTTOOLS_API tdble RtTrackSideTgAngleL(tTrkLocPos *p);
+tdble RtTrackSideTgAngleL(tTrkLocPos *p);
 
 /*
  * Used to get the normal vector of the road itself (pointing
@@ -163,15 +153,15 @@ ROBOTTOOLS_API tdble RtTrackSideTgAngleL(tTrkLocPos *p);
  *
  * The vector is normalized.
  */
-ROBOTTOOLS_API void RtTrackSurfaceNormalL(tTrkLocPos *p, t3Dd *norm);
+void RtTrackSurfaceNormalL(tTrkLocPos *p, t3Dd *norm);
 
 /** Get the current segment
  */
-ROBOTTOOLS_API tTrackSeg *RtTrackGetSeg(tTrkLocPos *p);
+tTrackSeg *RtTrackGetSeg(tTrkLocPos *p);
 
-ROBOTTOOLS_API int RtDistToPit(struct CarElt *car, tTrack *track, tdble *dL, tdble *dW);
+int RtDistToPit(struct CarElt *car, tTrack *track, tdble *dL, tdble *dW);
 
-ROBOTTOOLS_API tdble RtGetDistFromStart(tCarElt *car);
-ROBOTTOOLS_API tdble RtGetDistFromStart2(tTrkLocPos *p);
+tdble RtGetDistFromStart(tCarElt *car);
+tdble RtGetDistFromStart2(tTrkLocPos *p);
 
 #endif /* _ROBOTTOOLS_H_ */

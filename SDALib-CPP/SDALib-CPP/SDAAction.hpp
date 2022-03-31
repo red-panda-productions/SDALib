@@ -28,6 +28,26 @@
 #define SDA_BRAKE_ORDER
 #endif
 
+#ifdef SDA_GEAR_ACTION
+#define SDA_GEAR_VAR int Gear = 0;
+#define SDA_GEAR_PACK data.push_back(std::to_string(Gear));
+#define SDA_GEAR_ORDER p_order.push_back("Gear");
+#else
+#define SDA_GEAR_VAR
+#define SDA_GEAR_PACK
+#define SDA_GEAR_ORDER
+#endif
+
+#ifdef SDA_ACCEL_ACTION
+#define SDA_ACCEL_VAR float Accel = 0;
+#define SDA_ACCEL_PACK data.push_back(std::to_string(Accel));
+#define SDA_ACCEL_ORDER p_order.push_back("Accel");
+#else
+#define SDA_ACCEL_VAR
+#define SDA_ACCEL_PACK
+#define SDA_ACCEL_ORDER
+#endif
+
 /// @brief				      Copies a msgpack buffer
 /// @param  p_sbuffer		  The msgpack buffer
 /// @param  p_destination     The destination buffer
@@ -51,6 +71,8 @@ public:
 	// The needed variables
 	SDA_STEER_VAR
 	SDA_BRAKE_VAR
+	SDA_GEAR_VAR
+	SDA_ACCEL_VAR
 
 	/// @brief				  Serializes the data into a buffer
 	/// @param  p_buffer	  The buffer that will store the data
@@ -61,6 +83,8 @@ public:
 		std::vector<std::string> data;
 		SDA_STEER_PACK
 		SDA_BRAKE_PACK
+		SDA_GEAR_PACK
+		SDA_ACCEL_PACK
 
 		msgpack::sbuffer sbuffer;
 		msgpack::pack(sbuffer,data);
@@ -75,5 +99,7 @@ public:
 	{
 		SDA_STEER_ORDER
 		SDA_BRAKE_ORDER
+		SDA_GEAR_ORDER
+		SDA_ACCEL_ORDER
 	}
 };

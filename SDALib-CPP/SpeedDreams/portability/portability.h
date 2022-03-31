@@ -51,28 +51,17 @@
 
 // DLL exported symbols declarator for Windows.
 
-#define portability_EXPORTS
-#ifdef WIN32
-# ifdef portability_EXPORTS
-#  define PORTABILITY_API __declspec(dllexport)
-# else
-#  define PORTABILITY_API __declspec(dllimport)
-# endif
-#else
-# define PORTABILITY_API
-#endif
-
 // Missing strndup, defined in portability.cpp (for FreeBSD).
 #ifndef HAVE_STRNDUP
 
-PORTABILITY_API char *strndup(const char *str, int len);
+char *strndup(const char *str, int len);
 
 #endif // HAVE_STRNDUP
 
 // Missing strtok_r, defined in portability.cpp (for MinGW).
 #ifndef HAVE_STRTOK_R
 
-PORTABILITY_API char *strtok_r(char *str, const char *delim, char **nextp);
+char *strtok_r(char *str, const char *delim, char **nextp);
 
 #endif // HAVE_STRTOK_R
 
@@ -111,7 +100,7 @@ PORTABILITY_API char *strtok_r(char *str, const char *delim, char **nextp);
 // Ticket #663 - MSVC implementation of snprintf is not safe
 // We provide our own version of the function,
 // that ensures 0 ending for the string.
-PORTABILITY_API int SD_snprintf(char *str, size_t size, const char *format, ...);
+int SD_snprintf(char *str, size_t size, const char *format, ...);
 
 #include <cstdarg>
 #include <cstdio>

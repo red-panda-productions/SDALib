@@ -39,9 +39,7 @@ protected:
 	/// @brief			 Simulates an action in the simulation
 	/// @param  p_action The action that needs to be simulated
 	/// @return			 The new state of the game
-	void Simulate(const SDAAction& p_action, SDAData& p_data)
-	{
-	}
+	void Simulate(const SDAAction& p_action, SDAData& p_data);
 
 private:
 	/// @brief  Updates the ai when data is received
@@ -53,9 +51,14 @@ private:
 		if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
 		//todo: create car and situation from msgpack
-		SDAData data;
+		std::vector<std::string> resultVec;
+		GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec);
 
-		const SDAAction action = UpdateAI(data);
+		std::string pointerName = resultVec[0];
+		int pointerValue = std::stoi(pointerName);
+		SDAData* data = (SDAData*)pointerValue;
+
+		const SDAAction action = UpdateAI(*data);
 
 		int serializeSize;
 		action.Serialize(m_buffer, SDA_BUFFER_SIZE,serializeSize);

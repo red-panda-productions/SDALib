@@ -40,12 +40,7 @@
 #include "osspec.h"
 
 // DLL exported symbols declarator for Windows.
-#ifdef WIN32
-#  define TGF_API __declspec(dllexport)
-#else
 # define TGF_API
-#endif
-
 #include "modinfo.h" // Don't move this include line : needs TGF_API definition.
 
 #include <string>

@@ -1,5 +1,7 @@
 project(SDABrakeSample)
 
+include(../../cmake/SDAMacros.cmake)
+
 add_executable( SDABrakeSample
         "BrakeSampleAction.h"
         "BrakeSampleDriver.h"
@@ -10,3 +12,5 @@ target_link_libraries(
         SDALib
 )
 target_include_directories(SDABrakeSample PUBLIC "../../SDALib-CPP")
+
+INSTALL_SDA_PACKAGES(SDABrakeSample)
