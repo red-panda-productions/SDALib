@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 #include "BrakeSampleAction.h"
 #include "SDADriver.hpp"
 
@@ -23,6 +25,7 @@ protected:
 
         //full brake when going 20km/h above max speed
         action.Brake = std::max(0.0f,(p_data.Car.pub.DynGC.vel.x - m_maxSpeed) / 20);
+        std::cout << p_data.Car.pub.DynGC.vel.x << " " << action.Brake << std::endl;
 
         return action;
     }

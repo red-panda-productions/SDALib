@@ -1,5 +1,4 @@
 #pragma once
-
 #include "SDStructs.hpp"
 
 struct SDAData

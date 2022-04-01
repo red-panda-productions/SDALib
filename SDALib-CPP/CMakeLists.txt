@@ -21,4 +21,5 @@ add_subdirectory ("SDALib-CPP")
 add_subdirectory ("SDALibTests")
 add_subdirectory ("Samples")
 add_subdirectory ("SpeedDreams")
+add_subdirectory ("SDAReplay")
 
