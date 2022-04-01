@@ -28,6 +28,8 @@ IF(NOT APPLE OR OPTION_USE_MACPORTS)
    /system
    ../libraries
    ../
+   ${CMAKE_SOURCE_DIR}/../libraries
+   ${CMAKE_SOURCE_DIR}/../libraries/lib
   DOC "Location of plib")
 ENDIF(NOT APPLE OR OPTION_USE_MACPORTS)
 
@@ -45,10 +47,14 @@ IF(NOT APPLE OR OPTION_USE_MACPORTS)
 	/usr /usr/local
 	../libraries
 	../
+	${CMAKE_SOURCE_DIR}/../libraries
+    ${CMAKE_SOURCE_DIR}/../libraries/lib
   DOC "Location of plib")
 ENDIF(NOT APPLE OR OPTION_USE_MACPORTS)
 
 SET(PLIB_INCLUDE_DIR ${PLIB_PLIBINCLUDE_DIR} CACHE STRING "Include dir for plib")
+
+MESSAGE(STATUS ${PLIB_INCLUDE_DIR})
 
 SET(PLIB_ALREADY_FOUND FALSE)
 IF(OPTION_USE_MACPORTS)
