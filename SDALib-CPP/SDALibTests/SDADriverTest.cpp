@@ -29,6 +29,7 @@ TEST(DriverTests, DriverTest)
 {
 	// connect server and black box
 	ServerSocket server;
+	server.Initialize();
 	server.ConnectAsync();
 	std::thread t = std::thread(DriverSide);
 	t.detach();

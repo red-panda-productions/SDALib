@@ -82,6 +82,7 @@ private:
 	/// @brief Sets up the socket connection and transfers order data
 	void SetupSocket()
 	{
+		m_client.Initialize();
 		m_client.SendData("AI ACTIVE", 10);
 
 		std::vector<std::string> order;
