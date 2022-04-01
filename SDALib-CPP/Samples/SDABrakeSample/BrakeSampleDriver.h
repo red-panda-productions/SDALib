@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include "BrakeSampleAction.h"
-#include "BrakeSampleData.h"
 #include "SDADriver.hpp"
 
 /// @brief A sample driver that brakes when driving above set max speed
@@ -25,8 +24,9 @@ protected:
         SDAAction action;
 
         //full brake when going 20km/h above max speed
-        action.Brake = std::max(0.0f,(p_data.Speed() - m_maxSpeed) / 20);
-        std::cout << p_data.Speed() << " " << action.Brake  << std::endl;
+        action.Brake = std::max(0.0f,(p_data.Car.pub.DynGC.vel.x - m_maxSpeed) / 20);
+        std::cout << p_data.Car.pub.DynGC.vel.x << " " << action.Brake << std::endl;
+
         return action;
     }
 

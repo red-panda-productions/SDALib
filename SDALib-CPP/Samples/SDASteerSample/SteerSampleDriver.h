@@ -24,17 +24,17 @@ protected:
     {
         SDAAction action;
 
-        std::cout << p_data.ToLeft() << " " << p_data.ToMiddle() << " " << p_data.ToRight() << std::endl;
+        std::cout << p_data.Car.pub.trkPos.toLeft << " " << p_data.Car.pub.trkPos.toMiddle << " " << p_data.Car.pub.trkPos.toRight << std::endl;
 
-        if(p_data.ToMiddle() < -m_maxOff)
+        if(p_data.Car.pub.trkPos.toMiddle < -m_maxOff)
         {
 
-            action.Steer = std::min(-p_data.ToMiddle() / 60.0f,1.0f);
+            action.Steer = std::min(-p_data.Car.pub.trkPos.toMiddle / 60.0f,1.0f);
             std::cout << "Steering left: " << action.Steer << std::endl;
         }
-        if(p_data.ToMiddle() > m_maxOff)
+        if(p_data.Car.pub.trkPos.toMiddle > m_maxOff)
         {
-            action.Steer = std::max( - p_data.ToMiddle() / 60.0f,-1.0f);
+            action.Steer = std::max( -p_data.Car.pub.trkPos.toMiddle / 60.0f,-1.0f);
             std::cout << "Steering right: " << action.Steer << std::endl;
         }
 

@@ -43,7 +43,7 @@ protected:
             return action;
         }
 
-        if (m_tickToAct != p_data.TickCount()) return action;
+        if (m_tickToAct != p_data.TickCount) return action;
 
         READ_AND_SET_FLOAT(Brake)
         action.Brake = action.Brake > 1 || action.Brake < 0? 0 : action.Brake;
@@ -51,7 +51,7 @@ protected:
         READ_AND_SET_FLOAT(Steer)
         action.Steer = action.Steer > 1 || action.Steer < -1? 0 : action.Steer;
 
-        std::cout << "TickCount: " << p_data.TickCount() << "; Brake value: " << action.Brake << "; Steer value: " << action.Steer << std::endl;
+        std::cout << "TickCount: " << p_data.TickCount << "; Brake value: " << action.Brake << "; Steer value: " << action.Steer << std::endl;
 
         if (!m_replayFile.eof()) {SET_TICK_TO_ACT}
 

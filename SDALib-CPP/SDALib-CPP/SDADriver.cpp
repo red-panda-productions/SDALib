@@ -1,5 +1,5 @@
 #include "SDADriver.hpp"
-// .cpp needed to create .lib file
+#include "sim.h"
 
 /// @brief		   Default constructor of SDA driver
 /// @param  p_ip   The server ip
@@ -10,4 +10,9 @@ SDADriver::SDADriver(PCWSTR p_ip, int p_port) : m_client(p_ip, p_port)
 	{
 		m_buffer[i] = '\0';
 	}
+}
+
+void SDADriver::Simulate(const SDAAction& p_action, SDAData& p_data)
+{
+	// simulate using simu
 }

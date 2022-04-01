@@ -18,27 +18,10 @@ void DriverSide()
 /// @param  p_order The order
 void TestOrder(std::vector<std::string> p_order)
 {
-	ASSERT_EQ(p_order.size(), 20);
-	ASSERT_EQ(p_order[0], "DATAORDER");
-	ASSERT_EQ(p_order[1], "Speed");
-	ASSERT_EQ(p_order[2], "TopSpeed");
-	ASSERT_EQ(p_order[3], "Gear");
-	ASSERT_EQ(p_order[4], "Headlights");
-	ASSERT_EQ(p_order[5], "SteerCmd");
-	ASSERT_EQ(p_order[6], "AccelCmd");
-	ASSERT_EQ(p_order[7], "BrakeCmd");
-	ASSERT_EQ(p_order[8], "ClutchCmd");
-	ASSERT_EQ(p_order[9], "Offroad");
-	ASSERT_EQ(p_order[10], "ToMiddle");
-	ASSERT_EQ(p_order[11], "ToLeft");
-	ASSERT_EQ(p_order[12], "ToRight");
-	ASSERT_EQ(p_order[13], "ToStart");
-	ASSERT_EQ(p_order[14], "TimeOfDay");
-	ASSERT_EQ(p_order[15], "Clouds");
-	ASSERT_EQ(p_order[16], "Rain");
-	ASSERT_EQ(p_order[17], "ACTIONORDER");
-	ASSERT_EQ(p_order[18], "Steer");
-	ASSERT_EQ(p_order[19], "Brake");
+	ASSERT_EQ(p_order.size(), 3);
+	ASSERT_EQ(p_order[0], "ACTIONORDER");
+	ASSERT_EQ(p_order[1], "Steer");
+	ASSERT_EQ(p_order[2], "Brake");
 }
 
 /// @brief Tests a full session with a server

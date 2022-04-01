@@ -5,6 +5,17 @@
 #include "msgpack.hpp"
 #include "sdalib_export.h"
 
+/// @brief				 Retrieves the msgpack vector
+/// @param  p_buffer	 The character buffer
+///	@param  p_bufferSize The buffer size
+/// @param  p_vector	 The result vector
+inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std::string>& p_vector)
+{
+	msgpack::unpacked msg;
+	msgpack::unpack(msg, p_buffer, p_bufferSize);
+	msg->convert(p_vector);
+}
+
 #define SDA_BUFFER_SIZE 512
 
 /// @brief The driver class from which the AI should inherit
@@ -28,14 +39,7 @@ protected:
 	/// @brief			 Simulates an action in the simulation
 	/// @param  p_action The action that needs to be simulated
 	/// @return			 The new state of the game
-	SDAData Simulate(SDAAction p_action)
-	{
-		char request[20] = { '\0' }; //msgpack create request
-		m_client.SendData(request, strlen(request));
-
-		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);
-		return { m_buffer,SDA_BUFFER_SIZE };
-	}
+	void Simulate(const SDAAction& p_action, SDAData& p_data);
 
 private:
 	/// @brief  Updates the ai when data is received
@@ -46,9 +50,15 @@ private:
 
 		if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
-		SDAData tickData(m_buffer, SDA_BUFFER_SIZE);
+		//todo: create car and situation from msgpack
+		std::vector<std::string> resultVec;
+		GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec);
 
-		const SDAAction action = UpdateAI(tickData);
+		std::string pointerName = resultVec[0];
+		int pointerValue = std::stoi(pointerName);
+		SDAData* data = (SDAData*)pointerValue;
+
+		const SDAAction action = UpdateAI(*data);
 
 		int serializeSize;
 		action.Serialize(m_buffer, SDA_BUFFER_SIZE,serializeSize);
@@ -75,8 +85,6 @@ private:
 		m_client.SendData("AI ACTIVE", 10);
 
 		std::vector<std::string> order;
-		order.push_back("DATAORDER");
-		SDAData::GetOrder(order);
 		order.push_back("ACTIONORDER");
 		SDAAction::GetOrder(order);
 		msgpack::sbuffer sbuffer;
@@ -91,7 +99,7 @@ private:
 		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);
 
 		std::vector<std::string> resultVec;
-		GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec); // CRASH
+		GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec);
 
 		const int amountOfTests = std::stoi(resultVec[0]); //serialize test amount from server
 
