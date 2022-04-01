@@ -4,6 +4,7 @@
 #include "SDAAction.hpp"
 #include "msgpack.hpp"
 #include "sdalib_export.h"
+#include <thread>
 
 /// @brief				 Retrieves the msgpack vector
 /// @param  p_buffer	 The character buffer
@@ -82,7 +83,13 @@ private:
 	/// @brief Sets up the socket connection and transfers order data
 	void SetupSocket()
 	{
-		m_client.Initialize();
+		std::cout << "Trying to connect to Speed Dreams" << std::endl;
+		while(m_client.Initialize() != IPCLIB_SUCCEED)
+		{
+			std::cout << "Failed Retrying in 2 seconds" << std::endl;
+			std::this_thread::sleep_for(std::chrono::seconds(2));
+		}
+
 		m_client.SendData("AI ACTIVE", 10);
 
 		std::vector<std::string> order;
