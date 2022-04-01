@@ -17,7 +17,7 @@ IF(NOT APPLE OR OPTION_USE_MACPORTS)
  FIND_PATH(PLIB_PLIBINCLUDE_DIR plib/ssg.h
   HINTS ENV PLIB_DIR
   PATH_SUFFIXES 
-	Headers include/plib include develop/headers/plib develop/headers/x86/plib
+	Headers include/plib include develop/headers/plib develop/headers/x86/plib include
   PATHS
 #Additional MacOS Paths
    	 ~/Library/Frameworks/plib.framework
@@ -29,7 +29,6 @@ IF(NOT APPLE OR OPTION_USE_MACPORTS)
    ../libraries
    ../
    ${CMAKE_SOURCE_DIR}/../libraries
-   ${CMAKE_SOURCE_DIR}/../libraries/lib
   DOC "Location of plib")
 ENDIF(NOT APPLE OR OPTION_USE_MACPORTS)
 
@@ -48,7 +47,6 @@ IF(NOT APPLE OR OPTION_USE_MACPORTS)
 	../libraries
 	../
 	${CMAKE_SOURCE_DIR}/../libraries
-    ${CMAKE_SOURCE_DIR}/../libraries/lib
   DOC "Location of plib")
 ENDIF(NOT APPLE OR OPTION_USE_MACPORTS)
 
