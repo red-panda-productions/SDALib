@@ -18,7 +18,7 @@ void PythonDriver::InitAI()
     {
         m_initFunction();
     }
-    catch (error_already_set)
+    catch (error_already_set&)
     {
         PyErr_Print();
     }
@@ -35,7 +35,7 @@ SDAAction PythonDriver::UpdateAI(SDAData& p_data)
         action.Brake = extract<float>(result[2]);
         action.Gear  = extract<int>(result[3]);
     }
-    catch (error_already_set)
+    catch (error_already_set&)
     {
         PyErr_Print();
     }
