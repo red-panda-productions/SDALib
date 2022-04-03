@@ -18,6 +18,7 @@ FIND_SDA_PACKAGES()
 
 # Include sub-projects.
 add_subdirectory ("SDALib-CPP")
+add_subdirectory ("SDALib-Python")
 add_subdirectory ("SDALibTests")
 add_subdirectory ("Samples")
 add_subdirectory ("SpeedDreams")
