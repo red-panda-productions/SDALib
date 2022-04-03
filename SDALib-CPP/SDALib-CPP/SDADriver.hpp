@@ -5,6 +5,8 @@
 #include "msgpack.hpp"
 #include "sdalib_export.h"
 #include <thread>
+#include "boost/interprocess/shared_memory_object.hpp"
+#include "boost/interprocess/mapped_region.hpp"
 
 /// @brief				 Retrieves the msgpack vector
 /// @param  p_buffer	 The character buffer
@@ -43,7 +45,7 @@ protected:
 	void Simulate(const SDAAction& p_action, SDAData& p_data);
 
 private:
-	/// @brief  Updates the ai when data is received
+	/// @brief  Updates the aiddddd when data is received
 	/// @return Whether the simulation is still running
 	bool Update()
 	{
@@ -51,13 +53,12 @@ private:
 
 		if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
-		//todo: create car and situation from msgpack
-		std::vector<std::string> resultVec;
-		GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec);
+		boost::interprocess::mapped_region region(m_currentDataObject, boost::interprocess::read_write);
+		boost::interprocess::mapped_region segRegion(m_currentSegmentDataObject, boost::interprocess::read_only);
 
-		std::string pointerName = resultVec[0];
-		int pointerValue = std::stoi(pointerName);
-		SDAData* data = (SDAData*)pointerValue;
+		SDAData* data = (SDAData*)region.get_address();
+
+		data->Car.pub.trkPos.seg = static_cast<tTrackSeg*>(segRegion.get_address());
 
 		const SDAAction action = UpdateAI(*data);
 
@@ -119,4 +120,8 @@ private:
 
 	ClientSocket m_client;
 	char m_buffer[SDA_BUFFER_SIZE];
+	boost::interprocess::shared_memory_object m_currentDataObject =
+		boost::interprocess::shared_memory_object(boost::interprocess::open_only, "SDA_SHARED_MEMORY", boost::interprocess::read_write);
+	boost::interprocess::shared_memory_object m_currentSegmentDataObject =
+		boost::interprocess::shared_memory_object(boost::interprocess::open_only, "SDA_SHARED_SEGMENT_MEMORY", boost::interprocess::read_only);
 };
