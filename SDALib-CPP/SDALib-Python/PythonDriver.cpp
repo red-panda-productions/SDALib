@@ -1,6 +1,6 @@
 #include "PythonDriver.h"
 
-
+/// @brief Constructs PythonDriver and sets up python code
 PythonDriver::PythonDriver()
     :m_main(import("__main__"))
     ,m_globals(m_main.attr("__dict__"))
@@ -12,6 +12,7 @@ PythonDriver::PythonDriver()
     m_initFunction = m_pythonDriver.attr("InitAI");
 }
 
+/// @brief Initializes the python AI
 void PythonDriver::InitAI()
 {
     try
@@ -24,6 +25,9 @@ void PythonDriver::InitAI()
     }
 }
 
+/// @brief          Updates the python AI by passing the data to python
+/// @param  p_data  The data
+/// @return         The result of the AI
 SDAAction PythonDriver::UpdateAI(SDAData& p_data)
 {
     SDAAction action;
@@ -43,7 +47,7 @@ SDAAction PythonDriver::UpdateAI(SDAData& p_data)
     return action;
 }
 
-
+/// @brief  Main entry point of the driver
 int main()
 {
     Py_Initialize();
