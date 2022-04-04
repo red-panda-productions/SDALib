@@ -24,7 +24,7 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 /// @brief The driver class from which the AI should inherit
 
 template<class PointerManager>
-class SDALIB_EXPORT SDDriver
+class SDALIB_EXPORT AIInterface
 {
 public:
 	/// @brief Runs the driver
@@ -36,7 +36,7 @@ public:
 	}
 
 protected:
-	SDDriver(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
+	AIInterface(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
 
 	virtual void InitAI() = 0;
 	virtual SDAAction UpdateAI(SDAData& p_data) = 0;
@@ -47,7 +47,7 @@ protected:
 	void Simulate(const SDAAction& p_action, SDAData& p_data);
 
 private:
-	/// @brief  Updates the aiddddd when data is received
+	/// @brief  Updates the ai when data is received
 	/// @return Whether the simulation is still running
 	bool Update()
 	{
@@ -122,4 +122,4 @@ private:
 	PointerManager m_pointerManager;
 };
 
-#define SDADriver SDDriver<IPCPointerManager>
+#define SDADriver AIInterface<IPCPointerManager>

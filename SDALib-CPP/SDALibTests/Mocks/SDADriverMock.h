@@ -8,11 +8,11 @@
 
 
 /// @brief A driver mock
-class SDADriverMock : public SDDriver<PointerManagerMock>
+class SDADriverMock : public AIInterface<PointerManagerMock>
 {
 public:
 
-	SDADriverMock() : SDDriver<PointerManagerMock>()
+	SDADriverMock() : AIInterface<PointerManagerMock>()
 	{
 		// do nothing
 	}
