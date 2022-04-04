@@ -2,14 +2,17 @@
 #include "SDADataMock.h"
 #include "SDAActionMock.h"
 #include "SDADriver.hpp"
+#include "SDADriver.inl"
+#include "PointerManagerMock.h"
+
 
 
 /// @brief A driver mock
-class SDADriverMock : public SDADriver
+class SDADriverMock : public SDDriver<PointerManagerMock>
 {
 public:
 
-	SDADriverMock() : SDADriver()
+	SDADriverMock() : SDDriver<PointerManagerMock>()
 	{
 		// do nothing
 	}

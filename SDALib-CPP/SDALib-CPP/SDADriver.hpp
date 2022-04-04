@@ -5,8 +5,7 @@
 #include "msgpack.hpp"
 #include "sdalib_export.h"
 #include <thread>
-#include "boost/interprocess/shared_memory_object.hpp"
-#include "boost/interprocess/mapped_region.hpp"
+#include "IPCPointerManager.h"
 
 /// @brief				 Retrieves the msgpack vector
 /// @param  p_buffer	 The character buffer
@@ -21,8 +20,11 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 
 #define SDA_BUFFER_SIZE 512
 
+
 /// @brief The driver class from which the AI should inherit
-class SDALIB_EXPORT SDADriver
+
+template<class PointerManager>
+class SDALIB_EXPORT SDDriver
 {
 public:
 	/// @brief Runs the driver
@@ -34,7 +36,7 @@ public:
 	}
 
 protected:
-	SDADriver(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
+	SDDriver(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
 
 	virtual void InitAI() = 0;
 	virtual SDAAction UpdateAI(SDAData& p_data) = 0;
@@ -53,12 +55,9 @@ private:
 
 		if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
-		boost::interprocess::mapped_region region(m_currentDataObject, boost::interprocess::read_write);
-		boost::interprocess::mapped_region segRegion(m_currentSegmentDataObject, boost::interprocess::read_only);
+		SDAData* data = m_pointerManager.GetDataPointer();
 
-		SDAData* data = (SDAData*)region.get_address();
-
-		data->Car.pub.trkPos.seg = static_cast<tTrackSeg*>(segRegion.get_address());
+		data->Car.pub.trkPos.seg = m_pointerManager.GetSegmentPointer();
 
 		const SDAAction action = UpdateAI(*data);
 
@@ -120,8 +119,7 @@ private:
 
 	ClientSocket m_client;
 	char m_buffer[SDA_BUFFER_SIZE];
-	boost::interprocess::shared_memory_object m_currentDataObject =
-		boost::interprocess::shared_memory_object(boost::interprocess::open_only, "SDA_SHARED_MEMORY", boost::interprocess::read_write);
-	boost::interprocess::shared_memory_object m_currentSegmentDataObject =
-		boost::interprocess::shared_memory_object(boost::interprocess::open_only, "SDA_SHARED_SEGMENT_MEMORY", boost::interprocess::read_only);
+	PointerManager m_pointerManager;
 };
+
+#define SDADriver SDDriver<IPCPointerManager>
