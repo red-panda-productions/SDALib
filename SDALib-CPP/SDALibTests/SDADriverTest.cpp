@@ -29,6 +29,7 @@ TEST(DriverTests, DriverTest)
 {
 	// connect server and black box
 	ServerSocket server;
+	ASSERT_EQ(server.Initialize(), IPCLIB_SUCCEED);
 	server.ConnectAsync();
 	std::thread t = std::thread(DriverSide);
 	t.detach();
@@ -41,7 +42,7 @@ TEST(DriverTests, DriverTest)
 	TestMessageEqual(buffer, "AI ACTIVE", 9);
 
 	// accept the connection
-	server.SendData("OK", 2);
+	ASSERT_EQ(server.SendData("OK", 2), IPCLIB_SUCCEED);
 
 	// wait for order and test
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
@@ -54,7 +55,7 @@ TEST(DriverTests, DriverTest)
 	msgpack::sbuffer sbuffer(TEST_BUFFER_SIZE);
 	msgpack::pack(sbuffer, tests);
 	sbufferCopy(sbuffer, buffer, TEST_BUFFER_SIZE);
-	server.SendData(buffer, sbuffer.size());
+	ASSERT_EQ(server.SendData(buffer, sbuffer.size()), IPCLIB_SUCCEED);
 
 	// create data
 	std::string data[] = {
@@ -80,7 +81,7 @@ TEST(DriverTests, DriverTest)
 	sbuffer.clear();
 	msgpack::pack(sbuffer, data);
 	sbufferCopy(sbuffer, buffer, TEST_BUFFER_SIZE);
-	server.SendData(buffer, sbuffer.size());
+	ASSERT_EQ(server.SendData(buffer, sbuffer.size()), IPCLIB_SUCCEED);
 
 	// return result
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
@@ -90,7 +91,7 @@ TEST(DriverTests, DriverTest)
 	ASSERT_ALMOST_EQ(2, stof(actionData[1]));
 
 	// stop the connection
-	server.SendData("STOP", 4);
+	ASSERT_EQ(server.SendData("STOP", 4), IPCLIB_SUCCEED);
 	server.AwaitData(buffer, TEST_BUFFER_SIZE);
 	ASSERT_TRUE(buffer[0] == 'O' && buffer[1] == 'K' && buffer[2] == '\0');
 	std::this_thread::sleep_for(std::chrono::milliseconds(10)); // wait to disconnect client
