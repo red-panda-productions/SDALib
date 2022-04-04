@@ -5,6 +5,7 @@
 #include "msgpack.hpp"
 #include "sdalib_export.h"
 #include <thread>
+#include "IPCPointerManager.h"
 
 /// @brief				 Retrieves the msgpack vector
 /// @param  p_buffer	 The character buffer
@@ -19,8 +20,11 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 
 #define SDA_BUFFER_SIZE 512
 
+
 /// @brief The driver class from which the AI should inherit
-class SDALIB_EXPORT SDADriver
+
+template<class PointerManager>
+class SDALIB_EXPORT AIInterface
 {
 public:
 	/// @brief Runs the driver
@@ -32,7 +36,7 @@ public:
 	}
 
 protected:
-	SDADriver(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
+	AIInterface(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
 
 	virtual void InitAI() = 0;
 	virtual SDAAction UpdateAI(SDAData& p_data) = 0;
@@ -51,13 +55,9 @@ private:
 
 		if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
-		//todo: create car and situation from msgpack
-		std::vector<std::string> resultVec;
-		GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec);
+		SDAData* data = m_pointerManager.GetDataPointer();
 
-		std::string pointerName = resultVec[0];
-		int pointerValue = std::stoi(pointerName);
-		SDAData* data = (SDAData*)pointerValue;
+		data->Car.pub.trkPos.seg = m_pointerManager.GetSegmentPointer();
 
 		const SDAAction action = UpdateAI(*data);
 
@@ -119,4 +119,7 @@ private:
 
 	ClientSocket m_client;
 	char m_buffer[SDA_BUFFER_SIZE];
+	PointerManager m_pointerManager;
 };
+
+#define SDADriver AIInterface<IPCPointerManager>
