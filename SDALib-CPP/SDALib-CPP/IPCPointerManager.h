@@ -3,6 +3,7 @@
 #include "boost/interprocess/mapped_region.hpp"
 #include "SDAData.hpp"
 
+/// @brief Manages the shared memory pointers
 class IPCPointerManager
 {
 public:
