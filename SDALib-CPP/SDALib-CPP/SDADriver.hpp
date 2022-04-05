@@ -111,6 +111,8 @@ private:
 
 		const int amountOfTests = std::stoi(resultVec[0]); //serialize test amount from server
 
+		m_client.SendData("OK", 2);
+
 		for (int i = 0; i < amountOfTests; i++)
 		{
 			Update(); // perform tests
