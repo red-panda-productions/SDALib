@@ -57,6 +57,9 @@ TEST(DriverTests, DriverTest)
 	sbufferCopy(sbuffer, buffer, TEST_BUFFER_SIZE);
 	ASSERT_EQ(server.SendData(buffer, sbuffer.size()), IPCLIB_SUCCEED);
 
+	server.AwaitData(buffer, TEST_BUFFER_SIZE);
+	ASSERT_TRUE(buffer[0] == 'O' && buffer[1] == 'K');
+
 	// create data
 	std::string data[] = {
 		std::to_string(2.0f),
