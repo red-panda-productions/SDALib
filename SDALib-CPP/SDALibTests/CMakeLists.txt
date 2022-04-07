@@ -31,6 +31,24 @@ target_include_directories(SDATests PUBLIC "../SDALib-CPP")
 
 INSTALL_SDA_PACKAGES(SDATests)
 
-
 include(GoogleTest)
 gtest_discover_tests(SDATests)
+
+SET(COVERAGE_OUTPUT_FOLDER ${CMAKE_SOURCE_DIR} CACHE STRING "The output folder of the coverage bat files")
+
+FIND_PROGRAM(OPEN_CPP_COVERAGE "OpenCppCoverage")
+
+IF(OPEN_CPP_COVERAGE)
+	STRING(REGEX REPLACE "/" "\\\\" SOURCEDIR ${CMAKE_SOURCE_DIR})
+    STRING(REGEX REPLACE "/" "\\\\" CURRENTSOURCEDIR ${CMAKE_SOURCE_DIR}/SDALib-CPP)
+    STRING(REGEX REPLACE "/" "\\\\" CURRENTBINARYDIR ${CMAKE_CURRENT_BINARY_DIR})
+    STRING(REGEX REPLACE "/" "\\\\" BINARYDIR ${CMAKE_BINARY_DIR})
+    STRING(REGEX REPLACE "/" "\\\\" EXEPATH ${CMAKE_CURRENT_BINARY_DIR}/SDATests.exe)
+
+    FILE(GENERATE OUTPUT ${COVERAGE_OUTPUT_FOLDER}/SDACoverage.bat
+        CONTENT 
+            "@echo off
+            cd /d ${CURRENTBINARYDIR}
+            \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=html:${CURRENTBINARYDIR}\\SDACoverage --excluded_sources  --excluded_line_regex  -- ${EXEPATH}
+            @start ${CURRENTBINARYDIR}\\SDACoverage\\index.html")
+ENDIF(OPEN_CPP_COVERAGE)
