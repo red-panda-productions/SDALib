@@ -51,4 +51,6 @@ IF(OPEN_CPP_COVERAGE)
             cd /d ${CURRENTBINARYDIR}
             \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=html:${CURRENTBINARYDIR}\\SDACoverage --excluded_sources  --excluded_line_regex  -- ${EXEPATH}
             @start ${CURRENTBINARYDIR}\\SDACoverage\\index.html")
+
+    MESSAGE(STATUS "Created SDACoverage.bat, run with ./SDACoverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
 ENDIF(OPEN_CPP_COVERAGE)
