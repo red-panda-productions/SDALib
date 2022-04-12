@@ -24,16 +24,9 @@ void TestOrder(std::vector<std::string> p_order)
 	ASSERT_EQ(p_order[2], "Brake");
 }
 
-/// @brief Tests a full session with a server
-TEST(DriverTests, DriverTest)
-{
-	// connect server and black box
-	ServerSocket server;
-	ASSERT_EQ(server.Initialize(), IPCLIB_SUCCEED);
-	server.ConnectAsync();
-	std::thread t = std::thread(DriverSide);
-	t.detach();
 
+void ServerSide(ServerSocket& server)
+{
 	ASSERT_DURATION_LE(1, while (!server.Connected()) {});
 	char buffer[TEST_BUFFER_SIZE];
 
@@ -99,4 +92,32 @@ TEST(DriverTests, DriverTest)
 	ASSERT_TRUE(buffer[0] == 'O' && buffer[1] == 'K' && buffer[2] == '\0');
 	std::this_thread::sleep_for(std::chrono::milliseconds(10)); // wait to disconnect client
 	server.CloseServer();
+}
+
+/// @brief Tests a full session with a server
+TEST(DriverTests, DriverTest)
+{
+	// connect server and black box
+	ServerSocket server;
+	ASSERT_EQ(server.Initialize(), IPCLIB_SUCCEED);
+	server.ConnectAsync();
+	std::thread t = std::thread(DriverSide);
+	t.detach();
+
+	ServerSide(server);
+}
+
+
+TEST(DriverTests, WaitForConnectionTest)
+{
+	std::thread t = std::thread(DriverSide);
+	t.detach();
+
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+
+	ServerSocket server;
+	ASSERT_EQ(server.Initialize(), IPCLIB_SUCCEED);
+	server.ConnectAsync();
+
+	ServerSide(server);
 }
