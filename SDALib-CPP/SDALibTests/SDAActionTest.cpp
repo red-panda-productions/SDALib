@@ -1,6 +1,4 @@
-
-#include "Mocks/SDAActionMock.h"
-
+#include "SDAAction.hpp"
 #include <gtest/gtest.h>
 #include <vector>
 #include "Utils.h"

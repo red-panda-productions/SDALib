@@ -55,9 +55,10 @@ public:
 	{
 		std::vector<std::string> data;
 		SDA_STEER_PACK
+	    SDA_ACCEL_PACK
 		SDA_BRAKE_PACK
 		SDA_GEAR_PACK
-		SDA_ACCEL_PACK
+		
 		msgpack::sbuffer sbuffer;
 		msgpack::pack(sbuffer,data);
 
