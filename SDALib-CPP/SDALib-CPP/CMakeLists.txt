@@ -1,4 +1,21 @@
-﻿ADD_LIBRARY (SDALib STATIC "SDADriver.hpp" "SDAAction.hpp" "SDADriver.cpp" "../SpeedDreams/SDStructs.hpp" "SDAData.hpp" "IPCPointerManager.cpp" "IPCPointerManager.h" "SDADriver.inl")
+﻿SET(SDALIB_HEADERS 
+	SDADriver.hpp
+	SDAAction.hpp
+	SDAData.hpp
+	IPCPointerManager.h
+)
+
+SET(SDALIB_INLINES
+	SDADriver.inl
+)
+
+SET(SDALIB_SOURCES
+	SDADriver.cpp 
+	IPCPointerManager.cpp
+)
+
+
+ADD_LIBRARY (SDALib STATIC ${SDALIB_HEADERS} ${SDALIB_INLINES} ${SDALIB_SOURCES})
 
 include(GenerateExportHeader)
 GENERATE_EXPORT_HEADER(SDALib)
