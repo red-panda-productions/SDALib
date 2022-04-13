@@ -20,6 +20,9 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 
 #define SDA_BUFFER_SIZE 512
 
+/// @brief		   Checks if the action was reported successfully from IPCLib
+/// @param  p_stmt The action that needs to be checked
+/// @param  p_msg  The message that is pushed to the standard error output when the action has failed
 #define IPC_OK(p_stmt,p_msg) \
     if((p_stmt) != IPCLIB_SUCCEED) \
     { \
@@ -28,7 +31,6 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 
 
 /// @brief The driver class from which the AI should inherit
-
 template<class PointerManager>
 class SDALIB_EXPORT AIInterface
 {

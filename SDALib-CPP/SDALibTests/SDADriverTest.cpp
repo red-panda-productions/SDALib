@@ -139,23 +139,9 @@ void NoWaitTest(int p_situations)
 	ServerSide(server, p_situations);
 }
 
-/// @brief Tests a full session with a server
-TEST(DriverTests, NoWaitNoSituations)
-{
-	NoWaitTest(0);
-}
-
-/// @brief Tests a full session with a server
-TEST(DriverTests, NoWaitOneSituation)
-{
-	NoWaitTest(1);
-}
-
-/// @brief Tests a full session with a server
-TEST(DriverTests, NoWaitMultipleSituations)
-{
-	NoWaitTest(4);
-}
+TEST_CASE(DriverTests, NoWaitSituations,NoWaitTest,(0))
+TEST_CASE(DriverTests, NoWaitOneSituation,NoWaitTest,(1))
+TEST_CASE(DriverTests, NoWaitMultipleSituations,NoWaitTest,(4))
 
 /// @brief				 Tests the behaviour of a driver if it can't connect to a server
 /// @param  p_waitAmount The time the driver has to wait
@@ -174,34 +160,9 @@ void WaitTest(int p_waitAmount, int p_situations)
 	ServerSide(server, p_situations);
 }
 
-TEST(DriverTests, WaitNoSituations)
-{
-	WaitTest(3, 0);
-}
+BEGIN_TEST_COMBINATORIAL(DriverTests, CombinatorialWaitTests)
+int waitAmounts[2]{ 3,5 };
+int situationAmounts[3]{ 0,1,4 };
+END_TEST_COMBINATORIAL2(WaitTest, waitAmounts, 2, situationAmounts, 3)
 
-TEST(DriverTests, WaitOneSituation)
-{
-	WaitTest(3, 1);
-}
-
-TEST(DriverTests, WaitMultipleSituations)
-{
-	WaitTest(3, 4);
-}
-
-
-TEST(DriverTests, DoubleWaitNoSituations)
-{
-	WaitTest(5, 0);
-}
-
-TEST(DriverTests, DoubleWaitOneSituation)
-{
-	WaitTest(5, 1);
-}
-
-TEST(DriverTests, DoubleWaitMultipleSituations)
-{
-	WaitTest(5, 4);
-}
 
