@@ -4,6 +4,7 @@
 INCLUDE(cmake/SDAMacros.cmake)
 cmake_minimum_required (VERSION 3.8)
 
+set(INSTALL_GTEST OFF)
 SET(INTERNAL_SDA_PROJECT TRUE)
 
 project("SDALib")
