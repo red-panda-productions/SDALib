@@ -15,7 +15,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(
-  SDATests "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "Mocks/SDADriverMock.h" "Mocks/SDAActionMock.h" "Mocks/PointerManagerMock.h")
+  SDATests "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "Mocks/SDADriverMock.h" "Mocks/PointerManagerMock.h")
 target_link_libraries(
   SDATests
   SDALib
