@@ -1,6 +1,4 @@
 #pragma once
-#include "SDADataMock.h"
-#include "SDAActionMock.h"
 #include "SDADriver.hpp"
 #include "SDADriver.inl"
 #include "PointerManagerMock.h"
@@ -25,8 +23,10 @@ protected:
 	SDAAction UpdateAI(SDAData& p_data) override
 	{
 		SDAAction action;
-		action.Steer = 1;
+		action.Steer = 0.75;
 		action.Brake = 2;
+		action.Gear = 1;
+		action.Accel = 0.5;
 		return action;
 	}
 };

@@ -4,49 +4,22 @@
 #include <string>
 #include "sdalib_export.h"
 
-//#define SDA_STEER_ACTION
-//#define SDA_BRAKE_ACTION
 
-// these macros pre-compute what is needed for the SDAAction class
-#ifdef SDA_STEER_ACTION
 #define SDA_STEER_VAR float Steer = 0;
 #define SDA_STEER_PACK data.push_back(std::to_string(Steer));
 #define SDA_STEER_ORDER p_order.push_back("Steer");
-#else
-#define SDA_STEER_VAR
-#define SDA_STEER_PACK
-#define SDA_STEER_ORDER
-#endif
 
-#ifdef SDA_BRAKE_ACTION
 #define SDA_BRAKE_VAR float Brake = 0;
 #define SDA_BRAKE_PACK data.push_back(std::to_string(Brake));
 #define SDA_BRAKE_ORDER p_order.push_back("Brake");
-#else
-#define SDA_BRAKE_VAR
-#define SDA_BRAKE_PACK
-#define SDA_BRAKE_ORDER
-#endif
 
-#ifdef SDA_GEAR_ACTION
 #define SDA_GEAR_VAR int Gear = 0;
 #define SDA_GEAR_PACK data.push_back(std::to_string(Gear));
 #define SDA_GEAR_ORDER p_order.push_back("Gear");
-#else
-#define SDA_GEAR_VAR
-#define SDA_GEAR_PACK
-#define SDA_GEAR_ORDER
-#endif
 
-#ifdef SDA_ACCEL_ACTION
 #define SDA_ACCEL_VAR float Accel = 0;
 #define SDA_ACCEL_PACK data.push_back(std::to_string(Accel));
 #define SDA_ACCEL_ORDER p_order.push_back("Accel");
-#else
-#define SDA_ACCEL_VAR
-#define SDA_ACCEL_PACK
-#define SDA_ACCEL_ORDER
-#endif
 
 /// @brief				      Copies a msgpack buffer
 /// @param  p_sbuffer		  The msgpack buffer
@@ -85,7 +58,6 @@ public:
 		SDA_BRAKE_PACK
 		SDA_GEAR_PACK
 		SDA_ACCEL_PACK
-
 		msgpack::sbuffer sbuffer;
 		msgpack::pack(sbuffer,data);
 
@@ -98,8 +70,8 @@ public:
 	static void GetOrder(std::vector<std::string>& p_order)
 	{
 		SDA_STEER_ORDER
+	    SDA_ACCEL_ORDER
 		SDA_BRAKE_ORDER
 		SDA_GEAR_ORDER
-		SDA_ACCEL_ORDER
 	}
 };

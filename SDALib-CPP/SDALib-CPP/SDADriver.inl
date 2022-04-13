@@ -1,10 +1,8 @@
 #pragma once
 #include "SDADriver.hpp"
-#include "sim.h"
 
 #define CREATE_AI_INTERFACE_IMPLEMENTATION(p_type) \
-	template AIInterface<p_type>::AIInterface(PCWSTR p_ip, int p_port); \
-	template void AIInterface<p_type>::Simulate(const SDAAction& p_action, SDAData& p_data); 
+	template AIInterface<p_type>::AIInterface(PCWSTR p_ip, int p_port);
 
 /// @brief		   Default constructor of SDA driver
 /// @param  p_ip   The server ip
@@ -16,10 +14,4 @@ AIInterface<PointerManager>::AIInterface(PCWSTR p_ip, int p_port) : m_client(p_i
 	{
 		m_buffer[i] = '\0';
 	}
-}
-
-template <class PointerManager>
-void AIInterface<PointerManager>::Simulate(const SDAAction& p_action, SDAData& p_data)
-{
-	// simulate using simu
 }

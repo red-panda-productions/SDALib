@@ -20,6 +20,12 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 
 #define SDA_BUFFER_SIZE 512
 
+#define IPC_OK(p_stmt,p_msg) \
+    if((p_stmt) != IPCLIB_SUCCEED) \
+    { \
+	    std::cerr << (p_msg) << std::endl; throw std::exception(p_msg); \
+    } \
+
 
 /// @brief The driver class from which the AI should inherit
 
@@ -41,11 +47,6 @@ protected:
 	virtual void InitAI() = 0;
 	virtual SDAAction UpdateAI(SDAData& p_data) = 0;
 
-	/// @brief			 Simulates an action in the simulation
-	/// @param  p_action The action that needs to be simulated
-	/// @return			 The new state of the game
-	void Simulate(const SDAAction& p_action, SDAData& p_data);
-
 private:
 	/// @brief  Updates the ai when data is received
 	/// @return Whether the simulation is still running
@@ -64,7 +65,8 @@ private:
 		int serializeSize;
 		action.Serialize(m_buffer, SDA_BUFFER_SIZE,serializeSize);
 
-		m_client.SendData(m_buffer, serializeSize);
+		m_client.ReceiveDataAsync();
+		IPC_OK(m_client.SendData(m_buffer, serializeSize), "[SDA] Could not send action");
 		return true;
 	}
 
@@ -76,21 +78,22 @@ private:
 		{
 			run = Update();
 		}
-		m_client.SendData("OK",2);
+		IPC_OK(m_client.SendData("OK",2),"[SDA] Could not send OK");
 		m_client.Disconnect();
 	}
 
 	/// @brief Sets up the socket connection and transfers order data
 	void SetupSocket()
 	{
-		std::cout << "Trying to connect to Speed Dreams" << std::endl;
+		std::cerr << "Trying to connect to Speed Dreams" << std::endl;
 		while(m_client.Initialize() != IPCLIB_SUCCEED)
 		{
-			std::cout << "Failed Retrying in 2 seconds" << std::endl;
+			std::cerr << "Failed Retrying in 2 seconds" << std::endl;
 			std::this_thread::sleep_for(std::chrono::seconds(2));
 		}
 
-		m_client.SendData("AI ACTIVE", 10);
+		m_client.ReceiveDataAsync();
+		IPC_OK(m_client.SendData("AI ACTIVE", 10),"[SDA] Could not send AI ACTIVE")
 
 		std::vector<std::string> order;
 		order.push_back("ACTIONORDER");
@@ -103,7 +106,8 @@ private:
 
 		sbufferCopy(sbuffer, m_buffer, SDA_BUFFER_SIZE);
 
-		m_client.SendData(m_buffer, sbuffer.size());
+		m_client.ReceiveDataAsync();
+		IPC_OK(m_client.SendData(m_buffer, sbuffer.size()), "[SDA] Could not send order data");
 		m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);
 
 		std::vector<std::string> resultVec;
@@ -111,7 +115,8 @@ private:
 
 		const int amountOfTests = std::stoi(resultVec[0]); //serialize test amount from server
 
-		m_client.SendData("OK", 2);
+		m_client.ReceiveDataAsync();
+		IPC_OK(m_client.SendData("OK", 2),"[SDA] Could not send OK");
 
 		for (int i = 0; i < amountOfTests; i++)
 		{
