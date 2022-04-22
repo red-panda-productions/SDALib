@@ -62,7 +62,7 @@ public:
         msgpack::pack(sbuffer, data);
 
         sbufferCopy(sbuffer, p_buffer, p_bufferSize);
-        p_sbufferSize = sbuffer.size();
+        p_sbufferSize = static_cast<int>(sbuffer.size());
     }
 
     /// @brief			Gets the order of the actions and stores it into the vector
