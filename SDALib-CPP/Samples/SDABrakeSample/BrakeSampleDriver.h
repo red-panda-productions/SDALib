@@ -8,7 +8,7 @@
 class BrakeSampleDriver : public SDADriver
 {
 public:
-    BrakeSampleDriver(float p_maxSpeed)
+    explicit BrakeSampleDriver(float p_maxSpeed)
         : SDADriver()
     {
         m_maxSpeed = p_maxSpeed;

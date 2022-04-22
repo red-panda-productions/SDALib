@@ -9,7 +9,7 @@
 class SteerSampleDriver : public SDADriver
 {
 public:
-    SteerSampleDriver(float p_maxOff)
+    explicit SteerSampleDriver(float p_maxOff)
         : SDADriver()
     {
         m_maxOff = p_maxOff;

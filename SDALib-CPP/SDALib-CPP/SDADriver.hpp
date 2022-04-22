@@ -44,7 +44,7 @@ public:
     }
 
 protected:
-    AIInterface(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
+    explicit AIInterface(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
 
     virtual void InitAI() = 0;
     virtual SDAAction UpdateAI(SDAData& p_data) = 0;
