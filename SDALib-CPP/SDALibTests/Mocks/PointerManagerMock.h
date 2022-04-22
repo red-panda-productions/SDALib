@@ -5,8 +5,8 @@ class PointerManagerMock
 public:
     PointerManagerMock()
     {
-        
-    };
+
+    }
 
     SDAData* GetDataPointer()
     {
@@ -21,5 +21,4 @@ public:
     SDAData Data;
 
     tTrackSeg Segments[10];
-
 };

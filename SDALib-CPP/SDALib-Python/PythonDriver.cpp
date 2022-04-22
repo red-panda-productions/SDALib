@@ -2,8 +2,7 @@
 
 /// @brief Constructs PythonDriver and sets up python code
 PythonDriver::PythonDriver()
-    :m_main(import("__main__"))
-    ,m_globals(m_main.attr("__dict__"))
+    : m_main(import("__main__")), m_globals(m_main.attr("__dict__"))
 {
     exec("exec(open(\"Driver.py\").read())", m_globals);
     m_SDADriverType = m_globals["SDADriver"];
@@ -33,11 +32,11 @@ SDAAction PythonDriver::UpdateAI(SDAData& p_data)
     SDAAction action;
     try
     {
-        tuple result = extract<tuple>(m_updateFunction()); // needs input data
+        tuple result = extract<tuple>(m_updateFunction());  // needs input data
         action.Steer = extract<float>(result[0]);
         action.Accel = extract<float>(result[1]);
         action.Brake = extract<float>(result[2]);
-        action.Gear  = extract<int>(result[3]);
+        action.Gear = extract<int>(result[3]);
     }
     catch (error_already_set&)
     {
