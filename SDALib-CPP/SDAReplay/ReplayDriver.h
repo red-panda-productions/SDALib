@@ -25,10 +25,10 @@
 class ReplayDriver : public SDADriver
 {
 public:
-    ReplayDriver(std::string& replayFile)
+    explicit ReplayDriver(std::string& p_replayFile)
         : SDADriver()
     {
-        m_replayFile.open(replayFile);
+        m_replayFile.open(p_replayFile);
         if (!m_replayFile.good()) throw std::exception("Could not open replay file");
         SET_TICK_TO_ACT
     }

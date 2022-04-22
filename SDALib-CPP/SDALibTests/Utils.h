@@ -12,17 +12,17 @@
 /// @param msg2 The second message
 /// @param size The size of the 2 messages
 /// @return     Whether the test failed or succeeded
-inline bool TestMessageEqual(const char* msg1, const char* msg2, int size)
+inline bool TestMessageEqual(const char* p_msg1, const char* p_msg2, int p_size)
 {
-    bool len1 = size == strlen(msg1);
+    bool len1 = p_size == static_cast<int>(strlen(p_msg1));
     if (!len1) return false;
-    int length = strlen(msg2);
-    bool len2 = size == length;
+    int length = static_cast<int>(strlen(p_msg2));
+    bool len2 = p_size == length;
     if (!len2) return false;
 
     for (int i = 0; i < size; i++)
     {
-        if (msg1[i] != msg2[i]) return false;
+        if (p_msg1[i] != p_msg2[i]) return false;
     }
     return true;
 }
