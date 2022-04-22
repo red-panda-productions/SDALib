@@ -32,7 +32,7 @@ target_include_directories(SDATests PUBLIC "../SDALib-CPP")
 INSTALL_SDA_PACKAGES(SDATests)
 
 include(GoogleTest)
-gtest_discover_tests(SDATests)
+gtest_discover_tests(SDATests DISCOVERY_TIMEOUT 600)
 
 SET(COVERAGE_OUTPUT_FOLDER ${CMAKE_SOURCE_DIR} CACHE STRING "The output folder of the coverage bat files")
 
