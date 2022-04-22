@@ -20,7 +20,6 @@ protected:
     SDAAction UpdateAI(SDAData& p_data) override;
 
 private:
-
     object m_main;
     object m_globals;
     object m_SDADriverType;
@@ -29,4 +28,3 @@ private:
     object m_updateFunction;
     object m_initFunction;
 };
-

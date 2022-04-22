@@ -5,7 +5,6 @@ class PointerManagerMock
 public:
     PointerManagerMock()
     {
-
     }
 
     SDAData* GetDataPointer()
