@@ -20,7 +20,7 @@ inline bool TestMessageEqual(const char* p_msg1, const char* p_msg2, int p_size)
     bool len2 = p_size == length;
     if (!len2) return false;
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < p_size; i++)
     {
         if (p_msg1[i] != p_msg2[i]) return false;
     }

@@ -22,7 +22,7 @@ protected:
 private:
     object m_main;
     object m_globals;
-    object m_SDADriverType;
+    object m_driverType;
     object m_pythonDriver;
 
     object m_updateFunction;

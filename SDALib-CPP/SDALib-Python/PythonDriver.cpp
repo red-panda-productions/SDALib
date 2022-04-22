@@ -5,7 +5,7 @@ PythonDriver::PythonDriver()
     : m_main(import("__main__")), m_globals(m_main.attr("__dict__"))
 {
     exec("exec(open(\"Driver.py\").read())", m_globals);
-    m_SDADriverType = m_globals["SDADriver"];
+    m_driverType = m_globals["SDADriver"];
     m_pythonDriver = m_SDADriverType();
     m_updateFunction = m_pythonDriver.attr("UpdateAI");
     m_initFunction = m_pythonDriver.attr("InitAI");

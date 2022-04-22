@@ -26,7 +26,7 @@
 ///	@param  p_destinationSize The size of the destination buffer
 inline void sbufferCopy(const msgpack::sbuffer& p_sbuffer, char* p_destination, int p_destinationSize)
 {
-    int size = static_cast<int>(p_sbuffer.size());
+    const size_t size = p_sbuffer.size();
     assert(size < p_destinationSize);
     const char* newData = p_sbuffer.data();
     for (int i = 0; i < size; i++)
