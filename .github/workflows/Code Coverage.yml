@@ -35,7 +35,11 @@ jobs:
 
     - name: Run code coverage
       working-directory: ${{github.workspace}}
-      run: .\SDALib-CPP\SDACoverage.bat
+      run: |
+        dir
+        cd SDALib-CPP
+        dir
+        .\SDACoverage.bat
     
     - name: Check cod coverage
       shell: cmd
