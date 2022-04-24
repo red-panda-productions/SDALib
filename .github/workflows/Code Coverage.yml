@@ -34,8 +34,8 @@ jobs:
       run: cmake --build .
 
     - name: Run code coverage
-      working-directory: ${{github.workspace}}\SDALib-CPP
-      run: .\SDACoverage.bat
+      working-directory: ${{github.workspace}}
+      run: .\SDALib-CPP\SDACoverage.bat
     
     - name: Check cod coverage
       shell: cmd
