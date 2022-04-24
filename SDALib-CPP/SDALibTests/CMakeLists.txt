@@ -45,12 +45,22 @@ IF(OPEN_CPP_COVERAGE)
     STRING(REGEX REPLACE "/" "\\\\" BINARYDIR ${CMAKE_BINARY_DIR})
     STRING(REGEX REPLACE "/" "\\\\" EXEPATH ${CMAKE_CURRENT_BINARY_DIR}/SDATests.exe)
 
+    IF(OPTION_GITHUB_ACTIONS)
+        MESSAGE(STATUS "Creating Github actions coverage file")
+        STRING(CONCAT BINARYDIR "${BINARYDIR}" "\\Debug")
+        SET(COV_EXPORT_TYPE "cobertura:${SOURCEDIR}\\coverage.xml")
+        SET(COV_EXTRA_COMMANDS "")
+    ELSE(OPTION_GITHUB_ACTIONS)
+        SET(COV_EXPORT_TYPE "html:${CURRENTBINARYDIR}\\SDACoverage")
+        SET(COV_EXTRA_COMMANDS "@start ${CURRENTBINARYDIR}\\SDACoverage\\index.html")
+    ENDIF(OPTION_GITHUB_ACTIONS)
+
     FILE(GENERATE OUTPUT ${COVERAGE_OUTPUT_FOLDER}/SDACoverage.bat
         CONTENT 
             "@echo off
             cd /d ${CURRENTBINARYDIR}
-            \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=html:${CURRENTBINARYDIR}\\SDACoverage --excluded_sources  --excluded_line_regex  -- ${EXEPATH}
-            @start ${CURRENTBINARYDIR}\\SDACoverage\\index.html")
+            \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex  -- ${EXEPATH}
+            ${COV_EXTRA_COMMANDS}")
 
     MESSAGE(STATUS "Created SDACoverage.bat, run with ./SDACoverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
 ENDIF(OPEN_CPP_COVERAGE)
