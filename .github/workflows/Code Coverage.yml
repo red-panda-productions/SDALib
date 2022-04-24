@@ -26,6 +26,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install OpenCppCoverage
+      uses: KungFuDonkey/Install-OpenCppCoverage@v1.0.1
+      
     - name: Configure CMake
       run: cmake -DOPTION_GITHUB_ACTIONS=ON -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
 
