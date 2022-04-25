@@ -7,22 +7,28 @@
 #include "SDADriver.hpp"
 
 #define SET_TICK_TO_ACT \
-    READ_FILE \
+    READ_FILE           \
     m_tickToAct = std::stoul(m_reading);
 #define READ_FILE m_replayFile >> m_reading;
-#define READ_AND_SET_FLOAT(variable)             \
-    try {READ_FILE                               \
-         action.variable = std::stof(m_reading);}\
-    catch (std::exception& e)                    \
-        {m_replayFile.close();                   \
-         throw std::exception("Cannot convert string to float");}\
+#define READ_AND_SET_FLOAT(variable)                            \
+    try                                                         \
+    {                                                           \
+        READ_FILE                                               \
+        action.variable = std::stof(m_reading);                 \
+    }                                                           \
+    catch (std::exception & e)                                  \
+    {                                                           \
+        m_replayFile.close();                                   \
+        throw std::exception("Cannot convert string to float"); \
+    }
 
 class ReplayDriver : public SDADriver
 {
 public:
-    ReplayDriver(std::string& replayFile) : SDADriver()
+    explicit ReplayDriver(std::string& p_replayFile)
+        : SDADriver()
     {
-        m_replayFile.open(replayFile);
+        m_replayFile.open(p_replayFile);
         if (!m_replayFile.good()) throw std::exception("Could not open replay file");
         SET_TICK_TO_ACT
     }
@@ -46,14 +52,14 @@ protected:
         if (m_tickToAct != p_data.TickCount) return action;
 
         READ_AND_SET_FLOAT(Brake)
-        action.Brake = action.Brake > 1 || action.Brake < 0? 0 : action.Brake;
+        action.Brake = action.Brake > 1 || action.Brake < 0 ? 0 : action.Brake;
 
         READ_AND_SET_FLOAT(Steer)
-        action.Steer = action.Steer > 1 || action.Steer < -1? 0 : action.Steer;
+        action.Steer = action.Steer > 1 || action.Steer < -1 ? 0 : action.Steer;
 
         std::cout << "TickCount: " << p_data.TickCount << "; Brake value: " << action.Brake << "; Steer value: " << action.Steer << std::endl;
 
-        if (!m_replayFile.eof()) {SET_TICK_TO_ACT}
+        if (!m_replayFile.eof()) { SET_TICK_TO_ACT }
 
         return action;
     }

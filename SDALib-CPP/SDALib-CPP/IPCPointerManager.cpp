@@ -13,4 +13,3 @@ tTrackSeg* IPCPointerManager::GetSegmentPointer()
 {
     return static_cast<tTrackSeg*>(m_segmentRegion.get_address());
 }
-
