@@ -52,16 +52,16 @@ IF(OPEN_CPP_COVERAGE)
         SET(COV_EXPORT_TYPE "cobertura:${SOURCEDIR}\\coverage.xml")
         SET(COV_EXTRA_COMMANDS "")
     ELSE(OPTION_GITHUB_ACTIONS)
-        SET(COV_EXPORT_TYPE "html:${CURRENTBINARYDIR}\\SDACoverage")
-        SET(COV_EXTRA_COMMANDS "@start ${CURRENTBINARYDIR}\\SDACoverage\\index.html")
+        SET(COV_EXPORT_TYPE "html:${CURRENTBINARYDIR}\\coverage")
+        SET(COV_EXTRA_COMMANDS "@start ${CURRENTBINARYDIR}\\coverage\\index.html")
     ENDIF(OPTION_GITHUB_ACTIONS)
 
-    FILE(GENERATE OUTPUT ${COVERAGE_OUTPUT_FOLDER}/SDACoverage.bat
+    FILE(GENERATE OUTPUT ${COVERAGE_OUTPUT_FOLDER}/coverage.bat
         CONTENT 
             "@echo off
             cd /d ${CURRENTBINARYDIR}
             \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex  -- ${EXEPATH}
             ${COV_EXTRA_COMMANDS}")
 
-    MESSAGE(STATUS "Created SDACoverage.bat, run with ./SDACoverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
+    MESSAGE(STATUS "Created SDACoverage.bat, run with ./coverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
 ENDIF(OPEN_CPP_COVERAGE)
