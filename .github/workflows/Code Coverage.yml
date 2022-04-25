@@ -28,7 +28,7 @@ jobs:
 
     - name: Install OpenCppCoverage
       uses: KungFuDonkey/Install-OpenCppCoverage@v1.0.1
-      
+
     - name: Configure CMake
       run: cmake -DOPTION_GITHUB_ACTIONS=ON -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
 
@@ -39,12 +39,10 @@ jobs:
     - name: Run code coverage
       working-directory: ${{github.workspace}}
       run: |
-        dir
         cd SDALib-CPP
-        dir
         .\SDACoverage.bat
     
-    - name: Check cod coverage
+    - name: Check code coverage
       shell: cmd
       run: type "${{github.workspace}}\SDALib-CPP\coverage.xml"
 
