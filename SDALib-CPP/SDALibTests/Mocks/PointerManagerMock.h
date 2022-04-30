@@ -3,10 +3,7 @@
 class PointerManagerMock
 {
 public:
-    PointerManagerMock()
-    {
-        
-    };
+    PointerManagerMock() = default;
 
     SDAData* GetDataPointer()
     {
@@ -18,8 +15,7 @@ public:
         return Segments;
     }
 
-    SDAData Data;
+    SDAData Data = {};
 
-    tTrackSeg Segments[10];
-
+    tTrackSeg Segments[10] = {};
 };

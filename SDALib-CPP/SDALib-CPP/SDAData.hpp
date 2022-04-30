@@ -4,8 +4,10 @@
 struct SDAData
 {
 public:
-    SDAData(tCarElt* p_car, tSituation* p_situation, unsigned long p_tickCount) : Car(*p_car), Situation(*p_situation), TickCount(p_tickCount) {}
+    SDAData(tCarElt* p_car, tSituation* p_situation, unsigned long p_tickCount)
+        : Car(*p_car), Situation(*p_situation), TickCount(p_tickCount) {}
     SDAData()
+        : Car(), Situation()
     {
         TickCount = 0;
     }

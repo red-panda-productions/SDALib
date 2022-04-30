@@ -46,10 +46,10 @@ static inline std::ostream &operator<<(std::ostream& p_out,Bits<TYPE&> const p_b
 
 class ReplayDriver : public SDADriver {
 public:
-  ReplayDriver(std::string& replayFile) : SDADriver() {
+  explicit ReplayDriver(std::string& replayFile) : SDADriver() 
+{
     m_replayFile.open(replayFile, std::ios::binary);
-    if (!m_replayFile.good())
-      throw std::exception("Could not open replay file");
+    if (!m_replayFile.good()) throw std::exception("Could not open replay file");
 
     SET_TICK_TO_ACT
   }
@@ -90,10 +90,13 @@ protected:
               << "Accel: " << action.Accel << "\n\t"
               << "Gear: " << action.Gear << std::endl;
 
-    if (m_replayFile.eof()) {
+    if (m_replayFile.eof()) 
+    {
       m_replayFile.close();
       std::cout << "Reached end of file." << std::endl;
-    } else {
+    } 
+    else 
+    {
       SET_TICK_TO_ACT
     }
 

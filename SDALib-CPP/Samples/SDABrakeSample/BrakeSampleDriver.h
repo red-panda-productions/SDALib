@@ -8,11 +8,12 @@
 class BrakeSampleDriver : public SDADriver
 {
 public:
-
-    BrakeSampleDriver(float p_maxSpeed) : SDADriver()
+    explicit BrakeSampleDriver(float p_maxSpeed)
+        : SDADriver()
     {
         m_maxSpeed = p_maxSpeed;
     }
+
 protected:
     void InitAI() override
     {
@@ -23,8 +24,8 @@ protected:
     {
         SDAAction action;
 
-        //full brake when going 20km/h above max speed
-        action.Brake = std::max(0.0f,(p_data.Car.pub.DynGC.vel.x - m_maxSpeed) / 20);
+        // full brake when going 20km/h above max speed
+        action.Brake = std::max(0.0f, (p_data.Car.pub.DynGC.vel.x - m_maxSpeed) / 20);
         std::cout << p_data.Car.pub.DynGC.vel.x << " " << action.Brake << std::endl;
 
         return action;
