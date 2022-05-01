@@ -2,7 +2,7 @@
 
 int main()
 {
-    std::string replayFileName("ReplayData/bbRecording20220330-123618.txt");
+    std::string replayFileName("ReplayData/decisions.txt");
 
     ReplayDriver driver(replayFileName);
     driver.Run();
