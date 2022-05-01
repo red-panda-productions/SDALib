@@ -75,7 +75,8 @@ protected:
         std::cout << "TickCount: " << p_data.TickCount << "\n"
                   << "Tick To Act: " << m_tickToAct << std::endl;
 
-        if (m_tickToAct > p_data.TickCount) return m_prevAction;
+        if (m_tickToAct > p_data.TickCount)
+            return m_prevAction;
         else if (m_tickToAct < p_data.TickCount)
         {
             if (m_replayFile.is_open())
