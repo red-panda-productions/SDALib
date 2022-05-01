@@ -1,14 +1,14 @@
 #include "ReplayDriver.h"
 
-int main(int argc, char **path)
+int main(int p_argc, char **p_path)
 {
-    std::string replayFileName("ReplayData/bbRecording20220330-123618.txt"));
-    for (int i = 1; i < argc; i++)
+    std::string replayFileName;  // initialize the string
+    for (int i = 1; i < p_argc; i++)
     {
-        if (path[i] == std::string("--bbfile"))
+        // picks the argument written after --bbfile
+        if (p_path[i] == std::string("--bbfile"))
         {
-            std::string test(path[++i]);  //"ReplayData/bbRecording20220330-123618.txt");
-            replayFileName = test;
+            replayFileName = p_path[++i];
         }
     }
 
