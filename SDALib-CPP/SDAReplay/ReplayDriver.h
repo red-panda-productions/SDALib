@@ -34,8 +34,6 @@ static inline std::istream& operator>>(std::istream& p_in, Bits<TYPE&> p_b)
 template <typename TYPE>
 static inline std::ostream& operator<<(std::ostream& p_out, Bits<TYPE&> const p_b)
 {
-    // reinterpret_cast is for pointer conversion
-    // static_cast is for compatible pointer conversion
     return p_out.write(reinterpret_cast<const char*>(&(p_b.t)), sizeof(TYPE));
 }
 
@@ -46,6 +44,8 @@ static inline std::ostream& operator<<(std::ostream& p_out, Bits<TYPE&> const p_
 class ReplayDriver : public SDADriver
 {
 public:
+    /// \brief Opens p_replayFile and sets first tickCount.
+    /// \param p_replayFile File of recorded blackbox
     explicit ReplayDriver(std::string& p_replayFile)
         : SDADriver()
     {
@@ -55,11 +55,16 @@ public:
     }
 
 protected:
+    /// \brief Initialise the AI
     void InitAI() override
     {
         // do nothing
     }
 
+    /// \brief Reads actions from recorded file in m_replayFile.
+    ///        Sets the action if the read tick count is the same as the current tick count in p_data
+    /// \param p_data Current simulation data from speed dreams
+    /// \return Action to send to speed dreams
     SDAAction UpdateAI(SDAData& p_data) override
     {
         SDAAction action;
