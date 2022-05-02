@@ -6,7 +6,7 @@ int main(int p_argc, char **p_path)
     for (int i = 1; i < p_argc; i++)
     {
         // picks the argument written after --bbfile
-        if (p_path[i] == std::string("--bbfile"))
+        if (strcmp(p_path[i], "--bbfile") == 0)
         {
             replayFileName = p_path[++i];
         }
