@@ -17,6 +17,10 @@ env:
   # Enable colour output for GTEST and XML file generation
   GTEST_COLOR: yes
   GTEST_OUTPUT: xml:test-results/
+  
+  BUILD_TYPE: Release
+  BOOST_PATH: ${{github.workspace}}/libraries
+  BOOST_ROOT: ${{github.workspace}}/libraries/boost/boost
 
 jobs:
   build:
@@ -33,7 +37,7 @@ jobs:
       id: cache-boost
       with:
         # Set the default path as the path to cache
-        path: ${{github.workspace}}/libraries/boost/boost
+        path: ${{env.BOOST_ROOT}}
         # Use the version as the key to only cache the correct version
         key: boost-1.79.0
 
@@ -45,12 +49,10 @@ jobs:
         boost_version: 1.79.0
         toolset: msvc
         platform_version: 2022
-        boost_install_dir: ${{github.workspace}}/libraries
+        boost_install_dir: ${{env.BOOST_PATH}}
 
     - name: Configure CMake
-      run: cmake -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
-      env:
-        BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+      run: cmake -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

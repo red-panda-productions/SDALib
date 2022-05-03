@@ -10,6 +10,8 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  BOOST_PATH:
+  BOOST_ROOT:
 
 jobs:
   cpp-linter:
@@ -23,7 +25,7 @@ jobs:
         id: cache-boost
         with:
           # Set the default path as the path to cache
-          path: ${{github.workspace}}/libraries/boost/boost
+          path: ${{github.workspace}}/boost/boost
           # Use the version as the key to only cache the correct version
           key: boost-1.79.0
 
@@ -35,7 +37,7 @@ jobs:
           boost_version: 1.79.0
           toolset: msvc
           platform_version: 2022
-          boost_install_dir: ${{github.workspace}}/libraries
+          boost_install_dir: ${{github.workspace}}
 
       - name: Install linter package
         run: python3 -m pip install git+https://github.com/shenxianpeng/cpp-linter-action
@@ -45,7 +47,7 @@ jobs:
           arch: x86
 
       - name: Generate compilation database  
-        run: cmake -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DOPTION_SDALIB_PYTHON=ON -S '${{github.workspace}}/SDALib-CPP' -B '${{runner.workspace}}/build' -G Ninja
+        run: cmake -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.outputs.BOOST_ROOT}}/lib -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DOPTION_SDALIB_PYTHON=ON -S '${{github.workspace}}/SDALib-CPP' -B '${{runner.workspace}}/build' -G Ninja
 
       - name: run linter as package
         id: linter
