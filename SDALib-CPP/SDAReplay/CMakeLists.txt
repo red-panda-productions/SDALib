@@ -1,5 +1,7 @@
 project(SDAReplay)
 
+FIND_PACKAGE(Boost COMPONENTS program_options)
+
 add_executable( SDAReplay
         "ReplayAction.h"
         "ReplayData.h"
@@ -9,6 +11,7 @@ add_executable( SDAReplay
 target_link_libraries(
         SDAReplay
         SDALib
+        Boost::program_options
 )
 target_include_directories(SDAReplay PUBLIC "../SDALib-CPP")
 
