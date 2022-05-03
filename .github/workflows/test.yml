@@ -1,6 +1,8 @@
-name: CI Pipeline Code Coverage
+name: CI Pipeline Tests
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -10,11 +12,13 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Debug
+  BUILD_TYPE: Release
 
   # Enable colour output for GTEST and XML file generation
   GTEST_COLOR: yes
   GTEST_OUTPUT: xml:test-results/
+  
+
 
 jobs:
   build:
@@ -27,12 +31,9 @@ jobs:
       BOOST_PATH: ${{github.workspace}}/libraries
       BOOST_ROOT: ${{github.workspace}}/libraries/boost/boost
       BOOST_VERSION: 1.79.0
-
+    
     steps:
     - uses: actions/checkout@v2
-
-    - name: Install OpenCppCoverage
-      uses: KungFuDonkey/Install-OpenCppCoverage@v1
 
     - name: Cache boost
       uses: actions/cache@v2
@@ -54,30 +55,19 @@ jobs:
         boost_install_dir: ${{env.BOOST_PATH}}
 
     - name: Configure CMake
-      run: cmake -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -DOPTION_GITHUB_ACTIONS=ON -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
+      run: cmake -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
       run: cmake --build .
 
-    - name: Run code coverage
-      working-directory: ${{github.workspace}}
-      run: |
-        cd SDALib-CPP
-        .\coverage.bat
-    
-    - name: Check code coverage
-      shell: cmd
-      run: type "${{github.workspace}}\SDALib-CPP\coverage.xml"
+    - name: Test
+      working-directory: ${{runner.workspace}}/build
+      run: ctest -V
 
-    - name: Create code coverage report
-      uses: 5monkeys/cobertura-action@master
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      if: failure()
       with:
-        path: ${{github.workspace}}\SDALib-CPP\coverage.xml
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        minimum_coverage: 100
-        fail_below_threshold: true
-        show_missing: true
-        link_missing_lines: true
-        skip_covered: false
-        report_name: 'code coverage report'
+        name: test_results_xml
+        path: ${{runner.workspace}}/build/SDATests/test-results/**/*.xml
