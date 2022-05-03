@@ -45,7 +45,7 @@ jobs:
           arch: x86
 
       - name: Generate compilation database  
-        run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DOPTION_SDALIB_PYTHON=ON -S '${{github.workspace}}/SDALib-CPP' -B '${{runner.workspace}}/build' -G Ninja
+        run: cmake -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DOPTION_SDALIB_PYTHON=ON -S '${{github.workspace}}/SDALib-CPP' -B '${{runner.workspace}}/build' -G Ninja
 
       - name: run linter as package
         id: linter
