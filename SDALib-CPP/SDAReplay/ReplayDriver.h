@@ -6,6 +6,8 @@
 #include "ReplayData.h"
 #include "SDADriver.hpp"
 
+#define MAX_ULONG 4294967295
+
 template <typename TYPE>
 struct Bits
 {
@@ -69,13 +71,7 @@ protected:
     {
         SDAAction action;
 
-        if (m_firstUpdate)
-        {
-            m_firstUpdate = false;
-            return action;
-        }
-
-        if (!m_replayFile.is_open()) return action;
+        if (!m_replayFile.is_open() || p_data.TickCount == MAX_ULONG) return action;
 
         std::cout << "TickCount: " << p_data.TickCount << "\n"
                   << "Tick To Act: " << m_tickToAct << std::endl;
@@ -98,10 +94,10 @@ protected:
         action.Steer = floatToRead > 1 || floatToRead < -1 ? 0 : floatToRead;
 
         READ_FLOAT(floatToRead)
-        action.Brake = floatToRead > 1 || floatToRead < 0 ? 0 : floatToRead;
+        action.Accel = floatToRead > 1 || floatToRead < 0 ? 0 : floatToRead;
 
         READ_FLOAT(floatToRead)
-        action.Accel = floatToRead > 1 || floatToRead < 0 ? 0 : floatToRead;
+        action.Brake = floatToRead > 1 || floatToRead < 0 ? 0 : floatToRead;
 
         READ_FLOAT(floatToRead)
         action.Gear = (int)floatToRead < -1 || (int)floatToRead > 1 ? 0 : (int)floatToRead;
@@ -119,8 +115,6 @@ protected:
     }
 
 private:
-    bool m_firstUpdate = true;
-
     std::ifstream m_replayFile;
 
     unsigned long m_tickToAct{};
