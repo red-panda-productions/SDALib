@@ -34,8 +34,9 @@ jobs:
       with:
         boost_version: 1.79.0
         toolset: msvc
-        platform_version: 2019
+        platform_version: 2022
         boost_install_dir: ${{github.workspace}}/libraries
+        link: static+shared
 
     - name: Configure CMake
       run: cmake -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
