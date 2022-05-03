@@ -29,7 +29,17 @@ jobs:
     - name: Install OpenCppCoverage
       uses: KungFuDonkey/Install-OpenCppCoverage@v1
 
+    - name: Cache boost
+      uses: actions/cache@v2
+      id: cache-boost
+      with:
+        # Set the default path as the path to cache
+        path: ${{github.workspace}}/libraries/boost/boost
+        # Use the version as the key to only cache the correct version
+        key: boost-1.79.0
+
     - name: Install boost
+      if: steps.cache-boost.outputs.cache-hit != 'true'
       uses: MarkusJx/install-boost@v2.3.0
       id: install-boost
       with:
