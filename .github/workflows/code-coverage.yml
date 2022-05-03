@@ -29,8 +29,19 @@ jobs:
     - name: Install OpenCppCoverage
       uses: KungFuDonkey/Install-OpenCppCoverage@v1
 
+    - name: Install boost
+      uses: MarkusJx/install-boost@v2.3.0
+      id: install-boost
+      with:
+        boost_version: 1.79.0
+        toolset: msvc
+        platform_version: 2019
+        boost_install_dir: ${{github.workspace}}/libraries
+
     - name: Configure CMake
       run: cmake -DOPTION_GITHUB_ACTIONS=ON -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
+      env:
+        BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
