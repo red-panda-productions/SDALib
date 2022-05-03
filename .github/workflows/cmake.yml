@@ -28,6 +28,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install boost
+      uses: MarkusJx/install-boost@v2.3.0
+      id: install-boost
+      with:
+        boost_version: 1.79.0
+        toolset: msvc
+        platform_version: 2019
+        boost_install_dir: C:\Boost
+
     - name: Configure CMake
       run: cmake -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
 
