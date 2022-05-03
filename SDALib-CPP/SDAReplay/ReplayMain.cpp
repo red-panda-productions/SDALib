@@ -6,10 +6,9 @@ int main(int p_argc, char **p_path)
     for (int i = 1; i < p_argc; i++)
     {
         // picks the argument written after --bbfile
-        if (strcmp(p_path[i], "--bbfile") == 0)
-        {
-            replayFileName = p_path[++i];
-        }
+        if (strcmp(p_path[i], "--bbfile") == 0) continue;
+
+        replayFileName = p_path[++i];
     }
 
     ReplayDriver driver(replayFileName);
