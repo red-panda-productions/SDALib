@@ -18,7 +18,7 @@ int main(int p_argc, char **p_path)
     }
     catch (const error &er)
     {
-        std::cerr << "argument is invalid, try: \"--bbfile\" instead" << std::endl;
+        std::cerr << "arguments are invalid, syntax: \"--bbfile <filepath>\"" << std::endl;
         return 0;
     }
 
