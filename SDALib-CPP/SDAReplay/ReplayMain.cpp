@@ -30,7 +30,7 @@ int main(int p_argc, char **p_path)
 
     if (replayFileName.empty())  // if you don't give the program a filename, print the following error.
     {
-        std::cerr << "no replay file found, please use command \"--bbfile <filename>\"" << std::endl;
+        std::cerr << "no replay file found, syntax: \"--bbfile <filepath>\"" << std::endl;
         return 2;
     }
 
