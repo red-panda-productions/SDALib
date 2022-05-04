@@ -1,6 +1,7 @@
 project(SDAReplay)
 
-Find_Package(Boost COMPONENTS program_options)
+FIND_PACKAGE(Boost COMPONENTS program_options)
+
 
 add_executable( SDAReplay
         "ReplayAction.h"

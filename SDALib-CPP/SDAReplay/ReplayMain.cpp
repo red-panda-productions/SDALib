@@ -32,7 +32,6 @@ int main(int p_argc, char **p_path)
         std::cerr << "no replay file found, please use command \"--bbfile <filename>\"" << std::endl;
         return 0;
     }
-
     ReplayDriver driver(replayFileName);
     driver.Run();
 
