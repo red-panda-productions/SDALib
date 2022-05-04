@@ -18,8 +18,8 @@ int main(int p_argc, char **p_path)
     }
     catch (const BsOptions::error &er)
     {
-        std::cerr << "argument is invalid, try: \"--bbfile\" instead" << std::endl;
-        return 0;
+        std::cerr << "arguments are invalid, syntax: \"--bbfile <filepath>\"" << std::endl;
+        return 1;
     }
 
     std::string replayFileName;  // initialize the string
@@ -30,8 +30,8 @@ int main(int p_argc, char **p_path)
 
     if (replayFileName.empty())  // if you don't give the program a filename, print the following error.
     {
-        std::cerr << "no replay file found, please use command \"--bbfile <filename>\"" << std::endl;
-        return 0;
+        std::cerr << "no replay file found, syntax: \"--bbfile <filepath>\"" << std::endl;
+        return 2;
     }
 
     ReplayDriver driver(replayFileName);
