@@ -19,7 +19,7 @@ int main(int p_argc, char **p_path)
     catch (const error &er)
     {
         std::cerr << "arguments are invalid, syntax: \"--bbfile <filepath>\"" << std::endl;
-        return 0;
+        return 1;
     }
 
     std::string replayFileName;  // initialize the string
