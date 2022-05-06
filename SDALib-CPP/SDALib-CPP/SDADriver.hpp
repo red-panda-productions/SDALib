@@ -88,7 +88,8 @@ private:
     void SetupSocket()
     {
         std::cerr << "Trying to connect to Speed Dreams" << std::endl;
-        while (m_client.Initialize() != IPCLIB_SUCCEED)
+        int tries = 0;
+        while (m_client.Initialize() != IPCLIB_SUCCEED && tries++ < 10)
         {
             std::cerr << "Failed Retrying in 2 seconds" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(2));
