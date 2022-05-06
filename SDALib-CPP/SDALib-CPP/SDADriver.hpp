@@ -5,6 +5,7 @@
 #include "msgpack.hpp"
 #include "sdalib_export.h"
 #include <thread>
+#include <chrono>
 #include "IPCPointerManager.h"
 
 /// @brief				 Retrieves the msgpack vector
@@ -91,9 +92,12 @@ private:
         int tries = 0;
         while (m_client.Initialize() != IPCLIB_SUCCEED && tries++ < 10)
         {
-            std::cerr << "Failed Retrying in 2 seconds" << std::endl;
+            std::cerr << "Failed Retrying in 2 seconds, tries: " << tries << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(2));
         }
+
+        if (tries >= 10) 
+            throw std::exception("Could not connect to speed dreams");
 
         m_client.ReceiveDataAsync();
         IPC_OK(m_client.SendData("AI ACTIVE", 10), "[SDA] Could not send AI ACTIVE")

@@ -164,3 +164,10 @@ BEGIN_TEST_COMBINATORIAL(DriverTests, CombinatorialWaitTests)
 int waitAmounts[2]{3, 5};
 int situationAmounts[3]{0, 1, 4};
 END_TEST_COMBINATORIAL2(WaitTest, waitAmounts, 2, situationAmounts, 3)
+
+/// @brief Tests the timeout of the driver.
+TEST(DriverTests, TimeoutTests)
+{
+    SDADriverMock driver;
+    ASSERT_DURATION_LE(45, ASSERT_THROW(driver.Run(), std::exception));
+}
