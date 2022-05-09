@@ -179,7 +179,7 @@ END_TEST_COMBINATORIAL2(WaitTest, waitAmounts, 2, situationAmounts, 3)
 TEST(DriverTests, TimeoutTests)
 {
     SDADriverMock driver;
-    ASSERT_DURATION_LE(45, ASSERT_THROW(driver.Run(), std::exception));
+    ASSERT_DURATION_LE(60, ASSERT_THROW(driver.Run(), std::exception));
 }
 
 /// @brief Tests if the program shuts down correctly when the server is shut down abruptly
