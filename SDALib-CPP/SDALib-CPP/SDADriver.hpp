@@ -55,8 +55,9 @@ private:
     /// @return Whether the simulation is still running
     bool Update()
     {
-        m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);  // can change to GetData
+        const int err = m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);  // can change to GetData
 
+        if (err != IPCLIB_SUCCEED) return false;
         if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
         SDAData* data = m_pointerManager.GetDataPointer();
@@ -108,14 +109,15 @@ private:
         msgpack::sbuffer sbuffer;
         msgpack::pack(sbuffer, order);
 
-        m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);  // receive reply
+        IPC_OK(m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE), "Failed to receive message from server");  // receive reply
         if (m_buffer[0] != 'O' || m_buffer[1] != 'K') throw std::exception("Server send wrong reply");
 
         sbufferCopy(sbuffer, m_buffer, SDA_BUFFER_SIZE);
 
         m_client.ReceiveDataAsync();
         IPC_OK(m_client.SendData(m_buffer, sbuffer.size()), "[SDA] Could not send order data");
-        m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);
+
+        IPC_OK(m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE),"Failed to receive message from server");
 
         std::vector<std::string> resultVec;
         GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec);
