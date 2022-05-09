@@ -101,6 +101,9 @@ void TestStopConnection(ServerSocket& p_server, char* p_buffer)
     p_server.CloseServer();
 }
 
+/// @brief				 The server side of the tests without the stop function
+/// @param  p_server	 The server socket that has a connection to the driver
+/// @param  p_situations The amount of situations the driver has to handle
 void ServerSideNoStop(ServerSocket& p_server, int p_situations)
 {
     ASSERT_DURATION_LE(3, while (!p_server.Connected()){});
