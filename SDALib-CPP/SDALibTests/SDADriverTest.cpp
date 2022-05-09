@@ -101,10 +101,10 @@ void TestStopConnection(ServerSocket& p_server, char* p_buffer)
     p_server.CloseServer();
 }
 
-/// @brief				 The server side of the tests
+/// @brief				 The server side of the tests without the stop function
 /// @param  p_server	 The server socket that has a connection to the driver
 /// @param  p_situations The amount of situations the driver has to handle
-void ServerSide(ServerSocket& p_server, int p_situations)
+void ServerSideNoStop(ServerSocket& p_server, int p_situations)
 {
     ASSERT_DURATION_LE(3, while (!p_server.Connected()){});
     char buffer[TEST_BUFFER_SIZE];
@@ -121,6 +121,16 @@ void ServerSide(ServerSocket& p_server, int p_situations)
     {
         TestSituation(p_server, buffer);
     }
+}
+
+/// @brief				 The server side of the tests
+/// @param  p_server	 The server socket that has a connection to the driver
+/// @param  p_situations The amount of situations the driver has to handle
+void ServerSide(ServerSocket& p_server, int p_situations)
+{
+    ServerSideNoStop(p_server, p_situations);
+
+    char buffer[TEST_BUFFER_SIZE];
 
     TestStopConnection(p_server, buffer);
 }
@@ -134,9 +144,9 @@ void NoWaitTest(int p_situations)
     ASSERT_EQ(server.Initialize(), IPCLIB_SUCCEED);
     server.ConnectAsync();
     std::thread t = std::thread(DriverSide);
-    t.detach();
 
     ServerSide(server, p_situations);
+    t.join();
 }
 
 TEST_CASE(DriverTests, NoWaitSituations, NoWaitTest, (0))
@@ -149,7 +159,6 @@ TEST_CASE(DriverTests, NoWaitMultipleSituations, NoWaitTest, (4))
 void WaitTest(int p_waitAmount, int p_situations)
 {
     std::thread t = std::thread(DriverSide);
-    t.detach();
 
     std::this_thread::sleep_for(std::chrono::seconds(p_waitAmount));
 
@@ -158,9 +167,30 @@ void WaitTest(int p_waitAmount, int p_situations)
     server.ConnectAsync();
 
     ServerSide(server, p_situations);
+    t.join();
 }
 
 BEGIN_TEST_COMBINATORIAL(DriverTests, CombinatorialWaitTests)
 int waitAmounts[2]{3, 5};
 int situationAmounts[3]{0, 1, 4};
 END_TEST_COMBINATORIAL2(WaitTest, waitAmounts, 2, situationAmounts, 3)
+
+/// @brief Tests the timeout of the driver.
+TEST(DriverTests, TimeoutTests)
+{
+    SDADriverMock driver;
+    ASSERT_DURATION_LE(60, ASSERT_THROW(driver.Run(), std::exception));
+}
+
+/// @brief Tests if the program shuts down correctly when the server is shut down abruptly
+TEST(DriverTests, BreakingConnectionTest)
+{
+    ServerSocket server;
+    ASSERT_EQ(server.Initialize(), IPCLIB_SUCCEED);
+    server.ConnectAsync();
+    std::thread t = std::thread(DriverSide);
+
+    ServerSideNoStop(server, 0);
+    server.~ServerSocket();
+    t.join();
+}
