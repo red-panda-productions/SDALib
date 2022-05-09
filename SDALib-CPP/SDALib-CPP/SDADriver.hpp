@@ -117,7 +117,7 @@ private:
         m_client.ReceiveDataAsync();
         IPC_OK(m_client.SendData(m_buffer, sbuffer.size()), "[SDA] Could not send order data");
 
-        IPC_OK(m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE), "Failed to receive message from server");
+        IPC_OK(m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE), "[SDA] Failed to receive message from server");
 
         std::vector<std::string> resultVec;
         GetMsgVector(m_buffer, SDA_BUFFER_SIZE, resultVec);
