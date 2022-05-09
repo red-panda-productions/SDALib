@@ -182,6 +182,7 @@ TEST(DriverTests, TimeoutTests)
     ASSERT_DURATION_LE(45, ASSERT_THROW(driver.Run(), std::exception));
 }
 
+/// @brief Tests if the program shuts down correctly when the server is shut down abruptly
 TEST(DriverTests, BreakingConnectionTest)
 {
     ServerSocket server;
