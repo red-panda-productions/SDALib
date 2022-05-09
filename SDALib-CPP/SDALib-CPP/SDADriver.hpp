@@ -109,7 +109,7 @@ private:
         msgpack::sbuffer sbuffer;
         msgpack::pack(sbuffer, order);
 
-        IPC_OK(m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE), "Failed to receive message from server");  // receive reply
+        IPC_OK(m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE), "[SDA] Failed to receive message from server");  // receive reply
         if (m_buffer[0] != 'O' || m_buffer[1] != 'K') throw std::exception("Server send wrong reply");
 
         sbufferCopy(sbuffer, m_buffer, SDA_BUFFER_SIZE);
