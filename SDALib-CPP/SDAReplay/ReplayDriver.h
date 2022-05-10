@@ -91,16 +91,16 @@ protected:
         float floatToRead = NAN;
 
         READ_FLOAT(floatToRead)
-        action.Steer = floatToRead > 1 || floatToRead < -1 ? 0 : floatToRead;
+        action.Steer = floatToRead;
 
         READ_FLOAT(floatToRead)
-        action.Accel = floatToRead > 1 || floatToRead < 0 ? 0 : floatToRead;
+        action.Accel = floatToRead;
 
         READ_FLOAT(floatToRead)
-        action.Brake = floatToRead > 1 || floatToRead < 0 ? 0 : floatToRead;
+        action.Brake = floatToRead;
 
         READ_FLOAT(floatToRead)
-        action.Gear = (int)floatToRead < -1 || (int)floatToRead > 1 ? 0 : (int)floatToRead;
+        action.Gear = (int)floatToRead;
 
         std::cout << "\tSteer: " << action.Steer << "\n\t"
                   << "Brake: " << action.Brake << "\n\t"
