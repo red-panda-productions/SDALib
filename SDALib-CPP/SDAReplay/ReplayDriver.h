@@ -4,6 +4,7 @@
 #include <iostream>
 #include "ReplayAction.h"
 #include "ReplayData.h"
+
 #include "SDADriver.hpp"
 
 #define MAX_ULONG 4294967295
@@ -29,7 +30,6 @@ static inline Bits<const TYPE&> bits(const TYPE& p_t)
 template <typename TYPE>
 static inline std::istream& operator>>(std::istream& p_in, Bits<TYPE&> p_b)
 {
-    std::cout << "Reading " << sizeof(TYPE) << " bits" << std::endl;
     return p_in.read(reinterpret_cast<char*>(&p_b.T), sizeof(TYPE));
 }
 
@@ -73,8 +73,8 @@ protected:
 
         if (!m_replayFile.is_open() || p_data.TickCount == MAX_ULONG) return action;
 
-        std::cout << "TickCount: " << p_data.TickCount << "\n"
-                  << "Tick To Act: " << m_tickToAct << std::endl;
+        //std::cout << "TickCount: " << p_data.TickCount << "\n";
+        //          << "Tick To Act: " << m_tickToAct << std::endl;
 
         if (m_tickToAct > p_data.TickCount)
             return m_prevAction;
@@ -102,10 +102,10 @@ protected:
         READ_FLOAT(floatToRead)
         action.Gear = (int)floatToRead;
 
-        std::cout << "\tSteer: " << action.Steer << "\n\t"
+        /*std::cout << "\tSteer: " << action.Steer << "\n\t"
                   << "Brake: " << action.Brake << "\n\t"
                   << "Accel: " << action.Accel << "\n\t"
-                  << "Gear: " << action.Gear << std::endl;
+                  << "Gear: " << action.Gear << std::endl;*/
 
         SET_TICK_TO_ACT
 
