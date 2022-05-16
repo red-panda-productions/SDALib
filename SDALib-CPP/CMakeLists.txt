@@ -26,7 +26,6 @@ add_subdirectory ("Samples")
 add_subdirectory ("SpeedDreams")
 add_subdirectory ("SDAReplay")
 
-
 option(OPTION_SDALIB_PYTHON "installs the python package" FALSE)
 IF(OPTION_SDALIB_PYTHON)
 	add_subdirectory ("SDALib-Python")

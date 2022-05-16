@@ -14,7 +14,6 @@ SET(SDALIB_SOURCES
 	IPCPointerManager.cpp
 )
 
-
 ADD_LIBRARY (SDALib STATIC ${SDALIB_HEADERS} ${SDALIB_INLINES} ${SDALIB_SOURCES})
 
 include(GenerateExportHeader)
