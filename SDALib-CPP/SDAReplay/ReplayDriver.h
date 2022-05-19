@@ -90,6 +90,8 @@ protected:
     {
         SDAAction action;
 
+        LOG_TICK();
+
         if (!m_replayFile.is_open() || p_data.TickCount == MAX_ULONG) return action;
 
         if (m_tickToAct > p_data.TickCount)
