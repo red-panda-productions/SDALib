@@ -67,7 +67,7 @@ private:
 
         if (err != IPCLIB_SUCCEED)
         {
-            std::cout << "IPCLIB_FAIL" << std::endl;
+            std::cout << "IPCLIB_FAIL: " << err << std::endl;
             return false;
         }
         if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
