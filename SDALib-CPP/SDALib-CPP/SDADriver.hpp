@@ -14,7 +14,6 @@
 
 #endif
 
-
 /// @brief				 Retrieves the msgpack vector
 /// @param  p_buffer	 The character buffer
 ///	@param  p_bufferSize The buffer size
@@ -82,9 +81,9 @@ private:
 
         int serializeSize;
         action.Serialize(m_buffer, SDA_BUFFER_SIZE, serializeSize);
-        
+
         IPC_OK(m_client.SendData(m_buffer, serializeSize), "[SDA] Could not send action");
-        
+
         SDA_LOG_INFO("Updated")
         return true;
     }

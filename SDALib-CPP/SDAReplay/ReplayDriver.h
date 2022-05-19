@@ -73,8 +73,8 @@ protected:
 
         if (!m_replayFile.is_open() || p_data.TickCount == MAX_ULONG) return action;
 
-        //std::cout << "TickCount: " << p_data.TickCount << "\n";
-        //          << "Tick To Act: " << m_tickToAct << std::endl;
+        // std::cout << "TickCount: " << p_data.TickCount << "\n";
+        //           << "Tick To Act: " << m_tickToAct << std::endl;
 
         if (m_tickToAct > p_data.TickCount)
             return m_prevAction;
