@@ -40,11 +40,7 @@
 #include <unistd.h>
 #endif
 
-#ifdef WIN32
 #include <expat.h>
-#else
-#include <xmlparse.h>
-#endif
 
 #include <portability.h>
 #include "tgf.h"

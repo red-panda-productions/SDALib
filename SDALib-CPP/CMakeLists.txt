@@ -17,6 +17,8 @@ cmake_policy(SET CMP0079 NEW)
 
 list(APPEND CMAKE_PREFIX_PATH "/libraries" "${CMAKE_CURRENT_LIST_DIR}../../libraries" "${CMAKE_CURRENT_LIST_DIR}../libraries")
 
+SET(ENV{SOLID_DIR} "${CMAKE_SOURCE_DIR}/../libraries")
+
 FIND_SDA_PACKAGES()
 
 # Include sub-projects.
