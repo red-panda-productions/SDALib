@@ -1,4 +1,4 @@
-name: CI Pipeline Code Coverage
+name: CI Pipeline Code Coverage Linux
 
 on:
   pull_request:
@@ -30,9 +30,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Install OpenCppCoverage
-      uses: KungFuDonkey/Install-OpenCppCoverage@v1
 
     - name: Cache boost
       uses: actions/cache@v2

@@ -1,4 +1,4 @@
-name: CI Pipeline Tests
+name: CI Pipeline Tests Linux
 
 on:
   push:
@@ -34,6 +34,11 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+
+    - name: install 32 bit compilers
+      run: |
+        sudo apt-get install gcc-multilib
+        sudo apt-get install g++-multilib
 
     - name: Cache boost
       uses: actions/cache@v2
