@@ -9,6 +9,12 @@
 #include <chrono>
 #include "IPCPointerManager.h"
 
+#ifndef SDA_LOG_INFO(p_info)
+
+#define SDA_LOG_INFO(p_info)
+
+#endif
+
 /// @brief				 Retrieves the msgpack vector
 /// @param  p_buffer	 The character buffer
 ///	@param  p_bufferSize The buffer size
@@ -46,11 +52,18 @@ private:
     /// @return Whether the simulation is still running
     bool Update()
     {
+        SDA_LOG_INFO("Updating...");
         const int err = m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);  // can change to GetData
+        SDA_LOG_INFO("Received data");
 
-        if (err != IPCLIB_SUCCEED) return false;
+        if (err != IPCLIB_SUCCEED)
+        {
+            std::cout << "IPCLIB_FAIL: " << err << std::endl;
+            return false;
+        }
         if (m_buffer[0] == 'S' && m_buffer[1] == 'T' && m_buffer[2] == 'O' && m_buffer[3] == 'P') return false;
 
+        m_client.ReceiveDataAsync();
         SDAData* data = m_pointerManager.GetDataPointer();
 
         data->Car.pub.trkPos.seg = m_pointerManager.GetSegmentPointer();
@@ -60,8 +73,9 @@ private:
         int serializeSize;
         action.Serialize(m_buffer, SDA_BUFFER_SIZE, serializeSize);
 
-        m_client.ReceiveDataAsync();
         IPC_OK(m_client.SendData(m_buffer, serializeSize), "[SDA] Could not send action");
+
+        SDA_LOG_INFO("Updated")
         return true;
     }
 
@@ -73,6 +87,7 @@ private:
         {
             run = Update();
         }
+        std::cout << "STOP" << std::endl;
         IPC_OK(m_client.SendData("OK", 2), "[SDA] Could not send OK");
         m_client.Disconnect();
     }
