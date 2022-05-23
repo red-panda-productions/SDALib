@@ -6,8 +6,7 @@
 #include "SDAAction.hpp"
 #include "SDADriver.hpp"
 #include "SDAData.hpp"
-#include "boost/python.hpp"
-using namespace boost::python;
+#include "Python.h"
 
 class PythonDriver : public SDADriver
 {
@@ -20,11 +19,11 @@ protected:
     SDAAction UpdateAI(SDAData& p_data) override;
 
 private:
-    object m_main;
-    object m_globals;
-    object m_driverType;
-    object m_pythonDriver;
+    //object m_main;
+    //object m_globals;
+    //object m_driverType;
+    //object m_pythonDriver;
 
-    object m_updateFunction;
-    object m_initFunction;
+    //object m_updateFunction;
+    //object m_initFunction;
 };
