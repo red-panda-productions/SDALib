@@ -3,7 +3,7 @@
 	SDAAction.hpp
 	SDAData.hpp
 	IPCPointerManager.h
-)
+        SDA_portability.h)
 
 SET(SDALIB_INLINES
 	SDADriver.inl

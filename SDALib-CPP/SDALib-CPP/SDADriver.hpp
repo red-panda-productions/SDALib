@@ -4,6 +4,7 @@
 #include "SDAAction.hpp"
 #include "msgpack.hpp"
 #include "sdalib_export.h"
+#include "SDA_portability.h"
 #include <thread>
 #include <chrono>
 #include "IPCPointerManager.h"
@@ -21,16 +22,6 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 
 #define SDA_BUFFER_SIZE 512
 
-/// @brief		   Checks if the action was reported successfully from IPCLib
-/// @param  p_stmt The action that needs to be checked
-/// @param  p_msg  The message that is pushed to the standard error output when the action has failed
-#define IPC_OK(p_stmt, p_msg)              \
-    if ((p_stmt) != IPCLIB_SUCCEED)        \
-    {                                      \
-        std::cerr << (p_msg) << std::endl; \
-        throw std::exception(p_msg);       \
-    }
-
 /// @brief The driver class from which the AI should inherit
 template <class PointerManager>
 class SDALIB_EXPORT AIInterface
@@ -45,7 +36,7 @@ public:
     }
 
 protected:
-    explicit AIInterface(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888);
+    explicit AIInterface(IPC_IP_TYPE p_ip = LOCALHOST, int p_port = 8888);
 
     virtual void InitAI() = 0;
     virtual SDAAction UpdateAI(SDAData& p_data) = 0;
@@ -98,7 +89,9 @@ private:
         }
 
         if (tries >= 10)
-            throw std::exception("Could not connect to speed dreams");
+        {
+            SDA_THROW_EXCEPTION("Could not connect to speed dreams");
+        }
 
         m_client.ReceiveDataAsync();
         IPC_OK(m_client.SendData("AI ACTIVE", 10), "[SDA] Could not send AI ACTIVE")
@@ -110,7 +103,10 @@ private:
         msgpack::pack(sbuffer, order);
 
         IPC_OK(m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE), "[SDA] Failed to receive message from server");  // receive reply
-        if (m_buffer[0] != 'O' || m_buffer[1] != 'K') throw std::exception("Server send wrong reply");
+        if (m_buffer[0] != 'O' || m_buffer[1] != 'K')
+        {
+            SDA_THROW_EXCEPTION("Server send wrong reply");
+        }
 
         sbufferCopy(sbuffer, m_buffer, SDA_BUFFER_SIZE);
 

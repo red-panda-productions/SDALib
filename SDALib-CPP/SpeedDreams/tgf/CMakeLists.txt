@@ -1,6 +1,6 @@
 SET(TGF_HEADERS os.h tgf.h modinfo.h osspec.h memmanager.h)
-SET(TGF_SOURCES  directory.cpp file.cpp filesetup.cpp 
-                formula.cpp hash.cpp  legacymodule.cpp  os.cpp
+SET(TGF_SOURCES  directory.cpp file.cpp filesetup.cpp
+        formula.cpp hash.cpp  legacymodule.cpp  os.cpp
                 params.cpp profiler.cpp schedulespy.cpp tgf.cpp trace.cpp memmanager.cpp)
 SET(TGF_OTHER_SOURCES params.dtd)
 
