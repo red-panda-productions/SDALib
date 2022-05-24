@@ -53,7 +53,7 @@ jobs:
     - name: Install boost 32 bit
       run: |
         wget -O Boost.tar.gz https://github.com/KungFuDonkey/32BitBoost/releases/download/v1.79.0/Boost.tar.gz
-        tar xzf Boost.tar.gz -c ${{env.BOOST_PATH}}
+        tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
 
     - name: Configure CMake
       run: cmake -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
