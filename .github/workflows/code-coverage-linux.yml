@@ -52,23 +52,21 @@ jobs:
       run: cmake --build .
 
     - name: Run code coverage
-      working-directory: ${{github.workspace}}
-      run: |
-        cd SDALib-CPP
-        .\coverage.bat
-    
+        working-directory: ${{github.workspace}}
+        run: ./coverage.sh
+
     - name: Check code coverage
-      shell: cmd
-      run: type "${{github.workspace}}\SDALib-CPP\coverage.xml"
+      working-directory: ${{github.workspace}}
+      run: cat coverage.xml
 
     - name: Create code coverage report
       uses: 5monkeys/cobertura-action@master
       with:
-        path: ${{github.workspace}}\SDALib-CPP\coverage.xml
+        path: ${{github.workspace}}/coverage.xml
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         minimum_coverage: 100
         fail_below_threshold: true
         show_missing: true
         link_missing_lines: true
         skip_covered: false
-        report_name: 'code coverage report'
+        report_name: 'code coverage report linux'
