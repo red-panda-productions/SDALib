@@ -53,8 +53,8 @@ jobs:
     - name: Install boost 32 bit
       run: |
         wget -O boost_1_79_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
-        tar xzvf boost_1_79_0.tar.gz
-        cd boost_1_79_0.tar.gz
+        tar xzf boost_1_79_0.tar.gz
+        cd boost_1_79_0
         ./boostrap.sh
         ./b2 address-model=32
         sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}}
