@@ -35,20 +35,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install GCC11
+    - name: Install Compilers
       run: |
         sudo apt update
         sudo apt install gcc-11 g++-11
+        sudo apt-get install gcc-11-multilib
+        sudo apt-get install g++-11-multilib
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
-
-    - name: install 32 bit compilers
-      run: |
-        ldd --version
-        sudo apt-get update
-        sudo apt-get install gcc-multilib
-        sudo apt-get install g++-multilib
-        sudo dpkg --add-architecture i386
-        ldd --version
 
     - name: Cache boost
       uses: actions/cache@v2
