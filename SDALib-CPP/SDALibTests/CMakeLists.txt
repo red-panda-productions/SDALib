@@ -45,7 +45,7 @@ IF(OPEN_CPP_COVERAGE)
 ENDIF(OPEN_CPP_COVERAGE)
 
 IF(OPEN_CPP_COVERAGE OR GCOVR)
-    SET(COV_EXCLUDE_REGEX "((.*@NOCOVERAGE.*)${COV_SPECIFIC_REGEX})\"")
+    SET(COV_EXCLUDE_REGEX "\"((.*@NOCOVERAGE.*)${COV_SPECIFIC_REGEX})\"")
 ENDIF(OPEN_CPP_COVERAGE OR GCOVR)
 
 IF(OPEN_CPP_COVERAGE)
@@ -95,8 +95,8 @@ IF(GCOVR)
 
     FILE(GENERATE OUTPUT ${CMAKE_SOURCE_DIR}/coverage.sh
             CONTENT
-            "${CMAKE_CURRENT_BINARY_DIR}/SDALibTests
-            gcovr --gcov-ignore-parse-errors --root=\"${CMAKE_SOURCE_DIR}/SDALib-CPP/.\" --object-directory=\"${CMAKE_BINARY_DIR}/SDALib-CPP/CMakeFiles/SDALib-CPP.dir\" --exclude-lines-by-pattern ${COV_EXCLUDE_REGEX} ${COV_EXPORT_TYPE} -o ${COV_OUTPUT}
+            "${CMAKE_CURRENT_BINARY_DIR}/SDATests
+            gcovr --gcov-ignore-parse-errors --root=\"${CMAKE_SOURCE_DIR}/SDALib-CPP/.\" --object-directory=\"${CMAKE_BINARY_DIR}/SDALib-CPP/CMakeFiles/SDALib.dir\" --exclude-lines-by-pattern=${COV_EXCLUDE_REGEX} ${COV_EXPORT_TYPE} -o ${COV_OUTPUT}
             ${COV_EXTRA_COMMANDS}"
             FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ WORLD_EXECUTE WORLD_WRITE WORLD_READ)
 
