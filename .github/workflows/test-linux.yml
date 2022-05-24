@@ -35,6 +35,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install GCC11
+      run: |
+        sudo apt update
+        sudo apt install gcc-11 g++-11
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
+
     - name: install 32 bit compilers
       run: |
         ldd --version
@@ -59,8 +65,8 @@ jobs:
         tar xzf boost_1_79_0.tar.gz
         cd boost_1_79_0
         ./bootstrap.sh
-        ./b2 address-model=32
-        sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}} || 1
+        ./b2 address-model=32 || echo "build boost with errors"
+        sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}} || echo "installed boost with errors"
 
     - name: Configure CMake
       run: cmake -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
