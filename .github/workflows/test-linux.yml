@@ -39,6 +39,7 @@ jobs:
       run: |
         sudo apt-get install gcc-multilib
         sudo apt-get install g++-multilib
+        sudo dpkg --add-architecture i386
 
     - name: Cache boost
       uses: actions/cache@v2
@@ -51,21 +52,12 @@ jobs:
 
     - name: Install boost 32 bit
       run: |
-        mkdir ${{env.BOOST_PATH}}/Boost
-        mkdir ${{env.BOOST_PATH}}/Boost/lib
-        mkdir ${{env.BOOST_PATH}}/Boost/include
-        sudo dpkg --add-architecture i386
-        sudo apt-get update
-        sudo apt-get dist-upgrade
-        sudo apt-get purge libboost-all-dev:i386
-        sudo apt-get install $(apt-cache depends libboost-all-dev:i386 | grep Depends | sed "s/.*ends:\ //" | tr '\n' ' ')
-        sudo apt-get install libboost-all-dev:i386
-        for f in /usr/local/lib/*boost*; do
-          sudo mv "$f" "${{env.BOOST_PATH}}/Boost/lib"
-        done
-        sudo mv /usr/local/lib/cmake ${{env.BOOST_PATH}}/Boost/lib
-        sudo mv /usr/local/include/boost ${{env.BOOST_PATH}}/Boost/include
-        
+        wget -O boost_1_79_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
+        tar xzvf boost_1_79_0.tar.gz
+        cd boost_1_79_0.tar.gz
+        ./boostrap.sh
+        ./b2 address-model=32
+        sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}}
 
     - name: Configure CMake
       run: cmake -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
