@@ -57,6 +57,7 @@ jobs:
         sudo dpkg --add-architecture i386
         sudo apt-get update
         sudo apt-get dist-upgrade
+        sudo apt-get purge libboost-all-dev
         sudo apt-get install -f libboost-all-dev:i386
         for f in /usr/local/lib/*boost*; do
           sudo mv "$f" "${{env.BOOST_PATH}}/Boost/lib"
