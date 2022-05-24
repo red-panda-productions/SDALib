@@ -51,18 +51,21 @@ jobs:
         path: ${{env.BOOST_ROOT}}
         # Use the version as the key to only cache the correct version
         key: boost-${{env.BOOST_VERSION}}
-
+      
+      # wget -O boost_1_79_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
+      # tar xzf boost_1_79_0.tar.gz
+      # cd boost_1_79_0
+      # ./bootstrap.sh
+      # ./b2 address-model=32 || echo "build boost with errors"
+      # sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}} || echo "installed boost with errors"
+      
     - name: Install boost 32 bit
       run: |
-        wget -O boost_1_79_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
-        tar xzf boost_1_79_0.tar.gz
-        cd boost_1_79_0
-        ./bootstrap.sh
-        ./b2 address-model=32 || echo "build boost with errors"
-        sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}} || echo "installed boost with errors"
-
+        wget -O Boost.tar.gz https://github.com/KungFuDonkey/32BitBoost/releases/download/v1.79.0/Boost.tar.gz
+        tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
+        
     - name: Configure CMake
-      run: cmake -DCMAKE_C_FLAGS="-m32 -pthread -rt" -DCMAKE_CXX_FLAGS="-m32 -pthread -rt" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
+      run: cmake -DCMAKE_EXE_LINKER_FLAG="-lrt" -DCMAKE_C_FLAGS="-m32 -pthread" -DCMAKE_CXX_FLAGS="-m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
