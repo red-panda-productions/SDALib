@@ -42,22 +42,6 @@ jobs:
         sudo apt-get install gcc-11-multilib
         sudo apt-get install g++-11-multilib
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
-
-    - name: Cache boost
-      uses: actions/cache@v2
-      id: cache-boost
-      with:
-        # Set the default path as the path to cache
-        path: ${{env.BOOST_ROOT}}
-        # Use the version as the key to only cache the correct version
-        key: boost-${{env.BOOST_VERSION}}
-      
-      # wget -O boost_1_79_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
-      # tar xzf boost_1_79_0.tar.gz
-      # cd boost_1_79_0
-      # ./bootstrap.sh
-      # ./b2 address-model=32 || echo "build boost with errors"
-      # sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}} || echo "installed boost with errors"
       
     - name: Install boost 32 bit
       run: |
@@ -65,7 +49,7 @@ jobs:
         tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
         
     - name: Configure CMake
-      run: cmake -DCMAKE_C_FLAGS="-v -m32 -pthread" -DCMAKE_CXX_FLAGS="-v -m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
+      run: cmake -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-m32 -pthread" -DCMAKE_CXX_FLAGS="-m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

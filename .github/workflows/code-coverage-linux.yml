@@ -31,24 +31,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache boost
-      uses: actions/cache@v2
-      id: cache-boost
-      with:
-        # Set the default path as the path to cache
-        path: ${{env.BOOST_ROOT}}
-        # Use the version as the key to only cache the correct version
-        key: boost-${{env.BOOST_VERSION}}
+    - name: Install Compilers
+      run: |
+        sudo apt update
+        sudo apt install gcc-11 g++-11
+        sudo apt-get install gcc-11-multilib
+        sudo apt-get install g++-11-multilib
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
 
-    - name: Install boost
-      if: steps.cache-boost.outputs.cache-hit != 'true'
-      uses: MarkusJx/install-boost@v2.3.0
-      id: install-boost
-      with:
-        boost_version: ${{env.BOOST_VERSION}}
-        toolset: gcc
-        platform_version: 20.04
-        boost_install_dir: ${{env.BOOST_PATH}}
+    - name: Install boost 32 bit
+      run: |
+        wget -O Boost.tar.gz https://github.com/KungFuDonkey/32BitBoost/releases/download/v1.79.0/Boost.tar.gz
+        tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
 
     - name: Configure CMake
       run: cmake -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -DOPTION_GITHUB_ACTIONS=ON -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
