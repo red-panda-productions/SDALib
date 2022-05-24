@@ -55,11 +55,15 @@ jobs:
 
     - name: Install boost 32 bit
       run: |
-        wget -O Boost.tar.gz https://github.com/KungFuDonkey/32BitBoost/releases/download/v1.79.0/Boost.tar.gz
-        tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
+        wget -O boost_1_79_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
+        tar xzf boost_1_79_0.tar.gz
+        cd boost_1_79_0
+        ./bootstrap.sh
+        ./b2 address-model=32
+        sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}} || 1
 
     - name: Configure CMake
-      run: cmake -DCMAKE_THREAD_LIBS_INIT="-lpthread" -DCMAKE_HAVE_THREADS_LIBRARY=1 -DCMAKE_USE_PTHREADS_INIT=1 -DCMAKE_USE_WIN32_THREADS_INIT=0 -DTHREADS_PREFER_PTHREAD_FLAG=ON -DCMAKE_C_FLAGS="-m32 -pthread -lrt" -DCMAKE_CXX_FLAGS="-m32 -pthread -lrt" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
+      run: cmake -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
