@@ -29,7 +29,7 @@ jobs:
     env:
       BUILD_TYPE: Release
       BOOST_PATH: ${{github.workspace}}/libraries
-      BOOST_ROOT: ${{github.workspace}}/libraries/include/boost
+      BOOST_ROOT: ${{github.workspace}}/libraries/Boost/include/boost
       BOOST_VERSION: 1.79.0
     
     steps:
@@ -52,12 +52,8 @@ jobs:
 
     - name: Install boost 32 bit
       run: |
-        wget -O boost_1_79_0.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
-        tar xzf boost_1_79_0.tar.gz
-        cd boost_1_79_0
-        ./bootstrap.sh
-        ./b2 address-model=32
-        sudo ./b2 install address-model=32 --prefix=${{env.BOOST_PATH}}
+        wget -O Boost.tar.xz https://github.com/KungFuDonkey/32BitBoost/releases/download/v1.79.0/Boost.tar.xz
+        tar xzf Boost.tar.xz -c ${{env.BOOST_PATH}}
 
     - name: Configure CMake
       run: cmake -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
