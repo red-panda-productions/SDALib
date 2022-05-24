@@ -15,7 +15,7 @@ target_link_libraries(
 )
 
 IF(UNIX)
-    TARGET_LINK_LIBRARIES(SDABrakeSample rt)
+    TARGET_LINK_LIBRARIES(SDAReplay rt)
 ENDIF(UNIX)
 
 target_include_directories(SDAReplay PUBLIC "../SDALib-CPP")
