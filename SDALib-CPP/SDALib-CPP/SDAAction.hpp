@@ -34,5 +34,3 @@ public:
 
     static void GetOrder(std::vector<std::string>& p_order);
 };
-
-

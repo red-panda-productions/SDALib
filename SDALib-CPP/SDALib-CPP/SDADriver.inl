@@ -9,7 +9,6 @@
     template void AIInterface<p_type>::Loop();                               \
     template void AIInterface<p_type>::SetupSocket();
 
-
 /// @brief				 Retrieves the msgpack vector
 /// @param  p_buffer	 The character buffer
 ///	@param  p_bufferSize The buffer size

@@ -225,7 +225,7 @@ TEST(DriverTests, NoOkSend)
     ASSERT_DURATION_LE(1, server.AwaitData(buffer, TEST_BUFFER_SIZE));
     TestMessageEqual(buffer, "AI ACTIVE", 9);
 
-    ASSERT_EQ(server.SendData("HI", 2),IPCLIB_SUCCEED);
+    ASSERT_EQ(server.SendData("HI", 2), IPCLIB_SUCCEED);
 
     t.join();
 }
