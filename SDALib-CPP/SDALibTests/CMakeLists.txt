@@ -36,7 +36,17 @@ gtest_discover_tests(SDATests DISCOVERY_TIMEOUT 600)
 
 SET(COVERAGE_OUTPUT_FOLDER ${CMAKE_SOURCE_DIR} CACHE STRING "The output folder of the coverage bat files")
 
-FIND_PROGRAM(OPEN_CPP_COVERAGE "OpenCppCoverage")
+IF(GCOVR)
+    SET(COV_SPECIFIC_REGEX "|(.*@NOLINUXCOVERAGE.*)")
+ENDIF(GCOVR)
+
+IF(OPEN_CPP_COVERAGE)
+    SET(COV_SPECIFIC_REGEX "|(.*@NOWINDOWSCOVERAGE.*)")
+ENDIF(OPEN_CPP_COVERAGE)
+
+IF(OPEN_CPP_COVERAGE OR GCOVR)
+    SET(COV_EXCLUDE_REGEX "\"((.*@NOCOVERAGE.*)${COV_SPECIFIC_REGEX})\"")
+ENDIF(OPEN_CPP_COVERAGE OR GCOVR)
 
 IF(OPEN_CPP_COVERAGE)
 	STRING(REGEX REPLACE "/" "\\\\" SOURCEDIR ${CMAKE_SOURCE_DIR})
@@ -60,8 +70,35 @@ IF(OPEN_CPP_COVERAGE)
         CONTENT 
             "@echo off
             cd /d ${CURRENTBINARYDIR}
-            \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex  -- ${EXEPATH}
+            \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex=${COV_EXCLUDE_REGEX}  -- ${EXEPATH}
             ${COV_EXTRA_COMMANDS}")
 
     MESSAGE(STATUS "Created SDACoverage.bat, run with ./coverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
 ENDIF(OPEN_CPP_COVERAGE)
+
+IF(GCOVR)
+
+    IF(OPTION_GITHUB_ACTIONS)
+        MESSAGE(STATUS "Creating Github actions coverage file")
+        SET(COV_EXPORT_TYPE "--cobertura-pretty")
+        SET(COV_EXTRA_COMMANDS "sed -i 's/branches-covered=\"[0-9]*\"/branches-covered=\"0\"/g' coverage.xml
+                                sed -i 's/branches-valid=\"[0-9]*\"/branches-valid=\"0\"/g' coverage.xml
+                                sed -i 's/branch-rate=\"[0-9|.]*\"/branch-rate=\"0\"/g' coverage.xml
+                                sed -i 's/branch=\"true\"//g' coverage.xml
+                                sed -i 's/branch=\"false\"//g' coverage.xml")
+        SET(COV_OUTPUT "${CMAKE_SOURCE_DIR}/coverage.xml")
+    ELSE(OPTION_GITHUB_ACTIONS)
+        SET(COV_EXPORT_TYPE "--html --html-details")
+        SET(COV_EXTRA_COMMANDS "bash -c \"xdg-open ${CMAKE_BINARY_DIR}/coverage.html &\" 2> /dev/null")
+        SET(COV_OUTPUT "${CMAKE_BINARY_DIR}/coverage.html")
+    ENDIF(OPTION_GITHUB_ACTIONS)
+
+    FILE(GENERATE OUTPUT ${CMAKE_SOURCE_DIR}/coverage.sh
+            CONTENT
+            "${CMAKE_CURRENT_BINARY_DIR}/SDATests
+            gcovr --gcov-ignore-parse-errors --root=\"${CMAKE_SOURCE_DIR}/SDALib-CPP/.\" --object-directory=\"${CMAKE_BINARY_DIR}/SDALib-CPP/CMakeFiles/SDALib.dir\" --exclude-lines-by-pattern=${COV_EXCLUDE_REGEX} ${COV_EXPORT_TYPE} -o ${COV_OUTPUT}
+            ${COV_EXTRA_COMMANDS}"
+            FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ WORLD_EXECUTE WORLD_WRITE WORLD_READ)
+
+    MESSAGE(STATUS "Created coverage.sh at ${CMAKE_SOURCE_DIR}/coverage.sh")
+ENDIF(GCOVR)

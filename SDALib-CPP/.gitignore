@@ -570,3 +570,5 @@ FodyWeavers.xsd
 CMakeSettings.json
 
 coverage.bat
+
+coverage.sh

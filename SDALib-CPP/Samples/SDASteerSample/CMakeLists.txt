@@ -12,6 +12,11 @@ target_link_libraries(
         SDASteerSample
         SDALib
 )
+
+IF(UNIX)
+    TARGET_LINK_LIBRARIES(SDASteerSample rt)
+ENDIF(UNIX)
+
 target_include_directories(SDASteerSample PUBLIC "../../SDALib-CPP")
 
 

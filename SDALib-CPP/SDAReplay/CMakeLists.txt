@@ -13,6 +13,11 @@ target_link_libraries(
         SDALib
         Boost::program_options
 )
+
+IF(UNIX)
+    TARGET_LINK_LIBRARIES(SDAReplay rt)
+ENDIF(UNIX)
+
 target_include_directories(SDAReplay PUBLIC "../SDALib-CPP")
 
 add_custom_command(TARGET SDAReplay POST_BUILD
