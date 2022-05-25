@@ -9,6 +9,8 @@
 #include <chrono>
 #include "IPCPointerManager.h"
 
+//#define SDA_LOG_INFO(p_info) std::cout << p_info << std::endl;
+
 #ifndef SDA_LOG_INFO(p_info)
 
 #define SDA_LOG_INFO(p_info)

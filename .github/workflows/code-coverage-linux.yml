@@ -39,6 +39,9 @@ jobs:
         sudo apt-get install g++-11-multilib
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
 
+    - name: Install GCovr
+      run: pip install gcovr
+
     - name: Install boost 32 bit
       run: |
         wget -O Boost.tar.gz https://github.com/KungFuDonkey/32BitBoost/releases/download/v1.79.0/Boost.tar.gz
