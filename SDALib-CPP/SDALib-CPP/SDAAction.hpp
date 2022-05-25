@@ -30,14 +30,8 @@ public:
     int Gear = 0;
     float Accel = 0;
 
-    /// @brief				  Serializes the data into a buffer
-    /// @param  p_buffer	  The buffer that will store the data
-    /// @param  p_bufferSize  The size of the buffer
-    /// @param  p_sbufferSize The result size of the string
     void Serialize(char* p_buffer, int p_bufferSize, int& p_sbufferSize) const;
 
-    /// @brief			Gets the order of the actions and stores it into the vector
-    /// @param  p_order The order vector
     static void GetOrder(std::vector<std::string>& p_order);
 };
 

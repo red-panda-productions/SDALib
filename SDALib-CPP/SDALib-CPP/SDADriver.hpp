@@ -24,8 +24,14 @@ template <class PointerManager>
 class SDALIB_EXPORT AIInterface
 {
 public:
-    /// @brief Runs the driver
     void Run();
+
+#ifdef TEST
+    SDAData* GetPointer()
+    {
+        return m_pointerManager.GetDataPointer();
+    }
+#endif
 
 protected:
     explicit AIInterface(IPC_IP_TYPE p_ip = LOCALHOST, int p_port = 8888);
@@ -34,14 +40,10 @@ protected:
     virtual SDAAction UpdateAI(SDAData& p_data) = 0;
 
 private:
-    /// @brief  Updates the ai when data is received
-    /// @return Whether the simulation is still running
     bool Update();
 
-    /// @brief Loops the ai until the simulation stops
     void Loop();
 
-    /// @brief Sets up the socket connection and transfers order data
     void SetupSocket();
 
     ClientSocket m_client;

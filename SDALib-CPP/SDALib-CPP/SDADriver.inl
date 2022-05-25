@@ -21,6 +21,7 @@ void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std::strin
     msg->convert(p_vector);
 }
 
+/// @brief Runs the driver
 template <class PointerManager>
 void AIInterface<PointerManager>::Run()
 {
@@ -42,6 +43,8 @@ AIInterface<PointerManager>::AIInterface(IPC_IP_TYPE p_ip, int p_port)
     }
 }
 
+/// @brief  Updates the ai when data is received
+/// @return Whether the simulation is still running
 template <class PointerManager>
 bool AIInterface<PointerManager>::Update()
 {
@@ -72,6 +75,7 @@ bool AIInterface<PointerManager>::Update()
     return true;
 }
 
+/// @brief Loops the ai until the simulation stops
 template <class PointerManager>
 void AIInterface<PointerManager>::Loop()
 {
@@ -85,6 +89,7 @@ void AIInterface<PointerManager>::Loop()
     m_client.Disconnect();
 }
 
+/// @brief Sets up the socket connection and transfers order data
 template <class PointerManager>
 void AIInterface<PointerManager>::SetupSocket()
 {
