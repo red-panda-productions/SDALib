@@ -13,7 +13,3 @@ public:
     tSituation Situation;
     unsigned long TickCount;
 };
-
-
-
-
