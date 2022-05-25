@@ -23,7 +23,6 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
     env:
-      BUILD_TYPE: Debug
       BOOST_PATH: ${{github.workspace}}/libraries
       BOOST_ROOT: ${{github.workspace}}/libraries/Boost/include/boost
       BOOST_VERSION: 1.79.0
@@ -48,7 +47,7 @@ jobs:
         tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
 
     - name: Configure CMake
-      run: cmake -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-m32 -pthread" -DCMAKE_CXX_FLAGS="-m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -DOPTION_GITHUB_ACTIONS=ON -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
+      run: cmake -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-m32 -pthread" -DCMAKE_CXX_FLAGS="-m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
