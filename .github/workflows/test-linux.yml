@@ -49,7 +49,7 @@ jobs:
         tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
         
     - name: Configure CMake
-      run: cmake -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-m32 -pthread" -DCMAKE_CXX_FLAGS="-m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
+      run: cmake -CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-m32 -pthread" -DCMAKE_CXX_FLAGS="-m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
