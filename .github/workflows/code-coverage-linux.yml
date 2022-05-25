@@ -55,7 +55,9 @@ jobs:
 
     - name: Run code coverage
       working-directory: ${{github.workspace}}
-      run: ./coverage.sh
+      run: |
+        ls
+        ./coverage.sh
 
     - name: Check code coverage
       working-directory: ${{github.workspace}}
