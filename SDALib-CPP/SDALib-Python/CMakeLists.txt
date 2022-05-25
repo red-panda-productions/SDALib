@@ -31,7 +31,7 @@ target_include_directories(SDALib-Python PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_
 INSTALL_SDA_PACKAGES(SDALib-Python)
 
 IF(UNIX)
-    TARGET_LINK_LIBRARIES(SDABrakeSample rt)
+    TARGET_LINK_LIBRARIES(SDALib-Python rt)
 ENDIF(UNIX)
 
 add_custom_command(TARGET SDALib-Python POST_BUILD
