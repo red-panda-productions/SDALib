@@ -12,6 +12,8 @@ SET(SDALIB_INLINES
 SET(SDALIB_SOURCES
 	SDADriver.cpp 
 	IPCPointerManager.cpp
+	SDAAction.cpp
+	SDAData.cpp
 )
 
 

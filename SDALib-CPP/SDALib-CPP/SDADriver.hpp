@@ -17,17 +17,6 @@
 
 #endif
 
-/// @brief				 Retrieves the msgpack vector
-/// @param  p_buffer	 The character buffer
-///	@param  p_bufferSize The buffer size
-/// @param  p_vector	 The result vector
-inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std::string>& p_vector)
-{
-    msgpack::unpacked msg;
-    msgpack::unpack(msg, p_buffer, p_bufferSize);
-    msg->convert(p_vector);
-}
-
 #define SDA_BUFFER_SIZE 512
 
 /// @brief The driver class from which the AI should inherit

@@ -9,6 +9,18 @@
     template void AIInterface<p_type>::Loop();                               \
     template void AIInterface<p_type>::SetupSocket();
 
+
+/// @brief				 Retrieves the msgpack vector
+/// @param  p_buffer	 The character buffer
+///	@param  p_bufferSize The buffer size
+/// @param  p_vector	 The result vector
+void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std::string>& p_vector)
+{
+    msgpack::unpacked msg;
+    msgpack::unpack(msg, p_buffer, p_bufferSize);
+    msg->convert(p_vector);
+}
+
 template <class PointerManager>
 void AIInterface<PointerManager>::Run()
 {
