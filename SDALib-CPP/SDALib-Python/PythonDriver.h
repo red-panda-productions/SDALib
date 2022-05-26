@@ -6,8 +6,13 @@
 #include "SDAAction.hpp"
 #include "SDADriver.hpp"
 #include "SDAData.hpp"
-#include "Python.h"
-#include <Python.h>
+#ifdef _DEBUG
+    #undef _DEBUG
+    #include <python.h>
+    #define _DEBUG
+#else
+    #include <python.h>
+#endif
 
 class PythonDriver : public SDADriver
 {

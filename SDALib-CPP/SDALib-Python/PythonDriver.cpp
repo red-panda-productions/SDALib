@@ -122,7 +122,6 @@ int main()
     driver.Run();
 
     Py_Finalize();
-    // Py_Exit(0);
     return 0;
 }
 
