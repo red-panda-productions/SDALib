@@ -20,7 +20,9 @@ ENDIF(UNIX)
 target_include_directories(SDASteerSample PUBLIC "../../SDALib-CPP")
 
 
-add_custom_command(TARGET SDASteerSample POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy "${IPCLIB_BIN_DIR}/IPCLib.dll" $<TARGET_FILE_DIR:SDASteerSample>
-       COMMAND_EXPAND_LISTS
-)
+IF(WIN32)
+    add_custom_command(TARGET SDASteerSample POST_BUILD
+           COMMAND ${CMAKE_COMMAND} -E copy "${IPCLIB_BIN_DIR}/IPCLib.dll" $<TARGET_FILE_DIR:SDASteerSample>
+           COMMAND_EXPAND_LISTS
+    )
+ENDIF(WIN32)
