@@ -1,7 +1,7 @@
 project(SDATests)
 
 set(INSTALL_GTEST OFF)
-
+FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -15,15 +15,17 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(
-  SDATests "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "Mocks/SDADriverMock.h" "Mocks/PointerManagerMock.h")
+  SDATests "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "PythonDriverTest.cpp" "Mocks/SDADriverMock.h")
 target_link_libraries(
   SDATests
   SDALib
+  Python3::Python
   gtest_main
   ${SOLID_LIBRARY}
 )
 target_include_directories(SDATests PUBLIC "../SDALib-CPP")
-
+target_include_directories(SDATests PUBLIC "../SDALib-Python")
+target_include_directories(SDATests PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
 #add_custom_command(TARGET SDATests POST_BUILD
 #       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:SDATests> $<TARGET_FILE_DIR:SDATests>
 #       COMMAND_EXPAND_LISTS

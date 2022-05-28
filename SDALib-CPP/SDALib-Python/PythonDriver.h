@@ -7,24 +7,24 @@
 #include "SDADriver.hpp"
 #include "SDAData.hpp"
 #ifdef _DEBUG
-    #undef _DEBUG
-    #include <python.h>
-    #define _DEBUG
+#undef _DEBUG
+#include <python.h>
+#define _DEBUG
 #else
-    #include <python.h>
+#include <python.h>
 #endif
 
 class PythonDriver : public SDADriver
 {
 public:
-    PythonDriver();
+    PythonDriver()
+        : SDADriver()
+    {
+        InitializePythonDriver();
+    };
 
-protected:
-    void InitAI() override;
+    void InitializePythonDriver();
 
-    SDAAction UpdateAI(SDAData& p_data) override;
-
-private:
     PyObject* GetSDATypeObject(SDAData& p_data);
 
     PyObject* GetCarObject(tCarElt& p_car);
@@ -62,4 +62,9 @@ private:
     PyObject* m_pythonDriver;
 
     void FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetupArray[], tCarSetupItem* p_carSetupItems);
+
+protected:
+    void InitAI() override;
+
+    SDAAction UpdateAI(SDAData& p_data) override;
 };

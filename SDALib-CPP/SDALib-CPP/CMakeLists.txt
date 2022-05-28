@@ -2,6 +2,7 @@
 	SDADriver.hpp
 	SDAAction.hpp
 	SDAData.hpp
+	SDASpeedDreams.hpp
 	IPCPointerManager.h
 )
 
@@ -10,7 +11,8 @@ SET(SDALIB_INLINES
 )
 
 SET(SDALIB_SOURCES
-	SDADriver.cpp 
+	SDADriver.cpp
+	SDASpeedDreams.cpp
 	IPCPointerManager.cpp
 )
 

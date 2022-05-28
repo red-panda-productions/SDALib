@@ -1,7 +1,7 @@
 #include "PythonDriver.h"
 
 /// @brief Constructs PythonDriver and sets up python code
-PythonDriver::PythonDriver()
+void PythonDriver::InitializePythonDriver()
 {
     // initialize the SDAType data type
     PyObject* sdaTypesModuleName = PyUnicode_DecodeFSDefault("SDATypes");
@@ -84,7 +84,7 @@ void PythonDriver::InitAI()
         PyObject* py_arg_tuple = PyTuple_New(0);
         m_pythonDriver = PyObject_CallObject(driverClass, py_arg_tuple);
     }
-    catch (std::exception&)  // dangerous; throws all expections
+    catch (std::exception&)
     {
         PyErr_Print();
     }
