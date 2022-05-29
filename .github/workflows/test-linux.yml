@@ -35,13 +35,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install Compilers
+    - name: Install packages
       run: |
-        sudo apt update
-        sudo apt install gcc-11 g++-11
-        sudo apt-get install gcc-11-multilib
-        sudo apt-get install g++-11-multilib
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
+        sudo apt-get install libplib-dev
+        sudo apt-get install libexpat1-dev
       
     - name: Install boost 32 bit
       run: |
@@ -49,7 +46,7 @@ jobs:
         tar -C ${{env.BOOST_PATH}} -xzf Boost.tar.gz 
         
     - name: Configure CMake
-      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-m32 -pthread" -DCMAKE_CXX_FLAGS="-m32 -pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{github.workspace}}/build
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTION_GITHUB_ACTIONS=ON -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{github.workspace}}/build
 
     - name: Build
       working-directory: ${{github.workspace}}/build
