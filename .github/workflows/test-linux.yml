@@ -59,7 +59,7 @@ jobs:
         boost_install_dir: ${{env.BOOST_PATH}}
         
     - name: Configure CMake
-      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTION_GITHUB_ACTIONS=ON -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{github.workspace}}/build
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-pthread" -DCMAKE_CXX_FLAGS="-pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{github.workspace}}/build
 
     - name: Build
       working-directory: ${{github.workspace}}/build
