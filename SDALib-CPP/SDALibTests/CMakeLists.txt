@@ -19,10 +19,13 @@ add_executable(
 target_link_libraries(
   SDATests
   SDALib
+  #SDALib-Python
   Python3::Python
   gtest_main
   ${SOLID_LIBRARY}
 )
+target_link_libraries(SDATests PRIVATE $<TARGET_FILE:SDALib-Python>)
+
 target_include_directories(SDATests PUBLIC "../SDALib-CPP")
 target_include_directories(SDATests PUBLIC "../SDALib-Python")
 target_include_directories(SDATests PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})

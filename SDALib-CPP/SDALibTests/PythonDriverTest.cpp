@@ -7,9 +7,9 @@
 // check all classes are callable
 TEST(PythonDriverTests, PythonDriverInitTest)
 {
-    //PythonDriver pythonDriver = PythonDriver();
+    PythonDriver pythonDriver = PythonDriver();
 
-    //ASSERT_TRUE(PyCallable_Check(pythonDriver.m_sdaTypesClass));
+    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_sdaTypesClass));
     //ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carClass));
     //ASSERT_TRUE(PyCallable_Check(pythonDriver.m_initCarClass));
     //ASSERT_TRUE(PyCallable_Check(pythonDriver.m_wheelSpecificationsClass));

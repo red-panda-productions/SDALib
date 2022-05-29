@@ -1,7 +1,7 @@
 #include "PythonDriver.h"
 
 /// @brief Constructs PythonDriver and sets up python code
-void PythonDriver::InitializePythonDriver()
+PythonDriver::PythonDriver()
 {
     // initialize the SDAType data type
     PyObject* sdaTypesModuleName = PyUnicode_DecodeFSDefault("SDATypes");

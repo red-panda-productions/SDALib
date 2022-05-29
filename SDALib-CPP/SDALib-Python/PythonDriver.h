@@ -17,13 +17,7 @@
 class PythonDriver : public SDADriver
 {
 public:
-    PythonDriver()
-        : SDADriver()
-    {
-        InitializePythonDriver();
-    };
-
-    void InitializePythonDriver();
+    PythonDriver();
 
     PyObject* GetSDATypeObject(SDAData& p_data);
 

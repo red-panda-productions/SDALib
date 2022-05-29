@@ -5,6 +5,8 @@ FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 add_executable(SDALib-Python "PythonDriver.cpp" "PythonDriver.h")
 
+set_property(TARGET SDALib-Python PROPERTY ENABLE_EXPORTS 1)
+
 target_link_libraries(
         SDALib-Python
         SDALib
