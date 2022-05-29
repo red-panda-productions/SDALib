@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BOOST_PATH: ${{github.workspace}}/libraries
-      BOOST_ROOT: ${{github.workspace}}/libraries/Boost/include/boost
+      BOOST_ROOT: ${{github.workspace}}/libraries/boost/boost
       BOOST_VERSION: 1.79.0
 
     steps:
