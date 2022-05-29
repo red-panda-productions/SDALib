@@ -6,8 +6,6 @@ on:
 
   # Allow manually triggering from the actions tab
   workflow_dispatch:
-
-
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Debug
@@ -30,25 +28,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install Compilers
+    - name: Install packages
       run: |
-        sudo apt update
-        sudo apt install gcc-11 g++-11
-        sudo apt-get install gcc-11-multilib
-        sudo apt-get install g++-11-multilib
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
+        wget https://github.com/red-panda-productions/ipc-lib/releases/download/v1.1.0/ipclib.deb
+        sudo apt install ./ipclib.deb
+        sudo apt-get install libplib-dev
+        sudo apt-get install libexpat1-dev
 
     - name: Install GCovr
       run: pip install gcovr
 
     - name: Cache boost
-        uses: actions/cache@v2
-        id: cache-boost
-        with:
-          # Set the default path as the path to cache
-          path: ${{env.BOOST_ROOT}}
-          # Use the version as the key to only cache the correct version
-          key: boost-${{env.BOOST_VERSION}}
+      uses: actions/cache@v2
+      id: cache-boost
+      with:
+        # Set the default path as the path to cache
+        path: ${{env.BOOST_ROOT}}
+        # Use the version as the key to only cache the correct version
+        key: boost-${{env.BOOST_VERSION}}
 
     - name: Install boost
       if: steps.cache-boost.outputs.cache-hit != 'true'
@@ -85,4 +82,4 @@ jobs:
         show_missing: true
         link_missing_lines: true
         skip_covered: false
-        report_name: 'code coverage report linux'
+        report_name: 'code coverage report Linux'
