@@ -26,11 +26,10 @@ ENDIF(WIN32)
 target_link_libraries(
   SDATests
   SDALib
-  #SDALib-Python
+  SDALib-Pythonlib
   Python3::Python
   gtest_main
   ${SOLID_LIBRARY}
-  ${SDA_PYTHON_EXE}
 )
 
 target_include_directories(SDATests PUBLIC "../SDALib-CPP")

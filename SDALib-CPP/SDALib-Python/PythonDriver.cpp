@@ -113,18 +113,6 @@ SDAAction PythonDriver::UpdateAI(SDAData& p_data)
     return action;
 }
 
-/// @brief  Main entry point of the driver
-int main()
-{
-    Py_Initialize();
-
-    PythonDriver driver;
-    driver.Run();
-
-    Py_Finalize();
-    return 0;
-}
-
 /// @brief gets the python SDATypes object of the current input
 /// @param  p_data  The data
 /// @return         The python object
@@ -964,3 +952,17 @@ PyObject* PythonDriver::GetObjectFromArgs(PyObject* p_classInit, PyObject* p_ini
 
     return objectInit;
 }
+
+#ifndef SDA_LIBRARY
+/// @brief  Main entry point of the driver
+int main()
+{
+    Py_Initialize();
+
+    PythonDriver driver;
+    driver.Run();
+
+    Py_Finalize();
+    return 0;
+}
+#endif
