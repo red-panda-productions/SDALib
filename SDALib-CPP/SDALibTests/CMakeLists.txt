@@ -16,6 +16,13 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 add_executable(
   SDATests "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "PythonDriverTest.cpp" "Mocks/SDADriverMock.h")
+
+IF(WIN32)
+    SET(SDA_PYTHON_EXE ${CMAKE_BINARYDIR}/SDALib-Python/SDALib-Python.exe)
+ELSE(WIN32)
+    SET(SDA_PYTHON_EXE ${CMAKE_BINARYDIR}/SDALib-Python/SDALib-Python)
+ENDIF(WIN32)
+
 target_link_libraries(
   SDATests
   SDALib
@@ -23,8 +30,8 @@ target_link_libraries(
   Python3::Python
   gtest_main
   ${SOLID_LIBRARY}
+  ${SDA_PYTHON_EXE}
 )
-target_link_libraries(SDATests PRIVATE $<TARGET_FILE:SDALib-Python>)
 
 target_include_directories(SDATests PUBLIC "../SDALib-CPP")
 target_include_directories(SDATests PUBLIC "../SDALib-Python")
