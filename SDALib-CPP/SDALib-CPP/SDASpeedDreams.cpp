@@ -15,5 +15,5 @@ SDAData SDASpeedDreams(SDAData p_data, SDAAction& p_action)
     data.Situation;
     data.TickCount;
 
-    return data;
+    return p_data;
 }

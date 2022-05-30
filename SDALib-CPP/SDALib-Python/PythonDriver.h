@@ -13,6 +13,12 @@
 #else
 #include <python.h>
 #endif
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
+#include <stdlib.h>
+#include <iostream>
+#include <experimental/filesystem>
+
+namespace filesystem = std::experimental::filesystem;
 
 class PythonDriver : public SDADriver
 {

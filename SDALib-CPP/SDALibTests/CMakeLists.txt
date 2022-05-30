@@ -15,7 +15,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(
-  SDATests "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "PythonDriverTest.cpp" "Mocks/SDADriverMock.h")
+  SDATests "GeneratorUtils.h" "GeneratorUtils.cpp" "Random.hpp" "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "PythonDriverTest.cpp" "Mocks/SDADriverMock.h")
 
 IF(WIN32)
     SET(SDA_PYTHON_EXE ${CMAKE_BINARYDIR}/SDALib-Python/SDALib-Python.exe)
@@ -76,3 +76,7 @@ IF(OPEN_CPP_COVERAGE)
 
     MESSAGE(STATUS "Created SDACoverage.bat, run with ./coverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
 ENDIF(OPEN_CPP_COVERAGE)
+
+IF(OPTION_SDALIB_PYTHON)
+    INSTALL_PYTHON_FILES(SDATests)
+ENDIF(OPTION_SDALIB_PYTHON)

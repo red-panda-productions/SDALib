@@ -3,69 +3,74 @@
 /// @brief Constructs PythonDriver and sets up python code
 PythonDriver::PythonDriver()
 {
+    // td::cout << (filesystem::current_path()) << std::endl;
+
+    // const filesystem::path parentPath = filesystem::current_path().parent_path();
+    // PySys_SetPath(reinterpret_cast<const wchar_t*>((char*)strcat((char*)parentPath.c_str(),"/SDALib-Python")));
+
     // initialize the SDAType data type
-    PyObject* sdaTypesModuleName = PyUnicode_DecodeFSDefault("SDATypes");
+    PyObject* sdaTypesModuleName = PyUnicode_FromString("SDATypes");
     PyObject* sdaTypesModule = PyImport_Import(sdaTypesModuleName);
     PyObject* sdaTypesDict = PyModule_GetDict(sdaTypesModule);
 
-    std::string py_class_name = "sdatypes";
+    std::string py_class_name = "SDATypes";
     m_sdaTypesClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "car";
+    py_class_name = "Car";
     m_carClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "initcar";
+    py_class_name = "InitCar";
     m_initCarClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "wheelspecifications";
+    py_class_name = "WheelSpecifications";
     m_wheelSpecificationsClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "visualattributes";
+    py_class_name = "VisualAttributes";
     m_visualAttributesClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "publiccar";
+    py_class_name = "PublicCar";
     m_publicCarClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "dynamicpoint";
+    py_class_name = "DynamicPoint";
     m_dynamicPointClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "tracklocation";
+    py_class_name = "TrackLocation";
     m_trackLocationClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "tracksegment";
+    py_class_name = "TrackSegment";
     m_trackSegmentClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "carraceinfo";
+    py_class_name = "CarRaceInfo";
     m_carRaceInfoClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "privcar";
+    py_class_name = "PrivCar";
     m_privCarClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "posd";
+    py_class_name = "PosD";
     m_posDClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "collisionstate";
+    py_class_name = "CollisionState";
     m_collisionStateClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "carctrl";
+    py_class_name = "CarCtrl";
     m_carCtrlClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "carsetup";
+    py_class_name = "CarSetup";
     m_carSetupClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "carsetupitem";
+    py_class_name = "CarSetupItem";
     m_carSetupItemClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "carpitcmd";
+    py_class_name = "CarPitCmd";
     m_carPitCmdClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "situation";
+    py_class_name = "Situation";
     m_situationClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "raceinfo";
+    py_class_name = "RaceInfo";
     m_raceInfoClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "vector";
+    py_class_name = "Vector";
     m_vectorClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 }
 
@@ -393,6 +398,7 @@ PyObject* PythonDriver::GetTrackSegmentObject(tTrackSeg& p_trackSeg)
     try
     {
         const int size = 36;
+        //TODO: const int size = 37;
         PyObject* trackSegArgs[size];
 
         trackSegArgs[0] = PyUnicode_DecodeFSDefault(p_trackSeg.name);
@@ -434,6 +440,7 @@ PyObject* PythonDriver::GetTrackSegmentObject(tTrackSeg& p_trackSeg)
         trackSegArgs[33] = PyFloat_FromDouble(p_trackSeg.height);
         trackSegArgs[34] = PyLong_FromLong(static_cast<long>(p_trackSeg.raceInfo));
         trackSegArgs[35] = PyFloat_FromDouble(p_trackSeg.DoVfactor);
+        //TODO: trackSegArgs[36] = PyFloat_FromDouble(p_trackSeg.SpeedLimit);
 
         trackSegment = GetObjectFromArgs(m_trackSegmentClass, trackSegArgs, size);
     }
@@ -958,10 +965,8 @@ PyObject* PythonDriver::GetObjectFromArgs(PyObject* p_classInit, PyObject* p_ini
 int main()
 {
     Py_Initialize();
-
     PythonDriver driver;
     driver.Run();
-
     Py_Finalize();
     return 0;
 }

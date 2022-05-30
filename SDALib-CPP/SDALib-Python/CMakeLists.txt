@@ -30,22 +30,5 @@ target_include_directories(SDALib-Pythonlib PUBLIC "../SDALib-CPP")
 target_include_directories(SDALib-Python PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
 target_include_directories(SDALib-Pythonlib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
 
-add_custom_command(TARGET SDALib-Python POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/Driver.py" $<TARGET_FILE_DIR:SDALib-Python>
-    COMMAND_EXPAND_LISTS
-)
-
-add_custom_command(TARGET SDALib-Python POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/SDATypes.py" $<TARGET_FILE_DIR:SDALib-Python>
-    COMMAND_EXPAND_LISTS
-)
-
-add_custom_command(TARGET SDALib-Pythonlib POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/Driver.py" $<TARGET_FILE_DIR:SDALib-Python>
-    COMMAND_EXPAND_LISTS
-)
-
-add_custom_command(TARGET SDALib-Pythonlib POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/SDATypes.py" $<TARGET_FILE_DIR:SDALib-Python>
-    COMMAND_EXPAND_LISTS
-)
+INSTALL_PYTHON_FILES(SDALib-Python)
+INSTALL_PYTHON_FILES(SDALib-Pythonlib)

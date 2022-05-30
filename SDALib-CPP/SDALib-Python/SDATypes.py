@@ -1,10 +1,9 @@
 # object containing all data send to the decision maker
 class SDATypes:
     def __init__(self, car, situation, tickCount):
-        self.tickCount = tickCount  # long
         self.car = car  # Car
         self.situation = situation  # Situation
-
+        self.tickCount = tickCount  # long
 
 # the main car structure
 class Car:
@@ -102,8 +101,8 @@ class TrackLocation:
 # Track Segment
 class TrackSegment:
     def __init__(self, name, id, type, type2, style, length, width, startWidth, endWidth, lgFromStart, radius, radiusR,
-                 radiusL, arc, center, vertex, angle, sin, cos, kzl, kzw, kyl, rgtSideNormal, envIndex, height,
-                 raceInfo, doVFactor):
+                 radiusL, arc, center, vertex1, vertex2, vertex3, vertex4, angle1, angle2, angle3, angle4, angle5,angle6, angle7, sin, cos, kzl, kzw, kyl, rgtSideNormal, envIndex, height,
+                 raceInfo, doVFactor):#TODO: , speedLimit):
         self.name = name  # string
         self.id = id  # int
         self.type = type  # int
@@ -119,8 +118,8 @@ class TrackSegment:
         self.radiusL = radiusL  # float
         self.arc = arc  # float
         self.center = center  # Vector
-        self.vertex = vertex  # Vector[]
-        self.angle = angle  # float[]
+        self.vertex = [vertex1, vertex2, vertex3, vertex4]  # Vector[]
+        self.angle = [angle1, angle2, angle3, angle4, angle5, angle6, angle7]  # float[]
         self.sin = sin  # float
         self.cos = cos  # float
         self.kzl = kzl  # float
@@ -131,6 +130,7 @@ class TrackSegment:
         self.height = height  # float
         self.raceInfo = raceInfo  # int
         self.doVFactor = doVFactor  # float
+        #TODO: self.speedLimit = speedLimit # float
 
 
 # Race Administrative info
@@ -177,7 +177,7 @@ class PrivCar:
                  gearRatio4, gearRatio5, gearRatio6, gearRatio7, gearRatio8, gearRatio9, gearRatio10, gearNb,
                  gearOffset, skid1, skid2, skid3, skid4, reaction1, reaction2, reaction3, reaction4, collision,
                  simCollision, smoke, normal, collPos, damage, debug, collisionState, localPressure, driveSkill,
-                 steerTqCenter, steerTqAlign, dashboardInstantNb, dashboardRequestNb, dashabordActiveItem):
+                 steerTqCenter, steerTqAlign, dashboardInstantNb, dashboardRequestNb, dashboardActiveItem):
         self.driverIndex = driverIndex  # int
         self.moduleIndex = moduleIndex  # int
         self.modName = modName  # string
@@ -214,7 +214,7 @@ class PrivCar:
         self.steerTqAlign = steerTqAlign  # float
         self.dashboardInstantNb = dashboardInstantNb  # int
         self.dashboardRequestNb = dashboardRequestNb  # int
-        self.dashboardActiveItem = dashabordActiveItem  # int
+        self.dashboardActiveItem = dashboardActiveItem  # int
 
 
 # six degrees of freedom position
