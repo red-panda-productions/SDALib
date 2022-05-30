@@ -345,9 +345,9 @@ PyObject* PythonDriver::GetDynamicPointObject(tDynPt& p_dynPt)
         const int size = 3;
         PyObject* dynamicPointArgs[size];
 
-        dynamicPointArgs[0] = GetVectorObject(p_dynPt.pos.x, p_dynPt.pos.x, p_dynPt.pos.x);
-        dynamicPointArgs[1] = GetVectorObject(p_dynPt.vel.x, p_dynPt.vel.x, p_dynPt.vel.x);
-        dynamicPointArgs[2] = GetVectorObject(p_dynPt.acc.x, p_dynPt.acc.x, p_dynPt.acc.x);
+        dynamicPointArgs[0] = GetVectorObject(p_dynPt.pos.x, p_dynPt.pos.y, p_dynPt.pos.z);
+        dynamicPointArgs[1] = GetVectorObject(p_dynPt.vel.x, p_dynPt.vel.y, p_dynPt.vel.z);
+        dynamicPointArgs[2] = GetVectorObject(p_dynPt.acc.x, p_dynPt.acc.y, p_dynPt.acc.z);
 
         dynamicPoint = GetObjectFromArgs(m_dynamicPointClass, dynamicPointArgs, size);
     }
@@ -398,7 +398,7 @@ PyObject* PythonDriver::GetTrackSegmentObject(tTrackSeg& p_trackSeg)
     try
     {
         const int size = 36;
-        //TODO: const int size = 37;
+        // TODO: const int size = 37;
         PyObject* trackSegArgs[size];
 
         trackSegArgs[0] = PyUnicode_DecodeFSDefault(p_trackSeg.name);
@@ -440,7 +440,7 @@ PyObject* PythonDriver::GetTrackSegmentObject(tTrackSeg& p_trackSeg)
         trackSegArgs[33] = PyFloat_FromDouble(p_trackSeg.height);
         trackSegArgs[34] = PyLong_FromLong(static_cast<long>(p_trackSeg.raceInfo));
         trackSegArgs[35] = PyFloat_FromDouble(p_trackSeg.DoVfactor);
-        //TODO: trackSegArgs[36] = PyFloat_FromDouble(p_trackSeg.SpeedLimit);
+        // TODO: trackSegArgs[36] = PyFloat_FromDouble(p_trackSeg.SpeedLimit);
 
         trackSegment = GetObjectFromArgs(m_trackSegmentClass, trackSegArgs, size);
     }
@@ -710,10 +710,10 @@ PyObject* PythonDriver::GetCarCtrlObject(tCarCtrl& p_carCtrl)
         carCtrlArgs[22] = PyUnicode_DecodeFSDefault(p_carCtrl.msg[2]);
         carCtrlArgs[23] = PyUnicode_DecodeFSDefault(p_carCtrl.msg[3]);
 
-        carCtrlArgs[24] = PyLong_FromLong(static_cast<long>(p_carCtrl.msgColor[0]));
-        carCtrlArgs[25] = PyLong_FromLong(static_cast<long>(p_carCtrl.msgColor[1]));
-        carCtrlArgs[26] = PyLong_FromLong(static_cast<long>(p_carCtrl.msgColor[2]));
-        carCtrlArgs[27] = PyLong_FromLong(static_cast<long>(p_carCtrl.msgColor[3]));
+        carCtrlArgs[24] = PyFloat_FromDouble(static_cast<double>(p_carCtrl.msgColor[0]));
+        carCtrlArgs[25] = PyFloat_FromDouble(static_cast<double>(p_carCtrl.msgColor[1]));
+        carCtrlArgs[26] = PyFloat_FromDouble(static_cast<double>(p_carCtrl.msgColor[2]));
+        carCtrlArgs[27] = PyFloat_FromDouble(static_cast<double>(p_carCtrl.msgColor[3]));
 
         carCtrlItem = GetObjectFromArgs(m_carCtrlClass, carCtrlArgs, size);
     }

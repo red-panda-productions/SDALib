@@ -52,14 +52,17 @@ bool CheckVectorData(float p_x, float p_y, float p_z, PyObject* p_vecObject)
 {
     PyObject* xAttr = PyUnicode_FromString("x");
     PyObject* xVal = PyObject_GetAttr(p_vecObject, xAttr);
+    double xValTest = PyFloat_AsDouble(xVal);
     bool xCorrect = static_cast<double>(p_x) == PyFloat_AsDouble(xVal);
 
     PyObject* yAttr = PyUnicode_FromString("y");
     PyObject* yVal = PyObject_GetAttr(p_vecObject, yAttr);
+    double yValTest = PyFloat_AsDouble(yVal);
     bool yCorrect = static_cast<double>(p_y) == PyFloat_AsDouble(yVal);
 
     PyObject* zAttr = PyUnicode_FromString("z");
     PyObject* zVal = PyObject_GetAttr(p_vecObject, zAttr);
+    double zValTest = PyFloat_AsDouble(zVal);
     bool zCorrect = static_cast<double>(p_z) == PyFloat_AsDouble(zVal);
 
     return xCorrect && yCorrect && zCorrect;
@@ -114,7 +117,7 @@ bool CheckVisualAttrData(tVisualAttributes& p_visualAttributes, PyObject* p_visu
     bool exhaustNbCorrect = p_visualAttributes.exhaustNb == static_cast<int>(PyLong_AsLong(exhaustNbVal));
 
     PyObject* exhaustPosAttr = PyUnicode_FromString("exhaustPos");
-    PyObject* exhaustPosVal = PyObject_GetAttr(p_visualAttributesObject, exhaustPosAttr);
+    PyObject* exhaustPosVal = PyList_AsTuple(PyObject_GetAttr(p_visualAttributesObject, exhaustPosAttr));
     bool exhaustPosCorrect = CheckVectorData(p_visualAttributes.exhaustPos[0].x, p_visualAttributes.exhaustPos[0].y, p_visualAttributes.exhaustPos[0].z, PyTuple_GetItem(exhaustPosVal, 0)) &&
                              CheckVectorData(p_visualAttributes.exhaustPos[1].x, p_visualAttributes.exhaustPos[1].y, p_visualAttributes.exhaustPos[1].z, PyTuple_GetItem(exhaustPosVal, 1));
 
@@ -129,27 +132,27 @@ bool CheckInitCarData(tInitCar& p_initCar, PyObject* p_initCarObject)
 {
     PyObject* nameAttr = PyUnicode_FromString("name");
     PyObject* nameVal = PyObject_GetAttr(p_initCarObject, nameAttr);
-    bool nameCorrect = p_initCar.name == PyBytes_AsString(nameVal);
+    bool nameCorrect = strcmp(p_initCar.name, PyUnicode_AsUTF8(nameVal)) == 0;
 
     PyObject* snameAttr = PyUnicode_FromString("sName");
     PyObject* snameVal = PyObject_GetAttr(p_initCarObject, snameAttr);
-    bool snameCorrect = p_initCar.sname == PyBytes_AsString(snameVal);
+    bool snameCorrect = strcmp(p_initCar.sname, PyUnicode_AsUTF8(snameVal)) == 0;
 
     PyObject* codenameAttr = PyUnicode_FromString("codename");
     PyObject* codenameVal = PyObject_GetAttr(p_initCarObject, codenameAttr);
-    bool codenameCorrect = p_initCar.codename == PyBytes_AsString(codenameVal);
+    bool codenameCorrect = strcmp(p_initCar.codename, PyUnicode_AsUTF8(codenameVal)) == 0;
 
     PyObject* teamNameAttr = PyUnicode_FromString("teamName");
     PyObject* teamNameVal = PyObject_GetAttr(p_initCarObject, teamNameAttr);
-    bool teamNameCorrect = p_initCar.teamname == PyBytes_AsString(teamNameVal);
+    bool teamNameCorrect = strcmp(p_initCar.teamname, PyUnicode_AsUTF8(teamNameVal)) == 0;
 
     PyObject* carNameAttr = PyUnicode_FromString("carName");
     PyObject* carNameVal = PyObject_GetAttr(p_initCarObject, carNameAttr);
-    bool carNameCorrect = p_initCar.carName == PyBytes_AsString(carNameVal);
+    bool carNameCorrect = strcmp(p_initCar.carName, PyUnicode_AsUTF8(carNameVal)) == 0;
 
     PyObject* categoryAttr = PyUnicode_FromString("category");
     PyObject* categoryVal = PyObject_GetAttr(p_initCarObject, categoryAttr);
-    bool categoryCorrect = p_initCar.category == PyBytes_AsString(categoryVal);
+    bool categoryCorrect = strcmp(p_initCar.category, PyUnicode_AsUTF8(categoryVal)) == 0;
 
     PyObject* raceNumberAttr = PyUnicode_FromString("raceNumber");
     PyObject* raceNumberVal = PyObject_GetAttr(p_initCarObject, raceNumberAttr);
@@ -172,7 +175,7 @@ bool CheckInitCarData(tInitCar& p_initCar, PyObject* p_initCarObject)
     bool skillLevelCorrect = p_initCar.skillLevel == static_cast<int>(PyLong_AsLong(skillLevelVal));
 
     PyObject* iconColorAttr = PyUnicode_FromString("iconColor");
-    PyObject* iconColorVal = PyObject_GetAttr(p_initCarObject, iconColorAttr);
+    PyObject* iconColorVal = PyList_AsTuple(PyObject_GetAttr(p_initCarObject, iconColorAttr));
     bool iconColorCorrect = p_initCar.iconColor[0] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(iconColorVal, 0))) &&
                             p_initCar.iconColor[1] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(iconColorVal, 1))) &&
                             p_initCar.iconColor[2] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(iconColorVal, 2)));
@@ -202,8 +205,7 @@ bool CheckInitCarData(tInitCar& p_initCar, PyObject* p_initCarObject)
     bool statGCCorrect = CheckVectorData(p_initCar.statGC.x, p_initCar.statGC.y, p_initCar.statGC.z, statGCVal);
 
     PyObject* wheelAttr = PyUnicode_FromString("wheel");
-    PyObject* wheelVal = PyObject_GetAttr(p_initCarObject, wheelAttr);
-    PyObject* test = PyTuple_GetItem(wheelVal, 1);
+    PyObject* wheelVal = PyList_AsTuple(PyObject_GetAttr(p_initCarObject, wheelAttr));
     bool wheelCorrect = CheckWheelData(p_initCar.wheel[0], PyTuple_GetItem(wheelVal, 0)) &&
                         CheckWheelData(p_initCar.wheel[1], PyTuple_GetItem(wheelVal, 1)) &&
                         CheckWheelData(p_initCar.wheel[2], PyTuple_GetItem(wheelVal, 2)) &&
@@ -215,23 +217,23 @@ bool CheckInitCarData(tInitCar& p_initCar, PyObject* p_initCarObject)
 
     PyObject* masterModelAttr = PyUnicode_FromString("masterModel");
     PyObject* masterModelVal = PyObject_GetAttr(p_initCarObject, masterModelAttr);
-    bool masterModelCorrect = p_initCar.masterModel == PyBytes_AsString(masterModelVal);
+    bool masterModelCorrect = strcmp(p_initCar.masterModel, PyUnicode_AsUTF8(masterModelVal)) == 0;
 
     PyObject* skinNameAttr = PyUnicode_FromString("skinName");
     PyObject* skinNameVal = PyObject_GetAttr(p_initCarObject, skinNameAttr);
-    bool skinNameCorrect = p_initCar.skinName == PyBytes_AsString(skinNameVal);
+    bool skinNameCorrect = strcmp(p_initCar.skinName, PyUnicode_AsUTF8(skinNameVal)) == 0;
 
     PyObject* skinTargetsAttr = PyUnicode_FromString("skinTargets");
     PyObject* skinTargetsVal = PyObject_GetAttr(p_initCarObject, skinTargetsAttr);
     bool skinTargetsCorrect = p_initCar.skinTargets == static_cast<int>(PyLong_AsLong(skinTargetsVal));
 
-    return nameCorrect && snameCorrect && codenameCorrect && teamNameCorrect && carNameCorrect &&
-           categoryCorrect && raceNumberCorrect && startRankCorrect && driverTypeCorrect &&
-           networkPlayerCorrect && skillLevelCorrect && iconColorCorrect && dimensionCorrect &&
-           drvPosCorrect && bonnetPosCorrect && tankCorrect && steerLockCorrect && statGCCorrect &&
-           wheelCorrect && visualAttrCorrect && masterModelCorrect && skinNameCorrect && skinTargetsCorrect;
+    bool result = nameCorrect && snameCorrect && codenameCorrect && teamNameCorrect && carNameCorrect &&
+                  categoryCorrect && raceNumberCorrect && startRankCorrect && driverTypeCorrect &&
+                  networkPlayerCorrect && skillLevelCorrect && iconColorCorrect && dimensionCorrect &&
+                  drvPosCorrect && bonnetPosCorrect && tankCorrect && steerLockCorrect && statGCCorrect &&
+                  wheelCorrect && visualAttrCorrect && masterModelCorrect && skinNameCorrect && skinTargetsCorrect;
+    return result;
 }
-
 
 bool CheckDynamicPointData(tDynPt& p_dynPt, PyObject* p_dynPtObject)
 {
@@ -250,13 +252,13 @@ bool CheckDynamicPointData(tDynPt& p_dynPt, PyObject* p_dynPtObject)
     return posCorrect && velCorrect && accCorrect;
 }
 
-
 bool CheckMatrixData(sgMat4& p_posMat, PyObject* p_posMatObject)
 {
-    PyObject* row1Val = PyTuple_GetItem(p_posMatObject, 0);
-    PyObject* row2Val = PyTuple_GetItem(p_posMatObject, 1);
-    PyObject* row3Val = PyTuple_GetItem(p_posMatObject, 2);
-    PyObject* row4Val = PyTuple_GetItem(p_posMatObject, 3);
+    PyObject* p_posMatTuple = PyList_AsTuple(p_posMatObject);
+    PyObject* row1Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 0));
+    PyObject* row2Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 1));
+    PyObject* row3Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 2));
+    PyObject* row4Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 3));
 
     bool row1Correct = p_posMat[0][0] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 0))) &&
                        p_posMat[0][1] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 1))) &&
@@ -276,14 +278,13 @@ bool CheckMatrixData(sgMat4& p_posMat, PyObject* p_posMatObject)
                        p_posMat[3][3] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 3)));
 
     return row1Correct && row2Correct && row3Correct && row4Correct;
-
 }
 
 bool CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
 {
     PyObject* nameAttr = PyUnicode_FromString("name");
     PyObject* nameVal = PyObject_GetAttr(p_trackSegObject, nameAttr);
-    bool nameCorrect = p_trackSeg.name == PyBytes_AsString(nameVal);
+    bool nameCorrect = strcmp(p_trackSeg.name, PyUnicode_AsUTF8(nameVal)) == 0;
 
     PyObject* idAttr = PyUnicode_FromString("id");
     PyObject* idVal = PyObject_GetAttr(p_trackSegObject, idAttr);
@@ -342,14 +343,14 @@ bool CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
     bool centerCorrect = CheckVectorData(p_trackSeg.center.x, p_trackSeg.center.y, p_trackSeg.center.z, centerVal);
 
     PyObject* vertexAttr = PyUnicode_FromString("vertex");
-    PyObject* vertexVal = PyObject_GetAttr(p_trackSegObject, vertexAttr);
+    PyObject* vertexVal = PyList_AsTuple(PyObject_GetAttr(p_trackSegObject, vertexAttr));
     bool vertexCorrect = CheckVectorData(p_trackSeg.vertex[0].x, p_trackSeg.vertex[0].y, p_trackSeg.vertex[0].z, PyTuple_GetItem(vertexVal, 0)) &&
                          CheckVectorData(p_trackSeg.vertex[1].x, p_trackSeg.vertex[1].y, p_trackSeg.vertex[1].z, PyTuple_GetItem(vertexVal, 1)) &&
                          CheckVectorData(p_trackSeg.vertex[2].x, p_trackSeg.vertex[2].y, p_trackSeg.vertex[2].z, PyTuple_GetItem(vertexVal, 2)) &&
                          CheckVectorData(p_trackSeg.vertex[3].x, p_trackSeg.vertex[3].y, p_trackSeg.vertex[3].z, PyTuple_GetItem(vertexVal, 3));
 
     PyObject* angleAttr = PyUnicode_FromString("angle");
-    PyObject* angleVal = PyObject_GetAttr(p_trackSegObject, angleAttr);
+    PyObject* angleVal = PyList_AsTuple(PyObject_GetAttr(p_trackSegObject, angleAttr));
     bool angleCorrect = p_trackSeg.angle[0] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleVal, 0))) &&
                         p_trackSeg.angle[1] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleVal, 1))) &&
                         p_trackSeg.angle[2] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleVal, 2))) &&
@@ -398,15 +399,15 @@ bool CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
     PyObject* doVFactorVal = PyObject_GetAttr(p_trackSegObject, doVFactorAttr);
     bool doVFactorCorrect = static_cast<double>(p_trackSeg.DoVfactor) == PyFloat_AsDouble(doVFactorVal);
 
-    //TODO: PyObject* speedLimitAttr = PyUnicode_FromString("speedLimit");
-    //PyObject* speedLimitVal = PyObject_GetAttr(p_trackSegObject, speedLimitAttr);
-    //bool speedLimitCorrect = static_cast<double>(p_trackSeg.SpeedLimit) == PyFloat_AsDouble(speedLimitVal);
+    // TODO: PyObject* speedLimitAttr = PyUnicode_FromString("speedLimit");
+    // PyObject* speedLimitVal = PyObject_GetAttr(p_trackSegObject, speedLimitAttr);
+    // bool speedLimitCorrect = static_cast<double>(p_trackSeg.SpeedLimit) == PyFloat_AsDouble(speedLimitVal);
 
     return nameCorrect && idCorrect && typeCorrect && type2Correct && styleCorrect && lengthCorrect &&
            widthCorrect && startWidthCorrect && endWidthCorrect && lgFromStartCorrect && radiusCorrect &&
            radiusRCorrect && radiusLCorrect && arcCorrect && centerCorrect && vertexCorrect && angleCorrect &&
            sinCorrect && cosCorrect && kzlCorrect && kzwCorrect && kylCorrect && rgtSideNormalCorrect &&
-           envIndexCorrect && heightCorrect && raceInfoCorrect && doVFactorCorrect; //TODO: && speedLimitCorrect;
+           envIndexCorrect && heightCorrect && raceInfoCorrect && doVFactorCorrect;  // TODO: && speedLimitCorrect;
 }
 
 bool CheckTrackLocationData(tTrkLocPos& p_trackLoc, PyObject* p_trackLocObject)
@@ -584,7 +585,6 @@ bool CheckCarRaceInfoData(tCarRaceInfo& p_carRaceInfo, PyObject* p_carRaceInfoOb
            trackLengthCorrect && scheduledEventTimeCorrect && eventCorrect && penaltyTimeCorrect && prevFromStartLineCorrect && wrongWayTimeCorrect;
 }
 
-
 bool CheckPosDObject(tPosd& p_posD, PyObject* p_trackSegObject)
 {
     PyObject* xAttr = PyUnicode_FromString("x");
@@ -618,7 +618,6 @@ bool CheckPosDObject(tPosd& p_posD, PyObject* p_trackSegObject)
     return xCorrect && yCorrect && zCorrect && xyCorrect && axCorrect && ayCorrect && azCorrect;
 }
 
-
 bool CheckPrivCarData(tPrivCar& p_privCar, PyObject* p_privCarObject)
 {
     PyObject* driverIndexAttr = PyUnicode_FromString("driverIndex");
@@ -631,11 +630,10 @@ bool CheckPrivCarData(tPrivCar& p_privCar, PyObject* p_privCarObject)
 
     PyObject* modNameAttr = PyUnicode_FromString("modName");
     PyObject* modNameVal = PyObject_GetAttr(p_privCarObject, modNameAttr);
-    bool modNameCorrect = p_privCar.modName == PyBytes_AsString(modNameVal);
-
+    bool modNameCorrect = strcmp(p_privCar.modName, PyUnicode_AsUTF8(modNameVal)) == 0;
 
     PyObject* cornerAttr = PyUnicode_FromString("corner");
-    PyObject* cornerVal = PyObject_GetAttr(p_privCarObject, cornerAttr);
+    PyObject* cornerVal = PyList_AsTuple(PyObject_GetAttr(p_privCarObject, cornerAttr));
     bool cornerCorrect = CheckPosDObject(p_privCar.corner[0], PyTuple_GetItem(cornerVal, 0)) &&
                          CheckPosDObject(p_privCar.corner[1], PyTuple_GetItem(cornerVal, 1)) &&
                          CheckPosDObject(p_privCar.corner[2], PyTuple_GetItem(cornerVal, 2)) &&
@@ -682,7 +680,7 @@ bool CheckPrivCarData(tPrivCar& p_privCar, PyObject* p_privCarObject)
     bool engineRPMMaxPwCorrect = p_privCar.enginerpmMaxPw == static_cast<float>(PyFloat_AsDouble(engineRPMMaxPwVal));
 
     PyObject* engineMaxTqAttr = PyUnicode_FromString("engineMaxTq");
-    PyObject* engineMaxTqVal = PyObject_GetAttr(p_privCarObject,engineMaxTqAttr);
+    PyObject* engineMaxTqVal = PyObject_GetAttr(p_privCarObject, engineMaxTqAttr);
     bool engineMaxTqCorrect = p_privCar.engineMaxTq == static_cast<float>(PyFloat_AsDouble(engineMaxTqVal));
 
     PyObject* engineMaxPwAttr = PyUnicode_FromString("engineMaxPw");
@@ -690,7 +688,7 @@ bool CheckPrivCarData(tPrivCar& p_privCar, PyObject* p_privCarObject)
     bool engineMaxPwCorrect = p_privCar.engineMaxPw == static_cast<float>(PyFloat_AsDouble(engineMaxPwVal));
 
     PyObject* gearRatioAttr = PyUnicode_FromString("gearRatio");
-    PyObject* gearRatioVal = PyObject_GetAttr(p_privCarObject, gearRatioAttr);
+    PyObject* gearRatioVal = PyList_AsTuple(PyObject_GetAttr(p_privCarObject, gearRatioAttr));
     bool gearRatioCorrect = p_privCar.gearRatio[0] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearRatioVal, 0))) &&
                             p_privCar.gearRatio[1] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearRatioVal, 1))) &&
                             p_privCar.gearRatio[2] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearRatioVal, 2))) &&
@@ -711,14 +709,14 @@ bool CheckPrivCarData(tPrivCar& p_privCar, PyObject* p_privCarObject)
     bool gearOffsetCorrect = p_privCar.gearOffset == static_cast<int>(PyLong_AsLong(gearOffsetVal));
 
     PyObject* skidAttr = PyUnicode_FromString("skid");
-    PyObject* skidVal = PyObject_GetAttr(p_privCarObject, skidAttr);
+    PyObject* skidVal = PyList_AsTuple(PyObject_GetAttr(p_privCarObject, skidAttr));
     bool skidCorrect = p_privCar.skid[0] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(skidVal, 0))) &&
                        p_privCar.skid[1] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(skidVal, 1))) &&
                        p_privCar.skid[2] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(skidVal, 2))) &&
                        p_privCar.skid[3] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(skidVal, 3)));
 
     PyObject* reactionAttr = PyUnicode_FromString("reaction");
-    PyObject* reactionVal = PyObject_GetAttr(p_privCarObject, reactionAttr);
+    PyObject* reactionVal = PyList_AsTuple(PyObject_GetAttr(p_privCarObject, reactionAttr));
     bool reactionCorrect = p_privCar.reaction[0] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(reactionVal, 0))) &&
                            p_privCar.reaction[1] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(reactionVal, 1))) &&
                            p_privCar.reaction[2] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(reactionVal, 2))) &&
@@ -876,14 +874,16 @@ bool CheckCarCtrlData(tCarCtrl& p_carCtrl, PyObject* p_carCtrlObject)
     bool telemetryModeCorrect = p_carCtrl.telemetryMode == static_cast<int>(PyLong_AsLong(telemetryModeVal));
 
     PyObject* msgAttr = PyUnicode_FromString("msg");
-    PyObject* msgVal = PyObject_GetAttr(p_carCtrlObject, msgAttr);
-    bool msgCorrect = p_carCtrl.msg[0] == PyBytes_AsString(PyTuple_GetItem(msgVal, 0)) &&
-                      p_carCtrl.msg[1] == PyBytes_AsString(PyTuple_GetItem(msgVal, 1)) &&
-                      p_carCtrl.msg[2] == PyBytes_AsString(PyTuple_GetItem(msgVal, 2)) &&
-                      p_carCtrl.msg[3] == PyBytes_AsString(PyTuple_GetItem(msgVal, 3));
+    PyObject* msgVal = PyList_AsTuple(PyObject_GetAttr(p_carCtrlObject, msgAttr));
+    bool msgCorrect = strcmp(p_carCtrl.msg[0], PyUnicode_AsUTF8(PyTuple_GetItem(msgVal, 0))) == 0 &&
+                      strcmp(p_carCtrl.msg[1], PyUnicode_AsUTF8(PyTuple_GetItem(msgVal, 1))) == 0 &&
+                      strcmp(p_carCtrl.msg[2], PyUnicode_AsUTF8(PyTuple_GetItem(msgVal, 2))) == 0 &&
+                      strcmp(p_carCtrl.msg[3], PyUnicode_AsUTF8(PyTuple_GetItem(msgVal, 3))) == 0;
 
     PyObject* msgColorAttr = PyUnicode_FromString("msgColor");
-    PyObject* msgColorVal = PyObject_GetAttr(p_carCtrlObject, msgColorAttr);
+    PyObject* msgColorVal = PyList_AsTuple(PyObject_GetAttr(p_carCtrlObject, msgColorAttr));
+    PyObject* test1 = PyTuple_GetItem(msgColorVal, 0);
+    double test = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorVal, 0)));
     bool msgColorCorrect = p_carCtrl.msgColor[0] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorVal, 0))) &&
                            p_carCtrl.msgColor[1] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorVal, 1))) &&
                            p_carCtrl.msgColor[2] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorVal, 2))) &&
@@ -924,7 +924,6 @@ bool CheckCarSetupItemData(tCarSetupItem& p_carSetupItem, PyObject* p_carSetupIt
 
     return valueCorrect && minCorrect && maxCorrect && desiredValueCorrect && stepSizeCorrect && changedCorrect;
 }
-
 
 bool CheckCarPitCmdData(tCarPitCmd& p_carPitCmd, PyObject* p_carPitCmdObject)
 {
@@ -979,7 +978,7 @@ bool CheckCarSetupData(tCarSetup& p_carSetup, PyObject* p_carSetupObject)
     bool revsLimiterCorrect = CheckCarSetupItemData(p_carSetup.revsLimiter, revsLimiterVal);
 
     PyObject* gearRatioAttr = PyUnicode_FromString("gearRatio");
-    PyObject* gearRatioVal = PyObject_GetAttr(p_carSetupObject, gearRatioAttr);
+    PyObject* gearRatioVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, gearRatioAttr));
     bool gearRatioCorrect = CheckCarSetupItemData(p_carSetup.gearRatio[0], PyTuple_GetItem(gearRatioVal, 0)) &&
                             CheckCarSetupItemData(p_carSetup.gearRatio[1], PyTuple_GetItem(gearRatioVal, 1)) &&
                             CheckCarSetupItemData(p_carSetup.gearRatio[2], PyTuple_GetItem(gearRatioVal, 2)) &&
@@ -992,52 +991,52 @@ bool CheckCarSetupData(tCarSetup& p_carSetup, PyObject* p_carSetupObject)
                             CheckCarSetupItemData(p_carSetup.gearRatio[9], PyTuple_GetItem(gearRatioVal, 9));
 
     PyObject* differentialTypeAttr = PyUnicode_FromString("differentialType");
-    PyObject* differentialTypeVal = PyObject_GetAttr(p_carSetupObject, differentialTypeAttr);
+    PyObject* differentialTypeVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialTypeAttr));
     bool differentialTypeCorrect = p_carSetup.differentialType[0] == static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 0))) &&
                                    p_carSetup.differentialType[1] == static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 1))) &&
                                    p_carSetup.differentialType[2] == static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 2)));
 
     PyObject* differentialRatioAttr = PyUnicode_FromString("differentialRatio");
-    PyObject* differentialRatioVal = PyObject_GetAttr(p_carSetupObject, differentialRatioAttr);
+    PyObject* differentialRatioVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialRatioAttr));
     bool differentialRatioCorrect = CheckCarSetupItemData(p_carSetup.differentialRatio[0], PyTuple_GetItem(differentialRatioVal, 0)) &&
                                     CheckCarSetupItemData(p_carSetup.differentialRatio[1], PyTuple_GetItem(differentialRatioVal, 1)) &&
                                     CheckCarSetupItemData(p_carSetup.differentialRatio[2], PyTuple_GetItem(differentialRatioVal, 2));
 
     PyObject* differentialMinTqBiasAttr = PyUnicode_FromString("differentialMinTqBias");
-    PyObject* differentialMinTqBiasVal = PyObject_GetAttr(p_carSetupObject, differentialMinTqBiasAttr);
+    PyObject* differentialMinTqBiasVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialMinTqBiasAttr));
     bool differentialMinTqBiasCorrect = CheckCarSetupItemData(p_carSetup.differentialMinTqBias[0], PyTuple_GetItem(differentialMinTqBiasVal, 0)) &&
-                                    CheckCarSetupItemData(p_carSetup.differentialMinTqBias[1], PyTuple_GetItem(differentialMinTqBiasVal, 1)) &&
-                                    CheckCarSetupItemData(p_carSetup.differentialMinTqBias[2], PyTuple_GetItem(differentialMinTqBiasVal, 2));
+                                        CheckCarSetupItemData(p_carSetup.differentialMinTqBias[1], PyTuple_GetItem(differentialMinTqBiasVal, 1)) &&
+                                        CheckCarSetupItemData(p_carSetup.differentialMinTqBias[2], PyTuple_GetItem(differentialMinTqBiasVal, 2));
 
     PyObject* differentialMaxTqBiasAttr = PyUnicode_FromString("differentialMaxTqBias");
-    PyObject* differentialMaxTqBiasVal = PyObject_GetAttr(p_carSetupObject, differentialMaxTqBiasAttr);
+    PyObject* differentialMaxTqBiasVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialMaxTqBiasAttr));
     bool differentialMaxTqBiasCorrect = CheckCarSetupItemData(p_carSetup.differentialMaxTqBias[0], PyTuple_GetItem(differentialMaxTqBiasVal, 0)) &&
-                                    CheckCarSetupItemData(p_carSetup.differentialMaxTqBias[1], PyTuple_GetItem(differentialMaxTqBiasVal, 1)) &&
-                                    CheckCarSetupItemData(p_carSetup.differentialMaxTqBias[2], PyTuple_GetItem(differentialMaxTqBiasVal, 2));
+                                        CheckCarSetupItemData(p_carSetup.differentialMaxTqBias[1], PyTuple_GetItem(differentialMaxTqBiasVal, 1)) &&
+                                        CheckCarSetupItemData(p_carSetup.differentialMaxTqBias[2], PyTuple_GetItem(differentialMaxTqBiasVal, 2));
 
     PyObject* differentialViscosityAttr = PyUnicode_FromString("differentialViscosity");
-    PyObject* differentialViscosityVal = PyObject_GetAttr(p_carSetupObject, differentialViscosityAttr);
+    PyObject* differentialViscosityVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialViscosityAttr));
     bool differentialViscosityCorrect = CheckCarSetupItemData(p_carSetup.differentialViscosity[0], PyTuple_GetItem(differentialViscosityVal, 0)) &&
                                         CheckCarSetupItemData(p_carSetup.differentialViscosity[1], PyTuple_GetItem(differentialViscosityVal, 1)) &&
                                         CheckCarSetupItemData(p_carSetup.differentialViscosity[2], PyTuple_GetItem(differentialViscosityVal, 2));
 
     PyObject* differentialLockingTqAttr = PyUnicode_FromString("differentialLockingTq");
-    PyObject* differentialLockingTqVal = PyObject_GetAttr(p_carSetupObject, differentialLockingTqAttr);
+    PyObject* differentialLockingTqVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialLockingTqAttr));
     bool differentialLockingTqCorrect = CheckCarSetupItemData(p_carSetup.differentialLockingTq[0], PyTuple_GetItem(differentialLockingTqVal, 0)) &&
                                         CheckCarSetupItemData(p_carSetup.differentialLockingTq[1], PyTuple_GetItem(differentialLockingTqVal, 1)) &&
                                         CheckCarSetupItemData(p_carSetup.differentialLockingTq[2], PyTuple_GetItem(differentialLockingTqVal, 2));
 
     PyObject* differentialMaxSlipBiasAttr = PyUnicode_FromString("differentialMaxSlipBias");
-    PyObject* differentialMaxSlipBiasVal = PyObject_GetAttr(p_carSetupObject, differentialMaxSlipBiasAttr);
+    PyObject* differentialMaxSlipBiasVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialMaxSlipBiasAttr));
     bool differentialMaxSlipBiasCorrect = CheckCarSetupItemData(p_carSetup.differentialMaxSlipBias[0], PyTuple_GetItem(differentialMaxSlipBiasVal, 0)) &&
-                                        CheckCarSetupItemData(p_carSetup.differentialMaxSlipBias[1], PyTuple_GetItem(differentialMaxSlipBiasVal, 1)) &&
-                                        CheckCarSetupItemData(p_carSetup.differentialMaxSlipBias[2], PyTuple_GetItem(differentialMaxSlipBiasVal, 2));
+                                          CheckCarSetupItemData(p_carSetup.differentialMaxSlipBias[1], PyTuple_GetItem(differentialMaxSlipBiasVal, 1)) &&
+                                          CheckCarSetupItemData(p_carSetup.differentialMaxSlipBias[2], PyTuple_GetItem(differentialMaxSlipBiasVal, 2));
 
     PyObject* differentialCoastMaxSlipBiasAttr = PyUnicode_FromString("differentialCoastMaxSlipBias");
-    PyObject* differentialCoastMaxSlipBiasVal = PyObject_GetAttr(p_carSetupObject, differentialCoastMaxSlipBiasAttr);
+    PyObject* differentialCoastMaxSlipBiasVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialCoastMaxSlipBiasAttr));
     bool differentialCoastMaxSlipBiasCorrect = CheckCarSetupItemData(p_carSetup.differentialCoastMaxSlipBias[0], PyTuple_GetItem(differentialCoastMaxSlipBiasVal, 0)) &&
-                                          CheckCarSetupItemData(p_carSetup.differentialCoastMaxSlipBias[1], PyTuple_GetItem(differentialCoastMaxSlipBiasVal, 1)) &&
-                                          CheckCarSetupItemData(p_carSetup.differentialCoastMaxSlipBias[2], PyTuple_GetItem(differentialCoastMaxSlipBiasVal, 2));
+                                               CheckCarSetupItemData(p_carSetup.differentialCoastMaxSlipBias[1], PyTuple_GetItem(differentialCoastMaxSlipBiasVal, 1)) &&
+                                               CheckCarSetupItemData(p_carSetup.differentialCoastMaxSlipBias[2], PyTuple_GetItem(differentialCoastMaxSlipBiasVal, 2));
 
     PyObject* steerLockAttr = PyUnicode_FromString("steerLock");
     PyObject* steerLockVal = PyObject_GetAttr(p_carSetupObject, steerLockAttr);
@@ -1052,171 +1051,171 @@ bool CheckCarSetupData(tCarSetup& p_carSetup, PyObject* p_carSetupObject)
     bool brakePressureCorrect = CheckCarSetupItemData(p_carSetup.brakePressure, brakePressureVal);
 
     PyObject* rideHeightAttr = PyUnicode_FromString("rideHeight");
-    PyObject* rideHeightVal = PyObject_GetAttr(p_carSetupObject, rideHeightAttr);
+    PyObject* rideHeightVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, rideHeightAttr));
     bool rideHeightCorrect = CheckCarSetupItemData(p_carSetup.rideHeight[0], PyTuple_GetItem(rideHeightVal, 0)) &&
                              CheckCarSetupItemData(p_carSetup.rideHeight[1], PyTuple_GetItem(rideHeightVal, 1)) &&
                              CheckCarSetupItemData(p_carSetup.rideHeight[2], PyTuple_GetItem(rideHeightVal, 2)) &&
                              CheckCarSetupItemData(p_carSetup.rideHeight[3], PyTuple_GetItem(rideHeightVal, 3));
 
     PyObject* toeAttr = PyUnicode_FromString("toe");
-    PyObject* toeVal = PyObject_GetAttr(p_carSetupObject, toeAttr);
+    PyObject* toeVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, toeAttr));
     bool toeCorrect = CheckCarSetupItemData(p_carSetup.toe[0], PyTuple_GetItem(toeVal, 0)) &&
-                             CheckCarSetupItemData(p_carSetup.toe[1], PyTuple_GetItem(toeVal, 1)) &&
-                             CheckCarSetupItemData(p_carSetup.toe[2], PyTuple_GetItem(toeVal, 2)) &&
-                             CheckCarSetupItemData(p_carSetup.toe[3], PyTuple_GetItem(toeVal, 3));
+                      CheckCarSetupItemData(p_carSetup.toe[1], PyTuple_GetItem(toeVal, 1)) &&
+                      CheckCarSetupItemData(p_carSetup.toe[2], PyTuple_GetItem(toeVal, 2)) &&
+                      CheckCarSetupItemData(p_carSetup.toe[3], PyTuple_GetItem(toeVal, 3));
 
     PyObject* camberAttr = PyUnicode_FromString("camber");
-    PyObject* camberVal = PyObject_GetAttr(p_carSetupObject, camberAttr);
+    PyObject* camberVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, camberAttr));
     bool camberCorrect = CheckCarSetupItemData(p_carSetup.camber[0], PyTuple_GetItem(camberVal, 0)) &&
-                             CheckCarSetupItemData(p_carSetup.camber[1], PyTuple_GetItem(camberVal, 1)) &&
-                             CheckCarSetupItemData(p_carSetup.camber[2], PyTuple_GetItem(camberVal, 2)) &&
-                             CheckCarSetupItemData(p_carSetup.camber[3], PyTuple_GetItem(camberVal, 3));
+                         CheckCarSetupItemData(p_carSetup.camber[1], PyTuple_GetItem(camberVal, 1)) &&
+                         CheckCarSetupItemData(p_carSetup.camber[2], PyTuple_GetItem(camberVal, 2)) &&
+                         CheckCarSetupItemData(p_carSetup.camber[3], PyTuple_GetItem(camberVal, 3));
 
     PyObject* tirePressureAttr = PyUnicode_FromString("tirePressure");
-    PyObject* tirePressureVal = PyObject_GetAttr(p_carSetupObject, tirePressureAttr);
+    PyObject* tirePressureVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, tirePressureAttr));
     bool tirePressureCorrect = CheckCarSetupItemData(p_carSetup.tirePressure[0], PyTuple_GetItem(tirePressureVal, 0)) &&
-                             CheckCarSetupItemData(p_carSetup.tirePressure[1], PyTuple_GetItem(tirePressureVal, 1)) &&
-                             CheckCarSetupItemData(p_carSetup.tirePressure[2], PyTuple_GetItem(tirePressureVal, 2)) &&
-                             CheckCarSetupItemData(p_carSetup.tirePressure[3], PyTuple_GetItem(tirePressureVal, 3));
+                               CheckCarSetupItemData(p_carSetup.tirePressure[1], PyTuple_GetItem(tirePressureVal, 1)) &&
+                               CheckCarSetupItemData(p_carSetup.tirePressure[2], PyTuple_GetItem(tirePressureVal, 2)) &&
+                               CheckCarSetupItemData(p_carSetup.tirePressure[3], PyTuple_GetItem(tirePressureVal, 3));
 
     PyObject* tireOpLoadAttr = PyUnicode_FromString("tireOpLoad");
-    PyObject* tireOpLoadVal = PyObject_GetAttr(p_carSetupObject, tireOpLoadAttr);
+    PyObject* tireOpLoadVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, tireOpLoadAttr));
     bool tireOpLoadCorrect = CheckCarSetupItemData(p_carSetup.tireOpLoad[0], PyTuple_GetItem(tireOpLoadVal, 0)) &&
-                               CheckCarSetupItemData(p_carSetup.tireOpLoad[1], PyTuple_GetItem(tireOpLoadVal, 1)) &&
-                               CheckCarSetupItemData(p_carSetup.tireOpLoad[2], PyTuple_GetItem(tireOpLoadVal, 2)) &&
-                               CheckCarSetupItemData(p_carSetup.tireOpLoad[3], PyTuple_GetItem(tireOpLoadVal, 3));
+                             CheckCarSetupItemData(p_carSetup.tireOpLoad[1], PyTuple_GetItem(tireOpLoadVal, 1)) &&
+                             CheckCarSetupItemData(p_carSetup.tireOpLoad[2], PyTuple_GetItem(tireOpLoadVal, 2)) &&
+                             CheckCarSetupItemData(p_carSetup.tireOpLoad[3], PyTuple_GetItem(tireOpLoadVal, 3));
 
     PyObject* arbSpringAttr = PyUnicode_FromString("arbSpring");
-    PyObject* arbSpringVal = PyObject_GetAttr(p_carSetupObject, arbSpringAttr);
+    PyObject* arbSpringVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, arbSpringAttr));
     bool arbSpringCorrect = CheckCarSetupItemData(p_carSetup.arbSpring[0], PyTuple_GetItem(arbSpringVal, 0)) &&
                             CheckCarSetupItemData(p_carSetup.arbSpring[1], PyTuple_GetItem(arbSpringVal, 1));
 
     PyObject* arbBellCrankAttr = PyUnicode_FromString("arbBellCrank");
-    PyObject* arbBellCrankVal = PyObject_GetAttr(p_carSetupObject, arbBellCrankAttr);
+    PyObject* arbBellCrankVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, arbBellCrankAttr));
     bool arbBellCrankCorrect = CheckCarSetupItemData(p_carSetup.arbBellcrank[0], PyTuple_GetItem(arbBellCrankVal, 0)) &&
-                            CheckCarSetupItemData(p_carSetup.arbBellcrank[1], PyTuple_GetItem(arbBellCrankVal, 1));
+                               CheckCarSetupItemData(p_carSetup.arbBellcrank[1], PyTuple_GetItem(arbBellCrankVal, 1));
 
     PyObject* heaveSpringAttr = PyUnicode_FromString("heaveSpring");
-    PyObject* heaveSpringVal = PyObject_GetAttr(p_carSetupObject, heaveSpringAttr);
+    PyObject* heaveSpringVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveSpringAttr));
     bool heaveSpringCorrect = CheckCarSetupItemData(p_carSetup.heaveSpring[0], PyTuple_GetItem(heaveSpringVal, 0)) &&
-                            CheckCarSetupItemData(p_carSetup.heaveSpring[1], PyTuple_GetItem(heaveSpringVal, 1));
+                              CheckCarSetupItemData(p_carSetup.heaveSpring[1], PyTuple_GetItem(heaveSpringVal, 1));
 
     PyObject* heaveBellCrankAttr = PyUnicode_FromString("heaveBellCrank");
-    PyObject* heaveBellCrankVal = PyObject_GetAttr(p_carSetupObject, heaveBellCrankAttr);
+    PyObject* heaveBellCrankVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveBellCrankAttr));
     bool heaveBellCrankCorrect = CheckCarSetupItemData(p_carSetup.heaveBellcrank[0], PyTuple_GetItem(heaveBellCrankVal, 0)) &&
-                            CheckCarSetupItemData(p_carSetup.heaveBellcrank[1], PyTuple_GetItem(heaveBellCrankVal, 1));
+                                 CheckCarSetupItemData(p_carSetup.heaveBellcrank[1], PyTuple_GetItem(heaveBellCrankVal, 1));
 
     PyObject* heaveInertanceAttr = PyUnicode_FromString("heaveInertance");
-    PyObject* heaveInertanceVal = PyObject_GetAttr(p_carSetupObject, heaveInertanceAttr);
+    PyObject* heaveInertanceVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveInertanceAttr));
     bool heaveInertanceCorrect = CheckCarSetupItemData(p_carSetup.heaveInertance[0], PyTuple_GetItem(heaveInertanceVal, 0)) &&
                                  CheckCarSetupItemData(p_carSetup.heaveInertance[1], PyTuple_GetItem(heaveInertanceVal, 1));
 
     PyObject* heaveFastBumpAttr = PyUnicode_FromString("heaveFastBump");
-    PyObject* heaveFastBumpVal = PyObject_GetAttr(p_carSetupObject, heaveFastBumpAttr);
+    PyObject* heaveFastBumpVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveFastBumpAttr));
     bool heaveFastBumpCorrect = CheckCarSetupItemData(p_carSetup.heaveFastBump[0], PyTuple_GetItem(heaveFastBumpVal, 0)) &&
-                                 CheckCarSetupItemData(p_carSetup.heaveFastBump[1], PyTuple_GetItem(heaveFastBumpVal, 1));
+                                CheckCarSetupItemData(p_carSetup.heaveFastBump[1], PyTuple_GetItem(heaveFastBumpVal, 1));
 
     PyObject* heaveSlowBumpAttr = PyUnicode_FromString("heaveSlowBump");
-    PyObject* heaveSlowBumpVal = PyObject_GetAttr(p_carSetupObject, heaveSlowBumpAttr);
+    PyObject* heaveSlowBumpVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveSlowBumpAttr));
     bool heaveSlowBumpCorrect = CheckCarSetupItemData(p_carSetup.heaveSlowBump[0], PyTuple_GetItem(heaveSlowBumpVal, 0)) &&
-                                 CheckCarSetupItemData(p_carSetup.heaveSlowBump[1], PyTuple_GetItem(heaveSlowBumpVal, 1));
+                                CheckCarSetupItemData(p_carSetup.heaveSlowBump[1], PyTuple_GetItem(heaveSlowBumpVal, 1));
 
     PyObject* heaveBumpLevelAttr = PyUnicode_FromString("heaveBumpLevel");
-    PyObject* heaveBumpLevelVal = PyObject_GetAttr(p_carSetupObject, heaveBumpLevelAttr);
+    PyObject* heaveBumpLevelVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveBumpLevelAttr));
     bool heaveBumpLevelCorrect = CheckCarSetupItemData(p_carSetup.heaveBumpLvel[0], PyTuple_GetItem(heaveBumpLevelVal, 0)) &&
-                                CheckCarSetupItemData(p_carSetup.heaveBumpLvel[1], PyTuple_GetItem(heaveBumpLevelVal, 1));
+                                 CheckCarSetupItemData(p_carSetup.heaveBumpLvel[1], PyTuple_GetItem(heaveBumpLevelVal, 1));
 
     PyObject* heaveFastReboundAttr = PyUnicode_FromString("heaveFastRebound");
-    PyObject* heaveFastReboundVal = PyObject_GetAttr(p_carSetupObject, heaveFastReboundAttr);
+    PyObject* heaveFastReboundVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveFastReboundAttr));
     bool heaveFastReboundCorrect = CheckCarSetupItemData(p_carSetup.heaveFastRebound[0], PyTuple_GetItem(heaveFastReboundVal, 0)) &&
-                                CheckCarSetupItemData(p_carSetup.heaveFastRebound[1], PyTuple_GetItem(heaveFastReboundVal, 1));
+                                   CheckCarSetupItemData(p_carSetup.heaveFastRebound[1], PyTuple_GetItem(heaveFastReboundVal, 1));
 
     PyObject* heaveSlowReboundAttr = PyUnicode_FromString("heaveSlowRebound");
-    PyObject* heaveSlowReboundVal = PyObject_GetAttr(p_carSetupObject, heaveSlowReboundAttr);
+    PyObject* heaveSlowReboundVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveSlowReboundAttr));
     bool heaveSlowReboundCorrect = CheckCarSetupItemData(p_carSetup.heaveSlowRebound[0], PyTuple_GetItem(heaveSlowReboundVal, 0)) &&
-                                CheckCarSetupItemData(p_carSetup.heaveSlowRebound[1], PyTuple_GetItem(heaveSlowReboundVal, 1));
+                                   CheckCarSetupItemData(p_carSetup.heaveSlowRebound[1], PyTuple_GetItem(heaveSlowReboundVal, 1));
 
     PyObject* heaveReboundLevelAttr = PyUnicode_FromString("heaveReboundLevel");
-    PyObject* heaveReboundLevelVal = PyObject_GetAttr(p_carSetupObject, heaveReboundLevelAttr);
+    PyObject* heaveReboundLevelVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, heaveReboundLevelAttr));
     bool heaveReboundLevelCorrect = CheckCarSetupItemData(p_carSetup.heaveReboundLvel[0], PyTuple_GetItem(heaveReboundLevelVal, 0)) &&
-                                CheckCarSetupItemData(p_carSetup.heaveReboundLvel[1], PyTuple_GetItem(heaveReboundLevelVal, 1));
+                                    CheckCarSetupItemData(p_carSetup.heaveReboundLvel[1], PyTuple_GetItem(heaveReboundLevelVal, 1));
 
     PyObject* suspSpringAttr = PyUnicode_FromString("suspSpring");
-    PyObject* suspSpringVal = PyObject_GetAttr(p_carSetupObject, suspSpringAttr);
+    PyObject* suspSpringVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspSpringAttr));
     bool suspSpringCorrect = CheckCarSetupItemData(p_carSetup.suspSpring[0], PyTuple_GetItem(suspSpringVal, 0)) &&
                              CheckCarSetupItemData(p_carSetup.suspSpring[1], PyTuple_GetItem(suspSpringVal, 1)) &&
                              CheckCarSetupItemData(p_carSetup.suspSpring[2], PyTuple_GetItem(suspSpringVal, 2)) &&
                              CheckCarSetupItemData(p_carSetup.suspSpring[3], PyTuple_GetItem(suspSpringVal, 3));
 
     PyObject* suspBellCrankAttr = PyUnicode_FromString("suspBellCrank");
-    PyObject* suspBellCrankVal = PyObject_GetAttr(p_carSetupObject, suspBellCrankAttr);
+    PyObject* suspBellCrankVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspBellCrankAttr));
     bool suspBellCrankCorrect = CheckCarSetupItemData(p_carSetup.suspBellcrank[0], PyTuple_GetItem(suspBellCrankVal, 0)) &&
                                 CheckCarSetupItemData(p_carSetup.suspBellcrank[1], PyTuple_GetItem(suspBellCrankVal, 1)) &&
                                 CheckCarSetupItemData(p_carSetup.suspBellcrank[2], PyTuple_GetItem(suspBellCrankVal, 2)) &&
                                 CheckCarSetupItemData(p_carSetup.suspBellcrank[3], PyTuple_GetItem(suspBellCrankVal, 3));
 
     PyObject* suspInertanceAttr = PyUnicode_FromString("suspInertance");
-    PyObject* suspInertanceVal = PyObject_GetAttr(p_carSetupObject, suspInertanceAttr);
+    PyObject* suspInertanceVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspInertanceAttr));
     bool suspInertanceCorrect = CheckCarSetupItemData(p_carSetup.suspInertance[0], PyTuple_GetItem(suspInertanceVal, 0)) &&
                                 CheckCarSetupItemData(p_carSetup.suspInertance[1], PyTuple_GetItem(suspInertanceVal, 1)) &&
                                 CheckCarSetupItemData(p_carSetup.suspInertance[2], PyTuple_GetItem(suspInertanceVal, 2)) &&
                                 CheckCarSetupItemData(p_carSetup.suspInertance[3], PyTuple_GetItem(suspInertanceVal, 3));
 
     PyObject* suspCourseAttr = PyUnicode_FromString("suspCourse");
-    PyObject* suspCourseVal = PyObject_GetAttr(p_carSetupObject, suspCourseAttr);
+    PyObject* suspCourseVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspCourseAttr));
     bool suspCourseCorrect = CheckCarSetupItemData(p_carSetup.suspCourse[0], PyTuple_GetItem(suspCourseVal, 0)) &&
-                                CheckCarSetupItemData(p_carSetup.suspCourse[1], PyTuple_GetItem(suspCourseVal, 1)) &&
-                                CheckCarSetupItemData(p_carSetup.suspCourse[2], PyTuple_GetItem(suspCourseVal, 2)) &&
-                                CheckCarSetupItemData(p_carSetup.suspCourse[3], PyTuple_GetItem(suspCourseVal, 3));
+                             CheckCarSetupItemData(p_carSetup.suspCourse[1], PyTuple_GetItem(suspCourseVal, 1)) &&
+                             CheckCarSetupItemData(p_carSetup.suspCourse[2], PyTuple_GetItem(suspCourseVal, 2)) &&
+                             CheckCarSetupItemData(p_carSetup.suspCourse[3], PyTuple_GetItem(suspCourseVal, 3));
 
     PyObject* suspPackerAttr = PyUnicode_FromString("suspPacker");
-    PyObject* suspPackerVal = PyObject_GetAttr(p_carSetupObject, suspPackerAttr);
+    PyObject* suspPackerVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspPackerAttr));
     bool suspPackerCorrect = CheckCarSetupItemData(p_carSetup.suspPacker[0], PyTuple_GetItem(suspPackerVal, 0)) &&
                              CheckCarSetupItemData(p_carSetup.suspPacker[1], PyTuple_GetItem(suspPackerVal, 1)) &&
                              CheckCarSetupItemData(p_carSetup.suspPacker[2], PyTuple_GetItem(suspPackerVal, 2)) &&
                              CheckCarSetupItemData(p_carSetup.suspPacker[3], PyTuple_GetItem(suspPackerVal, 3));
 
     PyObject* suspFastBumpAttr = PyUnicode_FromString("suspFastBump");
-    PyObject* suspFastBumpVal = PyObject_GetAttr(p_carSetupObject, suspFastBumpAttr);
+    PyObject* suspFastBumpVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspFastBumpAttr));
     bool suspFastBumpCorrect = CheckCarSetupItemData(p_carSetup.suspFastBump[0], PyTuple_GetItem(suspFastBumpVal, 0)) &&
-                             CheckCarSetupItemData(p_carSetup.suspFastBump[1], PyTuple_GetItem(suspFastBumpVal, 1)) &&
-                             CheckCarSetupItemData(p_carSetup.suspFastBump[2], PyTuple_GetItem(suspFastBumpVal, 2)) &&
-                             CheckCarSetupItemData(p_carSetup.suspFastBump[3], PyTuple_GetItem(suspFastBumpVal, 3));
+                               CheckCarSetupItemData(p_carSetup.suspFastBump[1], PyTuple_GetItem(suspFastBumpVal, 1)) &&
+                               CheckCarSetupItemData(p_carSetup.suspFastBump[2], PyTuple_GetItem(suspFastBumpVal, 2)) &&
+                               CheckCarSetupItemData(p_carSetup.suspFastBump[3], PyTuple_GetItem(suspFastBumpVal, 3));
 
     PyObject* suspSlowBumpAttr = PyUnicode_FromString("suspSlowBump");
-    PyObject* suspSlowBumpVal = PyObject_GetAttr(p_carSetupObject, suspSlowBumpAttr);
+    PyObject* suspSlowBumpVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspSlowBumpAttr));
     bool suspSlowBumpCorrect = CheckCarSetupItemData(p_carSetup.suspSlowBump[0], PyTuple_GetItem(suspSlowBumpVal, 0)) &&
-                             CheckCarSetupItemData(p_carSetup.suspSlowBump[1], PyTuple_GetItem(suspSlowBumpVal, 1)) &&
-                             CheckCarSetupItemData(p_carSetup.suspSlowBump[2], PyTuple_GetItem(suspSlowBumpVal, 2)) &&
-                             CheckCarSetupItemData(p_carSetup.suspSlowBump[3], PyTuple_GetItem(suspSlowBumpVal, 3));
+                               CheckCarSetupItemData(p_carSetup.suspSlowBump[1], PyTuple_GetItem(suspSlowBumpVal, 1)) &&
+                               CheckCarSetupItemData(p_carSetup.suspSlowBump[2], PyTuple_GetItem(suspSlowBumpVal, 2)) &&
+                               CheckCarSetupItemData(p_carSetup.suspSlowBump[3], PyTuple_GetItem(suspSlowBumpVal, 3));
 
     PyObject* suspBumpLevelAttr = PyUnicode_FromString("suspBumpLevel");
-    PyObject* suspBumpLevelVal = PyObject_GetAttr(p_carSetupObject, suspBumpLevelAttr);
+    PyObject* suspBumpLevelVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspBumpLevelAttr));
     bool suspBumpLevelCorrect = CheckCarSetupItemData(p_carSetup.suspBumpLvel[0], PyTuple_GetItem(suspBumpLevelVal, 0)) &&
-                               CheckCarSetupItemData(p_carSetup.suspBumpLvel[1], PyTuple_GetItem(suspBumpLevelVal, 1)) &&
-                               CheckCarSetupItemData(p_carSetup.suspBumpLvel[2], PyTuple_GetItem(suspBumpLevelVal, 2)) &&
-                               CheckCarSetupItemData(p_carSetup.suspBumpLvel[3], PyTuple_GetItem(suspBumpLevelVal, 3));
+                                CheckCarSetupItemData(p_carSetup.suspBumpLvel[1], PyTuple_GetItem(suspBumpLevelVal, 1)) &&
+                                CheckCarSetupItemData(p_carSetup.suspBumpLvel[2], PyTuple_GetItem(suspBumpLevelVal, 2)) &&
+                                CheckCarSetupItemData(p_carSetup.suspBumpLvel[3], PyTuple_GetItem(suspBumpLevelVal, 3));
 
     PyObject* suspFastReboundAttr = PyUnicode_FromString("suspFastRebound");
-    PyObject* suspFastReboundVal = PyObject_GetAttr(p_carSetupObject, suspFastReboundAttr);
+    PyObject* suspFastReboundVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspFastReboundAttr));
     bool suspFastReboundCorrect = CheckCarSetupItemData(p_carSetup.suspFastRebound[0], PyTuple_GetItem(suspFastReboundVal, 0)) &&
-                               CheckCarSetupItemData(p_carSetup.suspFastRebound[1], PyTuple_GetItem(suspFastReboundVal, 1)) &&
-                               CheckCarSetupItemData(p_carSetup.suspFastRebound[2], PyTuple_GetItem(suspFastReboundVal, 2)) &&
-                               CheckCarSetupItemData(p_carSetup.suspFastRebound[3], PyTuple_GetItem(suspFastReboundVal, 3));
+                                  CheckCarSetupItemData(p_carSetup.suspFastRebound[1], PyTuple_GetItem(suspFastReboundVal, 1)) &&
+                                  CheckCarSetupItemData(p_carSetup.suspFastRebound[2], PyTuple_GetItem(suspFastReboundVal, 2)) &&
+                                  CheckCarSetupItemData(p_carSetup.suspFastRebound[3], PyTuple_GetItem(suspFastReboundVal, 3));
 
     PyObject* suspSlowReboundAttr = PyUnicode_FromString("suspSlowRebound");
-    PyObject* suspSlowReboundVal = PyObject_GetAttr(p_carSetupObject, suspSlowReboundAttr);
+    PyObject* suspSlowReboundVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspSlowReboundAttr));
     bool suspSlowReboundCorrect = CheckCarSetupItemData(p_carSetup.suspSlowRebound[0], PyTuple_GetItem(suspSlowReboundVal, 0)) &&
-                               CheckCarSetupItemData(p_carSetup.suspSlowRebound[1], PyTuple_GetItem(suspSlowReboundVal, 1)) &&
-                               CheckCarSetupItemData(p_carSetup.suspSlowRebound[2], PyTuple_GetItem(suspSlowReboundVal, 2)) &&
-                               CheckCarSetupItemData(p_carSetup.suspSlowRebound[3], PyTuple_GetItem(suspSlowReboundVal, 3));
+                                  CheckCarSetupItemData(p_carSetup.suspSlowRebound[1], PyTuple_GetItem(suspSlowReboundVal, 1)) &&
+                                  CheckCarSetupItemData(p_carSetup.suspSlowRebound[2], PyTuple_GetItem(suspSlowReboundVal, 2)) &&
+                                  CheckCarSetupItemData(p_carSetup.suspSlowRebound[3], PyTuple_GetItem(suspSlowReboundVal, 3));
 
     PyObject* suspReboundLevelAttr = PyUnicode_FromString("suspReboundLevel");
-    PyObject* suspReboundLevelVal = PyObject_GetAttr(p_carSetupObject, suspReboundLevelAttr);
+    PyObject* suspReboundLevelVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, suspReboundLevelAttr));
     bool suspReboundLevelCorrect = CheckCarSetupItemData(p_carSetup.suspReboundLvel[0], PyTuple_GetItem(suspReboundLevelVal, 0)) &&
-                                  CheckCarSetupItemData(p_carSetup.suspReboundLvel[1], PyTuple_GetItem(suspReboundLevelVal, 1)) &&
-                                  CheckCarSetupItemData(p_carSetup.suspReboundLvel[2], PyTuple_GetItem(suspReboundLevelVal, 2)) &&
-                                  CheckCarSetupItemData(p_carSetup.suspReboundLvel[3], PyTuple_GetItem(suspReboundLevelVal, 3));
+                                   CheckCarSetupItemData(p_carSetup.suspReboundLvel[1], PyTuple_GetItem(suspReboundLevelVal, 1)) &&
+                                   CheckCarSetupItemData(p_carSetup.suspReboundLvel[2], PyTuple_GetItem(suspReboundLevelVal, 2)) &&
+                                   CheckCarSetupItemData(p_carSetup.suspReboundLvel[3], PyTuple_GetItem(suspReboundLevelVal, 3));
 
     PyObject* reqRepairAttr = PyUnicode_FromString("reqRepair");
     PyObject* reqRepairVal = PyObject_GetAttr(p_carSetupObject, reqRepairAttr);
@@ -1306,7 +1305,6 @@ bool CheckSituationData(tSituation& p_situation, PyObject* p_situationObject)
 
     return raceInfoCorrect && deltaTimeCorrect && currentTimeCorrect && accelTimeCorrect && nbPlayersCorrect;
 }
-
 
 bool CheckCarData(tCarElt& p_car, PyObject* p_carObject)
 {
@@ -1409,6 +1407,114 @@ TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
         PyObject* carInitObject = pythonDriver.GetCarInitObject(carData.info);
 
         ASSERT_TRUE(CheckInitCarData(carData.info, carInitObject));
+    }
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
+{
+    Py_Initialize();
+    PythonDriver pythonDriver = PythonDriver();
+
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
+
+        PyObject* carPublicObject = pythonDriver.GetCarPublicObject(carData.pub);
+
+        ASSERT_TRUE(CheckPublicCarData(carData.pub, carPublicObject));
+    }
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
+{
+    Py_Initialize();
+    PythonDriver pythonDriver = PythonDriver();
+
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
+
+        PyObject* carRaceInfoObject = pythonDriver.GetCarRaceInfoObject(carData.race);
+
+        ASSERT_TRUE(CheckCarRaceInfoData(carData.race, carRaceInfoObject));
+    }
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
+{
+    Py_Initialize();
+    PythonDriver pythonDriver = PythonDriver();
+
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
+
+        PyObject* carPrivObject = pythonDriver.GetCarPrivObject(carData.priv);
+
+        ASSERT_TRUE(CheckPrivCarData(carData.priv, carPrivObject));
+    }
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
+{
+    Py_Initialize();
+    PythonDriver pythonDriver = PythonDriver();
+
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
+
+        PyObject* carCtrlObject = pythonDriver.GetCarCtrlObject(carData.ctrl);
+
+        ASSERT_TRUE(CheckCarCtrlData(carData.ctrl, carCtrlObject));
+    }
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
+{
+    Py_Initialize();
+    PythonDriver pythonDriver = PythonDriver();
+
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
+
+        PyObject* carSetupObject = pythonDriver.GetCarSetupObject(carData.setup);
+
+        ASSERT_TRUE(CheckCarSetupData(carData.setup, carSetupObject));
+    }
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
+{
+    Py_Initialize();
+    PythonDriver pythonDriver = PythonDriver();
+
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
+
+        PyObject* carPitCmdObject = pythonDriver.GetCarPitCmdObject(carData.pitcmd);
+
+        ASSERT_TRUE(CheckCarPitCmdData(carData.pitcmd, carPitCmdObject));
     }
 
     Py_Finalize();
