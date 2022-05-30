@@ -969,7 +969,8 @@ bool CheckCarSetupData(tCarSetup& p_carSetup, PyObject* p_carSetupObject)
     bool fuelCorrect = CheckCarSetupItemData(p_carSetup.fuel, fuelVal);
 
     PyObject* wingAngleAttr = PyUnicode_FromString("wingAngle");
-    PyObject* wingAngleVal = PyObject_GetAttr(p_carSetupObject, wingAngleAttr);
+    PyObject* wingAngleVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, wingAngleAttr));
+    PyObject* test = PyTuple_GetItem(wingAngleVal, 0);
     bool wingAngleCorrect = CheckCarSetupItemData(p_carSetup.wingAngle[0], PyTuple_GetItem(wingAngleVal, 0)) &&
                             CheckCarSetupItemData(p_carSetup.wingAngle[1], PyTuple_GetItem(wingAngleVal, 1));
 
@@ -1351,11 +1352,11 @@ bool CheckSDAData(SDAData p_data, PyObject* p_dataObject)
 
     PyObject* carAttr = PyUnicode_FromString("car");
     PyObject* carVal = PyObject_GetAttr(p_dataObject, carAttr);
-    bool carCorrect = CheckCarData(p_data.Car, PyObject_GetAttr(p_dataObject, carVal));
+    bool carCorrect = CheckCarData(p_data.Car, carVal);
 
     PyObject* situationAttr = PyUnicode_FromString("situation");
     PyObject* situationVal = PyObject_GetAttr(p_dataObject, situationAttr);
-    bool situationCorrect = CheckSituationData(p_data.Situation, PyObject_GetAttr(p_dataObject, situationVal));
+    bool situationCorrect = CheckSituationData(p_data.Situation, situationVal);
 
     return tickCorrect && carCorrect && situationCorrect;
 }

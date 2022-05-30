@@ -104,7 +104,7 @@ SDAAction PythonDriver::UpdateAI(SDAData& p_data)
     try
     {
         PyObject* args = GetSDATypeObject(p_data);
-        PyObject* result = PyObject_CallMethod(m_pythonDriver, "UpdateAI", NULL, args);  // maybe change format
+        PyObject* result = PyList_AsTuple(PyObject_CallMethod(m_pythonDriver, "UpdateAI", NULL, args));  // TODO: maybe change format
         action.Steer = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 0)));
         action.Accel = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 1)));
         action.Brake = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 2)));
@@ -814,7 +814,7 @@ void PythonDriver::FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetu
 {
     for (int i = 0; i < p_end - p_start; i++)
     {
-        p_carSetupArray[i] = GetCarSetupItemObject(p_carSetupItems[p_start + i]);
+        p_carSetupArray[p_start + i] = GetCarSetupItemObject(p_carSetupItems[i]);
     }
 }
 
