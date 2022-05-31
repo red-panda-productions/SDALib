@@ -1,5 +1,5 @@
-#include "Mocks/SDADriverMock.h"
 #include <gtest/gtest.h>
+#include "Mocks/SDADriverMock.h"
 #include "ServerSocket.h"
 #include <thread>
 #include "Utils.h"
@@ -7,11 +7,19 @@
 
 #define TEST_BUFFER_SIZE 8192
 
+SDAData* pointer;
+
 /// @brief Runs a mock driver as the test needs to run in parallel to this
 void DriverSide()
 {
     SDADriverMock driver;
+    pointer = driver.GetPointer();
     driver.Run();
+}
+
+void ThrowingDriverSide()
+{
+    ASSERT_THROW(DriverSide(), std::exception);
 }
 
 /// @brief			Tests if the order is expected
@@ -61,6 +69,13 @@ void TestTestAmount(ServerSocket& p_server, char* p_buffer)
     char* tests[]{"1"};
     msgpack::sbuffer sbuffer(TEST_BUFFER_SIZE);
     msgpack::pack(sbuffer, tests);
+
+    tCarElt car = {};
+    tSituation situation = {};
+    unsigned long tickCount = 0;
+
+    *pointer = SDAData(&car, &situation, tickCount);
+
     sbufferCopy(sbuffer, p_buffer, TEST_BUFFER_SIZE);
     p_server.ReceiveDataAsync();
     ASSERT_EQ(p_server.SendData(p_buffer, sbuffer.size()), IPCLIB_SUCCEED);
@@ -192,5 +207,25 @@ TEST(DriverTests, BreakingConnectionTest)
 
     ServerSideNoStop(server, 0);
     server.~ServerSocket();
+    t.join();
+}
+
+/// @brief Tests if the driver throws an exception if OK is not send
+TEST(DriverTests, NoOkSend)
+{
+    ServerSocket server;
+    ASSERT_EQ(server.Initialize(), IPCLIB_SUCCEED);
+    server.ConnectAsync();
+    std::thread t = std::thread(ThrowingDriverSide);
+
+    ASSERT_DURATION_LE(3, while (!server.Connected()){});
+
+    char buffer[TEST_BUFFER_SIZE];
+    // wait untill client sends AI ACTIVE
+    ASSERT_DURATION_LE(1, server.AwaitData(buffer, TEST_BUFFER_SIZE));
+    TestMessageEqual(buffer, "AI ACTIVE", 9);
+
+    ASSERT_EQ(server.SendData("HI", 2), IPCLIB_SUCCEED);
+
     t.join();
 }
