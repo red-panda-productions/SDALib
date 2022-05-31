@@ -1,7 +1,6 @@
 #pragma once
-#pragma comment(lib, "ws2_32.lib")
 #include "ipclib_export.h"
-#include <WinSock2.h>
+#include "ipclib_portability.h"
 #include "Socket.h"
 
 /// @brief A class that represents a server that can communicate with a client
@@ -9,28 +8,30 @@
 class IPCLIB_EXPORT ServerSocket : public Socket
 {
 public:
-    explicit ServerSocket(PCWSTR p_ip = L"127.0.0.1", int p_port = 8888, int p_connections = 1);
+    explicit ServerSocket(IPC_IP_TYPE p_ip = LOCAL_HOST, int p_port = 8888, int p_connections = 1);
 
     int Initialize();
 
     void ConnectAsync();
 
-    void AwaitClientConnection();
+    int AwaitClientConnection();
 
     int SendData(const char* p_data, int p_size) const;
 
-    void Disconnect();
+    int Disconnect();
 
-    void CloseServer();
+    int CloseServer();
 
     bool Connected();
 
     ~ServerSocket();
 
 private:
-    void Connect();
+    void ConnectThreadFunction();
 
-    PCWSTR m_ip;
+    int Connect();
+
+    IPC_IP_TYPE m_ip;
     int m_port;
     int m_connections;
 
@@ -38,6 +39,9 @@ private:
     struct sockaddr_in m_client;
     struct sockaddr_in m_server;
 
-    bool m_open;
     bool m_connecting;
+
+    bool m_open = false;
+
+    int m_connectErrorCode = IPCLIB_SUCCEED;
 };

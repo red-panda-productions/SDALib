@@ -7,11 +7,7 @@
 class IPCPointerManager
 {
 public:
-    IPCPointerManager()
-    {
-        m_dataRegion = boost::interprocess::mapped_region(m_currentDataObject, boost::interprocess::read_write);
-        m_segmentRegion = boost::interprocess::mapped_region(m_currentSegmentDataObject, boost::interprocess::read_only);
-    }
+    IPCPointerManager();
 
     SDAData* GetDataPointer();
 

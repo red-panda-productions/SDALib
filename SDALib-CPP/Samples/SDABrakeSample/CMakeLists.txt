@@ -11,8 +11,12 @@ target_link_libraries(
         SDABrakeSample
         SDALib
 )
-target_include_directories(SDABrakeSample PUBLIC "../../SDALib-CPP")
 
+IF(UNIX)
+    TARGET_LINK_LIBRARIES(SDABrakeSample rt)
+ENDIF(UNIX)
+
+target_include_directories(SDABrakeSample PUBLIC "../../SDALib-CPP")
 
 INSTALL_SDA_PACKAGES(SDABrakeSample)
 

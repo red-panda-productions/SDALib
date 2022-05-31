@@ -32,3 +32,6 @@ target_include_directories(SDALib-Pythonlib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Pytho
 
 INSTALL_PYTHON_FILES(SDALib-Python)
 INSTALL_PYTHON_FILES(SDALib-Pythonlib)
+IF(UNIX)
+    TARGET_LINK_LIBRARIES(SDALib-Python rt)
+ENDIF(UNIX)

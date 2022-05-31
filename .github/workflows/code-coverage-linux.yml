@@ -1,0 +1,85 @@
+name: CI Pipeline Code Coverage Linux
+
+on:
+  pull_request:
+    branches: [ main ]
+
+  # Allow manually triggering from the actions tab
+  workflow_dispatch:
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Debug
+
+  # Enable colour output for GTEST and XML file generation
+  GTEST_COLOR: yes
+  GTEST_OUTPUT: xml:test-results/
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic anda should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-latest
+    env:
+      BOOST_PATH: ${{github.workspace}}/libraries
+      BOOST_ROOT: ${{github.workspace}}/libraries/boost/boost
+      BOOST_VERSION: 1.79.0
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install packages
+      run: |
+        wget https://github.com/red-panda-productions/ipc-lib/releases/download/v1.1.0/ipclib.deb
+        sudo apt install ./ipclib.deb
+        sudo apt-get install libplib-dev
+        sudo apt-get install libexpat1-dev
+
+    - name: Install GCovr
+      run: pip install gcovr
+
+    - name: Cache boost
+      uses: actions/cache@v2
+      id: cache-boost
+      with:
+        # Set the default path as the path to cache
+        path: ${{env.BOOST_ROOT}}
+        # Use the version as the key to only cache the correct version
+        key: boost-${{env.BOOST_VERSION}}-${{runner.os}}
+
+    - name: Install boost
+      if: steps.cache-boost.outputs.cache-hit != 'true'
+      uses: MarkusJx/install-boost@v2.3.0
+      id: install-boost
+      with:
+        boost_version: ${{env.BOOST_VERSION}}
+        toolset: gcc
+        platform_version: 20.04
+        boost_install_dir: ${{env.BOOST_PATH}}
+
+    - name: Configure CMake
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTION_GITHUB_ACTIONS=ON -DCMAKE_C_FLAGS="-pthread" -DCMAKE_CXX_FLAGS="-pthread" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{github.workspace}}/SDALib-CPP/build
+
+    - name: Build
+      working-directory: ${{github.workspace}}/SDALib-CPP/build
+      run: cmake --build .
+
+    - name: Run code coverage
+      working-directory: ${{github.workspace}}/SDALib-CPP
+      run: ./coverage.sh
+
+    - name: Check code coverage
+      working-directory: ${{github.workspace}}/SDALib-CPP
+      run: cat coverage.xml
+
+    - name: Create code coverage report
+      uses: 5monkeys/cobertura-action@master
+      with:
+        path: ${{github.workspace}}/SDALib-CPP/coverage.xml
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        minimum_coverage: 100
+        fail_below_threshold: true
+        show_missing: true
+        link_missing_lines: true
+        skip_covered: false
+        report_name: 'code coverage report Linux'

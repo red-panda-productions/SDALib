@@ -4,7 +4,7 @@
 	SDAData.hpp
 	SDASpeedDreams.hpp
 	IPCPointerManager.h
-)
+        SDA_portability.h)
 
 SET(SDALIB_INLINES
 	SDADriver.inl
@@ -14,6 +14,8 @@ SET(SDALIB_SOURCES
 	SDADriver.cpp
 	SDASpeedDreams.cpp
 	IPCPointerManager.cpp
+	SDAAction.cpp
+	SDAData.cpp
 )
 
 ADD_LIBRARY (SDALib STATIC ${SDALIB_HEADERS} ${SDALIB_INLINES} ${SDALIB_SOURCES})
