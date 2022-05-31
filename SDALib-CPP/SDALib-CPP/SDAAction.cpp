@@ -1,6 +1,6 @@
 #include "SDAAction.hpp"
 
-/// @brief				  Serializes the data into a buffer
+/// @brief                Serializes the data into a buffer
 /// @param  p_buffer	  The buffer that will store the data
 /// @param  p_bufferSize  The size of the buffer
 /// @param  p_sbufferSize The result size of the string
