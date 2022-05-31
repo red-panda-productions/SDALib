@@ -11,7 +11,7 @@
 #include <python.h>
 #define _DEBUG
 #else
-#include <python.h>
+#include <Python.h>
 #endif
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
 #include <stdlib.h>
