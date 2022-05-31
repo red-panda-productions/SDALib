@@ -8,11 +8,11 @@
 /// @brief   Generates a random name; guarantees the last character is '\0', although one could pop up earlier
 /// @param a The array to generate the name in
 /// @param b The length of the array
-#define RAND_NAME(a, b)                   \
-    for (int i = 0; i < (b)-1; i++)       \
-    {                                     \
-        (a)[i] = (char)'c'; \
-    }                                     \
+#define RAND_NAME(a, b)             \
+    for (int i = 0; i < (b)-1; i++) \
+    {                               \
+        (a)[i] = (char)'c';         \
+    }                               \
     (a)[(b)-1] = '\0';
 
 /// @brief   Generates a random t3D
@@ -106,7 +106,7 @@ tTrackSeg GenerateSegment()
     segment.height = random.NextFloat();
     segment.raceInfo = random.NextInt(1024);
     segment.DoVfactor = random.NextFloat();
-    //TODO: segment.SpeedLimit = random.NextFloat();
+    // TODO: segment.SpeedLimit = random.NextFloat();
     segment.ext = nullptr;      // COPY NOT IMPLEMENTED
     segment.surface = nullptr;  // COPY NOT IMPLEMENTED
     for (int i = 0; i < 2; i++)

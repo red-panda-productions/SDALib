@@ -5,9 +5,7 @@
 #include "Utils.h"
 #include "Random.hpp"
 #include "GeneratorUtils.h"
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
+
 #define TEST_COUNT 1
 
 // check all classes are callable
