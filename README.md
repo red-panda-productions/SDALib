@@ -1,3 +1,8 @@
+![Tests linux](https://github.com/red-panda-productions/SDALib/actions/workflows/test-linux.yml/badge.svg)
+![Coverage linux](https://github.com/red-panda-productions/SDALib/actions/workflows/code-coverage-linux.yml/badge.svg) 
+![Tests windows](https://github.com/red-panda-productions/SDALib/actions/workflows/test-windows.yml/badge.svg)
+![Coverage windows](https://github.com/red-panda-productions/SDALib/actions/workflows/code-coverage-windows.yml/badge.svg) 
+
 # SDALib
 
 A framework to create AI for assisted cars for Linux and Windows. 
