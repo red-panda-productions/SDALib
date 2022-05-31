@@ -48,7 +48,7 @@ template <class PointerManager>
 bool AIInterface<PointerManager>::Update()
 {
     SDA_LOG_INFO("Updating...");
-    const int err = m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);  // can change to GetData
+    const int err = m_client.AwaitData(m_buffer, SDA_BUFFER_SIZE);
     SDA_LOG_INFO("Received data");
 
     if (err != IPCLIB_SUCCEED)
