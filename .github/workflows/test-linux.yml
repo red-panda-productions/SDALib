@@ -38,7 +38,6 @@ jobs:
         sudo apt install ./ipclib.deb
         sudo apt-get install libplib-dev
         sudo apt-get install libexpat1-dev
-        sudo apt-get install libpython3-dev
       
     - name: Cache boost
       uses: actions/cache@v2
