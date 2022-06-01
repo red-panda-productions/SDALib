@@ -16,6 +16,7 @@ CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
 TEST(PythonDriverTests, PythonDriverInitTest)
 {
     Py_Initialize();
+
     TPythonDriver pythonDriver = TPythonDriver();
 
     ASSERT_TRUE(PyCallable_Check(pythonDriver.m_sdaTypesClass));

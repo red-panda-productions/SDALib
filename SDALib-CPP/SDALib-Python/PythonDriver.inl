@@ -29,10 +29,12 @@
 template <typename PointerManager>
 PythonDriver<PointerManager>::PythonDriver()
 {
-    // std::cout << (filesystem::current_path()) << std::endl;
-
-    // const filesystem::path parentPath = filesystem::current_path().parent_path();
-    // PySys_SetPath(reinterpret_cast<const wchar_t*>((char*)strcat((char*)parentPath.c_str(),"/SDALib-Python")));
+    // set cwd in python
+    char buffer[256];
+    getcwd(buffer,256);
+    PyRun_SimpleString("import sys\n");
+    std::string s = "sys.path.append(\"" + std::string(buffer) + "\")";
+    PyRun_SimpleString(s.c_str());//the folder where the pythonTest.py is located
 
     // initialize the SDAType data type
     PyObject *sdaTypesModuleName = PyUnicode_FromString("SDATypes");
