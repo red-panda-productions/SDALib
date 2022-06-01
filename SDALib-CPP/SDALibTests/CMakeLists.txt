@@ -2,8 +2,6 @@ project(SDATests)
 
 set(INSTALL_GTEST OFF)
 
-SET(Python3_USE_STATIC_LIBS TRUE)
-FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 include(FetchContent)
 FetchContent_Declare(
   googletest

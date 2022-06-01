@@ -4,6 +4,8 @@
 INCLUDE(cmake/SDAMacros.cmake)
 cmake_minimum_required (VERSION 3.8)
 
+SET(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
+
 IF(WIN32)
 	find_program(OPEN_CPP_COVERAGE "OpenCppCoverage")
 	if(OPEN_CPP_COVERAGE)
