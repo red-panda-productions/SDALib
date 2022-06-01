@@ -78,7 +78,7 @@ IF(OPEN_CPP_COVERAGE)
         CONTENT 
             "@echo off
             cd /d ${CURRENTBINARYDIR}
-            \"${OPEN_CPP_COVERAGE}\" --sources=${SDADIR} --sources${SDAPYTHONDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex=${COV_EXCLUDE_REGEX}  -- ${EXEPATH}
+            \"${OPEN_CPP_COVERAGE}\" --sources=${SDADIR} --sources=${SDAPYTHONDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex=${COV_EXCLUDE_REGEX}  -- ${EXEPATH}
             ${COV_EXTRA_COMMANDS}")
 
     MESSAGE(STATUS "Created SDACoverage.bat, run with ./coverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
