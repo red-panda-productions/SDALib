@@ -1,3 +1,4 @@
+#include "portability.h"
 #include "PythonDriver.h"
 
 #define CREATE_PYTHON_DRIVER_IMPLEMENTATION(p_type)                                                                          \

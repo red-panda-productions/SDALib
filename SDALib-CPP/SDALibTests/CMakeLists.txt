@@ -9,6 +9,13 @@ FetchContent_Declare(
 )
 INCLUDE(../cmake/SDAMacros.cmake)
 
+MESSAGE(STATUS "RUNTIME: ${Python3_RUNTIME_LIBRARY_DIRS}")
+MESSAGE(STATUS "ROOTDIR: ${Python3_ROOT_DIR}")
+MESSAGE(STATUS "LIBRARY: ${Python3_LIBRARY}")
+MESSAGE(STATUS "LIBRARYD: ${Python3_LIBRARY_DIRS}")
+MESSAGE(STATUS "LIBRARIES: ${Python3_LIBRARIES}")
+
+
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
