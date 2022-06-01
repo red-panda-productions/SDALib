@@ -1,6 +1,8 @@
 project(SDATests)
 
 set(INSTALL_GTEST OFF)
+
+SET(Python3_USE_STATIC_LIBS TRUE)
 FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 include(FetchContent)
 FetchContent_Declare(
@@ -8,13 +10,6 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
 )
 INCLUDE(../cmake/SDAMacros.cmake)
-
-MESSAGE(STATUS "RUNTIME: ${Python3_RUNTIME_LIBRARY_DIRS}")
-MESSAGE(STATUS "ROOTDIR: ${Python3_ROOT_DIR}")
-MESSAGE(STATUS "LIBRARY: ${Python3_LIBRARY}")
-MESSAGE(STATUS "LIBRARYD: ${Python3_LIBRARY_DIRS}")
-MESSAGE(STATUS "LIBRARIES: ${Python3_LIBRARIES}")
-
 
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
