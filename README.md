@@ -24,7 +24,7 @@ When you use the project we suggest you use CMake and copy over the different .c
 
 ## Documentation
 
-We suggest reading the documentation before you start creating your AI.
+We suggest reading the [documentation](https://github.com/red-panda-productions/SDALib/blob/main/DOCUMENTATION.md) before you start creating your AI.
 
 ## Samples
 
