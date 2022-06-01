@@ -2,9 +2,9 @@ project(SDALib-Python)
 include(../cmake/SDAMacros.cmake)
 
 
-add_executable(SDALib-Python "PythonDriver.cpp" "PythonDriver.h")
+add_executable(SDALib-Python "PythonDriver.cpp" "PythonDriver.h" "PythonDriver.inl")
 
-add_library(SDALib-Pythonlib "PythonDriver.cpp" "PythonDriver.h")
+add_library(SDALib-Pythonlib "PythonDriver.cpp" "PythonDriver.h" "PythonDriver.inl")
 
 target_compile_definitions(SDALib-Pythonlib PUBLIC "SDA_LIBRARY")
 

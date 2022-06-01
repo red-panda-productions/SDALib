@@ -1,18 +1,22 @@
 #include "PythonDriver.h"
-#include "Mocks/SDADriverMock.h"
+#include "PythonDriver.inl"
+#include "Mocks/PointerManagerMock.h"
 #include <gtest/gtest.h>
 #include <vector>
 #include "Utils.h"
 #include "Random.hpp"
 #include "GeneratorUtils.h"
 
+CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
+
+#define TPythonDriver PythonDriver<PointerManagerMock>
 #define TEST_COUNT 1
 
 // check all classes are callable
 TEST(PythonDriverTests, PythonDriverInitTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     ASSERT_TRUE(PyCallable_Check(pythonDriver.m_sdaTypesClass));
     ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carClass));
@@ -1290,7 +1294,7 @@ void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
 TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1306,7 +1310,7 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1324,7 +1328,7 @@ TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1342,7 +1346,7 @@ TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1360,7 +1364,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1378,7 +1382,7 @@ TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1396,7 +1400,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1414,7 +1418,7 @@ TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1432,7 +1436,7 @@ TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
@@ -1450,7 +1454,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
 TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
 {
     Py_Initialize();
-    PythonDriver pythonDriver = PythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {

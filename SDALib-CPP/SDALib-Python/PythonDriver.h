@@ -20,7 +20,8 @@
 
 namespace filesystem = std::experimental::filesystem;
 
-class PythonDriver : public SDADriver
+template<typename PointerManager>
+class PythonDriver : public AIInterface<PointerManager>
 {
 public:
     PythonDriver();
