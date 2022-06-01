@@ -3,7 +3,7 @@
 /// @brief Constructs PythonDriver and sets up python code
 PythonDriver::PythonDriver()
 {
-    std::cout << (filesystem::current_path()) << std::endl;
+    //std::cout << (filesystem::current_path()) << std::endl;
 
     // const filesystem::path parentPath = filesystem::current_path().parent_path();
     //PySys_SetPath(reinterpret_cast<const wchar_t*>((char*)strcat((char*)parentPath.c_str(),"/SDALib-Python")));
