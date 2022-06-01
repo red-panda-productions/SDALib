@@ -33,6 +33,8 @@ PythonDriver<PointerManager>::PythonDriver()
     // set cwd in python
     char buffer[256];
     getcwd(buffer,256);
+
+    std::cout << buffer << std::endl;
     PyRun_SimpleString("import sys\n");
     std::string s = "sys.path.append(\"" + std::string(buffer) + "\")";
     PyRun_SimpleString(s.c_str());//the folder where the pythonTest.py is located

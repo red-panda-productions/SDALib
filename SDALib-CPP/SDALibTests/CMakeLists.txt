@@ -57,7 +57,8 @@ INSTALL_PYTHON_FILES(SDATests)
 
 IF(OPEN_CPP_COVERAGE)
 	STRING(REGEX REPLACE "/" "\\\\" SOURCEDIR ${CMAKE_SOURCE_DIR})
-    STRING(REGEX REPLACE "/" "\\\\" CURRENTSOURCEDIR ${CMAKE_SOURCE_DIR}/SDALib-CPP)
+    STRING(REGEX REPLACE "/" "\\\\" SDADIR ${CMAKE_SOURCE_DIR}/SDALib-CPP)
+    STRING(REGEX REPLACE "/" "\\\\" SDAPYTHONDIR ${CMAKE_SOURCE_DIR}/SDALib-Python)
     STRING(REGEX REPLACE "/" "\\\\" CURRENTBINARYDIR ${CMAKE_CURRENT_BINARY_DIR})
     STRING(REGEX REPLACE "/" "\\\\" BINARYDIR ${CMAKE_BINARY_DIR})
     STRING(REGEX REPLACE "/" "\\\\" EXEPATH ${CMAKE_CURRENT_BINARY_DIR}/SDATests.exe)
@@ -77,7 +78,7 @@ IF(OPEN_CPP_COVERAGE)
         CONTENT 
             "@echo off
             cd /d ${CURRENTBINARYDIR}
-            \"${OPEN_CPP_COVERAGE}\" --sources=${CURRENTSOURCEDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex=${COV_EXCLUDE_REGEX}  -- ${EXEPATH}
+            \"${OPEN_CPP_COVERAGE}\" --sources=${SDADIR} --sources${SDAPYTHONDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex=${COV_EXCLUDE_REGEX}  -- ${EXEPATH}
             ${COV_EXTRA_COMMANDS}")
 
     MESSAGE(STATUS "Created SDACoverage.bat, run with ./coverage.bat in ${COVERAGE_OUTPUT_FOLDER}")
@@ -102,7 +103,9 @@ IF(GCOVR)
 
     FILE(GENERATE OUTPUT ${CMAKE_SOURCE_DIR}/coverage.sh
             CONTENT
-            "${CMAKE_CURRENT_BINARY_DIR}/SDATests
+            " cd ${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_CURRENT_BINARY_DIR}/SDATests
+            cd ${CMAKE_SOURCE_DIR}
             gcovr --gcov-ignore-parse-errors --exclude=\"(.*IPCPointerManager.cpp.*|.*SDAReplay.*|.*Samples.*|.*SpeedDreams.*|.*googletest.*|.*CMakeFiles.*)\" --exclude-lines-by-pattern=${COV_EXCLUDE_REGEX} ${COV_EXPORT_TYPE} -o ${COV_OUTPUT}
             ${COV_EXTRA_COMMANDS}"
             FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ WORLD_EXECUTE WORLD_WRITE WORLD_READ)
