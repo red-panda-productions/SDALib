@@ -47,6 +47,7 @@ SET(ENV{SOLID_DIR} "${CMAKE_SOURCE_DIR}/../libraries")
 
 FIND_SDA_PACKAGES()
 
+FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 # Include sub-projects.
 add_subdirectory ("SDALib-CPP")
 

@@ -1,7 +1,6 @@
 project(SDALib-Python)
 include(../cmake/SDAMacros.cmake)
 
-FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 add_executable(SDALib-Python "PythonDriver.cpp" "PythonDriver.h")
 
@@ -36,3 +35,5 @@ IF(UNIX)
     TARGET_LINK_LIBRARIES(SDALib-Python rt)
     TARGET_LINK_LIBRARIES(SDALib-Pythonlib rt)
 ENDIF(UNIX)
+
+

@@ -17,12 +17,6 @@ enable_testing()
 add_executable(
   SDATests "GeneratorUtils.h" "GeneratorUtils.cpp" "Random.hpp" "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "PythonDriverTest.cpp" "Mocks/SDADriverMock.h")
 
-IF(WIN32)
-    SET(SDA_PYTHON_EXE ${CMAKE_BINARYDIR}/SDALib-Python/SDALib-Python.exe)
-ELSE(WIN32)
-    SET(SDA_PYTHON_EXE ${CMAKE_BINARYDIR}/SDALib-Python/SDALib-Python)
-ENDIF(WIN32)
-
 target_link_libraries(
   SDATests
   SDALib
