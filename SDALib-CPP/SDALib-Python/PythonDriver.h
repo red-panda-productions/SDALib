@@ -24,7 +24,7 @@ template <typename PointerManager>
 class PythonDriver : public AIInterface<PointerManager>
 {
 public:
-    PythonDriver();
+    PythonDriver(const char* sdaTypes);
 
 #ifdef TEST
 public:
