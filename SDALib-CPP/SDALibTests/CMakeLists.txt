@@ -112,8 +112,3 @@ IF(GCOVR)
 
     MESSAGE(STATUS "Created coverage.sh at ${CMAKE_SOURCE_DIR}/coverage.sh")
 ENDIF(GCOVR)
-
-add_custom_command(TARGET SDATests POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/SDATypesFail.py" $<TARGET_FILE_DIR:SDATests>
-        COMMAND_EXPAND_LISTS
-        )
