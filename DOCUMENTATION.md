@@ -20,7 +20,11 @@ A class that contains all of the data needed for a driver to understand the game
 
 ### Car
 
+This struct stores all data from the car. Also stores the segments that the car is on and where it is going.
+
 ### Situation
+
+This struct stores all data from the current situation.
 
 ### Tickcount
 
@@ -48,7 +52,7 @@ This variable currently does nothing, but might be added to the control of the A
 
 ## SDADriver
 
-A class that represents an SDADriver that can drive and edit inputs in the [DAISI](https://github.com/red-panda-productions/speed-dreams) simulator. This class will handle all of the communication and data transfer between DAISI and SDALib so that a developer can easily create an AI. A developer only has to inherit form this class and call the Run() function to begin.
+A class that represents an SDADriver that can drive and edit inputs in the [DAISI](https://github.com/red-panda-productions/speed-dreams) simulator. This class will handle all of the communication and data transfer between DAISI and SDALib so that a developer can easily create an AI. A developer has to inherit form this class, implement and override the InitAI() and UpdateAI() functions and call the Run() function to begin.
 
 ## SDASimulate
 
@@ -56,6 +60,54 @@ A C function that can simulate an action in the Simulator.
 
 ## Example
 
+Here is an example driver that will brake when the speed of the car is too high:
 
+```
+#include <iostream>
+#include "SDADriver.hpp"
+
+/// @brief A sample driver that brakes when driving above set max speed
+class BrakeSampleDriver : public SDADriver
+{
+public:
+    /// @brief Constructor for setting the maximum allowed speed
+    BrakeSampleDriver(float p_maxSpeed)
+        : SDADriver()
+    {
+        m_maxSpeed = p_maxSpeed;
+    }
+
+protected:
+    ///@brief initializes the AI, but this AI does not need initialization (still needs to be overridden)
+    void InitAI() override
+    {
+        // do nothing
+    }
+  
+    ///@brief Updates the driver with p_data. The return type should be an SDAAction to give the choices back to the simulation
+    SDAAction UpdateAI(SDAData& p_data) override
+    {
+        SDAAction action;
+
+        // full brake when going 20km/h above max speed
+        action.Brake = std::max(0.0f, (p_data.Car.pub.DynGC.vel.x - m_maxSpeed) / 20);
+        std::cout << p_data.Car.pub.DynGC.vel.x << " " << action.Brake << std::endl;
+
+        return action;
+    }
+
+private:
+    float m_maxSpeed;
+};
+
+///@brief the main function that calls Run() of BrakeSampleDriver
+int main()
+{
+    BrakeSampleDriver brakeSampleDriverDriver(80);
+    brakeSampleDriverDriver.Run();
+
+    return 0;
+}
+```
 
 
