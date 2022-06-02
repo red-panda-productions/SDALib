@@ -12,6 +12,9 @@ CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
 #define TPythonDriver PythonDriver<PointerManagerMock>
 #define TEST_COUNT    1
 
+SDAData sdaData;
+TestSegments segments;
+
 // check all classes are callable
 TEST(PythonDriverTests, PythonDriverInitTest)
 {
@@ -42,15 +45,20 @@ TEST(PythonDriverTests, PythonDriverInitTest)
     Py_Finalize();
 }
 
-SDAData CreateSDAData()
+void CreateSDAData()
 {
-    SDAData data;
     Random random;
-    TestSegments testSegments = GenerateSegments();
-    data.TickCount = random.NextUInt();
-    data.Car = GenerateCar(testSegments);
-    data.Situation = GenerateSituation();
-    return data;
+    segments = GenerateSegments();
+    sdaData.TickCount = random.NextUInt();
+    sdaData.Car = GenerateCar(segments);
+    sdaData.Situation = GenerateSituation();
+}
+
+void DeleteSDAData()
+{
+    DestroySegments(segments);
+    DestroyCar(sdaData.Car);
+    DestroySituation(sdaData.Situation);
 }
 
 void CheckVectorData(float p_x, float p_y, float p_z, PyObject* p_vecObject)
@@ -1299,10 +1307,12 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        SDAData sdaData = CreateSDAData();
+        CreateSDAData();
         PyObject* sdaDataObject = pythonDriver.GetSDATypeObject(sdaData);
 
         CheckSDAData(sdaData, sdaDataObject);
+
+        DeleteSDAData();
     }
 
     Py_Finalize();
@@ -1339,6 +1349,9 @@ TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
         PyObject* carInitObject = pythonDriver.GetCarInitObject(carData.info);
 
         CheckInitCarData(carData.info, carInitObject);
+
+        DestroySegments(testSegments);
+        DestroyCar(carData);
     }
 
     Py_Finalize();
@@ -1357,6 +1370,9 @@ TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
         PyObject* carPublicObject = pythonDriver.GetCarPublicObject(carData.pub);
 
         CheckPublicCarData(carData.pub, carPublicObject);
+
+        DestroySegments(testSegments);
+        DestroyCar(carData);
     }
 
     Py_Finalize();
@@ -1375,6 +1391,9 @@ TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
         PyObject* carRaceInfoObject = pythonDriver.GetCarRaceInfoObject(carData.race);
 
         CheckCarRaceInfoData(carData.race, carRaceInfoObject);
+
+        DestroySegments(testSegments);
+        DestroyCar(carData);
     }
 
     Py_Finalize();
@@ -1393,6 +1412,9 @@ TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
         PyObject* carPrivObject = pythonDriver.GetCarPrivObject(carData.priv);
 
         CheckPrivCarData(carData.priv, carPrivObject);
+
+        DestroySegments(testSegments);
+        DestroyCar(carData);
     }
 
     Py_Finalize();
@@ -1411,6 +1433,9 @@ TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
         PyObject* carCtrlObject = pythonDriver.GetCarCtrlObject(carData.ctrl);
 
         CheckCarCtrlData(carData.ctrl, carCtrlObject);
+
+        DestroySegments(testSegments);
+        DestroyCar(carData);
     }
 
     Py_Finalize();
@@ -1429,6 +1454,9 @@ TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
         PyObject* carSetupObject = pythonDriver.GetCarSetupObject(carData.setup);
 
         CheckCarSetupData(carData.setup, carSetupObject);
+
+        DestroySegments(testSegments);
+        DestroyCar(carData);
     }
 
     Py_Finalize();
@@ -1447,6 +1475,9 @@ TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
         PyObject* carPitCmdObject = pythonDriver.GetCarPitCmdObject(carData.pitcmd);
 
         CheckCarPitCmdData(carData.pitcmd, carPitCmdObject);
+
+        DestroySegments(testSegments);
+        DestroyCar(carData);
     }
 
     Py_Finalize();
@@ -1464,6 +1495,8 @@ TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
         PyObject* situationObject = pythonDriver.GetSituationObject(situationData);
 
         CheckSituationData(situationData, situationObject);
+
+        DestroySituation(situationData);
     }
 
     Py_Finalize();
