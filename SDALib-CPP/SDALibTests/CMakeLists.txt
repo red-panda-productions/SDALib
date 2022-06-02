@@ -15,7 +15,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(
-  SDATests "GeneratorUtils.h" "GeneratorUtils.cpp" "Random.hpp" "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "PythonDriverTest.cpp" "Mocks/SDADriverMock.h")
+  SDATests "GeneratorUtils.h" "GeneratorUtils.cpp" "Random.hpp" "SDAActionTest.cpp" "Utils.h" "PythonDriverTest.cpp" "SDADriverTest.cpp" "PythonSDATypeTest.cpp" "Mocks/SDADriverMock.h" "Mocks/PointerManagerMock.h" "Mocks/PythonDriverMock.h")
 
 target_link_libraries(
   SDATests
@@ -75,7 +75,7 @@ IF(OPEN_CPP_COVERAGE)
     ENDIF(OPTION_GITHUB_ACTIONS)
 
     FILE(GENERATE OUTPUT ${COVERAGE_OUTPUT_FOLDER}/coverage.bat
-        CONTENT 
+        CONTENT
             "@echo off
             cd /d ${CURRENTBINARYDIR}
             \"${OPEN_CPP_COVERAGE}\" --sources=${SDADIR} --sources=${SDAPYTHONDIR} --export_type=${COV_EXPORT_TYPE} --excluded_sources  --excluded_line_regex=${COV_EXCLUDE_REGEX}  -- ${EXEPATH}
