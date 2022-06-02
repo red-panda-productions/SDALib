@@ -24,8 +24,6 @@ IF(WIN32)
     endif(OPEN_CPP_COVERAGE)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:strict")
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /fp:strict")
-
-	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
 ELSEIF(UNIX)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -msse2 -mfpmath=sse")
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -msse2 -mfpmath=sse")
