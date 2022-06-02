@@ -9,15 +9,17 @@
 
 CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
 
-#define TPythonDriver PythonDriver<PointerManagerMock>
-#define TEST_COUNT    1
+#define TPythonDriver       PythonDriver<PointerManagerMock>
+#define TEST_COUNT          10
+#define SDA_TYPES_FILE      "SDATypes"
+#define SDA_TYPES_FAIL_FILE "SDATypesFail"
 
 // check all classes are callable
 TEST(PythonDriverTests, PythonDriverInitTest)
 {
     Py_Initialize();
 
-    TPythonDriver pythonDriver = TPythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     ASSERT_TRUE(PyCallable_Check(pythonDriver.m_sdaTypesClass));
     ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carClass));
@@ -257,10 +259,6 @@ void CheckMatrixData(sgMat4& p_posMat, PyObject* p_posMatObject)
 
 void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
 {
-    PyObject* nameAttr = PyUnicode_FromString("name");
-    PyObject* nameVal = PyObject_GetAttr(p_trackSegObject, nameAttr);
-    ASSERT_TRUE(strcmp(p_trackSeg.name, PyUnicode_AsUTF8(nameVal)) == 0);
-
     PyObject* idAttr = PyUnicode_FromString("id");
     PyObject* idVal = PyObject_GetAttr(p_trackSegObject, idAttr);
     ASSERT_TRUE(p_trackSeg.id == static_cast<int>(PyLong_AsLong(idVal)));
@@ -1284,14 +1282,13 @@ void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
 TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     Random random;
-    TestSegments segments;
-    SDAData sdaData;
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        segments = GenerateSegments();
+        SDAData sdaData;
+        TestSegments segments = GenerateSegments();
         sdaData.TickCount = random.NextUInt();
         sdaData.Car = GenerateCar(segments);
         sdaData.Situation = GenerateSituation();
@@ -1299,11 +1296,11 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
         PyObject* sdaDataObject = pythonDriver.GetSDATypeObject(sdaData);
 
         CheckSDAData(sdaData, sdaDataObject);
-    }
 
-    DestroySegments(segments);
-    DestroyCar(sdaData.Car);
-    DestroySituation(sdaData.Situation);
+        DestroySegments(segments);
+        DestroyCar(sdaData.Car);
+        DestroySituation(sdaData.Situation);
+    }
 
     Py_Finalize();
 }
@@ -1311,23 +1308,20 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carObject = pythonDriver.GetCarObject(carData);
 
         CheckCarData(carData, carObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1335,23 +1329,20 @@ TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carInitObject = pythonDriver.GetCarInitObject(carData.info);
 
         CheckInitCarData(carData.info, carInitObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1359,23 +1350,20 @@ TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carPublicObject = pythonDriver.GetCarPublicObject(carData.pub);
 
         CheckPublicCarData(carData.pub, carPublicObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1383,23 +1371,20 @@ TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carRaceInfoObject = pythonDriver.GetCarRaceInfoObject(carData.race);
 
         CheckCarRaceInfoData(carData.race, carRaceInfoObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1407,23 +1392,20 @@ TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carPrivObject = pythonDriver.GetCarPrivObject(carData.priv);
 
         CheckPrivCarData(carData.priv, carPrivObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1431,23 +1413,20 @@ TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carCtrlObject = pythonDriver.GetCarCtrlObject(carData.ctrl);
 
         CheckCarCtrlData(carData.ctrl, carCtrlObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1455,23 +1434,20 @@ TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carSetupObject = pythonDriver.GetCarSetupObject(carData.setup);
 
         CheckCarSetupData(carData.setup, carSetupObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1479,23 +1455,20 @@ TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
 TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    TestSegments testSegments;
-    tCarElt carData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        testSegments = GenerateSegments();
-        carData = GenerateCar(testSegments);
+        TestSegments testSegments = GenerateSegments();
+        tCarElt carData = GenerateCar(testSegments);
 
         PyObject* carPitCmdObject = pythonDriver.GetCarPitCmdObject(carData.pitcmd);
 
         CheckCarPitCmdData(carData.pitcmd, carPitCmdObject);
-    }
 
-    DestroySegments(testSegments);
-    DestroyCar(carData);
+        DestroySegments(testSegments);
+        DestroyCar(carData);
+    }
 
     Py_Finalize();
 }
@@ -1503,20 +1476,20 @@ TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
 TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
 {
     Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    tSituation situationData;
+    TPythonDriver pythonDriver = TPythonDriver(SDA_TYPES_FILE);
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
-        situationData = GenerateSituation();
+        tSituation situationData = GenerateSituation();
 
         PyObject* situationObject = pythonDriver.GetSituationObject(situationData);
 
         CheckSituationData(situationData, situationObject);
-    }
 
-    DestroySituation(situationData);
+        DestroySituation(situationData);
+    }
 
     Py_Finalize();
 }
+
+// ASSERT_THROW(PythonDriverSide(), std::exception);

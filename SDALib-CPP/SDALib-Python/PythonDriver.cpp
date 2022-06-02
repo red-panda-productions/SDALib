@@ -8,7 +8,8 @@ CREATE_PYTHON_DRIVER_IMPLEMENTATION(IPCPointerManager)
 int main()
 {
     Py_Initialize();
-    PythonDriver<IPCPointerManager> driver;
+    const char* sdaTypes = "SDATypes";
+    PythonDriver<IPCPointerManager> driver(sdaTypes);
     driver.Run();
     Py_Finalize();
     return 0;
