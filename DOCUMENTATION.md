@@ -28,11 +28,11 @@ This struct stores all data from the current situation.
 
 ### Tickcount
 
-Represents the tick of the simulation on which the data was send. 
+Represents the tick of the simulation on which the data was sent. 
 
 ## SDAAction
 
-An action struct contianing variables that edit the inputs of the car in the simulation. The different variables will be expained here as well as how they influence the system.
+An action struct containing  variables that edit the inputs of the car in the simulation. The different variables will be expained here, as well as how they influence the system.
 
 ### Steer
 
@@ -52,7 +52,7 @@ This variable currently does nothing, but might be added to the control of the A
 
 ## SDADriver
 
-A class that represents an SDADriver that can drive and edit inputs in the [DAISI](https://github.com/red-panda-productions/speed-dreams) simulator. This class will handle all of the communication and data transfer between DAISI and SDALib so that a developer can easily create an AI. A developer has to inherit form this class, implement and override the InitAI() and UpdateAI() functions and call the Run() function to begin.
+A class that represents an SDADriver that can drive and edit inputs in the [DAISI](https://github.com/red-panda-productions/speed-dreams) simulator. This class will handle all of the communication and data transfer between DAISI and SDALib so that a developer can easily create an AI. A developer has to inherit from this class, implement and override the InitAI() and UpdateAI() functions and call the Run() function to begin.
 
 ## SDASimulate
 
@@ -66,7 +66,7 @@ Here is an example driver that will brake when the speed of the car is too high:
 #include <iostream>
 #include "SDADriver.hpp"
 
-/// @brief A sample driver that brakes when driving above set max speed
+/// @brief A sample driver that brakes when driving above a set max speed
 class BrakeSampleDriver : public SDADriver
 {
 public:
@@ -78,7 +78,7 @@ public:
     }
 
 protected:
-    ///@brief initializes the AI, but this AI does not need initialization (still needs to be overridden)
+    ///@brief Initializes the AI, but this AI does not need initialization (still needs to be overridden)
     void InitAI() override
     {
         // do nothing
@@ -100,7 +100,7 @@ private:
     float m_maxSpeed;
 };
 
-///@brief the main function that calls Run() of BrakeSampleDriver
+///@brief The main function that calls Run() of BrakeSampleDriver
 int main()
 {
     BrakeSampleDriver brakeSampleDriverDriver(80);
