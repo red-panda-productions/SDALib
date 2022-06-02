@@ -20,12 +20,17 @@
 
 namespace filesystem = std::experimental::filesystem;
 
-template<typename PointerManager>
+template <typename PointerManager>
 class PythonDriver : public AIInterface<PointerManager>
 {
 public:
     PythonDriver();
 
+#ifdef TEST
+public:
+#else
+private:
+#endif
     PyObject* GetSDATypeObject(SDAData& p_data);
 
     PyObject* GetCarObject(tCarElt& p_car);
@@ -60,6 +65,7 @@ public:
         *m_publicCarClass, *m_dynamicPointClass, *m_trackLocationClass, *m_trackSegmentClass, *m_carRaceInfoClass,
         *m_privCarClass, *m_posDClass, *m_collisionStateClass, *m_carCtrlClass, *m_carSetupClass, *m_carSetupItemClass,
         *m_carPitCmdClass, *m_situationClass, *m_raceInfoClass, *m_vectorClass;
+
     PyObject* m_pythonDriver;
 
     void FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetupArray[], tCarSetupItem* p_carSetupItems);

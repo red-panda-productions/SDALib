@@ -1,8 +1,8 @@
+#include <gtest/gtest.h>
 #include "Mocks/SDADriverMock.h"
 #include "PythonDriver.h"
 #include "PythonDriver.inl"
 #include "Mocks/PointerManagerMock.h"
-#include <gtest/gtest.h>
 #include "Utils.h"
 #include "Random.hpp"
 #include "GeneratorUtils.h"
