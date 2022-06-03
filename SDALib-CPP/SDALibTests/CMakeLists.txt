@@ -62,6 +62,9 @@ IF(OPEN_CPP_COVERAGE)
     STRING(REGEX REPLACE "/" "\\\\" CURRENTBINARYDIR ${CMAKE_CURRENT_BINARY_DIR})
     STRING(REGEX REPLACE "/" "\\\\" BINARYDIR ${CMAKE_BINARY_DIR})
     STRING(REGEX REPLACE "/" "\\\\" EXEPATH ${CMAKE_CURRENT_BINARY_DIR}/SDATests.exe)
+    SET(EXCLUDEDSOURCES "")
+    STRING(REGEX REPLACE "/" "\\\\" EXCLUDEDSOURCE ${CMAKE_SOURCE_DIR}/SDALib-Python/PythonDriver.cpp)
+    STRING(APPEND EXCLUDEDSOURCES " --excluded_sources=${EXCLUDEDSOURCE}")
 
     IF(OPTION_GITHUB_ACTIONS)
         MESSAGE(STATUS "Creating Github actions coverage file")
@@ -94,7 +97,12 @@ IF(GCOVR)
                                 sed -i 's/branch-rate=\"[0-9|.]*\"/branch-rate=\"0\"/g' coverage.xml
                                 sed -i 's/branch=\"true\"//g' coverage.xml
                                 sed -i 's/branch=\"false\"//g' coverage.xml")
+        SET(EXCLUDEDSOURCES "")
+        GET_FILENAME_COMPONENT(EXCLUDED_SOURCE_NAME ${CMAKE_CURRENT_BINARY_DIR}/SDATests.exe NAME)
+        SET(EXCLUDEDSOURCES "${EXCLUDEDSOURCES}|.*${EXCLUDED_SOURCE_NAME}.*")
+
         SET(COV_OUTPUT "${CMAKE_SOURCE_DIR}/coverage.xml")
+
     ELSE(OPTION_GITHUB_ACTIONS)
         SET(COV_EXPORT_TYPE "--html --html-details")
         SET(COV_EXTRA_COMMANDS "bash -c \"xdg-open ${CMAKE_BINARY_DIR}/coverage.html &\" 2> /dev/null")
