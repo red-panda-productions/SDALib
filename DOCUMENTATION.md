@@ -20,11 +20,39 @@ A class that contains all of the data needed for a driver to understand the game
 
 ### Car
 
-This struct stores all data from the car. Also stores the segments that the car is on and where it is going.
+This struct stores all data from the car. It contains the following data from the Car:
+- info
+  - information about the name and car properties.
+- pub
+  - public information about the car
+  - position, rotation
+  - speed (DynGC.x, the speed float is bugged)
+  - trkpos
+    - Segments of the track. Has a lookahead of 10 segments.
+- race
+  -  (unnecessary) information about the race
+- priv
+  - Private information of the car
+  - fuel, engine, gear information
+- ctrl
+  - information about the inputs of the user
+  - steer, accel, brake, clutch information
+- setup
+  - (unnecessary) information about the setup of the car
+  - gearratios, differential, etc...
+- pitcmd
+  - (unnecessary) information about going into th pits
 
 ### Situation
 
 This struct stores all data from the current situation.
+- raceInfo
+  -  amount of cars, laps and total time
+-  deltaTime
+-  currentTime
+-  accelTime
+-  number of players
+-  (unset) list of cars
 
 ### Tickcount
 
