@@ -114,7 +114,7 @@ IF(GCOVR)
             " cd ${CMAKE_CURRENT_BINARY_DIR}
             ${CMAKE_CURRENT_BINARY_DIR}/SDATests
             cd ${CMAKE_SOURCE_DIR}
-            gcovr --gcov-ignore-parse-errors --exclude=\"(.*IPCPointerManager.cpp.*|.*SDAReplay.*|.*Samples.*|.*SpeedDreams.*|.*googletest.*|.*CMakeFiles.*)\" --exclude-lines-by-pattern=${COV_EXCLUDE_REGEX} ${COV_EXPORT_TYPE} -o ${COV_OUTPUT}
+            gcovr --gcov-ignore-parse-errors --exclude=\"(.*IPCPointerManager.cpp.*|.*SDAReplay.*|.*Samples.*|.*SpeedDreams.*|.*googletest.*|.*CMakeFiles.*|.*PythonDriver.cpp.*)\" --exclude-lines-by-pattern=${COV_EXCLUDE_REGEX} ${COV_EXPORT_TYPE} -o ${COV_OUTPUT}
             ${COV_EXTRA_COMMANDS}"
             FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ WORLD_EXECUTE WORLD_WRITE WORLD_READ)
 
