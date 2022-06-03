@@ -28,7 +28,7 @@ We suggest reading the [documentation](https://github.com/red-panda-productions/
 
 ## Samples
 
-The library also consists of 2 Samples namely [SDASteerSample](https://github.com/red-panda-productions/SDALib/tree/main/SDALib-CPP/Samples/SDASteerSample) and [SDABrakeSample](https://github.com/red-panda-productions/SDALib/tree/main/SDALib-CPP/Samples/SDABrakeSample). 
+The library also consists of 2 samples, namely [SDASteerSample](https://github.com/red-panda-productions/SDALib/tree/main/SDALib-CPP/Samples/SDASteerSample) and [SDABrakeSample](https://github.com/red-panda-productions/SDALib/tree/main/SDALib-CPP/Samples/SDABrakeSample). 
 
 ## Notes
 
