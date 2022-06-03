@@ -20,7 +20,7 @@ Furthermore, you can always create your project within the source code of SDALib
 
 ## Using SDALib in your project
 
-When you use the project we suggest you use CMake and copy over the different .cmake files into a cmake folder in your repository. The SDAMacros.cmake file consists of macros like FIND_SDA_PACKAGES and INSTALL_SDA_PACKAGES(target) that can easily find and install all of the dependencies needed for SDALib into your project. After calling these macros the setup of SDALib is done and you can begin programming your AI.
+When you use the project, we suggest you use CMake and copy over the different .cmake files into a CMake folder in your repository. The SDAMacros.cmake file consists of macros like FIND_SDA_PACKAGES and INSTALL_SDA_PACKAGES(target) that can easily find and install all of the dependencies needed for SDALib into your project. After calling these macros the setup of SDALib is done and you can begin programming your AI.
 
 ## Documentation
 
