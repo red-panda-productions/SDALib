@@ -16,7 +16,7 @@ You can download the library from the [Releases](https://github.com/red-panda-pr
 
 Premade files contain premade projects so that you can immediately start with creating your AI. The standalone files are there for when you have an existing project that you want to add this library to.
 
-Furthermore you can always create your project within the source code of SDALib by downloading or cloning the repo.
+Furthermore, you can always create your project within the source code of SDALib by downloading or cloning the repository.
 
 ## Using SDALib in your project
 
