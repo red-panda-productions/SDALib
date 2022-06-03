@@ -84,6 +84,33 @@ IF(WIN32)
         GET_FILENAME_COMPONENT(MYSQL_BASE_DIR ${MYSQL_LIB_DIR} DIRECTORY CACHE)
         STRING(CONCAT MYSQL_BIN_DIR_STRING "${MYSQL_BASE_DIR}" "/bin")
     ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
+
+    FIND_FILE(MYSQL_LIBSSL_DLL
+            NAMES libssl.dll ssl.dll libssl-1_1.dll
+            HINTS ENV MYSQL_DIR
+            PATH_SUFFIXES lib64 lib libs64 libs libs/Win32 libs/Win64
+            PATHS ${MYSQL_BASE_DIR})
+
+    FIND_FILE(MYSQL_LIBCRYPTO_DLL
+            NAMES libcrypto-1_1.dll libcrypto.dll
+            HINTS ENV MYSQL_DIR
+            PATH_SUFFIXES lib lib64 libs libs/Win32 libs/Win64
+            PATHS ${MYSQL_BASE_DIR})
+
+    FIND_FILE(MYSQL_CPPCONN_DLL
+            NAMES mysqlcppconn-9-vs14.dll mysqlcppconn.dll
+            HINTS ENV MYSQL_DIR
+            PATH_SUFFIXES "lib64${MYSQL_SUBDIR}" "lib${MYSQL_SUBDIR}" "libs64${MYSQL_SUBDIR}" "libs${MYSQL_SUBDIR}" "libs/Win32${MYSQL_SUBDIR}" "libs/Win64${MYSQL_SUBDIR}" "lib/*${MYSQL_SUBDIR}"
+            PATHS ${MYSQL_BASE_DIR})
+
+
+    FIND_FILE(MYSQL_CPPCONN8_DLL
+            NAMES mysqlcppconn8-2-vs14.dll mysqlcppconn8.dll mysqlcppconn8-vs14.dll
+            HINTS ENV MYSQL_DIR
+            PATH_SUFFIXES "lib64${MYSQL_SUBDIR}" "lib${MYSQL_SUBDIR}" "libs64${MYSQL_SUBDIR}" "libs${MYSQL_SUBDIR}" "libs/Win32${MYSQL_SUBDIR}" "libs/Win64${MYSQL_SUBDIR}" "lib/*${MYSQL_SUBDIR}"
+            PATHS ${MYSQL_BASE_DIR})
+
+    SET(MYSQL_DLL_FILES "${MYSQL_LIBSSL_DLL};${MYSQL_LIBCRYPTO_DLL};${MYSQL_CPPCONN_DLL};${MYSQL_CPPCONN8_DLL}")
 ENDIF(WIN32)
 
 SET(MYSQL_BIN_DIR ${MYSQL_BIN_DIR_STRING} CACHE STRING "The binary dir for mysql")
