@@ -136,7 +136,7 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
 
     PyObject *sdaType = GetSDATypeObject(p_data);
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
-    PyObject *result = PyObject_CallMethodOneArg(m_pythonDriver, updateAIFuncName, sdaType);
+    PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
 
     if (result == NULL) return action;
 
