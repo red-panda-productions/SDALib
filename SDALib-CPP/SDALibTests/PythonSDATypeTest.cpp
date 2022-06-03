@@ -9,10 +9,8 @@
 
 CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
 
-#define TPythonDriver       PythonDriver<PointerManagerMock>
-#define TEST_COUNT          10
-
-const char* SDATypesFile = "SDATypes";
+#define TPythonDriver PythonDriver<PointerManagerMock>
+#define TEST_COUNT    10
 
 // check all classes are callable
 TEST(PythonDriverTests, PythonDriverInitTest)
@@ -1488,6 +1486,47 @@ TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
 
         DestroySituation(situationData);
     }
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverUpdateAITest)
+{
+    Py_Initialize();
+
+    Random random;
+
+    TPythonDriver pythonDriver = TPythonDriver();
+    pythonDriver.SetPythonDriverFileName("DriverTest");
+    pythonDriver.InitAI();
+
+    SDAData sdaData;
+    TestSegments segments = GenerateSegments();
+    sdaData.TickCount = random.NextUInt();
+    sdaData.Car = GenerateCar(segments);
+    sdaData.Situation = GenerateSituation();
+
+    SDAAction action = pythonDriver.UpdateAI(sdaData);
+
+    ASSERT_TRUE(action.Steer == 0);
+    ASSERT_TRUE(action.Accel == 5);
+    ASSERT_TRUE(action.Brake == 3);
+    ASSERT_TRUE(action.Gear == 1);
+
+    DestroySegments(segments);
+    DestroyCar(sdaData.Car);
+    DestroySituation(sdaData.Situation);
+
+    Py_Finalize();
+}
+
+TEST(PythonDriverTests, PythonDriverPythonDriverFileNameTest)
+{
+    Py_Initialize();
+    TPythonDriver pythonDriver = TPythonDriver();
+
+    pythonDriver.SetPythonDriverFileName("DriverTest");
+    ASSERT_EQ(pythonDriver.GetPythonDriverFileName(), "DriverTest");
 
     Py_Finalize();
 }

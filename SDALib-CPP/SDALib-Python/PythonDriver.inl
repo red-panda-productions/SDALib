@@ -1,30 +1,32 @@
 #include "portability.h"
 #include "PythonDriver.h"
 
-#define CREATE_PYTHON_DRIVER_IMPLEMENTATION(p_type)                                                                          \
-    template PythonDriver<p_type>::PythonDriver();                                                                           \
-    template PyObject *PythonDriver<p_type>::GetSDATypeObject(SDAData &p_data);                                              \
-    template PyObject *PythonDriver<p_type>::GetCarObject(tCarElt &p_car);                                                   \
-    template PyObject *PythonDriver<p_type>::GetCarInitObject(tInitCar &p_initCar);                                          \
-    template PyObject *PythonDriver<p_type>::GetWheelSpecificationObject(tWheelSpec &p_wheelSpec);                           \
-    template PyObject *PythonDriver<p_type>::GetVisualAttributesObject(tVisualAttributes &p_visualAttributes);               \
-    template PyObject *PythonDriver<p_type>::GetCarPublicObject(tPublicCar &p_publicCar);                                    \
-    template PyObject *PythonDriver<p_type>::GetDynamicPointObject(tDynPt &p_dynPt);                                         \
-    template PyObject *PythonDriver<p_type>::GetTrackLocationObject(tTrkLocPos &p_trackLoc);                                 \
-    template PyObject *PythonDriver<p_type>::GetTrackSegmentObject(tTrackSeg &p_trackSeg);                                   \
-    template PyObject *PythonDriver<p_type>::GetCarRaceInfoObject(tCarRaceInfo &p_carRaceInfo);                              \
-    template PyObject *PythonDriver<p_type>::GetCarPrivObject(tPrivCar &p_privCar);                                          \
-    template PyObject *PythonDriver<p_type>::GetPosDObject(tPosd &p_posD);                                                   \
-    template PyObject *PythonDriver<p_type>::GetCollisionStateObject(tCollisionState &p_collisionState);                     \
-    template PyObject *PythonDriver<p_type>::GetVectorObject(double p_x, double p_y, double p_z);                            \
-    template PyObject *PythonDriver<p_type>::GetCarCtrlObject(tCarCtrl &p_carCtrl);                                          \
-    template PyObject *PythonDriver<p_type>::GetCarSetupObject(tCarSetup &p_carSetup);                                       \
-    template PyObject *PythonDriver<p_type>::GetCarSetupItemObject(tCarSetupItem &p_carSetupItem);                           \
-    template PyObject *PythonDriver<p_type>::GetCarPitCmdObject(tCarPitCmd &p_carPitCmd);                                    \
-    template PyObject *PythonDriver<p_type>::GetSituationObject(tSituation &p_situation);                                    \
-    template PyObject *PythonDriver<p_type>::GetRaceInfoObject(tRaceAdmInfo &p_raceInfo);                                    \
-    template PyObject *PythonDriver<p_type>::GetObjectFromArgs(PyObject *p_classInit, PyObject *p_initArgs[], int p_length); \
-    template void PythonDriver<p_type>::FillCarSetupArray(int p_start, int p_end, PyObject *p_carSetupArray[], tCarSetupItem *p_carSetupItems);
+#define CREATE_PYTHON_DRIVER_IMPLEMENTATION(p_type)                                                                                             \
+    template PythonDriver<p_type>::PythonDriver();                                                                                              \
+    template PyObject *PythonDriver<p_type>::GetSDATypeObject(SDAData &p_data);                                                                 \
+    template PyObject *PythonDriver<p_type>::GetCarObject(tCarElt &p_car);                                                                      \
+    template PyObject *PythonDriver<p_type>::GetCarInitObject(tInitCar &p_initCar);                                                             \
+    template PyObject *PythonDriver<p_type>::GetWheelSpecificationObject(tWheelSpec &p_wheelSpec);                                              \
+    template PyObject *PythonDriver<p_type>::GetVisualAttributesObject(tVisualAttributes &p_visualAttributes);                                  \
+    template PyObject *PythonDriver<p_type>::GetCarPublicObject(tPublicCar &p_publicCar);                                                       \
+    template PyObject *PythonDriver<p_type>::GetDynamicPointObject(tDynPt &p_dynPt);                                                            \
+    template PyObject *PythonDriver<p_type>::GetTrackLocationObject(tTrkLocPos &p_trackLoc);                                                    \
+    template PyObject *PythonDriver<p_type>::GetTrackSegmentObject(tTrackSeg &p_trackSeg);                                                      \
+    template PyObject *PythonDriver<p_type>::GetCarRaceInfoObject(tCarRaceInfo &p_carRaceInfo);                                                 \
+    template PyObject *PythonDriver<p_type>::GetCarPrivObject(tPrivCar &p_privCar);                                                             \
+    template PyObject *PythonDriver<p_type>::GetPosDObject(tPosd &p_posD);                                                                      \
+    template PyObject *PythonDriver<p_type>::GetCollisionStateObject(tCollisionState &p_collisionState);                                        \
+    template PyObject *PythonDriver<p_type>::GetVectorObject(double p_x, double p_y, double p_z);                                               \
+    template PyObject *PythonDriver<p_type>::GetCarCtrlObject(tCarCtrl &p_carCtrl);                                                             \
+    template PyObject *PythonDriver<p_type>::GetCarSetupObject(tCarSetup &p_carSetup);                                                          \
+    template PyObject *PythonDriver<p_type>::GetCarSetupItemObject(tCarSetupItem &p_carSetupItem);                                              \
+    template PyObject *PythonDriver<p_type>::GetCarPitCmdObject(tCarPitCmd &p_carPitCmd);                                                       \
+    template PyObject *PythonDriver<p_type>::GetSituationObject(tSituation &p_situation);                                                       \
+    template PyObject *PythonDriver<p_type>::GetRaceInfoObject(tRaceAdmInfo &p_raceInfo);                                                       \
+    template PyObject *PythonDriver<p_type>::GetObjectFromArgs(PyObject *p_classInit, PyObject *p_initArgs[], int p_length);                    \
+    template void PythonDriver<p_type>::FillCarSetupArray(int p_start, int p_end, PyObject *p_carSetupArray[], tCarSetupItem *p_carSetupItems); \
+    template void PythonDriver<p_type>::SetPythonDriverFileName(std::string p_fileName);                                                        \
+    template std::string PythonDriver<p_type>::GetPythonDriverFileName();
 
 /// @brief Constructs PythonDriver and sets up python code
 template <typename PointerManager>
@@ -42,6 +44,8 @@ PythonDriver<PointerManager>::PythonDriver()
     // initialize the SDAType data type
     PyObject *sdaTypesModuleName = PyUnicode_FromString("SDATypes");
     PyObject *sdaTypesModule = PyImport_Import(sdaTypesModuleName);
+
+    if (!PyModule_Check(sdaTypesModule)) return;
     PyObject *sdaTypesDict = PyModule_GetDict(sdaTypesModule);
 
     std::string py_class_name = "SDATypes";
@@ -109,22 +113,17 @@ PythonDriver<PointerManager>::PythonDriver()
 template <typename PointerManager>
 void PythonDriver<PointerManager>::InitAI()
 {
-    try
-    {
-        PyObject *driverModuleName = PyUnicode_DecodeFSDefault("Driver");
-        PyObject *driverModule = PyImport_Import(driverModuleName);
-        PyObject *driverDict = PyModule_GetDict(driverModule);
+    PyObject *driverModuleName = PyUnicode_DecodeFSDefault(m_pythonDriverFileName.c_str());
+    PyObject *driverModule = PyImport_Import(driverModuleName);
 
-        std::string py_class_name = "SDADriver";
-        PyObject *driverClass = PyDict_GetItemString(driverDict, py_class_name.c_str());
+    if (!PyModule_Check(driverModule)) return;
+    PyObject *driverDict = PyModule_GetDict(driverModule);
+    std::string py_class_name = "SDADriver";
+    PyObject *driverClass = PyDict_GetItemString(driverDict, py_class_name.c_str());
 
-        PyObject *py_arg_tuple = PyTuple_New(0);
-        m_pythonDriver = PyObject_CallObject(driverClass, py_arg_tuple);
-    }
-    catch (std::exception &)
-    {
-        PyErr_Print();
-    }
+    if (!PyCallable_Check(driverClass)) return;
+    PyObject *py_arg_tuple = PyTuple_New(0);
+    m_pythonDriver = PyObject_CallObject(driverClass, py_arg_tuple);
 }
 
 /// @brief          Updates the python AI by passing the data to python
@@ -134,20 +133,17 @@ template <typename PointerManager>
 SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
 {
     SDAAction action;
-    try
-    {
-        PyObject *args = GetSDATypeObject(p_data);
-        PyObject *result = PyList_AsTuple(
-            PyObject_CallMethod(m_pythonDriver, "UpdateAI", NULL, args));  // TODO: maybe change format
-        action.Steer = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 0)));
-        action.Accel = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 1)));
-        action.Brake = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 2)));
-        action.Gear = static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(result, 3)));
-    }
-    catch (std::exception &)
-    {
-        PyErr_Print();
-    }
+
+    PyObject *sdaType = GetSDATypeObject(p_data);
+    PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
+    PyObject *result = PyObject_CallMethodOneArg(m_pythonDriver, updateAIFuncName, sdaType);
+
+    if (result == NULL) return action;
+
+    action.Steer = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 0)));
+    action.Accel = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 1)));
+    action.Brake = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 2)));
+    action.Gear = static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(result, 3)));
 
     return action;
 }
@@ -842,4 +838,20 @@ PyObject *PythonDriver<PointerManager>::GetObjectFromArgs(PyObject *p_classInit,
     PyObject *objectInit = PyObject_CallObject(p_classInit, initArgsPy);
 
     return objectInit;
+}
+
+/// @brief sets the python driver file name
+/// @param p_fileName the python driver file name
+template <typename PointerManager>
+void PythonDriver<PointerManager>::SetPythonDriverFileName(std::string p_fileName)
+{
+    m_pythonDriverFileName = p_fileName;
+}
+
+/// @brief gets the python driver file name
+/// @return the python driver file name
+template <typename PointerManager>
+std::string PythonDriver<PointerManager>::GetPythonDriverFileName()
+{
+    return m_pythonDriverFileName;
 }

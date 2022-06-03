@@ -1,11 +1,15 @@
 #include <gtest/gtest.h>
 #include "Mocks/PythonDriverMock.h"
 #include "Mocks/PointerManagerMock.h"
+#include "PythonDriver.h"
+#include "PythonDriver.inl"
 #include "ServerSocket.h"
 #include <thread>
 #include "Utils.h"
 #include "msgpack.hpp"
 
+CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
+#define TPythonDriver    PythonDriver<PointerManagerMock>
 #define TEST_BUFFER_SIZE 8192
 
 SDAData* pythonPointer;

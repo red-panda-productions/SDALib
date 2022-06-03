@@ -26,6 +26,9 @@ class PythonDriver : public AIInterface<PointerManager>
 public:
     PythonDriver();
 
+    void SetPythonDriverFileName(std::string p_fileName);
+    std::string GetPythonDriverFileName();
+
 #ifdef TEST
 public:
 #else
@@ -68,9 +71,14 @@ private:
 
     PyObject* m_pythonDriver;
 
-    void FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetupArray[], tCarSetupItem* p_carSetupItems);
+    std::string m_pythonDriverFileName = "Driver";
 
+    void FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetupArray[], tCarSetupItem* p_carSetupItems);
+#ifdef TEST
+public:
+#else
 protected:
+#endif
     void InitAI() override;
 
     SDAAction UpdateAI(SDAData& p_data) override;

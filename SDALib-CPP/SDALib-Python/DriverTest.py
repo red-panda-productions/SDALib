@@ -20,7 +20,7 @@ class SDADriver:
         # SaveToDatabase(str(brake))
         # SaveToDatabase(str(accel))
 
-        return 0, self.clamp(accel, 0, 1), self.clamp(brake, 0, 1), 0  # steer, accel, brake, clutch
+        return 0, 5, 3, 1  # steer, accel, brake, clutch
 
     def clamp(self, value, min_value, max_value):
         if value < min_value:
