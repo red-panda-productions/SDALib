@@ -1,5 +1,10 @@
 #include "SDASpeedDreams.hpp"
+#include "sim.h"
 
+/// @brief sets tCarElt to tCar
+/// @param p_other the tCar car
+/// @param p_carElt the tCarElt car
+/// @return a new tCar
 tCar CarConstructor(const tCar& p_other, tCarElt* p_carElt)
 {
     tCar car(p_other);

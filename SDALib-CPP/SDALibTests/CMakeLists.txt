@@ -15,7 +15,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(
-  SDATests "GeneratorUtils.h" "GeneratorUtils.cpp" "Random.hpp" "SDAActionTest.cpp" "Utils.h" "PythonDriverTest.cpp" "SDADriverTest.cpp" "PythonSDATypeTest.cpp" "Mocks/SDADriverMock.h" "Mocks/PointerManagerMock.h" "Mocks/PythonDriverMock.h")
+  SDATests "GeneratorUtils.h" "GeneratorUtils.cpp" "Random.hpp" "SDAActionTest.cpp" "Utils.h" "SDADriverTest.cpp" "PythonSDATypeTest.cpp" "Mocks/SDADriverMock.h" "Mocks/PointerManagerMock.h")
 
 target_link_libraries(
   SDATests
@@ -54,6 +54,7 @@ IF(OPEN_CPP_COVERAGE OR GCOVR)
 ENDIF(OPEN_CPP_COVERAGE OR GCOVR)
 
 INSTALL_PYTHON_FILES(SDATests)
+INSTALL_PYTHON_TEST_FILES(SDATests)
 
 IF(OPEN_CPP_COVERAGE)
 	STRING(REGEX REPLACE "/" "\\\\" SOURCEDIR ${CMAKE_SOURCE_DIR})

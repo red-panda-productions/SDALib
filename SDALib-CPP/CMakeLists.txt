@@ -15,8 +15,6 @@ CMAKE_POLICY(SET CMP0012 NEW)
 CMAKE_POLICY(SET CMP0074 NEW)
 cmake_policy(SET CMP0079 NEW)
 
-#SET(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
-
 IF(WIN32)
     find_program(OPEN_CPP_COVERAGE "OpenCppCoverage")
     if(OPEN_CPP_COVERAGE)
@@ -54,7 +52,6 @@ FIND_SDA_PACKAGES()
 FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 # Include sub-projects.
 add_subdirectory ("SDALib-CPP")
-option(OPTION_SDALIB_PYTHON "installs the python package" FALSE)
 add_subdirectory ("SDALib-Python")
 add_subdirectory ("Samples")
 add_subdirectory ("SpeedDreams")

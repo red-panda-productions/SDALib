@@ -12,7 +12,7 @@ CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
 #define TPythonDriver PythonDriver<PointerManagerMock>
 #define TEST_COUNT    10
 
-// check all classes are callable
+/// @brief Checks all classes from SDATypes are callable
 TEST(PythonDriverTests, PythonDriverInitTest)
 {
     Py_Initialize();
@@ -42,6 +42,11 @@ TEST(PythonDriverTests, PythonDriverInitTest)
     Py_Finalize();
 }
 
+/// @brief checks the python vector object correspond to the original values
+/// @param  p_x The original x value
+/// @param  p_y The original y value
+/// @param  p_z The original z value
+/// @param  p_vecObject The vector data python object
 void CheckVectorData(float p_x, float p_y, float p_z, PyObject* p_vecObject)
 {
     PyObject* xAttr = PyUnicode_FromString("x");
@@ -57,6 +62,9 @@ void CheckVectorData(float p_x, float p_y, float p_z, PyObject* p_vecObject)
     ASSERT_TRUE(static_cast<double>(p_z) == PyFloat_AsDouble(zVal));
 }
 
+/// @brief checks the collision state python object corresponds to the original collision state values
+/// @param  p_collisionState The original collision state value
+/// @param  p_collisionStateObject The python collision state object
 void CheckCollisionStateObject(tCollisionState& p_collisionState, PyObject* p_collisionStateObject)
 {
     PyObject* collisionCountAttr = PyUnicode_FromString("collisionCount");
@@ -72,6 +80,9 @@ void CheckCollisionStateObject(tCollisionState& p_collisionState, PyObject* p_co
     CheckVectorData(p_collisionState.force[0], p_collisionState.force[1], p_collisionState.force[2], forceVal);
 }
 
+/// @brief checks the wheel python object corresponds to the original wheel values
+/// @param  p_wheelSpec The original wheel value
+/// @param  p_wheelObject The python wheel object
 void CheckWheelData(tWheelSpec& p_wheelSpec, PyObject* p_wheelObject)
 {
     PyObject* rimRadiusAttr = PyUnicode_FromString("rimRadius");
@@ -95,6 +106,9 @@ void CheckWheelData(tWheelSpec& p_wheelSpec, PyObject* p_wheelObject)
     ASSERT_TRUE(static_cast<double>(p_wheelSpec.wheelRadius) == PyFloat_AsDouble(wheelRadiusVal));
 }
 
+/// @brief checks the visual attribute python object corresponds to the original visual attribute values
+/// @param  p_visualAttributes The original visual attribute value
+/// @param  p_visualAttributesObject The python visual attribute object
 void CheckVisualAttrData(tVisualAttributes& p_visualAttributes, PyObject* p_visualAttributesObject)
 {
     PyObject* exhaustNbAttr = PyUnicode_FromString("exhaustNb");
@@ -111,6 +125,9 @@ void CheckVisualAttrData(tVisualAttributes& p_visualAttributes, PyObject* p_visu
     ASSERT_TRUE(static_cast<double>(p_visualAttributes.exhaustPower) == PyFloat_AsDouble(exhaustPowerVal));
 }
 
+/// @brief checks the init car python object corresponds to the original init car values
+/// @param  p_initCar The original init car value
+/// @param  p_initCarObject The python init car object
 void CheckInitCarData(tInitCar& p_initCar, PyObject* p_initCarObject)
 {
     PyObject* nameAttr = PyUnicode_FromString("name");
@@ -211,6 +228,9 @@ void CheckInitCarData(tInitCar& p_initCar, PyObject* p_initCarObject)
     ASSERT_TRUE(p_initCar.skinTargets == static_cast<int>(PyLong_AsLong(skinTargetsVal)));
 }
 
+/// @brief checks the dynamic point python object corresponds to the original dynamic point values
+/// @param  p_dynPt The original dynamic point value
+/// @param  p_dynPtObject The python dynamic point object
 void CheckDynamicPointData(tDynPt& p_dynPt, PyObject* p_dynPtObject)
 {
     PyObject* posAttr = PyUnicode_FromString("pos");
@@ -226,6 +246,9 @@ void CheckDynamicPointData(tDynPt& p_dynPt, PyObject* p_dynPtObject)
     CheckVectorData(p_dynPt.acc.x, p_dynPt.acc.y, p_dynPt.acc.z, accVal);
 }
 
+/// @brief checks the matrix python object corresponds to the original matrix values
+/// @param  p_posMat The original matrix value
+/// @param  p_posMatObject The python matrix object
 void CheckMatrixData(sgMat4& p_posMat, PyObject* p_posMatObject)
 {
     PyObject* p_posMatTuple = PyList_AsTuple(p_posMatObject);
@@ -255,6 +278,9 @@ void CheckMatrixData(sgMat4& p_posMat, PyObject* p_posMatObject)
     ASSERT_TRUE(p_posMat[3][3] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 3))));
 }
 
+/// @brief checks the track segment python object corresponds to the original track segment values
+/// @param  p_trackSegObject The original track segment value
+/// @param  p_trackSeg The python track segment object
 void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
 {
     PyObject* idAttr = PyUnicode_FromString("id");
@@ -375,6 +401,9 @@ void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
     // ASSERT_TRUE(static_cast<double>(p_trackSeg.SpeedLimit) == PyFloat_AsDouble(speedLimitVal));
 }
 
+/// @brief checks the track location python object corresponds to the original track location values
+/// @param  p_trackLocObject The original track location value
+/// @param  p_trackLoc The python track location object
 void CheckTrackLocationData(tTrkLocPos& p_trackLoc, PyObject* p_trackLocObject)
 {
     PyObject* segAttr = PyUnicode_FromString("seg");
@@ -402,6 +431,9 @@ void CheckTrackLocationData(tTrkLocPos& p_trackLoc, PyObject* p_trackLocObject)
     ASSERT_TRUE(static_cast<double>(p_trackLoc.toLeft) == PyFloat_AsDouble(toLeftVal));
 }
 
+/// @brief checks the public car python object corresponds to the original public car values
+/// @param  p_publicCar The original public car value
+/// @param  p_publicCarObject The python public car object
 void CheckPublicCarData(tPublicCar& p_publicCar, PyObject* p_publicCarObject)
 {
     PyObject* dynGCAttr = PyUnicode_FromString("dynGC");
@@ -429,6 +461,9 @@ void CheckPublicCarData(tPublicCar& p_publicCar, PyObject* p_publicCarObject)
     ASSERT_TRUE(p_publicCar.state == static_cast<int>(PyLong_AsLong(stateVal)));
 }
 
+/// @brief checks the car race info python object corresponds to the original car race info values
+/// @param  p_carRaceInfo The original car race info value
+/// @param  p_carRaceInfoObject The python car race info object
 void CheckCarRaceInfoData(tCarRaceInfo& p_carRaceInfo, PyObject* p_carRaceInfoObject)
 {
     PyObject* bestLapTimeAttr = PyUnicode_FromString("bestLapTime");
@@ -540,6 +575,9 @@ void CheckCarRaceInfoData(tCarRaceInfo& p_carRaceInfo, PyObject* p_carRaceInfoOb
     ASSERT_TRUE(p_carRaceInfo.wrongWayTime == static_cast<float>(PyFloat_AsDouble(wrongWayTimeVal)));
 }
 
+/// @brief checks the posD python object corresponds to the original posD values
+/// @param  p_posD The original posD value
+/// @param  p_trackSegObject The python posD object
 void CheckPosDObject(tPosd& p_posD, PyObject* p_trackSegObject)
 {
     PyObject* xAttr = PyUnicode_FromString("x");
@@ -571,6 +609,9 @@ void CheckPosDObject(tPosd& p_posD, PyObject* p_trackSegObject)
     ASSERT_TRUE(static_cast<double>(p_posD.az) == PyFloat_AsDouble(azVal));
 }
 
+/// @brief checks the private car python object corresponds to the original private car values
+/// @param  p_privCar The original private car value
+/// @param  p_privCarObject The python private car object
 void CheckPrivCarData(tPrivCar& p_privCar, PyObject* p_privCarObject)
 {
     PyObject* driverIndexAttr = PyUnicode_FromString("driverIndex");
@@ -736,6 +777,9 @@ void CheckPrivCarData(tPrivCar& p_privCar, PyObject* p_privCarObject)
     ASSERT_TRUE(p_privCar.dashboardActiveItem == static_cast<int>(PyLong_AsLong(dashboardActiveItemVal)));
 }
 
+/// @brief checks the car control python object corresponds to the original car control values
+/// @param  p_carCtrl The original car control value
+/// @param  p_carCtrlObject The python car control object
 void CheckCarCtrlData(tCarCtrl& p_carCtrl, PyObject* p_carCtrlObject)
 {
     PyObject* steerAttr = PyUnicode_FromString("steer");
@@ -834,6 +878,9 @@ void CheckCarCtrlData(tCarCtrl& p_carCtrl, PyObject* p_carCtrlObject)
     ASSERT_TRUE(p_carCtrl.msgColor[3] == static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorVal, 3))));
 }
 
+/// @brief checks the car setup item python object corresponds to the original car setup item values
+/// @param  p_carSetupItem The original car setup item value
+/// @param  p_carSetupItemObject The python car setup item object
 void CheckCarSetupItemData(tCarSetupItem& p_carSetupItem, PyObject* p_carSetupItemObject)
 {
     PyObject* valueAttr = PyUnicode_FromString("value");
@@ -861,6 +908,9 @@ void CheckCarSetupItemData(tCarSetupItem& p_carSetupItem, PyObject* p_carSetupIt
     ASSERT_TRUE(p_carSetupItem.changed == static_cast<bool>(PyLong_AsLong(changedVal)));
 }
 
+/// @brief checks the car pit cmd python object corresponds to the original car pit cmd values
+/// @param  p_carPitCmd The original car pit cmd value
+/// @param  p_carPitCmdObject The python car pit cmd object
 void CheckCarPitCmdData(tCarPitCmd& p_carPitCmd, PyObject* p_carPitCmdObject)
 {
     PyObject* fuelAttr = PyUnicode_FromString("fuel");
@@ -884,6 +934,9 @@ void CheckCarPitCmdData(tCarPitCmd& p_carPitCmd, PyObject* p_carPitCmdObject)
     ASSERT_TRUE(p_carPitCmd.tireChange == static_cast<bool>(PyLong_AsLong(tireChangeVal)));
 }
 
+/// @brief checks the car setup python object corresponds to the original car setup values
+/// @param  p_carSetup The original car setup value
+/// @param  p_carSetupObject The python car setup object
 void CheckCarSetupData(tCarSetup& p_carSetup, PyObject* p_carSetupObject)
 {
     PyObject* fRWeightRepAttr = PyUnicode_FromString("fRWeightRep");
@@ -1165,6 +1218,9 @@ void CheckCarSetupData(tCarSetup& p_carSetup, PyObject* p_carSetupObject)
     CheckCarSetupItemData(p_carSetup.reqPenalty, reqPenaltyVal);
 }
 
+/// @brief checks the race info python object corresponds to the original race info values
+/// @param  p_raceInfo The original race info value
+/// @param  p_raceInfoObject The python race info object
 void CheckRaceInfoData(tRaceAdmInfo& p_raceInfo, PyObject* p_raceInfoObject)
 {
     PyObject* ncarsAttr = PyUnicode_FromString("ncars");
@@ -1204,6 +1260,9 @@ void CheckRaceInfoData(tRaceAdmInfo& p_raceInfo, PyObject* p_raceInfoObject)
     ASSERT_TRUE(p_raceInfo.features == static_cast<int>(PyLong_AsLong(featuresVal)));
 }
 
+/// @brief checks the situation python object corresponds to the original situation values
+/// @param  p_situation The original situation value
+/// @param  p_situationObject The python situation object
 void CheckSituationData(tSituation& p_situation, PyObject* p_situationObject)
 {
     PyObject* raceInfoAttr = PyUnicode_FromString("raceInfo");
@@ -1227,6 +1286,9 @@ void CheckSituationData(tSituation& p_situation, PyObject* p_situationObject)
     ASSERT_TRUE(p_situation.nbPlayers == static_cast<int>(PyLong_AsLong(nbPlayersVal)));
 }
 
+/// @brief checks the car python object corresponds to the original car values
+/// @param  p_car The original car value
+/// @param  p_carObject The python car object
 void CheckCarData(tCarElt& p_car, PyObject* p_carObject)
 {
     PyObject* indexAttr = PyUnicode_FromString("index");
@@ -1262,6 +1324,9 @@ void CheckCarData(tCarElt& p_car, PyObject* p_carObject)
     CheckCarPitCmdData(p_car.pitcmd, pitcmdVal);
 }
 
+/// @brief checks the sda data python object corresponds to the original sda data values
+/// @param  p_data The original sda data value
+/// @param  p_dataObject The python sda data object
 void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
 {
     PyObject* tickAttr = PyUnicode_FromString("tickCount");
@@ -1277,6 +1342,7 @@ void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
     CheckSituationData(p_data.Situation, situationVal);
 }
 
+/// @brief tests the sda data c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
 {
     Py_Initialize();
@@ -1303,6 +1369,7 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the car c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
 {
     Py_Initialize();
@@ -1324,6 +1391,7 @@ TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the init car c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
 {
     Py_Initialize();
@@ -1345,6 +1413,7 @@ TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the public car c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
 {
     Py_Initialize();
@@ -1366,6 +1435,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the car race info c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
 {
     Py_Initialize();
@@ -1387,6 +1457,7 @@ TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the private car c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
 {
     Py_Initialize();
@@ -1408,6 +1479,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the car control c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
 {
     Py_Initialize();
@@ -1429,6 +1501,7 @@ TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the car setup c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
 {
     Py_Initialize();
@@ -1450,6 +1523,7 @@ TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the car pit cmd c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
 {
     Py_Initialize();
@@ -1471,6 +1545,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests the situation c++ data correctly translated to python and back
 TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
 {
     Py_Initialize();
@@ -1490,6 +1565,7 @@ TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
     Py_Finalize();
 }
 
+/// @brief tests whether the python function UpdateAI give back the correct c++ data
 TEST(PythonDriverTests, PythonDriverUpdateAITest)
 {
     Py_Initialize();
@@ -1508,10 +1584,10 @@ TEST(PythonDriverTests, PythonDriverUpdateAITest)
 
     SDAAction action = pythonDriver.UpdateAI(sdaData);
 
-    ASSERT_TRUE(action.Steer == 0);
-    ASSERT_TRUE(action.Accel == 5);
-    ASSERT_TRUE(action.Brake == 3);
-    ASSERT_TRUE(action.Gear == 1);
+    ASSERT_TRUE(action.Steer == sdaData.Car.pub.DynGC.vel.x);
+    ASSERT_TRUE(action.Accel == sdaData.Situation.deltaTime);
+    ASSERT_TRUE(action.Brake == sdaData.Situation.raceInfo.totTime);
+    ASSERT_TRUE(action.Gear == 0);
 
     DestroySegments(segments);
     DestroyCar(sdaData.Car);
@@ -1520,6 +1596,7 @@ TEST(PythonDriverTests, PythonDriverUpdateAITest)
     Py_Finalize();
 }
 
+/// @brief tests whether the driver file name is correctly get and set
 TEST(PythonDriverTests, PythonDriverPythonDriverFileNameTest)
 {
     Py_Initialize();

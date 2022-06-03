@@ -8,14 +8,14 @@
 #include "SDAData.hpp"
 #ifdef _DEBUG
 #undef _DEBUG
-#include <python.h>
+#include <Python.h>
 #define _DEBUG
 #else
 #include <Python.h>
 #endif
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
 #include <stdlib.h>
 #include <iostream>
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
 #include <experimental/filesystem>
 
 namespace filesystem = std::experimental::filesystem;
