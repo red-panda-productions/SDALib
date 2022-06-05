@@ -20,6 +20,7 @@
 
 namespace filesystem = std::experimental::filesystem;
 
+///@brief class for connecting SDALib to a Python decision maker
 template <typename PointerManager>
 class PythonDriver : public AIInterface<PointerManager>
 {
