@@ -396,9 +396,9 @@ void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
     PyObject* doVFactorVal = PyObject_GetAttr(p_trackSegObject, doVFactorAttr);
     ASSERT_TRUE(static_cast<double>(p_trackSeg.DoVfactor) == PyFloat_AsDouble(doVFactorVal));
 
-    // TODO: PyObject* speedLimitAttr = PyUnicode_FromString("speedLimit");
-    // PyObject* speedLimitVal = PyObject_GetAttr(p_trackSegObject, speedLimitAttr);
-    // ASSERT_TRUE(static_cast<double>(p_trackSeg.SpeedLimit) == PyFloat_AsDouble(speedLimitVal));
+    PyObject* speedLimitAttr = PyUnicode_FromString("speedLimit");
+    PyObject* speedLimitVal = PyObject_GetAttr(p_trackSegObject, speedLimitAttr);
+    ASSERT_TRUE(static_cast<double>(p_trackSeg.SpeedLimit) == PyFloat_AsDouble(speedLimitVal));
 }
 
 /// @brief checks the track location python object corresponds to the original track location values

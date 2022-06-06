@@ -364,8 +364,7 @@ PyObject *PythonDriver<PointerManager>::GetTrackLocationObject(tTrkLocPos &p_tra
 template <typename PointerManager>
 PyObject *PythonDriver<PointerManager>::GetTrackSegmentObject(tTrackSeg &p_trackSeg)
 {
-    const int size = 35;
-    // TODO: const int size = 36;
+    const int size = 36;
     PyObject *trackSegArgs[size];
 
     trackSegArgs[0] = PyLong_FromLong(static_cast<long>(p_trackSeg.id));
@@ -407,7 +406,7 @@ PyObject *PythonDriver<PointerManager>::GetTrackSegmentObject(tTrackSeg &p_track
     trackSegArgs[32] = PyFloat_FromDouble(p_trackSeg.height);
     trackSegArgs[33] = PyLong_FromLong(static_cast<long>(p_trackSeg.raceInfo));
     trackSegArgs[34] = PyFloat_FromDouble(p_trackSeg.DoVfactor);
-    // TODO: trackSegArgs[35] = PyFloat_FromDouble(p_trackSeg.SpeedLimit);
+    trackSegArgs[35] = PyFloat_FromDouble(p_trackSeg.SpeedLimit);
 
     PyObject *trackSegment = GetObjectFromArgs(m_trackSegmentClass, trackSegArgs, size);
 
