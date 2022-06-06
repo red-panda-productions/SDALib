@@ -71,7 +71,10 @@ public:
         : SDADriver()
     {
         m_replayFile.open(p_replayFile, std::ios::binary);
-        if (!m_replayFile.good()) throw std::exception("Could not open replay file");
+        if (!m_replayFile.good())
+        {
+            SDA_THROW_EXCEPTION("Could not open replay file");
+        }
         SET_TICK_TO_ACT
     }
 
