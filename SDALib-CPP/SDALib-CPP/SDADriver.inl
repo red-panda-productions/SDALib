@@ -13,7 +13,7 @@
 /// @param  p_buffer	 The character buffer
 ///	@param  p_bufferSize The buffer size
 /// @param  p_vector	 The result vector
-void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std::string>& p_vector)
+inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std::string>& p_vector)
 {
     msgpack::unpacked msg;
     msgpack::unpack(msg, p_buffer, p_bufferSize);
