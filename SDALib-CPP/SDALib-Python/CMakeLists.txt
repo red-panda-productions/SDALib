@@ -1,45 +1,39 @@
 project(SDALib-Python)
 include(../cmake/SDAMacros.cmake)
 
-FIND_PACKAGE(Python3 COMPONENTS Interpreter Development)
 
-add_executable(SDALib-Python "PythonDriver.cpp" "PythonDriver.h")
+add_executable(SDALib-Python "PythonDriver.cpp" "PythonDriver.h" "PythonDriver.inl")
 
-MESSAGE(STATUS ${Python3_LIBRARY_DIRS})
+add_library(SDALib-Pythonlib "PythonDriver.cpp" "PythonDriver.h" "PythonDriver.inl")
+
+target_compile_definitions(SDALib-Pythonlib PUBLIC "SDA_LIBRARY")
 
 target_link_libraries(
         SDALib-Python
         SDALib
-        ${Python3_LIBRARY_DIRS}/python310.lib
+        Python3::Python
 )
-
 target_link_libraries(
-    SDALib-Python
-    ${IPCLIB_LIB_DIR}/boost_python310-vc143-mt-gd-x32-1_78.lib
+        SDALib-Pythonlib
+        SDALib
+        Python3::Python
 )
-
-add_custom_command(TARGET SDALib-Python POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${IPCLIB_BIN_DIR}/boost_python310-vc143-mt-gd-x32-1_78.dll" $<TARGET_FILE_DIR:SDALib-Python>
-    COMMAND_EXPAND_LISTS
-)
-
-
-target_include_directories(SDALib-Python PUBLIC "../SDALib-CPP")
-
-target_include_directories(SDALib-Python PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
 
 INSTALL_SDA_PACKAGES(SDALib-Python)
+INSTALL_SDA_PACKAGES(SDALib-Pythonlib)
 
+target_include_directories(SDALib-Python PUBLIC "../SDALib-CPP")
+target_include_directories(SDALib-Pythonlib PUBLIC "../SDALib-CPP")
+
+
+target_include_directories(SDALib-Python PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
+target_include_directories(SDALib-Pythonlib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
+
+INSTALL_PYTHON_FILES(SDALib-Python)
+INSTALL_PYTHON_FILES(SDALib-Pythonlib)
 IF(UNIX)
     TARGET_LINK_LIBRARIES(SDALib-Python rt)
+    TARGET_LINK_LIBRARIES(SDALib-Pythonlib rt)
 ENDIF(UNIX)
 
-add_custom_command(TARGET SDALib-Python POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/Driver.py" $<TARGET_FILE_DIR:SDALib-Python>
-    COMMAND_EXPAND_LISTS
-)
 
-add_custom_command(TARGET SDALib-Python POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/SDATypes.py" $<TARGET_FILE_DIR:SDALib-Python>
-    COMMAND_EXPAND_LISTS
-)

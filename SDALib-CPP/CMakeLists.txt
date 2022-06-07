@@ -49,15 +49,14 @@ SET(ENV{SOLID_DIR} "${CMAKE_SOURCE_DIR}/../libraries")
 
 FIND_SDA_PACKAGES()
 
+FIND_PACKAGE(Python3 COMPONENTS Interpreter Development REQUIRED)
 # Include sub-projects.
 add_subdirectory ("SDALib-CPP")
-add_subdirectory ("SDALibTests")
+add_subdirectory ("SDALib-Python")
 add_subdirectory ("Samples")
 add_subdirectory ("SpeedDreams")
 add_subdirectory ("SDAReplay")
+add_subdirectory ("SDALibTests")
 
-option(OPTION_SDALIB_PYTHON "installs the python package" FALSE)
-IF(OPTION_SDALIB_PYTHON)
-	add_subdirectory ("SDALib-Python")
-ENDIF(OPTION_SDALIB_PYTHON)
+
 

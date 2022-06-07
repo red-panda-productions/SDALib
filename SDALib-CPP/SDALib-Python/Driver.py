@@ -1,8 +1,34 @@
+import SDATypes
 
 
 class SDADriver:
-    def InitAI(self):
+    speedLimit = 80
+
+    def __init__(self):
         return
 
-    def UpdateAI(self,SDAData):
-        return (0.4, 0.2, 0.5, 1)
+    # returns the decision maker action from the current SDAData
+    def UpdateAI(self, SDAData):
+        # find the velocity of the car
+        speed = SDAData.car.pub.dynGC.vel.x * 3.6
+        self.speedLimit = SDAData.speedLimit
+
+        accel = 0  # float between 0 and 1
+        brake = 0  # float between 0 and 1
+
+        # brake if the user goes over the speed limit
+        if speed > self.speedLimit:
+            brake = (speed - self.speedLimit) / 10
+        # accelerate if the user goes under the speed limit
+        elif speed < self.speedLimit:
+            accel = (self.speedLimit - speed) / 10
+
+        return 0, self.clamp(accel, 0, 1), self.clamp(brake, 0, 1), 0  # steer, accel, brake, clutch
+
+    # clamps the values value between min_value and max_value
+    def clamp(self, value, min_value, max_value):
+        if value < min_value:
+            return min_value
+        if value > max_value:
+            return max_value
+        return value

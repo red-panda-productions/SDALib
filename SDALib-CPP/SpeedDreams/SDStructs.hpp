@@ -435,6 +435,7 @@ typedef struct trackSeg
 #define TR_FENCE	3           /**< Fence (no width) (barrier only) */
 #define TR_PITBUILDING	4       /**< Pit building wall (barrier only) */
 
+    float SpeedLimit;           // SIMULATED DRIVING ASSISTANCE: added a speed limit to the track
     float length;               /**< Length in meters of the middle of the track */
     float width;                /**< Width of the segment (if constant width) */
     float startWidth;           /**< Width of the beginning of the segment */
