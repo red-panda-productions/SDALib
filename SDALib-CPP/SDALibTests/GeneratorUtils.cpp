@@ -106,7 +106,7 @@ tTrackSeg GenerateSegment()
     segment.height = random.NextFloat();
     segment.raceInfo = random.NextInt(1024);
     segment.DoVfactor = random.NextFloat();
-    // TODO: segment.SpeedLimit = random.NextFloat();
+    segment.SpeedLimit = random.NextFloat();
     segment.ext = nullptr;      // COPY NOT IMPLEMENTED
     segment.surface = nullptr;  // COPY NOT IMPLEMENTED
     for (int i = 0; i < 2; i++)
