@@ -2,37 +2,55 @@
 #include "PythonDriver.h"
 #include "IPCPointerManager.h"
 
-
 #define CREATE_PYTHON_DRIVER_IMPLEMENTATION(p_type)                                                                                             \
     template PythonDriver<p_type>::PythonDriver();                                                                                              \
-    template PyObject *PythonDriver<p_type>::GetSDATypeObject(SDAData &p_data);                                                                 \
-    template PyObject *PythonDriver<p_type>::GetCarObject(tCarElt &p_car);                                                                      \
-    template PyObject *PythonDriver<p_type>::GetCarInitObject(tInitCar &p_initCar);                                                             \
-    template PyObject *PythonDriver<p_type>::GetWheelSpecificationObject(tWheelSpec &p_wheelSpec);                                              \
-    template PyObject *PythonDriver<p_type>::GetVisualAttributesObject(tVisualAttributes &p_visualAttributes);                                  \
-    template PyObject *PythonDriver<p_type>::GetCarPublicObject(tPublicCar &p_publicCar);                                                       \
-    template PyObject *PythonDriver<p_type>::GetDynamicPointObject(tDynPt &p_dynPt);                                                            \
-    template PyObject *PythonDriver<p_type>::GetTrackLocationObject(tTrkLocPos &p_trackLoc);                                                    \
-    template PyObject *PythonDriver<p_type>::GetTrackSegmentObject(tTrackSeg &p_trackSeg);                                                      \
-    template PyObject *PythonDriver<p_type>::GetCarRaceInfoObject(tCarRaceInfo &p_carRaceInfo);                                                 \
-    template PyObject *PythonDriver<p_type>::GetCarPrivObject(tPrivCar &p_privCar);                                                             \
-    template PyObject *PythonDriver<p_type>::GetPosDObject(tPosd &p_posD);                                                                      \
-    template PyObject *PythonDriver<p_type>::GetCollisionStateObject(tCollisionState &p_collisionState);                                        \
-    template PyObject *PythonDriver<p_type>::GetVectorObject(double p_x, double p_y, double p_z);                                               \
-    template PyObject *PythonDriver<p_type>::GetCarCtrlObject(tCarCtrl &p_carCtrl);                                                             \
-    template PyObject *PythonDriver<p_type>::GetCarSetupObject(tCarSetup &p_carSetup);                                                          \
-    template PyObject *PythonDriver<p_type>::GetCarSetupItemObject(tCarSetupItem &p_carSetupItem);                                              \
-    template PyObject *PythonDriver<p_type>::GetCarPitCmdObject(tCarPitCmd &p_carPitCmd);                                                       \
-    template PyObject *PythonDriver<p_type>::GetSituationObject(tSituation &p_situation);                                                       \
-    template PyObject *PythonDriver<p_type>::GetRaceInfoObject(tRaceAdmInfo &p_raceInfo);                                                       \
+    template SDAAction PythonDriver<p_type>::GetCppSDAAction(PyObject *p_action);                                                               \
+    template PyObject *PythonDriver<p_type>::GetPythonSDATypeObject(SDAData &p_data);                                                           \
+    template SDAData PythonDriver<p_type>::GetCppSDAData(PyObject *p_data);                                                                     \
+    template PyObject *PythonDriver<p_type>::GetPythonCarObject(tCarElt &p_car);                                                                \
+    template tCarElt PythonDriver<p_type>::GetCppCarObject(PyObject *p_car);                                                                    \
+    template PyObject *PythonDriver<p_type>::GetPythonCarInitObject(tInitCar &p_initCar);                                                       \
+    template tInitCar PythonDriver<p_type>::GetCppCarInitObject(PyObject *p_initCar);                                                           \
+    template PyObject *PythonDriver<p_type>::GetPythonWheelSpecificationObject(tWheelSpec &p_wheelSpec);                                        \
+    template tWheelSpec PythonDriver<p_type>::GetCppWheelSpecificationObject(PyObject *p_wheelSpec);                                            \
+    template PyObject *PythonDriver<p_type>::GetPythonVisualAttributesObject(tVisualAttributes &p_visualAttributes);                            \
+    template tVisualAttributes PythonDriver<p_type>::GetCppVisualAttributesObject(PyObject *p_visualAttributes);                                \
+    template PyObject *PythonDriver<p_type>::GetPythonCarPublicObject(tPublicCar &p_publicCar);                                                 \
+    template tPublicCar PythonDriver<p_type>::GetCppCarPublicObject(PyObject *p_publicCar);                                                     \
+    template PyObject *PythonDriver<p_type>::GetPythonDynamicPointObject(tDynPt &p_dynPt);                                                      \
+    template tDynPt PythonDriver<p_type>::GetCppDynamicPointObject(PyObject *p_dynPt);                                                          \
+    template PyObject *PythonDriver<p_type>::GetPythonTrackLocationObject(tTrkLocPos &p_trackLoc);                                              \
+    template tTrkLocPos PythonDriver<p_type>::GetCppTrackLocationObject(PyObject *p_trackLoc);                                                  \
+    template PyObject *PythonDriver<p_type>::GetPythonTrackSegmentObject(tTrackSeg &p_trackSeg);                                                \
+    template tTrackSeg PythonDriver<p_type>::GetCppTrackSegmentObject(PyObject *p_trackSeg);                                                    \
+    template PyObject *PythonDriver<p_type>::GetPythonCarRaceInfoObject(tCarRaceInfo &p_carRaceInfo);                                           \
+    template tCarRaceInfo PythonDriver<p_type>::GetCppCarRaceInfoObject(PyObject *p_carRaceInfo);                                               \
+    template PyObject *PythonDriver<p_type>::GetPythonCarPrivObject(tPrivCar &p_privCar);                                                       \
+    template tPrivCar PythonDriver<p_type>::GetCppCarPrivObject(PyObject *p_privCar);                                                           \
+    template PyObject *PythonDriver<p_type>::GetPythonPosDObject(tPosd &p_posD);                                                                \
+    template tPosd PythonDriver<p_type>::GetCppPosDObject(PyObject *p_posD);                                                                    \
+    template PyObject *PythonDriver<p_type>::GetPythonCollisionStateObject(tCollisionState &p_collisionState);                                  \
+    template tCollisionState PythonDriver<p_type>::GetCppCollisionStateObject(PyObject *p_collisionState);                                      \
+    template PyObject *PythonDriver<p_type>::GetPythonVectorObject(double p_x, double p_y, double p_z);                                         \
+    template sgVec3 *PythonDriver<p_type>::GetCppSgVectorObject(PyObject *p_vec);                                                               \
+    template t3Dd PythonDriver<p_type>::GetCppTVectorObject(PyObject *p_vec);                                                                   \
+    template PyObject *PythonDriver<p_type>::GetPythonCarCtrlObject(tCarCtrl &p_carCtrl);                                                       \
+    template tCarCtrl PythonDriver<p_type>::GetCppCarCtrlObject(PyObject *p_carCtrl);                                                           \
+    template PyObject *PythonDriver<p_type>::GetPythonCarSetupObject(tCarSetup &p_carSetup);                                                    \
+    template tCarSetup PythonDriver<p_type>::GetCppCarSetupObject(PyObject *p_carSetup);                                                        \
+    template PyObject *PythonDriver<p_type>::GetPythonCarSetupItemObject(tCarSetupItem &p_carSetupItem);                                        \
+    template tCarSetupItem PythonDriver<p_type>::GetCppCarSetupItemObject(PyObject *p_carSetupItem);                                            \
+    template PyObject *PythonDriver<p_type>::GetPythonCarPitCmdObject(tCarPitCmd &p_carPitCmd);                                                 \
+    template tCarPitCmd PythonDriver<p_type>::GetCppCarPitCmdObject(PyObject *p_carPitCmd);                                                     \
+    template PyObject *PythonDriver<p_type>::GetPythonSituationObject(tSituation &p_situation);                                                 \
+    template tSituation PythonDriver<p_type>::GetCppSituationObject(PyObject *p_situation);                                                     \
+    template PyObject *PythonDriver<p_type>::GetPythonRaceInfoObject(tRaceAdmInfo &p_raceInfo);                                                 \
+    template tRaceAdmInfo PythonDriver<p_type>::GetCppRaceInfoObject(PyObject *p_raceInfo);                                                     \
     template PyObject *PythonDriver<p_type>::GetObjectFromArgs(PyObject *p_classInit, PyObject *p_initArgs[], int p_length);                    \
     template void PythonDriver<p_type>::FillCarSetupArray(int p_start, int p_end, PyObject *p_carSetupArray[], tCarSetupItem *p_carSetupItems); \
     template void PythonDriver<p_type>::SetPythonDriverFileName(std::string p_fileName);                                                        \
-    template SDAData PythonDriver<p_type>::GetSDADataCpp(PyObject* p_data);                                                                 \
-    template SDAAction PythonDriver<p_type>::GetSDAActionCpp(PyObject* p_action);                                                              \
-    template PyObject *PythonDriver<p_type>::GetPythonDriverObject();                                                                            \
+    template PyObject *PythonDriver<p_type>::GetPythonDriverObject();                                                                           \
     template std::string PythonDriver<p_type>::GetPythonDriverFileName();
-
 
 /// @brief Constructs PythonDriver and sets up python code
 template <typename PointerManager>
@@ -140,18 +158,18 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
 {
     SDAAction action;
 
-    PyObject *sdaType = GetSDATypeObject(p_data);
+    PyObject *sdaType = GetPythonSDATypeObject(p_data);
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
     PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
 
-    return GetSDAActionCpp(result);
+    return GetCppSDAAction(result);
 }
 
 /// @brief          Translates a python object to SDAAction
 /// @param  p_action  The action object in Python
 /// @return         The action object in C++
 template <typename PointerManager>
-SDAAction PythonDriver<PointerManager>::GetSDAActionCpp(PyObject* p_action)
+SDAAction PythonDriver<PointerManager>::GetCppSDAAction(PyObject *p_action)
 {
     SDAAction action;
 
@@ -169,13 +187,13 @@ SDAAction PythonDriver<PointerManager>::GetSDAActionCpp(PyObject* p_action)
 /// @param  p_data  The data
 /// @return         The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetSDATypeObject(SDAData &p_data)
+PyObject *PythonDriver<PointerManager>::GetPythonSDATypeObject(SDAData &p_data)
 {
     const int size = 3;
     PyObject *sdaTypesArgs[size];
 
-    sdaTypesArgs[0] = GetCarObject(p_data.Car);
-    sdaTypesArgs[1] = GetSituationObject(p_data.Situation);
+    sdaTypesArgs[0] = GetPythonCarObject(p_data.Car);
+    sdaTypesArgs[1] = GetPythonSituationObject(p_data.Situation);
     sdaTypesArgs[2] = PyLong_FromUnsignedLong(p_data.TickCount);
 
     // initialize SDAType
@@ -184,16 +202,16 @@ PyObject *PythonDriver<PointerManager>::GetSDATypeObject(SDAData &p_data)
     return SDATypes;
 }
 
-/// @brief          Translates a python object to SDAAction
-/// @param  p_action  The action object in Python
-/// @return         The action object in C++
+/// @brief          Translates a python object to SDAData
+/// @param  p_action  The data object in Python
+/// @return         The data object in C++
 template <typename PointerManager>
-SDAData PythonDriver<PointerManager>::GetSDADataCpp(PyObject *p_data)
+SDAData PythonDriver<PointerManager>::GetCppSDAData(PyObject *p_data)
 {
     SDAData data;
 
-    data.Car = GetCarCpp((PyObject_GetAttrString(p_data, "car")));
-    data.Situation = GetSituationCpp((PyObject_GetAttrString(p_data, "situation")));
+    data.Car = GetCppCarObject((PyObject_GetAttrString(p_data, "car")));
+    data.Situation = GetCppSituationObject((PyObject_GetAttrString(p_data, "situation")));
     data.TickCount = static_cast<unsigned long>(PyLong_AsLong(PyObject_GetAttrString(p_data, "tickCount")));
 
     return data;
@@ -203,19 +221,19 @@ SDAData PythonDriver<PointerManager>::GetSDADataCpp(PyObject *p_data)
 /// @param  p_car   The car data
 /// @return         The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarObject(tCarElt &p_car)
+PyObject *PythonDriver<PointerManager>::GetPythonCarObject(tCarElt &p_car)
 {
     const int size = 8;
     PyObject *carArgs[size];
 
     carArgs[0] = PyLong_FromLong(static_cast<long>(p_car.index));
-    carArgs[1] = GetCarInitObject(p_car.info);
-    carArgs[2] = GetCarPublicObject(p_car.pub);
-    carArgs[3] = GetCarRaceInfoObject(p_car.race);
-    carArgs[4] = GetCarPrivObject(p_car.priv);
-    carArgs[5] = GetCarCtrlObject(p_car.ctrl);
-    carArgs[6] = GetCarSetupObject(p_car.setup);
-    carArgs[7] = GetCarPitCmdObject(p_car.pitcmd);
+    carArgs[1] = GetPythonCarInitObject(p_car.info);
+    carArgs[2] = GetPythonCarPublicObject(p_car.pub);
+    carArgs[3] = GetPythonCarRaceInfoObject(p_car.race);
+    carArgs[4] = GetPythonCarPrivObject(p_car.priv);
+    carArgs[5] = GetPythonCarCtrlObject(p_car.ctrl);
+    carArgs[6] = GetPythonCarSetupObject(p_car.setup);
+    carArgs[7] = GetPythonCarPitCmdObject(p_car.pitcmd);
 
     PyObject *car = GetObjectFromArgs(m_carClass, carArgs, size);
 
@@ -226,22 +244,27 @@ PyObject *PythonDriver<PointerManager>::GetCarObject(tCarElt &p_car)
 /// @param  p_car  The car object in Python
 /// @return         The car object in C++
 template <typename PointerManager>
-tCarElt PythonDriver<PointerManager>::GetCarCpp(PyObject *p_car)
+tCarElt PythonDriver<PointerManager>::GetCppCarObject(PyObject *p_car)
 {
     tCarElt car;
 
-    data.Car = GetCarCpp((PyObject_GetAttrString(p_data, "car")));
-    data.Situation = GetSituationCpp((PyObject_GetAttrString(p_data, "situation")));
-    data.TickCount = static_cast<unsigned long>(PyLong_AsLong(PyObject_GetAttrString(p_data, "tickCount")));
+    car.index = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_car, "index")));
+    car.info = GetCppCarInitObject(PyObject_GetAttrString(p_car, "info"));
+    car.pub = GetCppCarPublicObject(PyObject_GetAttrString(p_car, "pub"));
+    car.race = GetCppCarRaceInfoObject(PyObject_GetAttrString(p_car, "race"));
+    car.priv = GetCppCarPrivObject(PyObject_GetAttrString(p_car, "priv"));
+    car.ctrl = GetCppCarCtrlObject(PyObject_GetAttrString(p_car, "ctrl"));
+    car.setup = GetCppCarSetupObject(PyObject_GetAttrString(p_car, "setup"));
+    car.pitcmd = GetCppCarPitCmdObject(PyObject_GetAttrString(p_car, "pitcmd"));
 
     return car;
 }
 
-/// @brief gets the python init car object of the current input
+/// @brief gets the Python init car object of the current input
 /// @param  p_initCar The race init data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarInitObject(tInitCar &p_initCar)
+PyObject *PythonDriver<PointerManager>::GetPythonCarInitObject(tInitCar &p_initCar)
 {
     const int size = 28;
     PyObject *carInitArgs[size];
@@ -262,19 +285,19 @@ PyObject *PythonDriver<PointerManager>::GetCarInitObject(tInitCar &p_initCar)
     carInitArgs[12] = PyFloat_FromDouble(p_initCar.iconColor[1]);
     carInitArgs[13] = PyFloat_FromDouble(p_initCar.iconColor[2]);
 
-    carInitArgs[14] = GetVectorObject(p_initCar.dimension.x, p_initCar.dimension.y, p_initCar.dimension.z);
-    carInitArgs[15] = GetVectorObject(p_initCar.drvPos.x, p_initCar.drvPos.y, p_initCar.drvPos.z);
-    carInitArgs[16] = GetVectorObject(p_initCar.bonnetPos.x, p_initCar.bonnetPos.y, p_initCar.bonnetPos.z);
+    carInitArgs[14] = GetPythonVectorObject(p_initCar.dimension.x, p_initCar.dimension.y, p_initCar.dimension.z);
+    carInitArgs[15] = GetPythonVectorObject(p_initCar.drvPos.x, p_initCar.drvPos.y, p_initCar.drvPos.z);
+    carInitArgs[16] = GetPythonVectorObject(p_initCar.bonnetPos.x, p_initCar.bonnetPos.y, p_initCar.bonnetPos.z);
     carInitArgs[17] = PyFloat_FromDouble(p_initCar.tank);
     carInitArgs[18] = PyFloat_FromDouble(p_initCar.steerLock);
-    carInitArgs[19] = GetVectorObject(p_initCar.statGC.x, p_initCar.statGC.y, p_initCar.statGC.z);
+    carInitArgs[19] = GetPythonVectorObject(p_initCar.statGC.x, p_initCar.statGC.y, p_initCar.statGC.z);
 
-    carInitArgs[20] = GetWheelSpecificationObject(p_initCar.wheel[0]);
-    carInitArgs[21] = GetWheelSpecificationObject(p_initCar.wheel[1]);
-    carInitArgs[22] = GetWheelSpecificationObject(p_initCar.wheel[2]);
-    carInitArgs[23] = GetWheelSpecificationObject(p_initCar.wheel[3]);
+    carInitArgs[20] = GetPythonWheelSpecificationObject(p_initCar.wheel[0]);
+    carInitArgs[21] = GetPythonWheelSpecificationObject(p_initCar.wheel[1]);
+    carInitArgs[22] = GetPythonWheelSpecificationObject(p_initCar.wheel[2]);
+    carInitArgs[23] = GetPythonWheelSpecificationObject(p_initCar.wheel[3]);
 
-    carInitArgs[24] = GetVisualAttributesObject(p_initCar.visualAttr);
+    carInitArgs[24] = GetPythonVisualAttributesObject(p_initCar.visualAttr);
     carInitArgs[25] = PyUnicode_DecodeFSDefault(p_initCar.masterModel);
     carInitArgs[26] = PyUnicode_DecodeFSDefault(p_initCar.skinName);
     carInitArgs[27] = PyLong_FromLong(static_cast<long>(p_initCar.skinTargets));
@@ -285,11 +308,36 @@ PyObject *PythonDriver<PointerManager>::GetCarInitObject(tInitCar &p_initCar)
     return carInit;
 }
 
+/// @brief gets the Cpp init car object of the current input
+/// @param  p_initCar The race init Python data
+/// @return           The Cpp object
+template <typename PointerManager>
+tInitCar PythonDriver<PointerManager>::GetCppCarInitObject(PyObject *p_initCar)
+{
+    tInitCar initCar;
+
+    strcmp(initCar.name, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "name")));
+    strcmp(initCar.sname, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "sName")));
+    strcmp(initCar.codename, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "codename")));
+    strcmp(initCar.teamname, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "teamName")));
+    strcmp(initCar.carName, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "carName")));
+    strcmp(initCar.category, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "category")));
+    initCar.raceNumber = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "raceNumber")));
+    initCar.startRank = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "startRank")));
+    initCar.driverType = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "driverType")));
+    initCar.networkplayer = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "networkPlayer")));
+    initCar.skillLevel = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "skillLevel")));
+
+    // TODO
+
+    return initCar;
+}
+
 /// @brief gets the python wheel specification object of the current input
 /// @param  p_wheelSpec The wheel specification data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetWheelSpecificationObject(tWheelSpec &p_wheelSpec)
+PyObject *PythonDriver<PointerManager>::GetPythonWheelSpecificationObject(tWheelSpec &p_wheelSpec)
 {
     const int size = 5;
     PyObject *wheelSpecArgs[size];
@@ -305,25 +353,47 @@ PyObject *PythonDriver<PointerManager>::GetWheelSpecificationObject(tWheelSpec &
     return wheelSpec;
 }
 
+/// @brief gets the Cpp wheel specification object from Python
+/// @param  p_wheelSpec The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tWheelSpec PythonDriver<PointerManager>::GetCppWheelSpecificationObject(PyObject *p_wheelSpec)
+{
+    tWheelSpec wheelSpec;
+
+    return wheelSpec;
+}
+
 /// @brief gets the python visual attributes object of the current input
 /// @param  p_visualAttributes The visual attribute data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetVisualAttributesObject(tVisualAttributes &p_visualAttributes)
+PyObject *PythonDriver<PointerManager>::GetPythonVisualAttributesObject(tVisualAttributes &p_visualAttributes)
 {
     const int size = 4;
     PyObject *visualAttributesArgs[size];
 
     visualAttributesArgs[0] = PyLong_FromLong(static_cast<long>(p_visualAttributes.exhaustNb));
-    visualAttributesArgs[1] = GetVectorObject(p_visualAttributes.exhaustPos[0].x,
-                                              p_visualAttributes.exhaustPos[0].y,
-                                              p_visualAttributes.exhaustPos[0].z);
-    visualAttributesArgs[2] = GetVectorObject(p_visualAttributes.exhaustPos[1].x,
-                                              p_visualAttributes.exhaustPos[1].y,
-                                              p_visualAttributes.exhaustPos[1].z);
+    visualAttributesArgs[1] = GetPythonVectorObject(p_visualAttributes.exhaustPos[0].x,
+                                                    p_visualAttributes.exhaustPos[0].y,
+                                                    p_visualAttributes.exhaustPos[0].z);
+    visualAttributesArgs[2] = GetPythonVectorObject(p_visualAttributes.exhaustPos[1].x,
+                                                    p_visualAttributes.exhaustPos[1].y,
+                                                    p_visualAttributes.exhaustPos[1].z);
     visualAttributesArgs[3] = PyFloat_FromDouble(p_visualAttributes.exhaustPower);
 
     PyObject *visualAttributes = GetObjectFromArgs(m_visualAttributesClass, visualAttributesArgs, size);
+
+    return visualAttributes;
+}
+
+/// @brief gets the Cpp visual attributes object of a Python object
+/// @param  p_visualAttributes The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tVisualAttributes PythonDriver<PointerManager>::GetCppVisualAttributesObject(PyObject *p_visualAttributes)
+{
+    tVisualAttributes visualAttributes;
 
     return visualAttributes;
 }
@@ -332,13 +402,13 @@ PyObject *PythonDriver<PointerManager>::GetVisualAttributesObject(tVisualAttribu
 /// @param  p_publicCar The public car data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarPublicObject(tPublicCar &p_publicCar)
+PyObject *PythonDriver<PointerManager>::GetPythonCarPublicObject(tPublicCar &p_publicCar)
 {
     const int size = 21;
     PyObject *publicCarArgs[size];
 
-    publicCarArgs[0] = GetDynamicPointObject(p_publicCar.DynGC);
-    publicCarArgs[1] = GetDynamicPointObject(p_publicCar.DynGCg);
+    publicCarArgs[0] = GetPythonDynamicPointObject(p_publicCar.DynGC);
+    publicCarArgs[1] = GetPythonDynamicPointObject(p_publicCar.DynGCg);
     publicCarArgs[2] = PyFloat_FromDouble(p_publicCar.speed);
 
     publicCarArgs[3] = PyFloat_FromDouble(p_publicCar.posMat[0][0]);
@@ -358,10 +428,21 @@ PyObject *PythonDriver<PointerManager>::GetCarPublicObject(tPublicCar &p_publicC
     publicCarArgs[17] = PyFloat_FromDouble(p_publicCar.posMat[3][2]);
     publicCarArgs[18] = PyFloat_FromDouble(p_publicCar.posMat[3][3]);
 
-    publicCarArgs[19] = GetTrackLocationObject(p_publicCar.trkPos);
+    publicCarArgs[19] = GetPythonTrackLocationObject(p_publicCar.trkPos);
     publicCarArgs[20] = PyLong_FromLong(static_cast<long>(p_publicCar.state));
 
     PyObject *publicCar = GetObjectFromArgs(m_publicCarClass, publicCarArgs, size);
+
+    return publicCar;
+}
+
+/// @brief gets the Cpp public car object of the Python object
+/// @param  p_publicCar The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tPublicCar PythonDriver<PointerManager>::GetCppCarPublicObject(PyObject *p_publicCar)
+{
+    tPublicCar publicCar;
 
     return publicCar;
 }
@@ -370,30 +451,41 @@ PyObject *PythonDriver<PointerManager>::GetCarPublicObject(tPublicCar &p_publicC
 /// @param  p_dynPt The dynamic point data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetDynamicPointObject(tDynPt &p_dynPt)
+PyObject *PythonDriver<PointerManager>::GetPythonDynamicPointObject(tDynPt &p_dynPt)
 {
     const int size = 3;
     PyObject *dynamicPointArgs[size];
 
-    dynamicPointArgs[0] = GetVectorObject(p_dynPt.pos.x, p_dynPt.pos.y, p_dynPt.pos.z);
-    dynamicPointArgs[1] = GetVectorObject(p_dynPt.vel.x, p_dynPt.vel.y, p_dynPt.vel.z);
-    dynamicPointArgs[2] = GetVectorObject(p_dynPt.acc.x, p_dynPt.acc.y, p_dynPt.acc.z);
+    dynamicPointArgs[0] = GetPythonVectorObject(p_dynPt.pos.x, p_dynPt.pos.y, p_dynPt.pos.z);
+    dynamicPointArgs[1] = GetPythonVectorObject(p_dynPt.vel.x, p_dynPt.vel.y, p_dynPt.vel.z);
+    dynamicPointArgs[2] = GetPythonVectorObject(p_dynPt.acc.x, p_dynPt.acc.y, p_dynPt.acc.z);
 
     PyObject *dynamicPoint = GetObjectFromArgs(m_dynamicPointClass, dynamicPointArgs, size);
 
     return dynamicPoint;
 }
 
+/// @brief gets the Cpp dynamic point object of the Python object
+/// @param  p_dynPt The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tDynPt PythonDriver<PointerManager>::GetCppDynamicPointObject(PyObject *p_dynPt)
+{
+    tDynPt dynPt;
+
+    return dynPt;
+}
+
 /// @brief gets the python track location object of the current input
 /// @param  p_trackLoc The track location data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetTrackLocationObject(tTrkLocPos &p_trackLoc)
+PyObject *PythonDriver<PointerManager>::GetPythonTrackLocationObject(tTrkLocPos &p_trackLoc)
 {
     const int size = 6;
     PyObject *trackLocationArgs[size];
 
-    trackLocationArgs[0] = GetTrackSegmentObject(*p_trackLoc.seg);
+    trackLocationArgs[0] = GetPythonTrackSegmentObject(*p_trackLoc.seg);
     trackLocationArgs[1] = PyLong_FromLong(static_cast<long>(p_trackLoc.type));
     trackLocationArgs[2] = PyFloat_FromDouble(p_trackLoc.toStart);
     trackLocationArgs[3] = PyFloat_FromDouble(p_trackLoc.toRight);
@@ -405,11 +497,22 @@ PyObject *PythonDriver<PointerManager>::GetTrackLocationObject(tTrkLocPos &p_tra
     return trackLocation;
 }
 
+/// @brief gets the Cpp track location object of the Python object
+/// @param  p_trackLoc The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tTrkLocPos PythonDriver<PointerManager>::GetCppTrackLocationObject(PyObject *p_trackLoc)
+{
+    tTrkLocPos trackLocPos;
+
+    return trackLocPos;
+}
+
 /// @brief gets the python track segment object of the current input
 /// @param  p_trackSeg The track segment data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetTrackSegmentObject(tTrackSeg &p_trackSeg)
+PyObject *PythonDriver<PointerManager>::GetPythonTrackSegmentObject(tTrackSeg &p_trackSeg)
 {
     const int size = 36;
     PyObject *trackSegArgs[size];
@@ -427,12 +530,12 @@ PyObject *PythonDriver<PointerManager>::GetTrackSegmentObject(tTrackSeg &p_track
     trackSegArgs[10] = PyFloat_FromDouble(p_trackSeg.radiusr);
     trackSegArgs[11] = PyFloat_FromDouble(p_trackSeg.radiusl);
     trackSegArgs[12] = PyFloat_FromDouble(p_trackSeg.arc);
-    trackSegArgs[13] = GetVectorObject(p_trackSeg.center.x, p_trackSeg.center.y, p_trackSeg.center.z);
+    trackSegArgs[13] = GetPythonVectorObject(p_trackSeg.center.x, p_trackSeg.center.y, p_trackSeg.center.z);
 
-    trackSegArgs[14] = GetVectorObject(p_trackSeg.vertex[0].x, p_trackSeg.vertex[0].y, p_trackSeg.vertex[0].z);
-    trackSegArgs[15] = GetVectorObject(p_trackSeg.vertex[1].x, p_trackSeg.vertex[1].y, p_trackSeg.vertex[1].z);
-    trackSegArgs[16] = GetVectorObject(p_trackSeg.vertex[2].x, p_trackSeg.vertex[2].y, p_trackSeg.vertex[2].z);
-    trackSegArgs[17] = GetVectorObject(p_trackSeg.vertex[3].x, p_trackSeg.vertex[3].y, p_trackSeg.vertex[3].z);
+    trackSegArgs[14] = GetPythonVectorObject(p_trackSeg.vertex[0].x, p_trackSeg.vertex[0].y, p_trackSeg.vertex[0].z);
+    trackSegArgs[15] = GetPythonVectorObject(p_trackSeg.vertex[1].x, p_trackSeg.vertex[1].y, p_trackSeg.vertex[1].z);
+    trackSegArgs[16] = GetPythonVectorObject(p_trackSeg.vertex[2].x, p_trackSeg.vertex[2].y, p_trackSeg.vertex[2].z);
+    trackSegArgs[17] = GetPythonVectorObject(p_trackSeg.vertex[3].x, p_trackSeg.vertex[3].y, p_trackSeg.vertex[3].z);
 
     trackSegArgs[18] = PyFloat_FromDouble(p_trackSeg.angle[0]);
     trackSegArgs[19] = PyFloat_FromDouble(p_trackSeg.angle[1]);
@@ -447,8 +550,8 @@ PyObject *PythonDriver<PointerManager>::GetTrackSegmentObject(tTrackSeg &p_track
     trackSegArgs[27] = PyFloat_FromDouble(p_trackSeg.Kzl);
     trackSegArgs[28] = PyFloat_FromDouble(p_trackSeg.Kzw);
     trackSegArgs[29] = PyFloat_FromDouble(p_trackSeg.Kyl);
-    trackSegArgs[30] = GetVectorObject(p_trackSeg.rgtSideNormal.x, p_trackSeg.rgtSideNormal.y,
-                                       p_trackSeg.rgtSideNormal.z);
+    trackSegArgs[30] = GetPythonVectorObject(p_trackSeg.rgtSideNormal.x, p_trackSeg.rgtSideNormal.y,
+                                             p_trackSeg.rgtSideNormal.z);
     trackSegArgs[31] = PyLong_FromLong(static_cast<long>(p_trackSeg.envIndex));
     trackSegArgs[32] = PyFloat_FromDouble(p_trackSeg.height);
     trackSegArgs[33] = PyLong_FromLong(static_cast<long>(p_trackSeg.raceInfo));
@@ -460,11 +563,22 @@ PyObject *PythonDriver<PointerManager>::GetTrackSegmentObject(tTrackSeg &p_track
     return trackSegment;
 }
 
+/// @brief gets the Cpp track segment object of the Python object
+/// @param  p_trackSeg The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tTrackSeg PythonDriver<PointerManager>::GetCppTrackSegmentObject(PyObject *p_trackSeg)
+{
+    tTrackSeg trackSeg;
+
+    return trackSeg;
+}
+
 /// @brief gets the python race car info object of the current input
 /// @param  p_carRaceInfo The race car info data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarRaceInfoObject(tCarRaceInfo &p_carRaceInfo)
+PyObject *PythonDriver<PointerManager>::GetPythonCarRaceInfoObject(tCarRaceInfo &p_carRaceInfo)
 {
     const int size = 27;
     PyObject *carRaceInfoArgs[size];
@@ -502,11 +616,22 @@ PyObject *PythonDriver<PointerManager>::GetCarRaceInfoObject(tCarRaceInfo &p_car
     return carRaceInfo;
 }
 
-/// @brief gets the python posD object of the current input
-/// @param  p_posD The posD data
+/// @brief gets the Cpp race car info object of the Python object
+/// @param  p_carRaceInfo The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tCarRaceInfo PythonDriver<PointerManager>::GetCppCarRaceInfoObject(PyObject *p_carRaceInfo)
+{
+    tCarRaceInfo carRaceInfo;
+
+    return carRaceInfo;
+}
+
+/// @brief gets the python private car object of the current input
+/// @param  p_posD The private car data
 /// @return        The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarPrivObject(tPrivCar &p_privCar)
+PyObject *PythonDriver<PointerManager>::GetPythonCarPrivObject(tPrivCar &p_privCar)
 {
     const int size = 54;
     PyObject *privCarArgs[size];
@@ -515,10 +640,10 @@ PyObject *PythonDriver<PointerManager>::GetCarPrivObject(tPrivCar &p_privCar)
     privCarArgs[1] = PyLong_FromLong(static_cast<long>(p_privCar.moduleIndex));
     privCarArgs[2] = PyUnicode_DecodeFSDefault(p_privCar.modName);
 
-    privCarArgs[3] = GetPosDObject(p_privCar.corner[0]);
-    privCarArgs[4] = GetPosDObject(p_privCar.corner[1]);
-    privCarArgs[5] = GetPosDObject(p_privCar.corner[2]);
-    privCarArgs[6] = GetPosDObject(p_privCar.corner[3]);
+    privCarArgs[3] = GetPythonPosDObject(p_privCar.corner[0]);
+    privCarArgs[4] = GetPythonPosDObject(p_privCar.corner[1]);
+    privCarArgs[5] = GetPythonPosDObject(p_privCar.corner[2]);
+    privCarArgs[6] = GetPythonPosDObject(p_privCar.corner[3]);
 
     privCarArgs[7] = PyLong_FromLong(static_cast<long>(p_privCar.gear));
     privCarArgs[8] = PyLong_FromLong(static_cast<long>(p_privCar.gearNext));
@@ -562,13 +687,13 @@ PyObject *PythonDriver<PointerManager>::GetCarPrivObject(tPrivCar &p_privCar)
     privCarArgs[40] = PyLong_FromLong(static_cast<long>(p_privCar.simcollision));
     privCarArgs[41] = PyFloat_FromDouble(p_privCar.smoke);
 
-    privCarArgs[42] = GetVectorObject(p_privCar.normal.x, p_privCar.normal.y, p_privCar.normal.z);
-    privCarArgs[43] = GetVectorObject(p_privCar.collpos.x, p_privCar.collpos.y, p_privCar.collpos.z);
+    privCarArgs[42] = GetPythonVectorObject(p_privCar.normal.x, p_privCar.normal.y, p_privCar.normal.z);
+    privCarArgs[43] = GetPythonVectorObject(p_privCar.collpos.x, p_privCar.collpos.y, p_privCar.collpos.z);
 
     privCarArgs[44] = PyLong_FromLong(static_cast<long>(p_privCar.dammage));
     privCarArgs[45] = PyLong_FromLong(static_cast<long>(p_privCar.debug));
 
-    privCarArgs[46] = GetCollisionStateObject(p_privCar.collision_state);
+    privCarArgs[46] = GetPythonCollisionStateObject(p_privCar.collision_state);
 
     privCarArgs[47] = PyFloat_FromDouble(p_privCar.localPressure);
     privCarArgs[48] = PyFloat_FromDouble(p_privCar.driveSkill);
@@ -584,11 +709,22 @@ PyObject *PythonDriver<PointerManager>::GetCarPrivObject(tPrivCar &p_privCar)
     return privCar;
 }
 
+/// @brief gets the Cpp private car object of the Python object
+/// @param  p_posD The Python object
+/// @return        The Cpp object
+template <typename PointerManager>
+tPrivCar PythonDriver<PointerManager>::GetCppCarPrivObject(PyObject *p_privCar)
+{
+    tPrivCar privCar;
+
+    return privCar;
+}
+
 /// @brief gets the python posD object of the current input
 /// @param  p_posD The posD data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetPosDObject(tPosd &p_posD)
+PyObject *PythonDriver<PointerManager>::GetPythonPosDObject(tPosd &p_posD)
 {
     const int size = 7;
     PyObject *posDArgs[size];
@@ -606,31 +742,55 @@ PyObject *PythonDriver<PointerManager>::GetPosDObject(tPosd &p_posD)
     return posD;
 }
 
+/// @brief gets the Cpp posD object of the Python input
+/// @param  p_posD The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tPosd PythonDriver<PointerManager>::GetCppPosDObject(PyObject *p_posD)
+{
+    tPosd posD;
+
+    return posD;
+}
+
 /// @brief gets the collision state object of the current input
 /// @param  p_collisionState The collision state data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCollisionStateObject(tCollisionState &p_collisionState)
+PyObject *PythonDriver<PointerManager>::GetPythonCollisionStateObject(tCollisionState &p_collisionState)
 {
     const int size = 3;
     PyObject *collisionStateArgs[size];
 
     collisionStateArgs[0] = PyLong_FromLong(static_cast<long>(p_collisionState.collision_count));
-    collisionStateArgs[1] = GetVectorObject(p_collisionState.pos[0], p_collisionState.pos[1],
-                                            p_collisionState.pos[2]);
-    collisionStateArgs[2] = GetVectorObject(p_collisionState.force[0], p_collisionState.force[1],
-                                            p_collisionState.force[2]);
+    collisionStateArgs[1] = GetPythonVectorObject(p_collisionState.pos[0], p_collisionState.pos[1],
+                                                  p_collisionState.pos[2]);
+    collisionStateArgs[2] = GetPythonVectorObject(p_collisionState.force[0], p_collisionState.force[1],
+                                                  p_collisionState.force[2]);
 
     PyObject *collisionState = GetObjectFromArgs(m_collisionStateClass, collisionStateArgs, size);
 
     return collisionState;
 }
 
+/// @brief gets the Cpp collision state object of the Python object
+/// @param  p_collisionState The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tCollisionState PythonDriver<PointerManager>::GetCppCollisionStateObject(PyObject *p_collisionState)
+{
+    tCollisionState collisionState;
+
+    return collisionState;
+}
+
 /// @brief gets the python vector object of the current input
-/// @param  p_vec The vector data
+/// @param  p_x The vector x data
+/// @param  p_y The vector y data
+/// @param  p_z The vector z data
 /// @return             The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetVectorObject(double p_x, double p_y, double p_z)
+PyObject *PythonDriver<PointerManager>::GetPythonVectorObject(double p_x, double p_y, double p_z)
 {
     const int size = 3;
     PyObject *vectorArgs[size];
@@ -644,11 +804,33 @@ PyObject *PythonDriver<PointerManager>::GetVectorObject(double p_x, double p_y, 
     return vector;
 }
 
+/// @brief gets the Cpp sgVec3 vector object of the Python object
+/// @param  p_vec The Python object
+/// @return       The Cpp object
+template <typename PointerManager>
+sgVec3 *PythonDriver<PointerManager>::GetCppSgVectorObject(PyObject *p_vec)
+{
+    sgVec3 *vec;
+
+    return vec;
+}
+
+/// @brief gets the Cpp t3Dd vector object of the Python object
+/// @param  p_vec The Python object
+/// @return       The Cpp object
+template <typename PointerManager>
+t3Dd PythonDriver<PointerManager>::GetCppTVectorObject(PyObject *p_vec)
+{
+    t3Dd vec;
+
+    return vec;
+}
+
 /// @brief gets the python car control object of the current input
 /// @param  p_carCtrl The car control data
 /// @return           The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarCtrlObject(tCarCtrl &p_carCtrl)
+PyObject *PythonDriver<PointerManager>::GetPythonCarCtrlObject(tCarCtrl &p_carCtrl)
 {
     const int size = 28;
     PyObject *carCtrlArgs[size];
@@ -690,21 +872,32 @@ PyObject *PythonDriver<PointerManager>::GetCarCtrlObject(tCarCtrl &p_carCtrl)
     return carCtrlItem;
 }
 
+/// @brief gets the Cpp car control object of the Python object
+/// @param  p_carCtrl The Python object
+/// @return           The Cpp object
+template <typename PointerManager>
+tCarCtrl PythonDriver<PointerManager>::GetCppCarCtrlObject(PyObject *p_carCtrl)
+{
+    tCarCtrl carCtrl;
+
+    return carCtrl;
+}
+
 /// @brief gets the python car setup object of the current input
 /// @param  p_carSetup The car setup data
 /// @return             The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarSetupObject(tCarSetup &p_carSetup)
+PyObject *PythonDriver<PointerManager>::GetPythonCarSetupObject(tCarSetup &p_carSetup)
 {
     const int size = 133;
     PyObject *carSetupArgs[size];
 
-    carSetupArgs[0] = GetCarSetupItemObject(p_carSetup.FRWeightRep);
-    carSetupArgs[1] = GetCarSetupItemObject(p_carSetup.FRLWeightRep);
-    carSetupArgs[2] = GetCarSetupItemObject(p_carSetup.RRLWeightRep);
-    carSetupArgs[3] = GetCarSetupItemObject(p_carSetup.fuel);
+    carSetupArgs[0] = GetPythonCarSetupItemObject(p_carSetup.FRWeightRep);
+    carSetupArgs[1] = GetPythonCarSetupItemObject(p_carSetup.FRLWeightRep);
+    carSetupArgs[2] = GetPythonCarSetupItemObject(p_carSetup.RRLWeightRep);
+    carSetupArgs[3] = GetPythonCarSetupItemObject(p_carSetup.fuel);
     FillCarSetupArray(4, 6, carSetupArgs, p_carSetup.wingAngle);
-    carSetupArgs[6] = GetCarSetupItemObject(p_carSetup.revsLimiter);
+    carSetupArgs[6] = GetPythonCarSetupItemObject(p_carSetup.revsLimiter);
     FillCarSetupArray(7, 17, carSetupArgs, p_carSetup.gearRatio);
 
     carSetupArgs[17] = PyLong_FromLong(static_cast<long>(p_carSetup.differentialType[0]));
@@ -719,9 +912,9 @@ PyObject *PythonDriver<PointerManager>::GetCarSetupObject(tCarSetup &p_carSetup)
     FillCarSetupArray(35, 38, carSetupArgs, p_carSetup.differentialMaxSlipBias);
     FillCarSetupArray(38, 41, carSetupArgs, p_carSetup.differentialCoastMaxSlipBias);
 
-    carSetupArgs[41] = GetCarSetupItemObject(p_carSetup.steerLock);
-    carSetupArgs[42] = GetCarSetupItemObject(p_carSetup.brakeRepartition);
-    carSetupArgs[43] = GetCarSetupItemObject(p_carSetup.brakePressure);
+    carSetupArgs[41] = GetPythonCarSetupItemObject(p_carSetup.steerLock);
+    carSetupArgs[42] = GetPythonCarSetupItemObject(p_carSetup.brakeRepartition);
+    carSetupArgs[43] = GetPythonCarSetupItemObject(p_carSetup.brakePressure);
 
     FillCarSetupArray(44, 48, carSetupArgs, p_carSetup.rideHeight);
     FillCarSetupArray(48, 52, carSetupArgs, p_carSetup.toe);
@@ -753,9 +946,9 @@ PyObject *PythonDriver<PointerManager>::GetCarSetupObject(tCarSetup &p_carSetup)
     FillCarSetupArray(122, 126, carSetupArgs, p_carSetup.suspSlowRebound);
     FillCarSetupArray(126, 130, carSetupArgs, p_carSetup.suspReboundLvel);
 
-    carSetupArgs[130] = GetCarSetupItemObject(p_carSetup.reqRepair);
-    carSetupArgs[131] = GetCarSetupItemObject(p_carSetup.reqTireset);
-    carSetupArgs[132] = GetCarSetupItemObject(p_carSetup.reqPenalty);
+    carSetupArgs[130] = GetPythonCarSetupItemObject(p_carSetup.reqRepair);
+    carSetupArgs[131] = GetPythonCarSetupItemObject(p_carSetup.reqTireset);
+    carSetupArgs[132] = GetPythonCarSetupItemObject(p_carSetup.reqPenalty);
 
     PyObject *carSetup = GetObjectFromArgs(m_carSetupClass, carSetupArgs, size);
 
@@ -773,15 +966,26 @@ void PythonDriver<PointerManager>::FillCarSetupArray(int p_start, int p_end, PyO
 {
     for (int i = 0; i < p_end - p_start; i++)
     {
-        p_carSetupArray[p_start + i] = GetCarSetupItemObject(p_carSetupItems[i]);
+        p_carSetupArray[p_start + i] = GetPythonCarSetupItemObject(p_carSetupItems[i]);
     }
+}
+
+/// @brief gets the Cpp car setup object of the Python object
+/// @param  p_carSetup The Python object
+/// @return             The Cpp object
+template <typename PointerManager>
+tCarSetup PythonDriver<PointerManager>::GetCppCarSetupObject(PyObject *p_carSetup)
+{
+    tCarSetup carSetup;
+
+    return carSetup;
 }
 
 /// @brief gets the python car setup item object of the current input
 /// @param  p_carSetupItem The car setup item data
 /// @return             The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarSetupItemObject(tCarSetupItem &p_carSetupItem)
+PyObject *PythonDriver<PointerManager>::GetPythonCarSetupItemObject(tCarSetupItem &p_carSetupItem)
 {
     const int size = 6;
     PyObject *carSetupItemArgs[size];
@@ -798,11 +1002,22 @@ PyObject *PythonDriver<PointerManager>::GetCarSetupItemObject(tCarSetupItem &p_c
     return carSetupItem;
 }
 
+/// @brief gets the Cpp car setup item object of the Python object
+/// @param  p_carSetupItem The Python object
+/// @return             The Cpp object
+template <typename PointerManager>
+tCarSetupItem PythonDriver<PointerManager>::GetCppCarSetupItemObject(PyObject *p_carSetupItem)
+{
+    tCarSetupItem carSetupItem;
+
+    return carSetupItem;
+}
+
 /// @brief gets the python car pit cmd object of the current input
 /// @param  p_carPitCmd The car pit cmd data
 /// @return             The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetCarPitCmdObject(tCarPitCmd &p_carPitCmd)
+PyObject *PythonDriver<PointerManager>::GetPythonCarPitCmdObject(tCarPitCmd &p_carPitCmd)
 {
     const int size = 5;
     PyObject *carPitCmdArgs[size];
@@ -818,17 +1033,28 @@ PyObject *PythonDriver<PointerManager>::GetCarPitCmdObject(tCarPitCmd &p_carPitC
     return carPitCmd;
 }
 
+/// @brief gets the Cpp car pit cmd object of Python object
+/// @param  p_carPitCmd The Python object
+/// @return             The Cpp object
+template <typename PointerManager>
+tCarPitCmd PythonDriver<PointerManager>::GetCppCarPitCmdObject(PyObject *p_carPitCmd)
+{
+    tCarPitCmd carPitCmd;
+
+    return carPitCmd;
+}
+
 /// @brief gets the python situation object of the current input
 /// @param  p_situation The situation data
 /// @return             The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetSituationObject(tSituation &p_situation)
+PyObject *PythonDriver<PointerManager>::GetPythonSituationObject(tSituation &p_situation)
 {
     const int size = 5;
     PyObject *situationArgs[size];
 
     situationArgs[1] = PyFloat_FromDouble(p_situation.deltaTime);
-    situationArgs[0] = GetRaceInfoObject(p_situation.raceInfo);
+    situationArgs[0] = GetPythonRaceInfoObject(p_situation.raceInfo);
     situationArgs[2] = PyFloat_FromDouble(p_situation.currentTime);
     situationArgs[3] = PyFloat_FromDouble(p_situation.accelTime);
     situationArgs[4] = PyLong_FromLong(static_cast<long>(p_situation.nbPlayers));
@@ -838,11 +1064,22 @@ PyObject *PythonDriver<PointerManager>::GetSituationObject(tSituation &p_situati
     return situation;
 }
 
+/// @brief gets the Cpp situation object of the Python object
+/// @param  p_situation The Python object
+/// @return             The Cpp object
+template <typename PointerManager>
+tSituation PythonDriver<PointerManager>::GetCppSituationObject(PyObject *p_situation)
+{
+    tSituation situation;
+
+    return situation;
+}
+
 /// @brief gets the python race info object of the current input
 /// @param  p_raceInfo The race info data
 /// @return             The python object
 template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetRaceInfoObject(tRaceAdmInfo &p_raceInfo)
+PyObject *PythonDriver<PointerManager>::GetPythonRaceInfoObject(tRaceAdmInfo &p_raceInfo)
 {
     const int size = 9;
     PyObject *raceInfoArgs[size];
@@ -860,6 +1097,17 @@ PyObject *PythonDriver<PointerManager>::GetRaceInfoObject(tRaceAdmInfo &p_raceIn
     PyObject *raceInfo = GetObjectFromArgs(m_raceInfoClass, raceInfoArgs, size);
 
     return raceInfo;
+}
+
+/// @brief gets the Cpp race info object of the Python object
+/// @param  p_raceInfo The Python object
+/// @return             The Cpp object
+template <typename PointerManager>
+tRaceAdmInfo PythonDriver<PointerManager>::GetCppRaceInfoObject(PyObject *p_raceInfo)
+{
+    tRaceAdmInfo raceAdmInfo;
+
+    return raceAdmInfo;
 }
 
 /// @brief gets the python object from p_classInit using p_initArgs arguments of p_length
@@ -905,7 +1153,7 @@ std::string PythonDriver<PointerManager>::GetPythonDriverFileName()
 /// @brief gets the python driver object
 /// @return the python driver object
 template <typename PointerManager>
-PyObject* PythonDriver<PointerManager>::GetPythonDriverObject()
+PyObject *PythonDriver<PointerManager>::GetPythonDriverObject()
 {
     return m_pythonDriver;
 }

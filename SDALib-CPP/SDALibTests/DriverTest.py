@@ -1,4 +1,5 @@
 import SDATypes
+import SpeedDreamsPython
 
 class SDADriver:
     speedLimit = 80
@@ -6,11 +7,15 @@ class SDADriver:
     def __init__(self):
         return
 
-    def UpdateAI(self, SDAData):
+    def UpdateAI(self, sdaData):
         # tests whether this can be called
-        steer = SDAData.car.pub.dynGC.vel.x
-        accel = SDAData.situation.deltaTime
-        brake = SDAData.situation.raceInfo.totTime
-        clutch = 0
+        sdaAction = SDATypes.SDAAction(0, 0, 0, 0)
 
-        return SDATypes.SDAAction(steer, accel, brake, clutch)
+        newSDAData = SpeedDreamsPython.call(sdaData, sdaAction);
+
+        sdaAction.steer = sdaData.car.pub.dynGC.vel.x
+        sdaAction.accel = sdaData.situation.deltaTime
+        sdaAction.brake = sdaData.situation.raceInfo.totTime
+        sdaAction.clutch = newSDAData.situation.raceInfo.totTime
+
+        return sdaAction

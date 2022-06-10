@@ -1357,7 +1357,7 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
         sdaData.Car = GenerateCar(segments);
         sdaData.Situation = GenerateSituation();
 
-        PyObject* sdaDataObject = pythonDriver.GetSDATypeObject(sdaData);
+        PyObject* sdaDataObject = pythonDriver.GetPythonSDATypeObject(sdaData);
 
         CheckSDAData(sdaData, sdaDataObject);
 
@@ -1380,7 +1380,7 @@ TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carObject = pythonDriver.GetCarObject(carData);
+        PyObject* carObject = pythonDriver.GetPythonCarObject(carData);
 
         CheckCarData(carData, carObject);
 
@@ -1402,7 +1402,7 @@ TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carInitObject = pythonDriver.GetCarInitObject(carData.info);
+        PyObject* carInitObject = pythonDriver.GetPythonCarInitObject(carData.info);
 
         CheckInitCarData(carData.info, carInitObject);
 
@@ -1424,7 +1424,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carPublicObject = pythonDriver.GetCarPublicObject(carData.pub);
+        PyObject* carPublicObject = pythonDriver.GetPythonCarPublicObject(carData.pub);
 
         CheckPublicCarData(carData.pub, carPublicObject);
 
@@ -1446,7 +1446,7 @@ TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carRaceInfoObject = pythonDriver.GetCarRaceInfoObject(carData.race);
+        PyObject* carRaceInfoObject = pythonDriver.GetPythonCarRaceInfoObject(carData.race);
 
         CheckCarRaceInfoData(carData.race, carRaceInfoObject);
 
@@ -1468,7 +1468,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carPrivObject = pythonDriver.GetCarPrivObject(carData.priv);
+        PyObject* carPrivObject = pythonDriver.GetPythonCarPrivObject(carData.priv);
 
         CheckPrivCarData(carData.priv, carPrivObject);
 
@@ -1490,7 +1490,7 @@ TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carCtrlObject = pythonDriver.GetCarCtrlObject(carData.ctrl);
+        PyObject* carCtrlObject = pythonDriver.GetPythonCarCtrlObject(carData.ctrl);
 
         CheckCarCtrlData(carData.ctrl, carCtrlObject);
 
@@ -1512,7 +1512,7 @@ TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carSetupObject = pythonDriver.GetCarSetupObject(carData.setup);
+        PyObject* carSetupObject = pythonDriver.GetPythonCarSetupObject(carData.setup);
 
         CheckCarSetupData(carData.setup, carSetupObject);
 
@@ -1534,7 +1534,7 @@ TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carPitCmdObject = pythonDriver.GetCarPitCmdObject(carData.pitcmd);
+        PyObject* carPitCmdObject = pythonDriver.GetPythonCarPitCmdObject(carData.pitcmd);
 
         CheckCarPitCmdData(carData.pitcmd, carPitCmdObject);
 
@@ -1555,7 +1555,7 @@ TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
     {
         tSituation situationData = GenerateSituation();
 
-        PyObject* situationObject = pythonDriver.GetSituationObject(situationData);
+        PyObject* situationObject = pythonDriver.GetPythonSituationObject(situationData);
 
         CheckSituationData(situationData, situationObject);
 
@@ -1587,7 +1587,7 @@ TEST(PythonDriverTests, PythonDriverUpdateAITest)
     ASSERT_TRUE(action.Steer == sdaData.Car.pub.DynGC.vel.x);
     ASSERT_TRUE(action.Accel == sdaData.Situation.deltaTime);
     ASSERT_TRUE(action.Brake == sdaData.Situation.raceInfo.totTime);
-    ASSERT_TRUE(action.Gear == 0);
+    ASSERT_TRUE(action.Gear == sdaData.Situation.raceInfo.totTime);
 
     DestroySegments(segments);
     DestroyCar(sdaData.Car);

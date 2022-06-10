@@ -1,11 +1,9 @@
 import SDATypes
-import SpeedDreamsFunction
 
 class SDADriver:
     speedLimit = 80
 
     def __init__(self):
-        self.speedDreamsFunction = SpeedDreamsFunction.SpeedDreamsFunction()
         return
 
     # returns the decision maker action from the current SDAData
@@ -23,9 +21,6 @@ class SDADriver:
         # accelerate if the user goes under the speed limit
         elif speed < self.speedLimit:
             accel = (self.speedLimit - speed) / 10
-
-        sdaAction = SDATypes.SDAAction(0, 0, 0, 0)
-        newSDA = self.speedDreamsFunction.SDASpeedDreams(sdaData, sdaAction)
 
         return SDATypes.SDAAction(0, self.clamp(accel, 0, 1), self.clamp(brake, 0, 1), 0)  # steer, accel, brake, clutch
 
