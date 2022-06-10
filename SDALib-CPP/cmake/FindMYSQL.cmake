@@ -80,20 +80,22 @@ IF(WIN32)
     IF(CMAKE_BUILD_TYPE MATCHES "Debug")
         GET_FILENAME_COMPONENT(MYSQL_BASE_DIR ${MYSQL_LIB_DIR} DIRECTORY CACHE)
         STRING(CONCAT MYSQL_BIN_DIR_STRING "${MYSQL_BASE_DIR}" "/bin/debug")
+        SET(MYSQL_OTHER_BIN "${MYSQL_BIN_DIR_STRING}/..")
     ELSE(CMAKE_BUILD_TYPE MATCHES "Debug")
         GET_FILENAME_COMPONENT(MYSQL_BASE_DIR ${MYSQL_LIB_DIR} DIRECTORY CACHE)
         STRING(CONCAT MYSQL_BIN_DIR_STRING "${MYSQL_BASE_DIR}" "/bin")
+        SET(MYSQL_OTHER_BIN "${MYSQL_BIN_DIR_STRING}")
     ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
 
     FIND_FILE(MYSQL_LIBSSL_DLL
-            NAMES libssl.dll ssl.dll libssl-1_1.dll
+            NAMES "libssl.dll" "ssl.dll" "libssl-1_1.dll"
             HINTS ENV MYSQL_DIR
-            PATHS ${MYSQL_BIN_DIR_STRING}/..)
+            PATHS ${MYSQL_OTHER_BIN})
 
     FIND_FILE(MYSQL_LIBCRYPTO_DLL
             NAMES libcrypto-1_1.dll
             HINTS ENV MYSQL_DIR
-            PATHS ${MYSQL_BIN_DIR_STRING}/..)
+            PATHS ${MYSQL_OTHER_BIN})
 
     FIND_FILE(MYSQL_CPPCONN_DLL
             NAMES mysqlcppconn-9-vs14.dll mysqlcppconn.dll
