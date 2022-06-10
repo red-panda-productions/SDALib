@@ -29,14 +29,17 @@ public:
 
     void SetPythonDriverFileName(std::string p_fileName);
     std::string GetPythonDriverFileName();
+    SDAData GetSDADataCpp(PyObject* p_data);
+    SDAAction GetSDAActionCpp(PyObject* p_action);
+    PyObject* GetSDATypeObject(SDAData& p_data);
+
+    PyObject* GetPythonDriverObject();
 
 #ifdef TEST
 public:
 #else
 private:
 #endif
-    PyObject* GetSDATypeObject(SDAData& p_data);
-
     PyObject* GetCarObject(tCarElt& p_car);
     PyObject* GetCarInitObject(tInitCar& p_initCar);
     PyObject* GetWheelSpecificationObject(tWheelSpec& p_wheelSpec);

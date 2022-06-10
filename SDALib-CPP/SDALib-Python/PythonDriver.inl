@@ -1,5 +1,7 @@
 #include "portability.h"
 #include "PythonDriver.h"
+#include "IPCPointerManager.h"
+
 
 #define CREATE_PYTHON_DRIVER_IMPLEMENTATION(p_type)                                                                                             \
     template PythonDriver<p_type>::PythonDriver();                                                                                              \
@@ -26,7 +28,11 @@
     template PyObject *PythonDriver<p_type>::GetObjectFromArgs(PyObject *p_classInit, PyObject *p_initArgs[], int p_length);                    \
     template void PythonDriver<p_type>::FillCarSetupArray(int p_start, int p_end, PyObject *p_carSetupArray[], tCarSetupItem *p_carSetupItems); \
     template void PythonDriver<p_type>::SetPythonDriverFileName(std::string p_fileName);                                                        \
+    template SDAData PythonDriver<p_type>::GetSDADataCpp(PyObject* p_data);                                                                 \
+    template SDAAction PythonDriver<p_type>::GetSDAActionCpp(PyObject* p_action);                                                              \
+    template PyObject *PythonDriver<p_type>::GetPythonDriverObject();                                                                            \
     template std::string PythonDriver<p_type>::GetPythonDriverFileName();
+
 
 /// @brief Constructs PythonDriver and sets up python code
 template <typename PointerManager>
@@ -138,12 +144,23 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
     PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
 
-    if (result == NULL) return action;
+    return GetSDAActionCpp(result);
+}
 
-    action.Steer = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 0)));
-    action.Accel = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 1)));
-    action.Brake = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(result, 2)));
-    action.Gear = static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(result, 3)));
+/// @brief          Translates a python object to SDAAction
+/// @param  p_action  The action object in Python
+/// @return         The action object in C++
+template <typename PointerManager>
+SDAAction PythonDriver<PointerManager>::GetSDAActionCpp(PyObject* p_action)
+{
+    SDAAction action;
+
+    if (p_action == NULL) return action;
+
+    action.Steer = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "steer")));
+    action.Accel = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "accel")));
+    action.Brake = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "brake")));
+    action.Gear = static_cast<int>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "gear")));
 
     return action;
 }
@@ -167,6 +184,21 @@ PyObject *PythonDriver<PointerManager>::GetSDATypeObject(SDAData &p_data)
     return SDATypes;
 }
 
+/// @brief          Translates a python object to SDAAction
+/// @param  p_action  The action object in Python
+/// @return         The action object in C++
+template <typename PointerManager>
+SDAData PythonDriver<PointerManager>::GetSDADataCpp(PyObject *p_data)
+{
+    SDAData data;
+
+    data.Car = GetCarCpp((PyObject_GetAttrString(p_data, "car")));
+    data.Situation = GetSituationCpp((PyObject_GetAttrString(p_data, "situation")));
+    data.TickCount = static_cast<unsigned long>(PyLong_AsLong(PyObject_GetAttrString(p_data, "tickCount")));
+
+    return data;
+}
+
 /// @brief gets the python car object of the current input
 /// @param  p_car   The car data
 /// @return         The python object
@@ -186,6 +218,21 @@ PyObject *PythonDriver<PointerManager>::GetCarObject(tCarElt &p_car)
     carArgs[7] = GetCarPitCmdObject(p_car.pitcmd);
 
     PyObject *car = GetObjectFromArgs(m_carClass, carArgs, size);
+
+    return car;
+}
+
+/// @brief          Translates a python object to tCarElt
+/// @param  p_car  The car object in Python
+/// @return         The car object in C++
+template <typename PointerManager>
+tCarElt PythonDriver<PointerManager>::GetCarCpp(PyObject *p_car)
+{
+    tCarElt car;
+
+    data.Car = GetCarCpp((PyObject_GetAttrString(p_data, "car")));
+    data.Situation = GetSituationCpp((PyObject_GetAttrString(p_data, "situation")));
+    data.TickCount = static_cast<unsigned long>(PyLong_AsLong(PyObject_GetAttrString(p_data, "tickCount")));
 
     return car;
 }
@@ -853,4 +900,12 @@ template <typename PointerManager>
 std::string PythonDriver<PointerManager>::GetPythonDriverFileName()
 {
     return m_pythonDriverFileName;
+}
+
+/// @brief gets the python driver object
+/// @return the python driver object
+template <typename PointerManager>
+PyObject* PythonDriver<PointerManager>::GetPythonDriverObject()
+{
+    return m_pythonDriver;
 }

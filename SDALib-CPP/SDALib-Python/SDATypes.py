@@ -404,3 +404,11 @@ class RaceInfo:
         self.maxDamage = maxDamage  # int
         self.fps = fps  # int
         self.features = features  # int
+
+# reaction from the decision maker
+class SDAAction:
+    def __init__(self, steer, accel, brake, clutch):
+        self.steer = steer
+        self.accel = accel
+        self.brake = brake
+        self.clutch = clutch

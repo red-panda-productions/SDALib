@@ -13,4 +13,4 @@ class SDADriver:
         brake = SDAData.situation.raceInfo.totTime
         clutch = 0
 
-        return steer, accel, brake, clutch
+        return SDATypes.SDAAction(steer, accel, brake, clutch)
