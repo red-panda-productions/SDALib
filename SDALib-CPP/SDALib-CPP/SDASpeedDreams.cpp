@@ -1,5 +1,4 @@
 #include "SDASpeedDreams.hpp"
-#include "sim.h"
 
 /// @brief sets tCarElt to tCar
 /// @param p_other the tCar car

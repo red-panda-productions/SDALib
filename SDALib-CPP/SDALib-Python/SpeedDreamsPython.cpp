@@ -14,23 +14,20 @@ static PyObject* CallSpeedDreams(PyObject* p_data, PyObject* p_action)
 
     SDAData newData = SDASpeedDreams(oldData, action);
 
-    //return sdaTypesConverter.GetPythonSDATypeObject(newData);
-    return NULL;
+    return sdaTypesConverter.GetPythonSDATypeObject(newData);
 }
 
 static PyMethodDef speedDreams_methods[] = {
     {"call", CallSpeedDreams, METH_VARARGS, ""},
-    {0}
-};
+    {0}};
 
 static struct PyModuleDef speedDreamsPythonMod =
     {
-       PyModuleDef_HEAD_INIT,
+        PyModuleDef_HEAD_INIT,
         "SpeedDreamsPython",
         "",
         -1,
-        speedDreams_methods
-};
+        speedDreams_methods};
 
 PyMODINIT_FUNC PyInit_speedDreamsMod(void)
 {

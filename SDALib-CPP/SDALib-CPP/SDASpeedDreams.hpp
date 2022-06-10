@@ -2,5 +2,7 @@
 
 #include "SDAData.hpp"
 #include "SDAAction.hpp"
+#include "sim.h"
 
-SDAData SDASpeedDreams(SDAData p_data, SDAAction& p_action);
+tCar CarConstructor(const tCar& p_other, tCarElt* p_carElt);
+SDAData SDASpeedDreams(const SDAData& p_data, SDAAction& p_action);
