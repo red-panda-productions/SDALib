@@ -753,7 +753,6 @@ typedef struct Track
     tdble SpeedLimit; /**< speed limit of the track */
     tdble Time;       /**< main track time (estimated) */
 
-
     t3Dd		min;
     t3Dd		max;
     tTrackGraphicInfo	graphic;
