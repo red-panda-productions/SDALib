@@ -439,7 +439,7 @@ typedef struct trackSeg
 
     float SpeedLimit;           // SIMULATED DRIVING ASSISTANCE: added a speed limit to the track
     float length;               /**< Length in meters of the middle of the track */
-        /// SIMULATED DRIVING ASSISTANCE: added tdble Time
+    /// SIMULATED DRIVING ASSISTANCE: added tdble Time
     tdble Time;                 /**< Estimated time in seconds */
     float width;                /**< Width of the segment (if constant width) */
     float startWidth;           /**< Width of the beginning of the segment */
