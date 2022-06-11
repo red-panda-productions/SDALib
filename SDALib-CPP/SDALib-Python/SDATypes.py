@@ -101,7 +101,7 @@ class TrackLocation:
 
 # Track Segment
 class TrackSegment:
-    def __init__(self, id, type, type2, style, length, width, startWidth, endWidth, lgFromStart, radius, radiusR,
+    def __init__(self, id, type, type2, style, length, time width, startWidth, endWidth, lgFromStart, radius, radiusR,
                  radiusL, arc, center, vertex1, vertex2, vertex3, vertex4, angle1, angle2, angle3, angle4, angle5,
                  angle6, angle7, sin, cos, kzl, kzw, kyl, rgtSideNormal, envIndex, height,
                  raceInfo, doVFactor, speedLimit):
@@ -110,6 +110,7 @@ class TrackSegment:
         self.type2 = type2  # int
         self.style = style  # int
         self.length = length  # float
+        self.time = time    # float
         self.width = width  # float
         self.startWidth = startWidth  # float
         self.endWidth = endWidth  # float
