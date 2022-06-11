@@ -64,7 +64,7 @@ public:
     tCollisionState GetCppCollisionStateObject(PyObject* p_collisionState);
 
     PyObject* GetPythonVectorObject(double p_x, double p_y, double p_z);
-    sgVec3* GetCppSgVectorObject(PyObject* p_vec);
+    void GetCppSgVectorObject(float* p_outputVec, PyObject* p_vec);
     t3Dd GetCppTVectorObject(PyObject* p_vec);
 
     PyObject* GetPythonCarCtrlObject(tCarCtrl& p_carCtrl);

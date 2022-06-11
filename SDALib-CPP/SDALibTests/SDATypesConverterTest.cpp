@@ -278,9 +278,9 @@ void CheckMatrixData(sgMat4& p_posMat, PyObject* p_posMatObject)
 /// @param  p_trackSeg The python track segment object
 void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
 {
-    PyObject* idAttr = PyUnicode_FromString("id");
-    PyObject* idVal = PyObject_GetAttr(p_trackSegObject, idAttr);
-    ASSERT_TRUE(p_trackSeg.id == static_cast<int>(PyLong_AsLong(idVal)));
+    // PyObject* idAttr = PyUnicode_FromString("trackId");
+    // PyObject* idVal = PyObject_GetAttr(p_trackSegObject, idAttr);
+    // ASSERT_TRUE(p_trackSeg.id == static_cast<int>(PyLong_AsLong(idVal)));
 
     PyObject* typeAttr = PyUnicode_FromString("type");
     PyObject* typeVal = PyObject_GetAttr(p_trackSegObject, typeAttr);
@@ -572,35 +572,35 @@ void CheckCarRaceInfoData(tCarRaceInfo& p_carRaceInfo, PyObject* p_carRaceInfoOb
 
 /// @brief checks the posD python object corresponds to the original posD values
 /// @param  p_posD The original posD value
-/// @param  p_trackSegObject The python posD object
-void CheckPosDObject(tPosd& p_posD, PyObject* p_trackSegObject)
+/// @param  p_posD The python posD object
+void CheckPosDObject(tPosd& p_posD, PyObject* p_posDObject)
 {
     PyObject* xAttr = PyUnicode_FromString("x");
-    PyObject* xVal = PyObject_GetAttr(p_trackSegObject, xAttr);
+    PyObject* xVal = PyObject_GetAttr(p_posDObject, xAttr);
     ASSERT_TRUE(static_cast<double>(p_posD.x) == PyFloat_AsDouble(xVal));
 
     PyObject* yAttr = PyUnicode_FromString("y");
-    PyObject* yVal = PyObject_GetAttr(p_trackSegObject, yAttr);
+    PyObject* yVal = PyObject_GetAttr(p_posDObject, yAttr);
     ASSERT_TRUE(static_cast<double>(p_posD.y) == PyFloat_AsDouble(yVal));
 
     PyObject* zAttr = PyUnicode_FromString("z");
-    PyObject* zVal = PyObject_GetAttr(p_trackSegObject, zAttr);
+    PyObject* zVal = PyObject_GetAttr(p_posDObject, zAttr);
     ASSERT_TRUE(static_cast<double>(p_posD.z) == PyFloat_AsDouble(zVal));
 
     PyObject* xyAttr = PyUnicode_FromString("xy");
-    PyObject* xyVal = PyObject_GetAttr(p_trackSegObject, xyAttr);
+    PyObject* xyVal = PyObject_GetAttr(p_posDObject, xyAttr);
     ASSERT_TRUE(static_cast<double>(p_posD.xy) == PyFloat_AsDouble(xyVal));
 
     PyObject* axAttr = PyUnicode_FromString("ax");
-    PyObject* axVal = PyObject_GetAttr(p_trackSegObject, axAttr);
+    PyObject* axVal = PyObject_GetAttr(p_posDObject, axAttr);
     ASSERT_TRUE(static_cast<double>(p_posD.ax) == PyFloat_AsDouble(axVal));
 
     PyObject* ayAttr = PyUnicode_FromString("ay");
-    PyObject* ayVal = PyObject_GetAttr(p_trackSegObject, ayAttr);
+    PyObject* ayVal = PyObject_GetAttr(p_posDObject, ayAttr);
     ASSERT_TRUE(static_cast<double>(p_posD.ay) == PyFloat_AsDouble(ayVal));
 
     PyObject* azAttr = PyUnicode_FromString("az");
-    PyObject* azVal = PyObject_GetAttr(p_trackSegObject, azAttr);
+    PyObject* azVal = PyObject_GetAttr(p_posDObject, azAttr);
     ASSERT_TRUE(static_cast<double>(p_posD.az) == PyFloat_AsDouble(azVal));
 }
 
@@ -1338,10 +1338,10 @@ void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
 }
 
 /// @brief tests the sda data c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
+TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     Random random;
     for (int i = 0; i < TEST_COUNT; i++)
@@ -1352,9 +1352,10 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
         sdaData.Car = GenerateCar(segments);
         sdaData.Situation = GenerateSituation();
 
-        PyObject* sdaDataObject = pythonDriver.GetPythonSDATypeObject(sdaData);
+        PyObject* sdaDataObject = converter.GetPythonSDATypeObject(sdaData);
 
         CheckSDAData(sdaData, sdaDataObject);
+        CheckSDAData(converter.GetCppSDAData(sdaDataObject), sdaDataObject);
 
         DestroySegments(segments);
         DestroyCar(sdaData.Car);
@@ -1365,19 +1366,22 @@ TEST(PythonDriverTests, PythonDriverGetSDATypeObjectTest)
 }
 
 /// @brief tests the car c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carObject = pythonDriver.GetPythonCarObject(carData);
+        PyObject* carObject = converter.GetPythonCarObject(carData);
 
         CheckCarData(carData, carObject);
+
+        tCarElt convertedCarData = converter.GetCppCarObject(carObject);
+        CheckCarData(convertedCarData, carObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1387,19 +1391,22 @@ TEST(PythonDriverTests, PythonDriverGetCarObjectTest)
 }
 
 /// @brief tests the init car c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarInitObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carInitObject = pythonDriver.GetPythonCarInitObject(carData.info);
+        PyObject* carInitObject = converter.GetPythonCarInitObject(carData.info);
 
         CheckInitCarData(carData.info, carInitObject);
+
+        tInitCar convertedCarData = converter.GetCppCarInitObject(carInitObject);
+        CheckInitCarData(convertedCarData, carInitObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1409,19 +1416,22 @@ TEST(PythonDriverTests, PythonDriverGetCarInitObjectTest)
 }
 
 /// @brief tests the public car c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarPublicObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carPublicObject = pythonDriver.GetPythonCarPublicObject(carData.pub);
+        PyObject* carPublicObject = converter.GetPythonCarPublicObject(carData.pub);
 
         CheckPublicCarData(carData.pub, carPublicObject);
+
+        tPublicCar convertedCarData = converter.GetCppCarPublicObject(carPublicObject);
+        CheckPublicCarData(convertedCarData, carPublicObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1431,19 +1441,22 @@ TEST(PythonDriverTests, PythonDriverGetCarPublicObjectTest)
 }
 
 /// @brief tests the car race info c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarRaceInfoObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carRaceInfoObject = pythonDriver.GetPythonCarRaceInfoObject(carData.race);
+        PyObject* carRaceInfoObject = converter.GetPythonCarRaceInfoObject(carData.race);
 
         CheckCarRaceInfoData(carData.race, carRaceInfoObject);
+
+        tCarRaceInfo convertedCarData = converter.GetCppCarRaceInfoObject(carRaceInfoObject);
+        CheckCarRaceInfoData(convertedCarData, carRaceInfoObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1453,19 +1466,22 @@ TEST(PythonDriverTests, PythonDriverGetCarRaceInfoObjectTest)
 }
 
 /// @brief tests the private car c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarPrivObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carPrivObject = pythonDriver.GetPythonCarPrivObject(carData.priv);
+        PyObject* carPrivObject = converter.GetPythonCarPrivObject(carData.priv);
 
         CheckPrivCarData(carData.priv, carPrivObject);
+
+        tPrivCar convertedCarData = converter.GetCppCarPrivObject(carPrivObject);
+        CheckPrivCarData(convertedCarData, carPrivObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1475,19 +1491,21 @@ TEST(PythonDriverTests, PythonDriverGetCarPrivObjectTest)
 }
 
 /// @brief tests the car control c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarCtrlObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carCtrlObject = pythonDriver.GetPythonCarCtrlObject(carData.ctrl);
-
+        PyObject* carCtrlObject = converter.GetPythonCarCtrlObject(carData.ctrl);
         CheckCarCtrlData(carData.ctrl, carCtrlObject);
+
+        tCarCtrl convertedCarData = converter.GetCppCarCtrlObject(carCtrlObject);
+        CheckCarCtrlData(convertedCarData, carCtrlObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1497,19 +1515,21 @@ TEST(PythonDriverTests, PythonDriverGetCarCtrlObjectTest)
 }
 
 /// @brief tests the car setup c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarSetupObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carSetupObject = pythonDriver.GetPythonCarSetupObject(carData.setup);
-
+        PyObject* carSetupObject = converter.GetPythonCarSetupObject(carData.setup);
         CheckCarSetupData(carData.setup, carSetupObject);
+
+        tCarSetup convertedCarData = converter.GetCppCarSetupObject(carSetupObject);
+        CheckCarSetupData(convertedCarData, carSetupObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1519,19 +1539,21 @@ TEST(PythonDriverTests, PythonDriverGetCarSetupObjectTest)
 }
 
 /// @brief tests the car pit cmd c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
+TEST(PythonConverterTests, PythonDriverGetCarPitCmdObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         TestSegments testSegments = GenerateSegments();
         tCarElt carData = GenerateCar(testSegments);
 
-        PyObject* carPitCmdObject = pythonDriver.GetPythonCarPitCmdObject(carData.pitcmd);
-
+        PyObject* carPitCmdObject = converter.GetPythonCarPitCmdObject(carData.pitcmd);
         CheckCarPitCmdData(carData.pitcmd, carPitCmdObject);
+
+        tCarPitCmd convertedCarData = converter.GetCppCarPitCmdObject(carPitCmdObject);
+        CheckCarPitCmdData(convertedCarData, carPitCmdObject);
 
         DestroySegments(testSegments);
         DestroyCar(carData);
@@ -1541,18 +1563,20 @@ TEST(PythonDriverTests, PythonDriverGetCarPitCmdObjectTest)
 }
 
 /// @brief tests the situation c++ data correctly translated to python and back
-TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
+TEST(PythonConverterTests, PythonDriverGetSituationObjectTest)
 {
     Py_Initialize();
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter converter = SDATypesConverter();
 
     for (int i = 0; i < TEST_COUNT; i++)
     {
         tSituation situationData = GenerateSituation();
 
-        PyObject* situationObject = pythonDriver.GetPythonSituationObject(situationData);
-
+        PyObject* situationObject = converter.GetPythonSituationObject(situationData);
         CheckSituationData(situationData, situationObject);
+
+        tSituation convertedSituationData = converter.GetCppSituationObject(situationObject);
+        CheckSituationData(convertedSituationData, situationObject);
 
         DestroySituation(situationData);
     }

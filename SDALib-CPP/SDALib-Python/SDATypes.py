@@ -105,7 +105,7 @@ class TrackSegment:
                  radiusL, arc, center, vertex1, vertex2, vertex3, vertex4, angle1, angle2, angle3, angle4, angle5,
                  angle6, angle7, sin, cos, kzl, kzw, kyl, rgtSideNormal, envIndex, height,
                  raceInfo, doVFactor, speedLimit):
-        self.id = id  # int
+        self.trackId = id  # int
         self.type = type  # int
         self.type2 = type2  # int
         self.style = style  # int

@@ -12,7 +12,7 @@ class SDADriver:
         # tests whether this can be called
         sdaAction = SDATypes.SDAAction(0, 0, 0, 0)
 
-        # newSDAData = SpeedDreamsPython.call(sdaData, sdaAction);
+        # newSDAData = SpeedDreamsPython.call(sdaData, sdaAction)
 
         sdaAction.steer = sdaData.car.pub.dynGC.vel.x
         sdaAction.accel = sdaData.situation.deltaTime
