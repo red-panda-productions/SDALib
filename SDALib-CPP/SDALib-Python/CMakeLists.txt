@@ -3,10 +3,10 @@ include(../cmake/SDAMacros.cmake)
 
 
 add_executable(SDALib-Python "SDATypesConverter.cpp" "SDATypesConverter.h" "PythonDriver.cpp"
-        "PythonDriver.h" "PythonDriver.inl" "SpeedDreamsPython.cpp" "SpeedDreamsPython.h")
+        "PythonDriver.h" "PythonDriver.inl" "SpeedDreamsPython.cpp")
 
 add_library(SDALib-Pythonlib "SDATypesConverter.cpp" "SDATypesConverter.h"  "PythonDriver.cpp"
-        "PythonDriver.h" "PythonDriver.inl" "SpeedDreamsPython.cpp" "SpeedDreamsPython.h")
+        "PythonDriver.h" "PythonDriver.inl" "SpeedDreamsPython.cpp")
 
 target_compile_definitions(SDALib-Pythonlib PUBLIC "SDA_LIBRARY")
 

@@ -94,4 +94,6 @@ public:
         *m_carPitCmdClass, *m_situationClass, *m_raceInfoClass, *m_vectorClass;
 
     void FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetupArray[], tCarSetupItem* p_carSetupItems);
+
+    void ReplaceString(char* p_toFill, const char* p_data, int p_length);
 };

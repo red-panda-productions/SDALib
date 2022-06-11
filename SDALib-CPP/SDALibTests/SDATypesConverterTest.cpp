@@ -1,45 +1,39 @@
 #include <gtest/gtest.h>
-#include "Mocks/SDADriverMock.h"
-#include "PythonDriver.h"
 #include "PythonDriver.inl"
 #include "SDATypesConverter.h"
 #include "Mocks/PointerManagerMock.h"
-#include "Utils.h"
 #include "Random.hpp"
 #include "GeneratorUtils.h"
 
-CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
-
-#define TPythonDriver PythonDriver<PointerManagerMock>
-#define TEST_COUNT    10
+#define TEST_COUNT 10
 
 /// @brief Checks all classes from SDATypes are callable
-TEST(PythonDriverTests, PythonDriverInitTest)
+TEST(SDATypesConverterTests, SDATypesConverterInitTest)
 {
     Py_Initialize();
 
-    SDATypesConverter pythonDriver = SDATypesConverter();
+    SDATypesConverter sdaTypesConverter = SDATypesConverter();
 
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_sdaTypesClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_initCarClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_wheelSpecificationsClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_visualAttributesClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_publicCarClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_dynamicPointClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_trackLocationClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_trackSegmentClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carRaceInfoClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_privCarClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_posDClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_collisionStateClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carCtrlClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carSetupClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carSetupItemClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_carPitCmdClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_situationClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_raceInfoClass));
-    ASSERT_TRUE(PyCallable_Check(pythonDriver.m_vectorClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_sdaTypesClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_carClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_initCarClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_wheelSpecificationsClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_visualAttributesClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_publicCarClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_dynamicPointClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_trackLocationClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_trackSegmentClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_carRaceInfoClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_privCarClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_posDClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_collisionStateClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_carCtrlClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_carSetupClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_carSetupItemClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_carPitCmdClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_situationClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_raceInfoClass));
+    ASSERT_TRUE(PyCallable_Check(sdaTypesConverter.m_vectorClass));
     Py_Finalize();
 }
 
@@ -1562,49 +1556,6 @@ TEST(PythonDriverTests, PythonDriverGetSituationObjectTest)
 
         DestroySituation(situationData);
     }
-
-    Py_Finalize();
-}
-
-/// @brief tests whether the python function UpdateAI give back the correct c++ data
-TEST(PythonDriverTests, PythonDriverUpdateAITest)
-{
-    Py_Initialize();
-
-    Random random;
-
-    TPythonDriver pythonDriver = TPythonDriver();
-    pythonDriver.SetPythonDriverFileName("DriverTest");
-    pythonDriver.InitAI();
-
-    SDAData sdaData;
-    TestSegments segments = GenerateSegments();
-    sdaData.TickCount = random.NextUInt();
-    sdaData.Car = GenerateCar(segments);
-    sdaData.Situation = GenerateSituation();
-
-    SDAAction action = pythonDriver.UpdateAI(sdaData);
-
-    ASSERT_TRUE(action.Steer == sdaData.Car.pub.DynGC.vel.x);
-    ASSERT_TRUE(action.Accel == sdaData.Situation.deltaTime);
-    ASSERT_TRUE(action.Brake == sdaData.Situation.raceInfo.totTime);
-    ASSERT_TRUE(action.Gear == sdaData.Situation.raceInfo.totTime);
-
-    DestroySegments(segments);
-    DestroyCar(sdaData.Car);
-    DestroySituation(sdaData.Situation);
-
-    Py_Finalize();
-}
-
-/// @brief tests whether the driver file name is correctly get and set
-TEST(PythonDriverTests, PythonDriverPythonDriverFileNameTest)
-{
-    Py_Initialize();
-    TPythonDriver pythonDriver = TPythonDriver();
-
-    pythonDriver.SetPythonDriverFileName("DriverTest");
-    ASSERT_EQ(pythonDriver.GetPythonDriverFileName(), "DriverTest");
 
     Py_Finalize();
 }

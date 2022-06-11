@@ -1,4 +1,15 @@
-#include "SpeedDreamsPython.h"
+#pragma once
+
+#include <stdio.h>
+#include "IPCPointerManager.h"
+#include "SDATypesConverter.h"
+#ifdef _DEBUG
+#undef _DEBUG
+#include <Python.h>
+#define _DEBUG
+#else
+#include <Python.h>
+#endif
 #include "SDASpeedDreams.hpp"
 
 /// @brief           Calls speed dream functions from Python

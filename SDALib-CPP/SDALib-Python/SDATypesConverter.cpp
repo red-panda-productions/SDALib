@@ -100,7 +100,7 @@ SDAAction SDATypesConverter::GetCppSDAAction(PyObject *p_action)
 /// @brief gets the python SDATypes object of the current input
 /// @param  p_data  The data
 /// @return         The python object
-PyObject* SDATypesConverter::GetPythonSDATypeObject(SDAData &p_data)
+PyObject *SDATypesConverter::GetPythonSDATypeObject(SDAData &p_data)
 {
     const int size = 3;
     PyObject *sdaTypesArgs[size];
@@ -224,19 +224,39 @@ tInitCar SDATypesConverter::GetCppCarInitObject(PyObject *p_initCar)
 {
     tInitCar initCar;
 
-    strcmp(initCar.name, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "name")));
-    strcmp(initCar.sname, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "sName")));
-    strcmp(initCar.codename, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "codename")));
-    strcmp(initCar.teamname, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "teamName")));
-    strcmp(initCar.carName, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "carName")));
-    strcmp(initCar.category, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "category")));
+    ReplaceString(initCar.name, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "name")), MAX_NAME_LEN);
+    ReplaceString(initCar.sname, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "sName")), MAX_NAME_LEN);
+    ReplaceString(initCar.codename, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "codename")), 4);
+    ReplaceString(initCar.teamname, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "teamName")), MAX_NAME_LEN);
+    ReplaceString(initCar.carName, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "carName")), MAX_NAME_LEN);
+    ReplaceString(initCar.category, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "category")), MAX_NAME_LEN);
     initCar.raceNumber = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "raceNumber")));
     initCar.startRank = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "startRank")));
     initCar.driverType = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "driverType")));
     initCar.networkplayer = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "networkPlayer")));
     initCar.skillLevel = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "skillLevel")));
 
-    // TODO
+    PyObject *iconColorVal = PyList_AsTuple(PyObject_GetAttrString(p_initCar, "iconColor"));
+    initCar.iconColor[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(iconColorVal, 0)));
+    initCar.iconColor[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(iconColorVal, 1)));
+    initCar.iconColor[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(iconColorVal, 2)));
+    initCar.dimension = GetCppTVectorObject(PyObject_GetAttrString(p_initCar, "dimension"));
+    initCar.drvPos = GetCppTVectorObject(PyObject_GetAttrString(p_initCar, "drvPos"));
+    initCar.bonnetPos = GetCppTVectorObject(PyObject_GetAttrString(p_initCar, "bonnetPos"));
+    initCar.tank = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_initCar, "tank")));
+    initCar.steerLock = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_initCar, "steerLock")));
+    initCar.statGC = GetCppTVectorObject(PyObject_GetAttrString(p_initCar, "statGC"));
+
+    PyObject *wheelVal = PyList_AsTuple(PyObject_GetAttrString(p_initCar, "wheel"));
+    initCar.wheel[0] = GetCppWheelSpecificationObject(PyTuple_GetItem(wheelVal, 0));
+    initCar.wheel[1] = GetCppWheelSpecificationObject(PyTuple_GetItem(wheelVal, 1));
+    initCar.wheel[2] = GetCppWheelSpecificationObject(PyTuple_GetItem(wheelVal, 2));
+    initCar.wheel[3] = GetCppWheelSpecificationObject(PyTuple_GetItem(wheelVal, 3));
+    initCar.visualAttr = GetCppVisualAttributesObject(PyObject_GetAttrString(p_initCar, "visualAttr"));
+    ReplaceString(initCar.masterModel, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "masterModel")), MAX_NAME_LEN);
+    ReplaceString(initCar.skinName, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "skinName")), MAX_NAME_LEN);
+    initCar.skinTargets = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "skinTargets")));
+    ;
 
     return initCar;
 }
@@ -254,7 +274,7 @@ PyObject *SDATypesConverter::GetPythonWheelSpecificationObject(tWheelSpec &p_whe
     wheelSpecArgs[2] = PyFloat_FromDouble(p_wheelSpec.tireWidth);
     wheelSpecArgs[3] = PyFloat_FromDouble(p_wheelSpec.brakeDiskRadius);
     wheelSpecArgs[4] = PyFloat_FromDouble(p_wheelSpec.wheelRadius);
-    // initialize SDAType
+
     PyObject *wheelSpec = GetObjectFromArgs(m_wheelSpecificationsClass, wheelSpecArgs, size);
 
     return wheelSpec;
@@ -266,6 +286,12 @@ PyObject *SDATypesConverter::GetPythonWheelSpecificationObject(tWheelSpec &p_whe
 tWheelSpec SDATypesConverter::GetCppWheelSpecificationObject(PyObject *p_wheelSpec)
 {
     tWheelSpec wheelSpec;
+
+    wheelSpec.rimRadius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheelSpec, "rimRadius")));
+    wheelSpec.tireHeight = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheelSpec, "tireHeight")));
+    wheelSpec.tireWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheelSpec, "tireWidth")));
+    wheelSpec.brakeDiskRadius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheelSpec, "brakeDiskRadius")));
+    wheelSpec.wheelRadius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheelSpec, "wheelRadius")));
 
     return wheelSpec;
 }
@@ -298,6 +324,13 @@ PyObject *SDATypesConverter::GetPythonVisualAttributesObject(tVisualAttributes &
 tVisualAttributes SDATypesConverter::GetCppVisualAttributesObject(PyObject *p_visualAttributes)
 {
     tVisualAttributes visualAttributes;
+
+    visualAttributes.exhaustNb = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_visualAttributes, "exhaustNb")));
+
+    PyObject *exhaustPos = PyList_AsTuple(PyObject_GetAttrString(p_visualAttributes, "exhaustPos"));
+    visualAttributes.exhaustPos[0] = GetCppTVectorObject(PyTuple_GetItem(exhaustPos, 0));
+    visualAttributes.exhaustPos[1] = GetCppTVectorObject(PyTuple_GetItem(exhaustPos, 1));
+    visualAttributes.exhaustPower = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_visualAttributes, "exhaustPower")));
 
     return visualAttributes;
 }
@@ -346,6 +379,41 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
 {
     tPublicCar publicCar;
 
+    publicCar.DynGC = GetCppDynamicPointObject(PyObject_GetAttrString(p_publicCar, "dynGC"));
+    publicCar.DynGCg = GetCppDynamicPointObject(PyObject_GetAttrString(p_publicCar, "dynGCg"));
+    publicCar.speed = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_publicCar, "speed")));
+    ;
+
+    PyObject *p_posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_publicCar, "posMat"));
+    PyObject *row1Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 0));
+    PyObject *row2Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 1));
+    PyObject *row3Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 2));
+    PyObject *row4Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 3));
+
+    publicCar.posMat[0][0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 0)));
+    publicCar.posMat[0][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 1)));
+    publicCar.posMat[0][2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 2)));
+    publicCar.posMat[0][3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 3)));
+
+    publicCar.posMat[1][0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row2Val, 0)));
+    publicCar.posMat[1][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row2Val, 1)));
+    publicCar.posMat[1][2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row2Val, 2)));
+    publicCar.posMat[1][3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row2Val, 3)));
+
+    publicCar.posMat[2][0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row3Val, 0)));
+    publicCar.posMat[2][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row3Val, 1)));
+    publicCar.posMat[2][2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row3Val, 2)));
+    publicCar.posMat[2][3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row3Val, 3)));
+
+    publicCar.posMat[3][0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 0)));
+    publicCar.posMat[3][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 1)));
+    publicCar.posMat[3][2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 2)));
+    publicCar.posMat[3][3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 3)));
+
+    publicCar.trkPos = GetCppTrackLocationObject(PyObject_GetAttrString(p_publicCar, "trkPos"));
+    publicCar.state = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_publicCar, "state")));
+    ;
+
     return publicCar;
 }
 
@@ -372,6 +440,10 @@ PyObject *SDATypesConverter::GetPythonDynamicPointObject(tDynPt &p_dynPt)
 tDynPt SDATypesConverter::GetCppDynamicPointObject(PyObject *p_dynPt)
 {
     tDynPt dynPt;
+
+    dynPt.pos = GetCppPosDObject(PyObject_GetAttrString(p_dynPt, "pos"));
+    dynPt.vel = GetCppPosDObject(PyObject_GetAttrString(p_dynPt, "vel"));
+    dynPt.acc = GetCppPosDObject(PyObject_GetAttrString(p_dynPt, "acc"));
 
     return dynPt;
 }
@@ -843,7 +915,7 @@ PyObject *SDATypesConverter::GetPythonCarSetupObject(tCarSetup &p_carSetup)
 /// @param  p_carSetupArray The car setup item python object array
 /// @param  p_carSetupItem The car setup item array
 void SDATypesConverter::FillCarSetupArray(int p_start, int p_end, PyObject *p_carSetupArray[],
-                                                     tCarSetupItem *p_carSetupItems)
+                                          tCarSetupItem *p_carSetupItems)
 {
     for (int i = 0; i < p_end - p_start; i++)
     {
@@ -1005,3 +1077,10 @@ PyObject *SDATypesConverter::GetObjectFromArgs(PyObject *p_classInit, PyObject *
     return objectInit;
 }
 
+void SDATypesConverter::ReplaceString(char *p_toFill, const char *p_data, int p_length)
+{
+    for (int i = 0; i < p_length; i++)
+    {
+        p_toFill[i] = p_data[i];
+    }
+}
