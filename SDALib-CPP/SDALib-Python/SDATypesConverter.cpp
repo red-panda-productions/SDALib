@@ -472,8 +472,8 @@ tTrkLocPos SDATypesConverter::GetCppTrackLocationObject(PyObject *p_trackLoc)
 {
     tTrkLocPos trackLocPos;
 
-    tTrackSeg segment = GetCppTrackSegmentObject(PyObject_GetAttrString(p_trackLoc, "seg"));
-    trackLocPos.seg = &segment;
+    trackLocPos.seg = new tTrackSeg[1];
+    trackLocPos.seg[0] = GetCppTrackSegmentObject(PyObject_GetAttrString(p_trackLoc, "seg"));
     trackLocPos.type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackLoc, "type")));
     trackLocPos.toStart = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackLoc, "toStart")));
     trackLocPos.toRight = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackLoc, "toRight")));
