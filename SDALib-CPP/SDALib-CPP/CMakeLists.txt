@@ -2,9 +2,11 @@
 	SDADriver.hpp
 	SDAAction.hpp
 	SDAData.hpp
+	SDAUtils.hpp
 	SDASpeedDreams.hpp
 	IPCPointerManager.h
-        SDA_portability.h)
+	SDA_portability.h
+)
 
 SET(SDALIB_INLINES
 	SDADriver.inl

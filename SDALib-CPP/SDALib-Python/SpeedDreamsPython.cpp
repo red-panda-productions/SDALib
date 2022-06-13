@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdio.h>
-#include "IPCPointerManager.h"
+#include "SDASpeedDreams.hpp"
 #include "SDATypesConverter.h"
 #ifdef _DEBUG
 #undef _DEBUG
@@ -10,7 +10,6 @@
 #else
 #include <Python.h>
 #endif
-#include "SDASpeedDreams.hpp"
 
 /// @brief           Calls speed dream functions from Python
 /// @param  p_data   The data

@@ -27,7 +27,6 @@ INSTALL_SDA_PACKAGES(SDALib-Pythonlib)
 target_include_directories(SDALib-Python PUBLIC "../SDALib-CPP")
 target_include_directories(SDALib-Pythonlib PUBLIC "../SDALib-CPP")
 
-
 target_include_directories(SDALib-Python PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
 target_include_directories(SDALib-Pythonlib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLUDE_DIRS})
 
@@ -37,5 +36,7 @@ IF(UNIX)
     TARGET_LINK_LIBRARIES(SDALib-Python rt)
     TARGET_LINK_LIBRARIES(SDALib-Pythonlib rt)
 ENDIF(UNIX)
+
+INSTALL_PYTHON_SIMULATION(SDALib-Python)
 
 
