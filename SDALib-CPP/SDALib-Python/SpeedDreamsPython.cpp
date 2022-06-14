@@ -1,8 +1,6 @@
 #pragma once
 
 #include <stdio.h>
-#include "SDASpeedDreams.hpp"
-#include "SDATypesConverter.h"
 #ifdef _DEBUG
 #undef _DEBUG
 #include <Python.h>
@@ -10,6 +8,9 @@
 #else
 #include <Python.h>
 #endif
+
+#include "SDASpeedDreams.hpp"
+#include "SDATypesConverter.h"
 
 /// @brief           Calls speed dream functions from Python
 /// @param  p_data   The data
@@ -31,15 +32,15 @@ static PyMethodDef speedDreams_methods[] = {
     {"call", CallSpeedDreams, METH_VARARGS, ""},
     {0}};
 
-static struct PyModuleDef speedDreamsPythonMod =
+static struct PyModuleDef SpeedDreamsFunction =
     {
         PyModuleDef_HEAD_INIT,
-        "SpeedDreamsPython",
+        "SpeedDreamsFunction",
         "",
         -1,
         speedDreams_methods};
 
-PyMODINIT_FUNC PyInit_speedDreamsMod(void)
+PyMODINIT_FUNC PyInit_SpeedDreamsFunction(void)
 {
-    return PyModule_Create(&speedDreamsPythonMod);
+    return PyModule_Create(&SpeedDreamsFunction);
 }

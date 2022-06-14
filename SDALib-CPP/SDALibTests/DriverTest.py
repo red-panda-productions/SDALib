@@ -1,5 +1,5 @@
 import SDATypes
-import SpeedDreamsPython
+import SpeedDreamsFunction
 
 
 class SDADriver:
@@ -12,11 +12,11 @@ class SDADriver:
         # tests whether this can be called
         sdaAction = SDATypes.SDAAction(0, 0, 0, 0)
 
-        # newSDAData = SpeedDreamsPython.call(sdaData, sdaAction)
+        newSDAData = SpeedDreamsFunction.call(sdaData, sdaAction)
 
         sdaAction.steer = sdaData.car.pub.dynGC.vel.x
         sdaAction.accel = sdaData.situation.deltaTime
         sdaAction.brake = sdaData.situation.raceInfo.totTime
-        sdaAction.clutch = 0  # newSDAData.situation.raceInfo.totTime
+        sdaAction.clutch = newSDAData.situation.raceInfo.totTime
 
         return sdaAction

@@ -766,6 +766,7 @@ static char* makeRunTimeDirPath(const char* srcPath)
 	if (strlen(srcPath) > 0 && srcPath[0] == '~'
 		&& (strlen(srcPath) == 1 || (srcPath[1] == '/' || srcPath[1] == '\\')))
 	{
+#ifndef PYTHON_MODULE
 #ifdef WIN32
 		LPITEMIDLIST pidl;
 		if (!SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_PERSONAL, &pidl))
@@ -777,6 +778,7 @@ static char* makeRunTimeDirPath(const char* srcPath)
 			strcpy(tgtPath, pszHomeDir);
 		else
 			GfLogFatal("Could not get user's HOME folder path, or it is empty\n");
+#endif
 #endif
 		if (strlen(tgtPath) + strlen(srcPath) - 1 < bufSize - 1)
 			strcat(tgtPath, srcPath+1); // Don't keep the ~.

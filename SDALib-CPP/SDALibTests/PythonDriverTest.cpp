@@ -30,10 +30,10 @@ TEST(PythonDriverTests, PythonDriverUpdateAITest)
 
     SDAAction action = pythonDriver.UpdateAI(sdaData);
 
-    ASSERT_TRUE(action.Steer == sdaData.Car.pub.DynGC.vel.x);
-    ASSERT_TRUE(action.Accel == sdaData.Situation.deltaTime);
-    ASSERT_TRUE(action.Brake == sdaData.Situation.raceInfo.totTime);
-    ASSERT_TRUE(action.Gear == sdaData.Situation.raceInfo.totTime);
+    ASSERT_EQ(action.Steer, sdaData.Car.pub.DynGC.vel.x);
+    ASSERT_EQ(action.Accel, sdaData.Situation.deltaTime);
+    ASSERT_EQ(action.Brake, sdaData.Situation.raceInfo.totTime);
+    ASSERT_EQ(action.Gear, sdaData.Situation.raceInfo.totTime);
 
     DestroySegments(segments);
     DestroyCar(sdaData.Car);

@@ -92,7 +92,7 @@ SDAAction SDATypesConverter::GetCppSDAAction(PyObject *p_action)
     action.Steer = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "steer")));
     action.Accel = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "accel")));
     action.Brake = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "brake")));
-    action.Gear = static_cast<int>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "gear")));
+    action.Gear = static_cast<int>(PyFloat_AsDouble(PyObject_GetAttrString(p_action, "clutch")));
 
     return action;
 }
