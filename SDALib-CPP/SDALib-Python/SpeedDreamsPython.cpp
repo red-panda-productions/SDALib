@@ -29,18 +29,18 @@ static PyObject* CallSpeedDreams(PyObject* p_data, PyObject* p_action)
 }
 
 static PyMethodDef speedDreams_methods[] = {
-    {"call", CallSpeedDreams, METH_VARARGS, ""},
+    {"update", CallSpeedDreams, METH_VARARGS, ""},
     {0}};
 
-static struct PyModuleDef SpeedDreamsFunction =
+static struct PyModuleDef simulator =
     {
         PyModuleDef_HEAD_INIT,
-        "SpeedDreamsFunction",
+        "simulator",
         "",
         -1,
         speedDreams_methods};
 
-PyMODINIT_FUNC PyInit_SpeedDreamsFunction(void)
+PyMODINIT_FUNC PyInit_simulator(void)
 {
-    return PyModule_Create(&SpeedDreamsFunction);
+    return PyModule_Create(&simulator);
 }

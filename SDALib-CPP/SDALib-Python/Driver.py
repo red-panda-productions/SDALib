@@ -1,4 +1,5 @@
 import SDATypes
+import simulator
 
 class SDADriver:
     speedLimit = 80

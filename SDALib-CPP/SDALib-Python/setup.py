@@ -15,7 +15,14 @@ libDir = os.path.join(newDir, 'libraries')
 libIncludeDir = os.path.join(libDir, 'include')
 libLibDir = os.path.join(libDir, 'lib')
 libcmake = os.path.join(sdaLibDir, 'cmake-build-debug')
-libcmakeSDALib = os.path.join(libcmake, 'SDALib-CPP')
+libcmakeSDALibCpp = os.path.join(libcmake, 'SDALib-CPP')
+libcmakeSDALibPy = os.path.join(libcmake, 'SDALib-Python')
+libcmakeSDALibSD = os.path.join(libcmake, 'SpeedDreams')
+libcmakeSDALibSDSimu = os.path.join(libcmakeSDALibSD, 'simuv4')
+libcmakeSDALibSDMath = os.path.join(libcmakeSDALibSD, 'math')
+libcmakeSDALibSDPort= os.path.join(libcmakeSDALibSD, 'portability')
+libcmakeSDALibSDRobot = os.path.join(libcmakeSDALibSD, 'robottools')
+libcmakeSDALibSDTgf = os.path.join(libcmakeSDALibSD, 'tgf')
 
 sdTgfDir = os.path.join(sdaLibSDDir, 'tgf')
 sdMathDir = os.path.join(sdaLibSDDir, 'math')
@@ -74,20 +81,30 @@ macros = [('PYTHON_MODULE', '1')]
 if sys.platform == "win32":
     macros.append(('WIN32', '1'))
 
-module = Extension('SpeedDreamsFunction',
+module = Extension('simulator',
                    define_macros = macros,
-                   include_dirs = [sdaLibPyDir, sdaLibCppDir, sdaLibTestDir, sdaLibSDDir, libcmakeSDALib,
+                   extra_compile_args = ['/DWIN32', '/D_WINDOWS', '/W3', '/GR', '/EHsc', '/fp:strict',
+                                         '/Zi', '/Ob0', '/Od', '/RTC1', '/VERBOSE', '/debug', '/INCREMENTAL', '/MP'],
+                   extra_link_args= ['/debug', '/INCREMENTAL', '/MP'],
+                   include_dirs = [sdaLibPyDir, sdaLibCppDir, sdaLibTestDir, sdaLibSDDir, libcmakeSDALibCpp,
                                    sdTgfDir, sdMathDir, sdSimDir, sdPortDir, sdRobotDir, libIncludeDir,
                                    libLibDir],
-                   library_dirs = [libLibDir, "C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.19041.0\\um\\x86"],
-                   libraries = ['sg', 'solid2', 'ul', 'IPCLib', 'libexpat', 'js', 'libssl', 'sl', 'ssg', 'User32'],
-                   sources=[sdaDataFile, simuFile, sdaTypesConverterFile, transmissionFile, sdaSpeedDreamsFile,
-                            speedDreamsPythonFile, wheelFile, rttrackFile, rtutilFile, portabilityFile,
-                            sgGeoFile, sgRandomFile, sgGeodesyFile, vectorFile, carFile, brakeFile, axleFile,
-                            atmosphereFile, aeroFile, steerFile, tgfFile, paramsFile, directoryFile, fileFile,
-                            fileSetupFile, formulaFile, hashFile, legacymoduleFile, windowsspecFile,
-                            memmanagerFile, osFile, profilerFile, schedulespyFile, traceFile,
-                            categoriesFile, collideFile, differentialFile, engineFile, suspFile])
+                   library_dirs = [libLibDir, "C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.19041.0\\um\\x86",
+                                   libcmakeSDALibCpp, libcmakeSDALibPy, libcmakeSDALibSD, libcmakeSDALibSDSimu,
+                                   libcmakeSDALibSDMath, libcmakeSDALibSDPort, libcmakeSDALibSDRobot, libcmakeSDALibSDTgf],
+                   libraries = ['SDALib', 'SDALib-Python', 'SDALib-Pythonlib', 'SpeedDreamsLib', 'simu', 'tgf', 'robottools',
+                                'portability', 'math',
+                                'sg', 'solid2', 'ul', 'IPCLib', 'libexpat', 'js', 'libssl', 'sl', 'ssg', 'User32',
+                                'kernel32', 'Gdi32', 'WinSpool', 'shell32', 'Ole32', 'OleAut32', 'Uuid', 'ComDlg32',
+                                'AdvAPI32'],
+                   #depends=[sdaDataFile, simuFile, sdaTypesConverterFile, transmissionFile, sdaSpeedDreamsFile,
+                   #         wheelFile, rttrackFile, rtutilFile, portabilityFile,
+                   #         sgGeoFile, sgRandomFile, sgGeodesyFile, vectorFile, carFile, brakeFile, axleFile,
+                   #         atmosphereFile, aeroFile, steerFile, tgfFile, paramsFile, directoryFile, fileFile,
+                   #         fileSetupFile, formulaFile, hashFile, legacymoduleFile, windowsspecFile,
+                   #         memmanagerFile, osFile, profilerFile, schedulespyFile, traceFile,
+                   #         categoriesFile, collideFile, differentialFile, engineFile, suspFile],
+                   sources = [speedDreamsPythonFile])
 
-setup(name='SpeedDreamsFunction',
+setup(name='simulator',
       ext_modules=[module])
