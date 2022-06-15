@@ -115,6 +115,8 @@ struct {								\
 #define TRK_ATT_DESCR               "description"
 #define TRK_ATT_CAT                 "category"
 #define TRK_ATT_SUBCAT              "subcategory"
+// SIMULATED DRIVING ASSISTANCE: added the speed limit parameter
+#define TRK_ATT_AVERAGE_SPEEDLIMIT  "average speed limit"
 
 #define TRK_ATT_NONE                "none"
 #define TRK_ATT_SHORT               "short"
@@ -437,6 +439,8 @@ typedef struct trackSeg
 
     float SpeedLimit;           // SIMULATED DRIVING ASSISTANCE: added a speed limit to the track
     float length;               /**< Length in meters of the middle of the track */
+    /// SIMULATED DRIVING ASSISTANCE: added tdble Time
+    tdble Time;                 /**< Estimated time in seconds */
     float width;                /**< Width of the segment (if constant width) */
     float startWidth;           /**< Width of the beginning of the segment */
     float endWidth;             /**< Width of the end of the segment */
@@ -744,6 +748,10 @@ typedef struct Track
     tTrackPitInfo pits;         /**< Pits information */
     tTrackSeg* seg;         /**< Segment list for the main track */
     tTrackSurface* surfaces;	/**< Segment surface list */
+
+    // SIMULATED DRIVING ASSISTANCE: added speedlimit and estimated time members
+    tdble SpeedLimit; /**< speed limit of the track */
+    tdble Time;       /**< main track time (estimated) */
 
     t3Dd		min;
     t3Dd		max;

@@ -298,6 +298,10 @@ void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
     PyObject* lengthVal = PyObject_GetAttr(p_trackSegObject, lengthAttr);
     ASSERT_TRUE(static_cast<double>(p_trackSeg.length) == PyFloat_AsDouble(lengthVal));
 
+    PyObject* timeAttr = PyUnicode_FromString("time");
+    PyObject* timeVal = PyObject_GetAttr(p_trackSegObject, timeAttr);
+    ASSERT_TRUE(static_cast<double>(p_trackSeg.Time) == PyFloat_AsDouble(timeVal));
+
     PyObject* widthAttr = PyUnicode_FromString("width");
     PyObject* widthVal = PyObject_GetAttr(p_trackSegObject, widthAttr);
     ASSERT_TRUE(static_cast<double>(p_trackSeg.width) == PyFloat_AsDouble(widthVal));
