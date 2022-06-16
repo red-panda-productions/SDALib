@@ -1,5 +1,7 @@
 import SDATypes
-import simulator
+import SpeedDreamsFunction
+
+print(dir(SpeedDreamsFunction))
 
 class SDADriver:
     speedLimit = 80

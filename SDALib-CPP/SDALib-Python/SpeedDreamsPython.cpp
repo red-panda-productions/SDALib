@@ -16,31 +16,36 @@
 /// @param  p_data   The data
 /// @param  p_action The action to be performed
 /// @return The updated SDAData
-static PyObject* CallSpeedDreams(PyObject* p_data, PyObject* p_action)
+static PyObject* simulator_update(PyObject *p_self, PyObject* p_args)
 {
+
+    PyObject* data = PyTuple_GetItem(p_args, 0);
+    PyObject* action = PyTuple_GetItem(p_args, 1);
+
     SDATypesConverter sdaTypesConverter = SDATypesConverter();
 
-    SDAData oldData = sdaTypesConverter.GetCppSDAData(p_data);
-    SDAAction action = sdaTypesConverter.GetCppSDAAction(p_action);
+    SDAData oldData = sdaTypesConverter.GetCppSDAData(data);
+    SDAAction oldAction = sdaTypesConverter.GetCppSDAAction(action);
 
-    SDAData newData = SDASpeedDreams(oldData, action);
+    SDAData newData = SDASpeedDreams(oldData, oldAction);
 
     return sdaTypesConverter.GetPythonSDATypeObject(newData);
 }
 
-static PyMethodDef speedDreams_methods[] = {
-    {"update", CallSpeedDreams, METH_VARARGS, ""},
-    {0}};
+static PyMethodDef simulator_methods[] = {
+    {"update", (PyCFunction)simulator_update, METH_NOARGS, NULL },
+    { NULL, NULL, 0, NULL }
+};
 
-static struct PyModuleDef simulator =
+static struct PyModuleDef simulatormodule =
     {
         PyModuleDef_HEAD_INIT,
         "simulator",
         "",
         -1,
-        speedDreams_methods};
+        simulator_methods};
 
 PyMODINIT_FUNC PyInit_simulator(void)
 {
-    return PyModule_Create(&simulator);
+    return PyModule_Create(&simulatormodule);
 }

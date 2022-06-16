@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages, Extension
+from distutils import setup, Extension
 import os
 import sys
 
