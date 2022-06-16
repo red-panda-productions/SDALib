@@ -111,6 +111,7 @@ target_link_libraries(
 
 INSTALL_SDA_PACKAGES(SDALib-Python)
 INSTALL_SDA_PACKAGES(SDALib-Pythonlib)
+INSTALL_SDA_DLLS(SDALib-Python)
 
 target_include_directories(SDALib-Python PUBLIC "../SDALib-CPP")
 target_include_directories(SDALib-Pythonlib PUBLIC "../SDALib-CPP")
