@@ -1,0 +1,16 @@
+from setuptools import setup, find_packages, Extension
+import os
+import sys
+
+module = Extension('simulator',
+                   define_macros = [@SETUP_DEFINE_MACROS@],
+                   extra_compile_args = [@SETUP_COMPILER_ARGS@],
+                   extra_link_args= [@SETUP_LINK_ARGS@],
+                   include_dirs = [@SETUP_INCLUDE_DIRS@],
+                   library_dirs = [@SETUP_LIBRARY_DIRS@],
+                   libraries = [@SETUP_LIBRARIES@],
+                   sources = [@SETUP_SOURCES@],
+                   language = 'c++')
+
+setup(name='simulator',
+      ext_modules=[module])

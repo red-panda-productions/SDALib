@@ -1,11 +1,14 @@
-from distutils.core import setup, Extension
+from setuptools import setup, find_packages, Extension
 import os
 import sys
 
+print(os.getcwd())
 userDir = os.getcwd()
 newDir = userDir.split('SDALib-CPP')[0]
-os.chdir('C:\\')
+print(newDir)
+os.chdir('E:\\')
 
+newDir =  os.path.join(newDir, 'SDALib-CPP')
 sdaLibDir = os.path.join(newDir, 'SDALib-CPP')
 sdaLibCppDir = os.path.join(sdaLibDir, 'SDALib-CPP')
 sdaLibPyDir = os.path.join(sdaLibDir, 'SDALib-Python')
@@ -14,7 +17,8 @@ sdaLibSDDir = os.path.join(sdaLibDir, 'SpeedDreams')
 libDir = os.path.join(newDir, 'libraries')
 libIncludeDir = os.path.join(libDir, 'include')
 libLibDir = os.path.join(libDir, 'lib')
-libcmake = os.path.join(sdaLibDir, 'cmake-build-debug')
+libcmake = os.path.join(sdaLibDir, 'out\\build\\x86-Release')
+print(libcmake)
 libcmakeSDALibCpp = os.path.join(libcmake, 'SDALib-CPP')
 libcmakeSDALibPy = os.path.join(libcmake, 'SDALib-Python')
 libcmakeSDALibSD = os.path.join(libcmake, 'SpeedDreams')
@@ -84,7 +88,7 @@ if sys.platform == "win32":
 module = Extension('simulator',
                    define_macros = macros,
                    extra_compile_args = ['/DWIN32', '/D_WINDOWS', '/W3', '/GR', '/EHsc', '/fp:strict',
-                                         '/Zi', '/Ob0', '/Od', '/RTC1', '/VERBOSE', '/debug', '/INCREMENTAL', '/MP'],
+                                         '/Zi', '/Ob0', '/Od', '/RTC1', '/VERBOSE', '/INCREMENTAL', '/MP'],
                    extra_link_args= ['/debug', '/INCREMENTAL', '/MP'],
                    include_dirs = [sdaLibPyDir, sdaLibCppDir, sdaLibTestDir, sdaLibSDDir, libcmakeSDALibCpp,
                                    sdTgfDir, sdMathDir, sdSimDir, sdPortDir, sdRobotDir, libIncludeDir,
