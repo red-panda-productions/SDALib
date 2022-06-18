@@ -35,6 +35,7 @@ target_include_directories(SDATests PUBLIC ${IPCLIB_INCLUDE_DIR} ${Python3_INCLU
 #)
 
 INSTALL_SDA_PACKAGES(SDATests)
+INSTALL_SDA_DLLS(SDATests)
 
 include(GoogleTest)
 gtest_discover_tests(SDATests DISCOVERY_TIMEOUT 600)
