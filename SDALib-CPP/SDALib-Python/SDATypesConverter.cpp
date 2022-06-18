@@ -488,7 +488,7 @@ tTrkLocPos SDATypesConverter::GetCppTrackLocationObject(PyObject *p_trackLoc)
 /// @return           The python object
 PyObject *SDATypesConverter::GetPythonTrackSegmentObject(tTrackSeg &p_trackSeg)
 {
-    const int size = 36;
+    const int size = 37;
     PyObject *trackSegArgs[size];
 
     trackSegArgs[0] = PyLong_FromLong(static_cast<long>(p_trackSeg.id));
@@ -496,41 +496,42 @@ PyObject *SDATypesConverter::GetPythonTrackSegmentObject(tTrackSeg &p_trackSeg)
     trackSegArgs[2] = PyLong_FromLong(static_cast<long>(p_trackSeg.type2));
     trackSegArgs[3] = PyLong_FromLong(static_cast<long>(p_trackSeg.style));
     trackSegArgs[4] = PyFloat_FromDouble(p_trackSeg.length);
-    trackSegArgs[5] = PyFloat_FromDouble(p_trackSeg.width);
-    trackSegArgs[6] = PyFloat_FromDouble(p_trackSeg.startWidth);
-    trackSegArgs[7] = PyFloat_FromDouble(p_trackSeg.endWidth);
-    trackSegArgs[8] = PyFloat_FromDouble(p_trackSeg.lgfromstart);
-    trackSegArgs[9] = PyFloat_FromDouble(p_trackSeg.radius);
-    trackSegArgs[10] = PyFloat_FromDouble(p_trackSeg.radiusr);
-    trackSegArgs[11] = PyFloat_FromDouble(p_trackSeg.radiusl);
-    trackSegArgs[12] = PyFloat_FromDouble(p_trackSeg.arc);
-    trackSegArgs[13] = GetPythonVectorObject(p_trackSeg.center.x, p_trackSeg.center.y, p_trackSeg.center.z);
+    trackSegArgs[5] = PyFloat_FromDouble(p_trackSeg.Time);
+    trackSegArgs[6] = PyFloat_FromDouble(p_trackSeg.width);
+    trackSegArgs[7] = PyFloat_FromDouble(p_trackSeg.startWidth);
+    trackSegArgs[8] = PyFloat_FromDouble(p_trackSeg.endWidth);
+    trackSegArgs[9] = PyFloat_FromDouble(p_trackSeg.lgfromstart);
+    trackSegArgs[10] = PyFloat_FromDouble(p_trackSeg.radius);
+    trackSegArgs[11] = PyFloat_FromDouble(p_trackSeg.radiusr);
+    trackSegArgs[12] = PyFloat_FromDouble(p_trackSeg.radiusl);
+    trackSegArgs[13] = PyFloat_FromDouble(p_trackSeg.arc);
+    trackSegArgs[14] = GetPythonVectorObject(p_trackSeg.center.x, p_trackSeg.center.y, p_trackSeg.center.z);
 
-    trackSegArgs[14] = GetPythonVectorObject(p_trackSeg.vertex[0].x, p_trackSeg.vertex[0].y, p_trackSeg.vertex[0].z);
-    trackSegArgs[15] = GetPythonVectorObject(p_trackSeg.vertex[1].x, p_trackSeg.vertex[1].y, p_trackSeg.vertex[1].z);
-    trackSegArgs[16] = GetPythonVectorObject(p_trackSeg.vertex[2].x, p_trackSeg.vertex[2].y, p_trackSeg.vertex[2].z);
-    trackSegArgs[17] = GetPythonVectorObject(p_trackSeg.vertex[3].x, p_trackSeg.vertex[3].y, p_trackSeg.vertex[3].z);
+    trackSegArgs[15] = GetPythonVectorObject(p_trackSeg.vertex[0].x, p_trackSeg.vertex[0].y, p_trackSeg.vertex[0].z);
+    trackSegArgs[16] = GetPythonVectorObject(p_trackSeg.vertex[1].x, p_trackSeg.vertex[1].y, p_trackSeg.vertex[1].z);
+    trackSegArgs[17] = GetPythonVectorObject(p_trackSeg.vertex[2].x, p_trackSeg.vertex[2].y, p_trackSeg.vertex[2].z);
+    trackSegArgs[18] = GetPythonVectorObject(p_trackSeg.vertex[3].x, p_trackSeg.vertex[3].y, p_trackSeg.vertex[3].z);
 
-    trackSegArgs[18] = PyFloat_FromDouble(p_trackSeg.angle[0]);
-    trackSegArgs[19] = PyFloat_FromDouble(p_trackSeg.angle[1]);
-    trackSegArgs[20] = PyFloat_FromDouble(p_trackSeg.angle[2]);
-    trackSegArgs[21] = PyFloat_FromDouble(p_trackSeg.angle[3]);
-    trackSegArgs[22] = PyFloat_FromDouble(p_trackSeg.angle[4]);
-    trackSegArgs[23] = PyFloat_FromDouble(p_trackSeg.angle[5]);
-    trackSegArgs[24] = PyFloat_FromDouble(p_trackSeg.angle[6]);
+    trackSegArgs[19] = PyFloat_FromDouble(p_trackSeg.angle[0]);
+    trackSegArgs[20] = PyFloat_FromDouble(p_trackSeg.angle[1]);
+    trackSegArgs[21] = PyFloat_FromDouble(p_trackSeg.angle[2]);
+    trackSegArgs[22] = PyFloat_FromDouble(p_trackSeg.angle[3]);
+    trackSegArgs[23] = PyFloat_FromDouble(p_trackSeg.angle[4]);
+    trackSegArgs[24] = PyFloat_FromDouble(p_trackSeg.angle[5]);
+    trackSegArgs[25] = PyFloat_FromDouble(p_trackSeg.angle[6]);
 
-    trackSegArgs[25] = PyFloat_FromDouble(p_trackSeg.sin);
-    trackSegArgs[26] = PyFloat_FromDouble(p_trackSeg.cos);
-    trackSegArgs[27] = PyFloat_FromDouble(p_trackSeg.Kzl);
-    trackSegArgs[28] = PyFloat_FromDouble(p_trackSeg.Kzw);
-    trackSegArgs[29] = PyFloat_FromDouble(p_trackSeg.Kyl);
-    trackSegArgs[30] = GetPythonVectorObject(p_trackSeg.rgtSideNormal.x, p_trackSeg.rgtSideNormal.y,
+    trackSegArgs[26] = PyFloat_FromDouble(p_trackSeg.sin);
+    trackSegArgs[27] = PyFloat_FromDouble(p_trackSeg.cos);
+    trackSegArgs[28] = PyFloat_FromDouble(p_trackSeg.Kzl);
+    trackSegArgs[29] = PyFloat_FromDouble(p_trackSeg.Kzw);
+    trackSegArgs[30] = PyFloat_FromDouble(p_trackSeg.Kyl);
+    trackSegArgs[31] = GetPythonVectorObject(p_trackSeg.rgtSideNormal.x, p_trackSeg.rgtSideNormal.y,
                                              p_trackSeg.rgtSideNormal.z);
-    trackSegArgs[31] = PyLong_FromLong(static_cast<long>(p_trackSeg.envIndex));
-    trackSegArgs[32] = PyFloat_FromDouble(p_trackSeg.height);
-    trackSegArgs[33] = PyLong_FromLong(static_cast<long>(p_trackSeg.raceInfo));
-    trackSegArgs[34] = PyFloat_FromDouble(p_trackSeg.DoVfactor);
-    trackSegArgs[35] = PyFloat_FromDouble(p_trackSeg.SpeedLimit);
+    trackSegArgs[32] = PyLong_FromLong(static_cast<long>(p_trackSeg.envIndex));
+    trackSegArgs[33] = PyFloat_FromDouble(p_trackSeg.height);
+    trackSegArgs[34] = PyLong_FromLong(static_cast<long>(p_trackSeg.raceInfo));
+    trackSegArgs[35] = PyFloat_FromDouble(p_trackSeg.DoVfactor);
+    trackSegArgs[36] = PyFloat_FromDouble(p_trackSeg.SpeedLimit);
 
     PyObject *trackSegment = GetObjectFromArgs(m_trackSegmentClass, trackSegArgs, size);
 
@@ -550,6 +551,7 @@ tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
     segment.type2 = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type2")));
     segment.style = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "style")));
     segment.length = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "length")));
+    segment.Time = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "time")));
     segment.width = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "width")));
     segment.startWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "startWidth")));
     segment.endWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "endWidth")));
