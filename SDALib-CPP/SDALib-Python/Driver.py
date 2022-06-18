@@ -1,7 +1,4 @@
 import SDATypes
-import SpeedDreamsFunction
-
-print(dir(SpeedDreamsFunction))
 
 class SDADriver:
     speedLimit = 80
