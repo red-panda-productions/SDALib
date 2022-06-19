@@ -1,5 +1,3 @@
-#pragma once
-
 #include <stdio.h>
 #ifdef _DEBUG
 #undef _DEBUG
