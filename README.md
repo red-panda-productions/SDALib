@@ -25,7 +25,7 @@ When you use the project on Windows you will need to use a 32 bit compiler, on L
 
 ## Using SDALib in your Python project
 
-On Windows you will need to have a 32 bit version of python installed, on Linux you can use 64 bit. When you use the python project you will get an executable and 2 files, SDATypes.py and SDADriver.py. You can build your AI in SDADriver.py. When you want to use your driver with [DAISI](https://github.com/red-panda-productions/speed-dreams) be sure to select the SDALib-Python.exe executable. The executable will load your driver into the Python runtime and will give data to your python driver
+On Windows you will need to have a 32 bit version of python installed, on Linux you can use 64 bit. When you use the python project you will get an executable and 2 files, SDATypes.py and SDADriver.py. You can build your AI in SDADriver.py. When you want to use your driver with [DAISI](https://github.com/red-panda-productions/DAISI) be sure to select the SDALib-Python.exe executable. The executable will load your driver into the Python runtime and give data to your python driver
 
 ## Building on Linux
 
