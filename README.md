@@ -29,7 +29,7 @@ On Windows, you will need to have a 32-bit version of Python installed. On Linux
 
 ## Building on Linux
 
-On Linux, you will need to pass the -pthread compiler flag to your compiler, and you will need to link your driver executable with the rt library (which is installed on every distro of Linux). 
+On Linux, you will need to pass the  -pthread` compiler flag to your compiler, and you will need to link your driver executable with the rt library (which is installed on every distro of Linux). 
 
 ## Documentation
 
