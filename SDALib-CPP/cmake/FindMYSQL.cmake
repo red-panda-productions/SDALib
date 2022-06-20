@@ -1,3 +1,7 @@
+# This program has been developed by students from the bachelor Computer Science at
+# Utrecht University within the Software Project course.
+# © Copyright Utrecht University (Department of Information and Computing Sciences)
+
 FIND_LIBRARY(MYSQL_LIBSSL_LIBRARY
         NAMES libssl ssl
         HINTS ENV MYSQL_DIR
