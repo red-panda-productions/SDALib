@@ -21,7 +21,7 @@ Furthermore, you can always create your project within the source code of SDALib
 
 ## Using SDALib in your C++ project
 
-When you use the project on Windows, you will need to use a 32 bit compiler. On Linux you can use 64 bit. Furthermore, we suggest that you use CMake, and that you copy over the different .cmake files into a CMake folder in your repository. The SDAMacros.cmake file consists of macros like FIND_SDA_PACKAGES and INSTALL_SDA_PACKAGES(target) that can easily find and install all of the dependencies needed for SDALib into your project. After calling these macros the setup of SDALib is done, and you can begin programming your AI.
+When you use the project on Windows, you will need to use a 32-bit compiler. On Linux you can use 64 bit. Furthermore, we suggest that you use CMake, and that you copy over the different .cmake files into a CMake folder in your repository. The SDAMacros.cmake file consists of macros like `FIND_SDA_PACKAGES` and `INSTALL_SDA_PACKAGES(target)` that can easily find and install all of the dependencies needed for SDALib into your project. After calling these macros the setup of SDALib is done, and you can begin programming your AI.
 
 ## Using SDALib in your Python project
 
