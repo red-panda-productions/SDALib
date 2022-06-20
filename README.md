@@ -6,7 +6,7 @@
 # SDALib
 
 A framework to create AI for assisted cars for Linux (64 bit) and Windows (32 bit) in C++ and Python.
-This library can connect to the [DAISI](https://github.com/red-panda-productions/DAISI) simulation to adjust the controls of the human player in the simulation. The AI (currently) has full access to edit steer, acceleration and brake of the car.
+This library can connect to the [DAISI](https://github.com/red-panda-productions/DAISI) simulation to adjust the controls of the human player in the simulation. The AI (currently) has access to edit steer, acceleration and brake of the car, but can be constrained by DAISI.
 
 ## Download
 
