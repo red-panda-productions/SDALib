@@ -10,7 +10,7 @@ public:
 
 private:
     tCar CarConstructor(const tCar& p_other, tCarElt* p_carElt);
-    tCar *SimCarTable = 0;
+    tCar SimCarTable[1];
     tdble SimDeltaTime;
     tdble simSkidFactor[6]{0.4f, 0.3f, 0.2f, 0.1f, 0.0f, 0.0f};
     tdble simDammageFactor[6]{0.0f, 0.1f, 0.3f, 0.5f, 0.8f, 1.0f};

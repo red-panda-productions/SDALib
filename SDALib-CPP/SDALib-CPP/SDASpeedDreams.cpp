@@ -55,12 +55,7 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData& p_data, SDAAction& p_acti
     data.Situation.cars[0]->ctrl.steer = p_action.Steer;
     data.Situation.cars[0]->ctrl.gear = p_action.Gear;
 
-    tCar car;
-
-    SimCarTable = new tCar[1];
-    SimCarTable = (tCar *)calloc(1, sizeof(tCar));
-
-    SimCarTable[0] = CarConstructor(car, data.Situation.cars[0]);
+    SimCarTable[0] = CarConstructor(p_data.SimCar, data.Situation.cars[0]);
 
     // update the simulator
     double elapsed = 0;
@@ -598,7 +593,7 @@ tdble SDASpeedDreams::RtTrackHeightL(tTrkLocPos *p)
             // alpha shows how far we've moved into this segment.
             tdble alpha = seg->width - tr;
             tdble angle = seg->angle[TR_XS] + p->toStart * seg->Kzw;
-            tdble noise = seg->surface->kRoughness * sin(seg->surface->kRoughWaveLen * lg) * alpha / seg->width;
+            tdble noise = 0 * sin(6.28318548 * lg) * alpha / seg->width;
             tdble start_height = seg->vertex[TR_SR].z + p->toStart * seg->Kzl;
             return start_height + tr * tan(angle) + alpha * atan2(seg->height, seg->width) + noise;
 
@@ -607,11 +602,11 @@ tdble SDASpeedDreams::RtTrackHeightL(tTrkLocPos *p)
         return seg->vertex[TR_SR].z + p->toStart * seg->Kzl +
                tr * (tan(seg->angle[TR_XS] + p->toStart * seg->Kzw)
                      + atan2(seg->height, seg->width)) +
-               seg->surface->kRoughness * sin(seg->surface->kRoughWaveLen * lg) * tr / seg->width;
+               0 * sin(6.28318548 * lg) * tr / seg->width;
     }
 
     return seg->vertex[TR_SR].z + p->toStart * seg->Kzl + tr * tan(seg->angle[TR_XS] + p->toStart * seg->Kzw) +
-           seg->surface->kRoughness * sin(seg->surface->kRoughWaveLen * tr) * sin(seg->surface->kRoughWaveLen * lg);
+           0 * sin(6.28318548 * tr) * sin(6.28318548 * lg);
 }
 
 tdble SDASpeedDreams::RtTrackSideTgAngleL(tTrkLocPos *p)

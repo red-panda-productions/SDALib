@@ -23,3 +23,7 @@ void DestroyCar(tCarElt& p_car);
 tSituation GenerateSituation();
 
 void DestroySituation(tSituation& p_situation);
+
+tCar GenerateSimCar();
+
+tCar GenerateSimCar(tCarElt& p_car);
