@@ -597,7 +597,7 @@ tSituation GenerateSituation()
 {
     Random random;
     tSituation situation{};
-    situation.raceInfo.ncars = random.NextInt();
+    situation.raceInfo.ncars = 1;
     situation.raceInfo.totLaps = random.NextInt();
     situation.raceInfo.extraLaps = random.NextInt();
     situation.raceInfo.totTime = random.NextFloat();

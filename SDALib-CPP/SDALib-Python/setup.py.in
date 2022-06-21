@@ -1,11 +1,11 @@
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 import os
 import sys
 
 os.environ["CC"] = '@CMAKE_C_COMPILER@'
 os.environ["CXX"] = '@CMAKE_CXX_COMPILER@'
 
-module = Extension('simulator',
+module = Extension("simulator",
                    define_macros = [@SETUP_DEFINE_MACROS@],
                    extra_compile_args = [@SETUP_COMPILER_ARGS@],
                    extra_link_args= [@SETUP_LINK_ARGS@],
@@ -15,5 +15,6 @@ module = Extension('simulator',
                    sources = [@SETUP_SOURCES@],
                    language = 'c++')
 
-setup(name='simulator',
-      ext_modules=[module])
+setup(name="simulator",
+      ext_modules=[module],
+      zip_safe = False)

@@ -6,6 +6,7 @@
 #include "Mocks/PointerManagerMock.h"
 #include "Random.hpp"
 #include "GeneratorUtils.h"
+#include "SDASpeedDreams.h"
 
 CREATE_PYTHON_DRIVER_IMPLEMENTATION(PointerManagerMock)
 
@@ -52,4 +53,24 @@ TEST(PythonDriverTests, PythonDriverPythonDriverFileNameTest)
     ASSERT_EQ(pythonDriver.GetPythonDriverFileName(), "DriverTest");
 
     Py_Finalize();
+}
+
+/// @brief tests whether the driver file name is correctly get and set
+TEST(PythonDriverTests, SDASpeedDreamsTest)
+{
+    Random random;
+    SDAData sdaData;
+    TestSegments segments = GenerateSegments();
+    sdaData.TickCount = random.NextUInt();
+    sdaData.Car = GenerateCar(segments);
+    sdaData.Situation = GenerateSituation();
+
+    SDAAction sdaAction;
+
+    SDASpeedDreams sdaSpeedDreams;
+
+    SDAData newData = sdaSpeedDreams.UpdateSimulator(sdaData, sdaAction);
+
+    ASSERT_EQ(sdaData.TickCount, newData.TickCount);
+
 }

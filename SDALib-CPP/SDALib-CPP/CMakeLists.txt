@@ -3,7 +3,7 @@
 	SDAAction.hpp
 	SDAData.hpp
 	SDAUtils.hpp
-	SDASpeedDreams.hpp
+    SDASpeedDreams.h
 	IPCPointerManager.h
 	SDA_portability.h
 )
