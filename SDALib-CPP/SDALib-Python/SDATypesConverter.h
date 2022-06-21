@@ -104,6 +104,70 @@ public:
     tRaceAdmInfo GetCppRaceInfoObject(PyObject* p_raceInfo);
     void SetPythonRaceInfoObject(PyObject* p_target, PyObject* p_data);
 
+    PyObject* GetPythonAeroObject(tAero& p_aero);
+    tRaceAdmInfo GetCppAeroObject(PyObject* p_aero);
+    void SetPythonAeroObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonWingObject(tWing& p_wing);
+    tRaceAdmInfo GetCppWingObject(PyObject* p_wing);
+    void SetPythonWingObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonDamperDefObject(tDamperDef& p_damperDef);
+    tRaceAdmInfo GetCppDamperDefObject(PyObject* p_damperDef);
+    void SetPythonDamperDefObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonDamperObject(tDamper& p_damper);
+    tRaceAdmInfo GetCppDamperObject(PyObject* p_damper);
+    void SetPythonDamperObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonSpringObject(tSpring& p_spring);
+    tRaceAdmInfo GetCppSpringObject(PyObject* p_spring);
+    void SetPythonSpringObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonSuspensionObject(tSuspension& p_suspension);
+    tRaceAdmInfo GetCppSuspensionObject(PyObject* p_suspension);
+    void SetPythonSuspensionObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonBrakeObject(tBrake& p_brake);
+    tRaceAdmInfo GetCppBrakeObject(PyObject* p_brake);
+    void SetPythonBrakeObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonBrakeSystObject(tBrakeSyst& p_brakeSyst);
+    tRaceAdmInfo GetCppBrakeSystObject(PyObject* p_brakeSyst);
+    void SetPythonBrakeSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonDynAxisSystObject(tDynAxis& p_dynAxis);
+    tRaceAdmInfo GetCppDynAxisSystObject(PyObject* p_dynAxis);
+    void SetPythonDynAxisSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonDifferentialSystObject(tDifferential& p_differential);
+    tRaceAdmInfo GetCppDifferentialSystObject(PyObject* p_differential);
+    void SetPythonDifferentialSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonAxleSystObject(tAxle& p_axle);
+    tRaceAdmInfo GetCppAxleSystObject(PyObject* p_axle);
+    void SetPythonAxleSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonSteerSystObject(tSteer& p_steer);
+    tRaceAdmInfo GetCppSteerSystObject(PyObject* p_steer);
+    void SetPythonSteerSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonWheelSystObject(tWheel& p_wheel);
+    tRaceAdmInfo GetCppWheelSystObject(PyObject* p_wheel);
+    void SetPythonWheelSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonTransmissionSystObject(tTransmission& p_transmission);
+    tRaceAdmInfo GetCppTransmissionSystObject(PyObject* p_transmission);
+    void SetPythonTransmissionSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonEngineSystObject(tEngine& p_engine);
+    tRaceAdmInfo GetCppEngineSystObject(PyObject* p_engine);
+    void SetPythonEngineSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonCarSystObject(tCar& p_car);
+    tRaceAdmInfo GetCppCarSystObject(PyObject* p_car);
+    void SetPythonCarSystObject(PyObject* p_target, PyObject* p_data);
+
     PyObject* GetObjectFromArgs(PyObject* p_classInit, PyObject* p_initArgs[], int p_length);
 
     // all classes from SDATypes.py
