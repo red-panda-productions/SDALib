@@ -40,7 +40,7 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData& p_data, SDAAction& p_acti
 
     // update the car
     data.Situation.cars = new tCarElt*[1] ;
-    data.Situation.cars[0] = new tCarElt();
+    data.Situation.cars[0] = new tCarElt(p_data.Car);
     data.Situation.cars[0]->ctrl.accelCmd = p_action.Accel;
     data.Situation.cars[0]->ctrl.brakeCmd = p_action.Brake;
     data.Situation.cars[0]->ctrl.steer = p_action.Steer;
@@ -49,6 +49,7 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData& p_data, SDAAction& p_acti
     tCar car;
 
     SimCarTable = new tCar[1];
+    SimCarTable = (tCar *)calloc(1, sizeof(tCar));
 
     SimCarTable[0] = CarConstructor(car, data.Situation.cars[0]);
 

@@ -9,6 +9,7 @@ public:
 
     SDAData();
 
+    tCar SimCar;
     tCarElt Car;
     tSituation Situation;
     unsigned long TickCount;
