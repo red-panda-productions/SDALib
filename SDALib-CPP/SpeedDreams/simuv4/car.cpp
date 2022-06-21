@@ -954,17 +954,17 @@ void
 SimCarUpdate(tCar *car, tSituation * /* s */)
 {
 	SimCarUpdateForces(car);
-	CHECK(car);
+
 	SimCarUpdateSpeed(car);
-	CHECK(car);
+
 	SimCarUpdateCornerPos(car);
-	CHECK(car);
+
 	SimCarUpdatePos(car);
-	CHECK(car);
+
 	SimCarCollideZ(car);
-	CHECK(car);
+
 	SimCarCollideXYScene(car);
-	CHECK(car);
+
 	
 	/* update car->carElt->setup.reqRepair with damage */
 	tCarSetupItem *repair = &(car->carElt->setup.reqRepair);

@@ -980,9 +980,9 @@ void CheckCarSetupData(tCarSetup& p_carSetup, PyObject* p_carSetupObject)
 
     PyObject* differentialTypeAttr = PyUnicode_FromString("differentialType");
     PyObject* differentialTypeVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialTypeAttr));
-    ASSERT_TRUE(p_carSetup.differentialType[0] == static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 0))));
-    ASSERT_TRUE(p_carSetup.differentialType[1] == static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 1))));
-    ASSERT_TRUE(p_carSetup.differentialType[2] == static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 2))));
+    ASSERT_EQ(p_carSetup.differentialType[0] , static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 0))));
+    ASSERT_EQ(p_carSetup.differentialType[1] , static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 1))));
+    ASSERT_EQ(p_carSetup.differentialType[2] , static_cast<int>(PyFloat_AsDouble(PyTuple_GetItem(differentialTypeVal, 2))));
 
     PyObject* differentialRatioAttr = PyUnicode_FromString("differentialRatio");
     PyObject* differentialRatioVal = PyList_AsTuple(PyObject_GetAttr(p_carSetupObject, differentialRatioAttr));
@@ -1347,7 +1347,6 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
 {
     Py_Initialize();
     SDATypesConverter converter = SDATypesConverter();
-    SDASpeedDreams sdaSpeedDreams;
 
     Random random;
     for (int i = 0; i < TEST_COUNT; i++)
@@ -1366,15 +1365,24 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
         CheckSDAData(converter.GetCppSDAData(sdaDataObject), sdaDataObject);
 
         // checks the data is correctly set from PyObject to PyObject
-        SDAAction sdaAction;
-        SDAData newSDAData = sdaSpeedDreams.UpdateSimulator(sdaData, sdaAction);
+        SDAData newSDAData;
+        TestSegments newSegments = GenerateSegments();
+        newSDAData.TickCount = random.NextUInt();
+        newSDAData.Car = GenerateCar(newSegments);
+        newSDAData.Situation = GenerateSituation();
+
         PyObject* newSDADataObject = converter.GetPythonSDATypeObject(newSDAData);
         converter.SetPythonSDATypeObject(newSDADataObject, sdaDataObject);
+
         CheckSDAData(sdaData, newSDADataObject);
 
         DestroySegments(segments);
         DestroyCar(sdaData.Car);
         DestroySituation(sdaData.Situation);
+
+        DestroySegments(newSegments);
+        DestroyCar(newSDAData.Car);
+        DestroySituation(newSDAData.Situation);
     }
 
     Py_Finalize();

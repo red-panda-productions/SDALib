@@ -1,5 +1,13 @@
 #include "SDASpeedDreams.h"
 
+#define FLOAT_RELAXATION2(target, prev, rate) 			\
+do {								\
+    tdble __tmp__;						\
+    __tmp__ = target;						\
+    target = (prev) + (rate) * ((target) - (prev)) * 0.01f;	\
+    prev = __tmp__;						\
+} while (0)
+
 /// @brief sets tCarElt to tCar
 /// @param p_other the tCar car
 /// @param p_carElt the tCarElt car

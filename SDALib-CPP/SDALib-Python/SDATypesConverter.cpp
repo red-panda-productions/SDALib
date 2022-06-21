@@ -9,11 +9,11 @@
 
 #define COPY_PYTHON_ARRAY(target, ref, str, length) \
     for (int i = 0; i < length; i++) \
-        PyTuple_SET_ITEM(PyObject_GetAttrString(target, str), i, PyTuple_GetItem(PyObject_GetAttrString(ref, str), i));
+        PyList_SET_ITEM(PyObject_GetAttrString(target, str), i, PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(ref, str)), i));
 
 #define COPY_PYTHON_CARSETUP_ARRAY(target, ref, str, length) \
     for (int i = 0; i < length; i++)                         \
-         SetPythonCarSetupItemObject(PyTuple_GetItem(PyObject_GetAttrString(target, str), i), PyTuple_GetItem(PyObject_GetAttrString(ref, str), i));
+         SetPythonCarSetupItemObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(target, str)), i), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(ref, str)), i));
 
 
 SDATypesConverter::SDATypesConverter()
@@ -309,10 +309,10 @@ void SDATypesConverter::SetPythonCarInitObject(PyObject *p_target, PyObject *p_d
 
     COPY_PYTHON_ARRAY(p_target, p_data, "iconColor", 4)
 
-    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 0), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 0));
-    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 1), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 1));
-    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 2), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 2));
-    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 3), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 3));
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "wheel")), 0), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "wheel")), 0));
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "wheel")), 1), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "wheel")), 1));
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "wheel")), 2), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "wheel")), 2));
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "wheel")), 3), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "wheel")), 3));
 }
 
 /// @brief gets the python wheel specification object of the current input
@@ -400,8 +400,8 @@ void SDATypesConverter::SetPythonVisualAttributesObject(PyObject* p_target, PyOb
     const char* attributeList[2]{"exhaustNb", "exhaustPower"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 2);
 
-    SetPythonVectorObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "exhaustPos"), 0), PyTuple_GetItem(PyObject_GetAttrString(p_data, "exhaustPos"), 0));
-    SetPythonVectorObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "exhaustPos"), 1), PyTuple_GetItem(PyObject_GetAttrString(p_data, "exhaustPos"), 1));
+    SetPythonVectorObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "exhaustPos")), 0), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "exhaustPos")), 0));
+    SetPythonVectorObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "exhaustPos")), 1), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "exhaustPos")), 1));
 }
 
 
@@ -495,7 +495,17 @@ void SDATypesConverter::SetPythonCarPublicObject(PyObject* p_target, PyObject* p
     SetPythonTrackLocationObject(PyObject_GetAttrString(p_target, "trkPos"), PyObject_GetAttrString(p_data, "trkPos"));
 
     //posmat
+    PyObject *p_posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_data, "posMat"));
+    PyObject *row1Val = PyTuple_GetItem(p_posMatTuple, 0);
+    PyObject *row2Val = PyTuple_GetItem(p_posMatTuple, 1);
+    PyObject *row3Val = PyTuple_GetItem(p_posMatTuple, 2);
+    PyObject *row4Val = PyTuple_GetItem(p_posMatTuple, 3);
 
+    PyObject* matrix = PyObject_GetAttrString(p_target, "posMat");
+    PyList_Insert(matrix, 0, row1Val);
+    PyList_Insert(matrix, 1, row2Val);
+    PyList_Insert(matrix, 2, row3Val);
+    PyList_Insert(matrix, 3, row4Val);
 }
 
 
@@ -963,7 +973,7 @@ void SDATypesConverter::SetPythonCarPrivObject(PyObject* p_target, PyObject* p_d
                                   "steerTqCenter", "steerTqAlign", "dashboardInstantNb", "dashboardRequestNb", "dashboardActiveItem"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 29);
 
-    COPY_PYTHON_ARRAY(p_target, p_data, "gearRatio1", 10);
+    COPY_PYTHON_ARRAY(p_target, p_data, "gearRatio", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "skid", 4);
     COPY_PYTHON_ARRAY(p_target, p_data, "reaction", 4);
 
@@ -971,10 +981,10 @@ void SDATypesConverter::SetPythonCarPrivObject(PyObject* p_target, PyObject* p_d
     SetPythonVectorObject(PyObject_GetAttrString(p_target, "normal"), PyObject_GetAttrString(p_data, "normal"));
     SetPythonVectorObject(PyObject_GetAttrString(p_target, "collPos"), PyObject_GetAttrString(p_data, "collPos"));
 
-    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 0), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 0));
-    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 1), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 1));
-    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 2), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 2));
-    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 3), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 3));
+    SetPythonPosDObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "corner")), 0), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "corner")), 0));
+    SetPythonPosDObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "corner")), 1), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "corner")), 1));
+    SetPythonPosDObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "corner")), 2), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "corner")), 2));
+    SetPythonPosDObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "corner")), 3), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "corner")), 3));
 }
 
 
@@ -1525,7 +1535,7 @@ void SDATypesConverter::SetPythonCarSetupObject(PyObject* p_target, PyObject* p_
 {
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "wingAngle", 2);
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "gearRatio", 10);
-    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialType", 3);
+    COPY_PYTHON_ARRAY(p_target, p_data, "differentialType", 3);
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialRatio", 3);
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialMinTqBias", 3);
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialMaxTqBias", 3);
