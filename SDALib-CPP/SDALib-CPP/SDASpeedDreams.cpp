@@ -35,6 +35,7 @@ tCar SDASpeedDreams::CarConstructor(const tCar& p_other, tCarElt* p_carElt)
 
     car.transmission.differential[TRANS_CENTRAL_DIFF].inAxis[1] = &(car.transmission.differential[TRANS_REAR_DIFF].feedBack);
     car.transmission.differential[TRANS_CENTRAL_DIFF].outAxis[1] = &(car.transmission.differential[TRANS_REAR_DIFF].in);
+
     return car;
 }
 

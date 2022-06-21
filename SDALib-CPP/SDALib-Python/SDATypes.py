@@ -638,124 +638,100 @@ class Transmission:
                  driveI7, driveI8, driveI9, driveI10, freeI1, freeI2, freeI3, freeI4, freeI5, freeI6,
                  freeI7, freeI8, freeI9, freeI10, gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6,
                  gearEff7, gearEff8, gearEff9, gearEff10, currI, differential1, differential2, differential3):
-        self.gearbox = gearbox
-        self.clutch = clutch
+        self.gearbox = gearbox #Gearbox
+        self.clutch = clutch #Clutch
         self.overallRatio = [overallRatio1, overallRatio2, overallRatio3, overallRatio4, overallRatio5, overallRatio6,
-                 overallRatio7, overallRatio8, overallRatio9, overallRatio10]
-        self.gearI = [gearI1, gearI2, gearI3, gearI4, gearI5, gearI6, gearI7, gearI8, gearI9, gearI10]
-        self.driveI = [driveI1, driveI2, driveI3, driveI4, driveI5, driveI6, driveI7, driveI8, driveI9, driveI10]
-        self.freeI = [freeI1, freeI2, freeI3, freeI4, freeI5, freeI6, freeI7, freeI8, freeI9, freeI10]
-        self.gearEff = [gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6, gearEff7, gearEff8, gearEff9, gearEff10]
-        self.currI = currI
-        self.differential = [differential1, differential2, differential3]
+                 overallRatio7, overallRatio8, overallRatio9, overallRatio10] #float[10]
+        self.gearI = [gearI1, gearI2, gearI3, gearI4, gearI5, gearI6, gearI7, gearI8, gearI9, gearI10] #float[10]
+        self.driveI = [driveI1, driveI2, driveI3, driveI4, driveI5, driveI6, driveI7, driveI8, driveI9, driveI10] #float[10]
+        self.freeI = [freeI1, freeI2, freeI3, freeI4, freeI5, freeI6, freeI7, freeI8, freeI9, freeI10] #float[10]
+        self.gearEff = [gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6, gearEff7, gearEff8, gearEff9, gearEff10] #float[10]
+        self.currI = currI #float
+        self.differential = [differential1, differential2, differential3] #float[3]
 
 
+class EngineCurveElem:
+    def __init__(self, rad, a, b):
+        self.rad = rad #float
+        self.a = a  #float
+        self.b = b  #float
 
-#endif /* _TRANSMISSION_H_ */
+class EngineCurve:
+    def __init__(self, maxTq, maxPw, rpmMaxPw, TqAtMaxPw, rpmMaxTq, npPts) :
+        self.maxTq = maxTq #float
+        self.maxPw = maxPw #float
+        self.rpmMaxPw = rpmMaxPw #float
+        self.TqAtMaxPw = TqAtMaxPw #float
+        self.rpmMaxTq = rpmMaxTq #float
+        self.npPts = npPts #int
+        #data missing tEngineCurveElem
 
-#ifndef _ENGINE_H_
-#define _ENGINE_H_
+class Engine:
+    def __init__(self, curve, revsLimiter, revsMax, tickover, I, rads, Tq, Tq_response, I_joint, fuelcons, brakeCoeff, brakeLinCoeff,
+                 pressure, exhaust_pressure, exhaust_refract, timeInLimiter, TCL, EnableTCL):
+        self.curve = curve #EngineCurve
+        self.revsLimiter = revsLimiter #float
+        self.revsMax = revsMax #float
+        self.tickover = tickover #float
+        self.I = I #float#float
+        self.rads = rads #float
+        self.Tq = Tq #float
+        self.Tq_response = Tq_response #float
+        self.I_joint = I_joint #float
+        self.fuelcons = fuelcons #float
+        self.brakeCoeff = brakeCoeff #float
+        self.brakeLinCoeff = brakeLinCoeff #float
+        self.pressure = pressure #float
+        self.exhaust_pressure = exhaust_pressure #float
+        self.exhaust_refract = exhaust_refract #float
+        self.timeInLimiter = timeInLimiter #float
+        self.TCL = TCL #float
+        self.EnableTCL = EnableTCL #bool
 
-typedef struct
-{
-    tdble rads;
-    tdble a;
-    tdble b;
-} tEngineCurveElem;
-
-typedef struct
-{
-    tdble maxTq;
-    tdble maxPw;
-    tdble rpmMaxPw;
-    tdble TqAtMaxPw;
-    tdble rpmMaxTq;
-    int nbPts;
-    tEngineCurveElem* data;
-} tEngineCurve;
-
-typedef struct
-{
-    tEngineCurve curve;
-    tdble revsLimiter;
-    tdble revsMax;
-    tdble tickover;
-    tdble I;
-    tdble rads;        /* revs in rad/s ... */
-    tdble Tq;          /* output torque */
-    tdble Tq_response; /* response Tq due to mismatch */
-    tdble I_joint;     /* joint inertia */
-    tdble fuelcons;
-    tdble brakeCoeff;    /* coefficient for constant engine brake */
-    tdble brakeLinCoeff; /* coefficient for RPM dependent engine brake */
-    tdble pressure;
-    tdble exhaust_pressure;
-    tdble exhaust_refract;
-    tdble timeInLimiter; /* time to still spend with fuel cut, in secundum */
-
-    tdble TCL;       // Optional TCL
-    bool EnableTCL;  // Enable optional TCL
-} tEngine;
-
-#endif /* _ENGINE_H_ */ 
-
-typedef struct
-{
-    /* driver's interface */
-    tCarCtrl* ctrl;
-    void* params;
-    tCarElt* carElt;
-
-    tCarCtrl preCtrl;
-
-    /* components */
-    tAxle axle[2];
-    tWheel wheel[4];
-    tSteer steer;
-    tBrakeSyst brkSyst;
-    tAero aero;
-    tWing wing[2];
-    tTransmission transmission; /* includes clutch, gearbox and driveshaft */
-    tEngine engine;
-
-    /* static */
-    t3Dd dimension; /* car's mesures */
-    tdble mass;     /* mass with pilot (without fuel) */
-    tdble Minv;     /* 1 / mass with pilot (without fuel) */
-    tdble tank;     /* fuel tank capa */
-    t3Dd statGC;    /* static pos of GC */
-    t3Dd Iinv;      /* inverse of inertial moment along the car's 3 axis */
-
-    /* dynamic */
-    tdble fuel;             /* current fuel load */
-    tdble fuel_consumption; /* average fuel consumption */
-    tdble fuel_prev;        /* average fuel consumption */
-    tdble fuel_time;        /* average fuel consumption */
-    tDynPt DynGC;           /* GC local data except position */
-    tDynPt DynGCg;          /* GC global data */
-    tPosd VelColl;          /* resulting velocity after collision */
-    tDynPt preDynGC;        /* previous one */
-    tTrkLocPos trkPos;      /* current track position */
-    tdble airSpeed2;        /* current air speed (squared) for aerodynamic forces */
-
-    /* internals */
-    tdble Cosz;
-    tdble Sinz;
-    tDynPt corner[4]; /* x,y,z for static relative pos, ax,ay,az for dyn. world coord */
-    int collision;
-    t3Dd normal;
-    t3Dd collpos;
-    tdble wheelbase;
-    tdble wheeltrack;
-    sgMat4 posMat;
-    DtShapeRef shape; /* for collision */
-    int blocked;      // Flag to show if the car has had already a collision in the same timestep.
-    int dammage;
-
-    /* enabling features */
-    int features;
-
-    tDynPt restPos; /* target rest position after the car is broken */
-
-    int collisionAware;
-} tCar;
+class SimCar:
+    def __init__(self, preCtrl, axle1, axle2, wheel1, wheel2, wheel3, wheel4, steer, brkSyst, aero, wing1, wing2, transmission,
+                 engine, dimension, mass, Minv, tank, statGC, Iinv, fuel, fuel_consumption, fuel_prev, fuel_time, DynGC, DynGCg,
+                 VelColl, preDynGC,  trkPos, airSpeed2, Cosz, Sinz, corner1, corner2, corner3, corner4, collision, normal, collpos,
+                 wheelbase, wheeltrack, posMat1, posMat2, posMat3, posMat4, posMat5, posMat6, posMat7, posMat8, posMat9, posMat10, 
+                 posMat11, posMat12, posMat13, posMat14, posMat15, posMat16, shape, blocked, dammage, features, restPos, collisionAware):
+        self.preCtrl = preCtrl #CarCtrl
+        self.axle = [axle1, axle2] #Axle[2]
+        self.wheel = [wheel1, wheel2, wheel3, wheel4] #Wheel[4]
+        self.steer = steer #Steer
+        self.brkSyst = brkSyst #BrakeSyst
+        self.aero = aero #Aero
+        self.wing = [wing1, wing2] #Wing[2]
+        self.transmission = transmission #Transmission
+        self.engine = engine #Engine
+        self.dimension = dimension #Vector
+        self.mass = mass #float
+        self.Minv = Minv #float
+        self.tank = tank #float
+        self.statGC = statGC #Vector
+        self.Iinv = Iinv #Vector
+        self.fuel = fuel #float
+        self.fuel_consumption = fuel_consumption #float
+        self.fuel_prev = fuel_prev #float
+        self.fuel_time = fuel_time #float
+        self.DynGC = DynGC #DynamicPoint
+        self.DynGCg = DynGCg #DynamicPoint
+        self.VelColl = VelColl #Posd
+        self.preDynGC = preDynGC #DynamicPoint
+        self.trkPos = trkPos #TrkLocalPos
+        self.airSpeed2 = airSpeed2 #float
+        self.Cosz = Cosz #float
+        self.Sinz = Sinz #float
+        self.corner = [corner1, corner2, corner3, corner4] #DynamicPoint[4]
+        self.collision = collision #int
+        self.normal = normal #Vector
+        self.collpos = collpos #Vector
+        self.wheelbase = wheelbase #float
+        self.wheeltrack = wheeltrack #float
+        self.posMat = [[posMat1, posMat2, posMat3, posMat4], [posMat5, posMat6, posMat7, posMat8],
+                       [posMat9, posMat10, posMat11, posMat12], [posMat13, posMat14, posMat15, posMat16]]  # float[][]
+        self.shape = shape #DtShapeRef?? seems like inheritance or smthing
+        self.blocked = blocked #int
+        self.dammage = dammage #int
+        self.features = features #int
+        self.restPos = restPos #DynamicPoint
+        self.collisionAware = collisionAware #int
