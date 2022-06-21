@@ -1,6 +1,21 @@
 #include "SDATypesConverter.h"
 #include "portability.h"
 
+#define COPY_PYTHON_OBJECT(target, ref, str) \
+    PyObject_SetAttrString(target, str, PyObject_GetAttrString(ref, str));
+
+#define COPY_PYTHON_OBJECT_LIST(target, ref, strs, length) \
+    for (int i = 0; i < length; i++) COPY_PYTHON_OBJECT(target, ref, strs[i]);
+
+#define COPY_PYTHON_ARRAY(target, ref, str, length) \
+    for (int i = 0; i < length; i++) \
+        PyTuple_SET_ITEM(PyObject_GetAttrString(target, str), i, PyTuple_GetItem(PyObject_GetAttrString(ref, str), i));
+
+#define COPY_PYTHON_CARSETUP_ARRAY(target, ref, str, length) \
+    for (int i = 0; i < length; i++)                         \
+         SetPythonCarSetupItemObject(PyTuple_GetItem(PyObject_GetAttrString(target, str), i), PyTuple_GetItem(PyObject_GetAttrString(ref, str), i));
+
+
 SDATypesConverter::SDATypesConverter()
 {
     // set cwd in python
@@ -129,6 +144,13 @@ SDAData SDATypesConverter::GetCppSDAData(PyObject *p_data)
     return data;
 }
 
+void SDATypesConverter::SetPythonSDATypeObject(PyObject *p_target, PyObject *p_data)
+{
+    SetPythonCarObject(PyObject_GetAttrString(p_target, "car"), PyObject_GetAttrString(p_data, "car"));
+    SetPythonSituationObject(PyObject_GetAttrString(p_target, "situation"), PyObject_GetAttrString(p_data, "situation"));
+    COPY_PYTHON_OBJECT(p_target, p_data, "tickCount");
+}
+
 /// @brief gets the python car object of the current input
 /// @param  p_car   The car data
 /// @return         The python object
@@ -168,6 +190,18 @@ tCarElt SDATypesConverter::GetCppCarObject(PyObject *p_car)
     car.pitcmd = GetCppCarPitCmdObject(PyObject_GetAttrString(p_car, "pitcmd"));
 
     return car;
+}
+
+void SDATypesConverter::SetPythonCarObject(PyObject *p_target, PyObject *p_data)
+{
+    COPY_PYTHON_OBJECT(p_target, p_data, "index");
+    SetPythonCarInitObject(PyObject_GetAttrString(p_target, "info"), PyObject_GetAttrString(p_data, "info"));
+    SetPythonCarPublicObject(PyObject_GetAttrString(p_target, "pub"), PyObject_GetAttrString(p_data, "pub"));
+    SetPythonCarRaceInfoObject(PyObject_GetAttrString(p_target, "race"), PyObject_GetAttrString(p_data, "race"));
+    SetPythonCarPrivObject(PyObject_GetAttrString(p_target, "priv"), PyObject_GetAttrString(p_data, "priv"));
+    SetPythonCarCtrlObject(PyObject_GetAttrString(p_target, "ctrl"), PyObject_GetAttrString(p_data, "ctrl"));
+    SetPythonCarSetupObject(PyObject_GetAttrString(p_target, "setup"), PyObject_GetAttrString(p_data, "setup"));
+    SetPythonCarPitCmdObject(PyObject_GetAttrString(p_target, "pitcmd"), PyObject_GetAttrString(p_data, "pitcmd"));
 }
 
 /// @brief gets the Python init car object of the current input
@@ -260,6 +294,27 @@ tInitCar SDATypesConverter::GetCppCarInitObject(PyObject *p_initCar)
     return initCar;
 }
 
+void SDATypesConverter::SetPythonCarInitObject(PyObject *p_target, PyObject *p_data)
+{
+    const char* attributeList[16]{"name", "sName","codename","teamName","carName","category","raceNumber",
+        "startRank", "driverType", "networkPlayer", "skillLevel", "tank", "steerLock", "masterModel", "skinName", "skinTargets"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 16);
+
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "dimension"), PyObject_GetAttrString(p_data, "dimension"));
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "drvPos"), PyObject_GetAttrString(p_data, "drvPos"));
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "bonnetPos"), PyObject_GetAttrString(p_data, "bonnetPos"));
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "statGC"), PyObject_GetAttrString(p_data, "statGC"));
+
+    SetPythonVisualAttributesObject(PyObject_GetAttrString(p_target, "visualAttr"), PyObject_GetAttrString(p_data, "visualAttr"));
+
+    COPY_PYTHON_ARRAY(p_target, p_data, "iconColor", 4)
+
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 0), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 0));
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 1), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 1));
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 2), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 2));
+    SetPythonWheelSpecificationObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "wheel"), 3), PyTuple_GetItem(PyObject_GetAttrString(p_data, "wheel"), 3));
+}
+
 /// @brief gets the python wheel specification object of the current input
 /// @param  p_wheelSpec The wheel specification data
 /// @return           The python object
@@ -293,6 +348,12 @@ tWheelSpec SDATypesConverter::GetCppWheelSpecificationObject(PyObject *p_wheelSp
     wheelSpec.wheelRadius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheelSpec, "wheelRadius")));
 
     return wheelSpec;
+}
+
+void SDATypesConverter::SetPythonWheelSpecificationObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[5]{"rimRadius", "tireHeight", "tireWidth", "brakeDiskRadius", "wheelRadius"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 }
 
 /// @brief gets the python visual attributes object of the current input
@@ -333,6 +394,16 @@ tVisualAttributes SDATypesConverter::GetCppVisualAttributesObject(PyObject *p_vi
 
     return visualAttributes;
 }
+
+void SDATypesConverter::SetPythonVisualAttributesObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[2]{"exhaustNb", "exhaustPower"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 2);
+
+    SetPythonVectorObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "exhaustPos"), 0), PyTuple_GetItem(PyObject_GetAttrString(p_data, "exhaustPos"), 0));
+    SetPythonVectorObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "exhaustPos"), 1), PyTuple_GetItem(PyObject_GetAttrString(p_data, "exhaustPos"), 1));
+}
+
 
 /// @brief gets the python public car object of the current input
 /// @param  p_publicCar The public car data
@@ -414,6 +485,20 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
     return publicCar;
 }
 
+void SDATypesConverter::SetPythonCarPublicObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[2]{"speed", "state"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 2);
+
+    SetPythonDynamicPointObject(PyObject_GetAttrString(p_target, "dynGC"), PyObject_GetAttrString(p_data, "dynGC"));
+    SetPythonDynamicPointObject(PyObject_GetAttrString(p_target, "dynGCg"), PyObject_GetAttrString(p_data, "dynGCg"));
+    SetPythonTrackLocationObject(PyObject_GetAttrString(p_target, "trkPos"), PyObject_GetAttrString(p_data, "trkPos"));
+
+    //posmat
+
+}
+
+
 /// @brief gets the python dynamic point object of the current input
 /// @param  p_dynPt The dynamic point data
 /// @return           The python object
@@ -443,6 +528,13 @@ tDynPt SDATypesConverter::GetCppDynamicPointObject(PyObject *p_dynPt)
     dynPt.acc = GetCppPosDObject(PyObject_GetAttrString(p_dynPt, "acc"));
 
     return dynPt;
+}
+
+void SDATypesConverter::SetPythonDynamicPointObject(PyObject* p_target, PyObject* p_data)
+{
+    SetPythonPosDObject(PyObject_GetAttrString(p_target, "pos"), PyObject_GetAttrString(p_data, "pos"));
+    SetPythonPosDObject(PyObject_GetAttrString(p_target, "vel"), PyObject_GetAttrString(p_data, "vel"));
+    SetPythonPosDObject(PyObject_GetAttrString(p_target, "acc"), PyObject_GetAttrString(p_data, "acc"));
 }
 
 /// @brief gets the python track location object of the current input
@@ -481,6 +573,14 @@ tTrkLocPos SDATypesConverter::GetCppTrackLocationObject(PyObject *p_trackLoc)
     trackLocPos.toLeft = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackLoc, "toLeft")));
 
     return trackLocPos;
+}
+
+void SDATypesConverter::SetPythonTrackLocationObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[5]{"type", "toStart", "toRight", "toMiddle", "toLeft"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
+
+    SetPythonTrackSegmentObject(PyObject_GetAttrString(p_target, "seg"), PyObject_GetAttrString(p_data, "seg"));
 }
 
 /// @brief gets the python track segment object of the current input
@@ -592,6 +692,20 @@ tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
     return segment;
 }
 
+void SDATypesConverter::SetPythonTrackSegmentObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[24]{"id", "type", "type2", "style", "length", "time", "width", "startWidth", "endWidth", "lgFromStart", "radius", "radiusR",
+                                 "radiusL", "arc",  "sin", "cos", "kzl", "kzw", "kyl", "envIndex", "height",
+                                 "raceInfo", "doVFactor", "speedLimit"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 24);
+
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "center"), PyObject_GetAttrString(p_data, "center"));
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "rgtSideNormal"), PyObject_GetAttrString(p_data, "rgtSideNormal"));
+
+    COPY_PYTHON_ARRAY(p_target, p_data, "vertex", 4);
+    COPY_PYTHON_ARRAY(p_target, p_data, "angle", 7);
+}
+
 /// @brief gets the python race car info object of the current input
 /// @param  p_carRaceInfo The race car info data
 /// @return           The python object
@@ -670,6 +784,17 @@ tCarRaceInfo SDATypesConverter::GetCppCarRaceInfoObject(PyObject *p_carRaceInfo)
 
     return carRaceInfo;
 }
+
+void SDATypesConverter::SetPythonCarRaceInfoObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[27]{"bestLapTime", "commitBestLapTime", "deltaBestLapTime", "curLapTime",
+                                  "lastLapTime", "curTime", "topSpeed", "currentMinSpeedForLap", "laps", "bestLap", "nbPitStops", "remainingLaps", "pos",
+                                  "timeBehindLeader", "lapsBehindLeader", "timeBehindPrev", "timeBeforeNext", "distRaced", "distFromStartLine",
+                                  "currentSector", "nbSectors", "trackLength", "scheduledEventTime", "event", "penaltyTime",
+                                  "prevFromStartLine", "wrongWayTime"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 27);
+}
+
 
 /// @brief gets the python private car object of the current input
 /// @param  p_posD The private car data
@@ -828,6 +953,31 @@ tPrivCar SDATypesConverter::GetCppCarPrivObject(PyObject *p_privCar)
     return privCar;
 }
 
+void SDATypesConverter::SetPythonCarPrivObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[29]{"driverIndex", "moduleIndex", "modName",  "gear", "gearNext", "fuel",
+                                  "fuelConsumptionTotal", "fuelConsumptionInstant", "engineRPM", "engineRPMRedLine", "engineRPMMax",
+                                  "engineRPMMaxTq", "engineRPMMaxPw", "engineMaxTq", "engineMaxPw",  "gearNb",
+                                  "gearOffset","collision",
+                                  "simCollision", "smoke", "damage", "debug", "localPressure", "driveSkill",
+                                  "steerTqCenter", "steerTqAlign", "dashboardInstantNb", "dashboardRequestNb", "dashboardActiveItem"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 29);
+
+    COPY_PYTHON_ARRAY(p_target, p_data, "gearRatio1", 10);
+    COPY_PYTHON_ARRAY(p_target, p_data, "skid", 4);
+    COPY_PYTHON_ARRAY(p_target, p_data, "reaction", 4);
+
+    SetPythonCollisionStateObject(PyObject_GetAttrString(p_target, "collisionState"), PyObject_GetAttrString(p_data, "collisionState"));
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "normal"), PyObject_GetAttrString(p_data, "normal"));
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "collPos"), PyObject_GetAttrString(p_data, "collPos"));
+
+    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 0), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 0));
+    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 1), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 1));
+    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 2), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 2));
+    SetPythonPosDObject(PyTuple_GetItem(PyObject_GetAttrString(p_target, "corner"), 3), PyTuple_GetItem(PyObject_GetAttrString(p_data, "corner"), 3));
+}
+
+
 /// @brief gets the python posD object of the current input
 /// @param  p_posD The posD data
 /// @return           The python object
@@ -867,6 +1017,13 @@ tPosd SDATypesConverter::GetCppPosDObject(PyObject *p_posD)
     return posD;
 }
 
+void SDATypesConverter::SetPythonPosDObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[7]{"x", "y", "z", "xy", "ax", "ay", "az"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 7);
+}
+
+
 /// @brief gets the collision state object of the current input
 /// @param  p_collisionState The collision state data
 /// @return           The python object
@@ -899,6 +1056,14 @@ tCollisionState SDATypesConverter::GetCppCollisionStateObject(PyObject *p_collis
 
     return collisionState;
 }
+
+void SDATypesConverter::SetPythonCollisionStateObject(PyObject* p_target, PyObject* p_data)
+{
+    COPY_PYTHON_OBJECT(p_target, p_data, "collisionCount");
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "pos"), PyObject_GetAttrString(p_data, "pos"));
+    SetPythonVectorObject(PyObject_GetAttrString(p_target, "force"), PyObject_GetAttrString(p_data, "force"));
+}
+
 
 /// @brief gets the python vector object of the current input
 /// @param  p_x The vector x data
@@ -941,6 +1106,12 @@ t3Dd SDATypesConverter::GetCppTVectorObject(PyObject *p_vec)
     vec.z = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_vec, "z")));
 
     return vec;
+}
+
+void SDATypesConverter::SetPythonVectorObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[3]{"x", "y", "z"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 }
 
 /// @brief gets the python car control object of the current input
@@ -1030,6 +1201,18 @@ tCarCtrl SDATypesConverter::GetCppCarCtrlObject(PyObject *p_carCtrl)
 
     return carCtrl;
 }
+
+void SDATypesConverter::SetPythonCarCtrlObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[20]{"steer", "accelCmd", "brakeCmd", "clutchCmd", "brakeFrontLeftCmd", "brakeFrontRightCmd", "brakeRearLeftCmd",
+                                 "brakeRearRightCmd", "wingFrontCmd", "wingRearCmd", "reserved1", "reserved2", "gear", "raceCmd", "lightCmd", "eBrakeCmd",
+                                 "wingControlMode", "singleWheelBrakeMode", "switch3", "telemetryMode"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 20);
+
+    COPY_PYTHON_ARRAY(p_target, p_data, "msg", 4);
+    COPY_PYTHON_ARRAY(p_target, p_data, "msgColor", 4);
+}
+
 
 /// @brief gets the python car setup object of the current input
 /// @param  p_carSetup The car setup data
@@ -1337,6 +1520,60 @@ tCarSetup SDATypesConverter::GetCppCarSetupObject(PyObject *p_carSetup)
     return carSetup;
 }
 
+
+void SDATypesConverter::SetPythonCarSetupObject(PyObject* p_target, PyObject* p_data)
+{
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "wingAngle", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "gearRatio", 10);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialType", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialRatio", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialMinTqBias", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialMaxTqBias", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialViscosity", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialLockingTq", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialMaxSlipBias", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "differentialCoastMaxSlipBias", 3);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "rideHeight", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "toe", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "camber", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "tirePressure", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "tireOpLoad", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "arbSpring", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "arbBellCrank", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveSpring", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveBellCrank", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveInertance", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveFastBump", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveSlowBump", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveBumpLevel", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveFastRebound", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveSlowRebound", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "heaveReboundLevel", 2);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspSpring", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspBellCrank", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspInertance", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspCourse", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspPacker", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspFastBump", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspSlowBump", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspBumpLevel", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspFastRebound", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspSlowRebound", 4);
+    COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "suspReboundLevel", 4);
+
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "fRWeightRep"), PyObject_GetAttrString(p_data, "fRWeightRep"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "fRLWeightRep"), PyObject_GetAttrString(p_data, "fRLWeightRep"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "rRLWeightRep"), PyObject_GetAttrString(p_data, "rRLWeightRep"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "fuel"), PyObject_GetAttrString(p_data, "fuel"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "revsLimiter"), PyObject_GetAttrString(p_data, "revsLimiter"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "steerLock"), PyObject_GetAttrString(p_data, "steerLock"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "brakeRepartition"), PyObject_GetAttrString(p_data, "brakeRepartition"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "brakePressure"), PyObject_GetAttrString(p_data, "brakePressure"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "reqRepair"), PyObject_GetAttrString(p_data, "reqRepair"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "reqTireset"), PyObject_GetAttrString(p_data, "reqTireset"));
+    SetPythonCarSetupItemObject(PyObject_GetAttrString(p_target, "reqPenalty"), PyObject_GetAttrString(p_data, "reqPenalty"));
+}
+
 /// @brief gets the python car setup item object of the current input
 /// @param  p_carSetupItem The car setup item data
 /// @return             The python object
@@ -1374,6 +1611,12 @@ tCarSetupItem SDATypesConverter::GetCppCarSetupItemObject(PyObject *p_carSetupIt
     return carSetupItem;
 }
 
+void SDATypesConverter::SetPythonCarSetupItemObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[6]{"value", "min", "max", "desiredValue", "stepSize", "changed"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
+}
+
 /// @brief gets the python car pit cmd object of the current input
 /// @param  p_carPitCmd The car pit cmd data
 /// @return             The python object
@@ -1409,6 +1652,13 @@ tCarPitCmd SDATypesConverter::GetCppCarPitCmdObject(PyObject *p_carPitCmd)
     return carPitCmd;
 }
 
+void SDATypesConverter::SetPythonCarPitCmdObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[5]{"fuel", "repair", "stopType", "setupChanged", "tireChange"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
+}
+
+
 /// @brief gets the python situation object of the current input
 /// @param  p_situation The situation data
 /// @return             The python object
@@ -1443,6 +1693,15 @@ tSituation SDATypesConverter::GetCppSituationObject(PyObject *p_situation)
 
     return situation;
 }
+
+void SDATypesConverter::SetPythonSituationObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[4]{"deltaTime", "currentTime", "accelTime", "nbPlayers"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 4);
+
+    SetPythonRaceInfoObject(PyObject_GetAttrString(p_target, "raceInfo"), PyObject_GetAttrString(p_data, "raceInfo"));
+}
+
 
 /// @brief gets the python race info object of the current input
 /// @param  p_raceInfo The race info data
@@ -1486,6 +1745,13 @@ tRaceAdmInfo SDATypesConverter::GetCppRaceInfoObject(PyObject *p_raceInfo)
 
     return raceAdmInfo;
 }
+
+void SDATypesConverter::SetPythonRaceInfoObject(PyObject* p_target, PyObject* p_data)
+{
+    const char* attributeList[9]{"ncars", "totLaps", "extraLaps", "totTime", "state", "type", "maxDamage", "fps", "features"};
+    COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 9);
+}
+
 
 /// @brief gets the python object from p_classInit using p_initArgs arguments of p_length
 /// @param  p_classInit The class init

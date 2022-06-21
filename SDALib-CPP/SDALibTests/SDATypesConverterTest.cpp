@@ -4,6 +4,7 @@
 #include "Mocks/PointerManagerMock.h"
 #include "Random.hpp"
 #include "GeneratorUtils.h"
+#include "SDASpeedDreams.h"
 
 #define TEST_COUNT 10
 
@@ -1346,6 +1347,7 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
 {
     Py_Initialize();
     SDATypesConverter converter = SDATypesConverter();
+    SDASpeedDreams sdaSpeedDreams;
 
     Random random;
     for (int i = 0; i < TEST_COUNT; i++)
@@ -1356,10 +1358,19 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
         sdaData.Car = GenerateCar(segments);
         sdaData.Situation = GenerateSituation();
 
+        // checks the data is correctly translated from SDAData to PyObject
         PyObject* sdaDataObject = converter.GetPythonSDATypeObject(sdaData);
-
         CheckSDAData(sdaData, sdaDataObject);
+
+        // checks the data is correctly translated from PyObject to SDAData
         CheckSDAData(converter.GetCppSDAData(sdaDataObject), sdaDataObject);
+
+        // checks the data is correctly set from PyObject to PyObject
+        SDAAction sdaAction;
+        SDAData newSDAData = sdaSpeedDreams.UpdateSimulator(sdaData, sdaAction);
+        PyObject* newSDADataObject = converter.GetPythonSDATypeObject(newSDAData);
+        converter.SetPythonSDATypeObject(newSDADataObject, sdaDataObject);
+        CheckSDAData(sdaData, newSDADataObject);
 
         DestroySegments(segments);
         DestroyCar(sdaData.Car);

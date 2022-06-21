@@ -25,64 +25,84 @@ public:
 
     PyObject* GetPythonSDATypeObject(SDAData& p_data);
     SDAData GetCppSDAData(PyObject* p_data);
+    void SetPythonSDATypeObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarObject(tCarElt& p_car);
     tCarElt GetCppCarObject(PyObject* p_car);
+    void SetPythonCarObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarInitObject(tInitCar& p_initCar);
     tInitCar GetCppCarInitObject(PyObject* p_initCar);
+    void SetPythonCarInitObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonWheelSpecificationObject(tWheelSpec& p_wheelSpec);
     tWheelSpec GetCppWheelSpecificationObject(PyObject* p_wheelSpec);
+    void SetPythonWheelSpecificationObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonVisualAttributesObject(tVisualAttributes& p_visualAttributes);
     tVisualAttributes GetCppVisualAttributesObject(PyObject* p_visualAttributes);
+    void SetPythonVisualAttributesObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarPublicObject(tPublicCar& p_publicCar);
     tPublicCar GetCppCarPublicObject(PyObject* p_publicCar);
+    void SetPythonCarPublicObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonDynamicPointObject(tDynPt& p_dynPt);
     tDynPt GetCppDynamicPointObject(PyObject* p_dynPt);
+    void SetPythonDynamicPointObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonTrackLocationObject(tTrkLocPos& p_trackLoc);
     tTrkLocPos GetCppTrackLocationObject(PyObject* p_trackLoc);
+    void SetPythonTrackLocationObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonTrackSegmentObject(tTrackSeg& p_trackSeg);
     tTrackSeg GetCppTrackSegmentObject(PyObject* p_trackSeg);
+    void SetPythonTrackSegmentObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarRaceInfoObject(tCarRaceInfo& p_carRaceInfo);
     tCarRaceInfo GetCppCarRaceInfoObject(PyObject* p_carRaceInfo);
+    void SetPythonCarRaceInfoObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarPrivObject(tPrivCar& p_privCar);
     tPrivCar GetCppCarPrivObject(PyObject* p_privCar);
+    void SetPythonCarPrivObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonPosDObject(tPosd& p_posD);
     tPosd GetCppPosDObject(PyObject* p_posD);
+    void SetPythonPosDObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCollisionStateObject(tCollisionState& p_collisionState);
     tCollisionState GetCppCollisionStateObject(PyObject* p_collisionState);
+    void SetPythonCollisionStateObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonVectorObject(double p_x, double p_y, double p_z);
     void GetCppSgVectorObject(float* p_outputVec, PyObject* p_vec);
     t3Dd GetCppTVectorObject(PyObject* p_vec);
+    void SetPythonVectorObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarCtrlObject(tCarCtrl& p_carCtrl);
     tCarCtrl GetCppCarCtrlObject(PyObject* p_carCtrl);
+    void SetPythonCarCtrlObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarSetupObject(tCarSetup& p_carSetup);
     tCarSetup GetCppCarSetupObject(PyObject* p_carSetup);
+    void SetPythonCarSetupObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarSetupItemObject(tCarSetupItem& p_carSetupItem);
     tCarSetupItem GetCppCarSetupItemObject(PyObject* p_carSetupItem);
+    void SetPythonCarSetupItemObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarPitCmdObject(tCarPitCmd& p_carPitCmd);
     tCarPitCmd GetCppCarPitCmdObject(PyObject* p_carPitCmd);
+    void SetPythonCarPitCmdObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonSituationObject(tSituation& p_situation);
     tSituation GetCppSituationObject(PyObject* p_situation);
+    void SetPythonSituationObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonRaceInfoObject(tRaceAdmInfo& p_raceInfo);
     tRaceAdmInfo GetCppRaceInfoObject(PyObject* p_raceInfo);
+    void SetPythonRaceInfoObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetObjectFromArgs(PyObject* p_classInit, PyObject* p_initArgs[], int p_length);
 
