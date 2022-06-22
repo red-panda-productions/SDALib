@@ -1683,6 +1683,33 @@ void CheckDynAxisData(tDynAxis p_dynAxis, PyObject* p_dynAxisObject)
     ASSERT_EQ(p_dynAxis.I, static_cast<float>(PyFloat_AsDouble(IVal)));
 }
 
+void CheckEngineCurveData(tEngineCurve p_engineCurve, PyObject* p_engineCurveObject)
+{
+    PyObject* maxTqAttr = PyUnicode_FromString("maxTq");
+    PyObject* maxTqVal = PyObject_GetAttr(p_engineCurveObject, maxTqAttr);
+    ASSERT_EQ(p_engineCurve.maxTq, static_cast<float>(PyFloat_AsDouble(maxTqVal)));
+
+    PyObject* maxPwAttr = PyUnicode_FromString("maxPw");
+    PyObject* maxPwVal = PyObject_GetAttr(p_engineCurveObject, maxPwAttr);
+    ASSERT_EQ(p_engineCurve.maxPw, static_cast<float>(PyFloat_AsDouble(maxPwVal)));
+
+    PyObject* rpmMaxPwAttr = PyUnicode_FromString("rpmMaxPw");
+    PyObject* rpmMaxPwVal = PyObject_GetAttr(p_engineCurveObject, rpmMaxPwAttr);
+    ASSERT_EQ(p_engineCurve.rpmMaxPw, static_cast<float>(PyFloat_AsDouble(rpmMaxPwVal)));
+
+    PyObject* TqAtMaxPwAttr = PyUnicode_FromString("TqAtMaxPw");
+    PyObject* TqAtMaxPwVal = PyObject_GetAttr(p_engineCurveObject, TqAtMaxPwAttr);
+    ASSERT_EQ(p_engineCurve.TqAtMaxPw, static_cast<float>(PyFloat_AsDouble(TqAtMaxPwVal)));
+
+    PyObject* rpmMaxTqAttr = PyUnicode_FromString("rpmMaxTq");
+    PyObject* rpmMaxTqVal = PyObject_GetAttr(p_engineCurveObject, rpmMaxTqAttr);
+    ASSERT_EQ(p_engineCurve.rpmMaxTq, static_cast<float>(PyFloat_AsDouble(rpmMaxTqVal)));
+
+    PyObject* nbPtsAttr = PyUnicode_FromString("nbPts");
+    PyObject* nbPtsVal = PyObject_GetAttr(p_engineCurveObject, nbPtsAttr);
+    ASSERT_EQ(p_engineCurve.nbPts, static_cast<int>(PyLong_AsLong(nbPtsVal)));
+}
+
 void CheckEngineData(tEngine p_engine, PyObject* p_engineObject)
 {
     PyObject* curveAttr = PyUnicode_FromString("curve");
