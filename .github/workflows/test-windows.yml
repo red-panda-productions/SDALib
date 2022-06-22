@@ -55,7 +55,7 @@ jobs:
         boost_install_dir: ${{env.BOOST_PATH}}
 
     - name: Configure CMake
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DEXTRA_PY_BUILD_DIR="/Debug" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DEXTRA_PY_BUILD_DIR="/Release" -DBoost_INCLUDE_DIR=${{env.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT}}/lib -S ${{github.workspace}}/SDALib-CPP -B ${{runner.workspace}}/build -T host=x86 -A Win32
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
