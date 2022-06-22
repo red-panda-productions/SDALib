@@ -41,7 +41,6 @@ jobs:
         sudo apt-get install libplib-dev
         sudo apt-get install libexpat1-dev
         sudo apt-get install libmysqlcppconn-dev
-	      sudo apt-get install python3-distutils
       
     - name: Cache boost
       uses: actions/cache@v2
