@@ -2,8 +2,7 @@
 #  Utrecht University within the Software Project course.
 #  © Copyright Utrecht University (Department of Information and Computing Sciences)
 
-import sys
-sys.path.append("C:\\Users\\sietz\\AppData\\Local\\Programs\\Python\\Python310-32\\Lib\\site-packages")
+import site
 
 import SDATypes
 import simulator
