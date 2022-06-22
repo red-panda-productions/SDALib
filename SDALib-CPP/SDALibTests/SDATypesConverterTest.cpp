@@ -1519,7 +1519,80 @@ void CheckDemperDefData(tDamperDef p_demperDef, PyObject* p_demperDefObject)
     ASSERT_EQ(p_demperDef.b2, static_cast<float>(PyFloat_AsDouble(b2Val)));
 }
 
+void CheckEngineData(tEngine p_engine, PyObject* p_engineObject)
+{
+    PyObject* curveAttr = PyUnicode_FromString("curve");
+    PyObject* curveVal = PyObject_GetAttr(p_engineObject, curveAttr);
+    CheckEngineCurveData(p_engine.curve, curveVal);
 
+    PyObject* revsLimiterAttr = PyUnicode_FromString("revsLimiter");
+    PyObject* revsLimiterVal = PyObject_GetAttr(p_engineObject, revsLimiterAttr);
+    ASSERT_EQ(p_engine.revsLimiter, static_cast<float>(PyFloat_AsDouble(revsLimiterVal)));
+
+    PyObject* revsMaxAttr = PyUnicode_FromString("revsMax");
+    PyObject* revsMaxVal = PyObject_GetAttr(p_engineObject, revsMaxAttr);
+    ASSERT_EQ(p_engine.revsMax, static_cast<float>(PyFloat_AsDouble(revsMaxVal)));
+
+    PyObject* tickoverAttr = PyUnicode_FromString("tickover");
+    PyObject* tickoverVal = PyObject_GetAttr(p_engineObject, tickoverAttr);
+    ASSERT_EQ(p_engine.tickover, static_cast<float>(PyFloat_AsDouble(tickoverVal)));
+
+    PyObject* IAttr = PyUnicode_FromString("I");
+    PyObject* IVal = PyObject_GetAttr(p_engineObject, IAttr);
+    ASSERT_EQ(p_engine.I, static_cast<float>(PyFloat_AsDouble(IVal)));
+
+    PyObject* radsAttr = PyUnicode_FromString("rads");
+    PyObject* radsVal = PyObject_GetAttr(p_engineObject, radsAttr);
+    ASSERT_EQ(p_engine.rads, static_cast<float>(PyFloat_AsDouble(radsVal)));
+
+    PyObject* TqAttr = PyUnicode_FromString("Tq");
+    PyObject* TqVal = PyObject_GetAttr(p_engineObject, TqAttr);
+    ASSERT_EQ(p_engine.Tq, static_cast<float>(PyFloat_AsDouble(TqVal)));
+
+    PyObject* Tq_responseAttr = PyUnicode_FromString("Tq_response");
+    PyObject* Tq_responseVal = PyObject_GetAttr(p_engineObject, Tq_responseAttr);
+    ASSERT_EQ(p_engine.Tq_response, static_cast<float>(PyFloat_AsDouble(Tq_responseVal)));
+
+    PyObject* I_jointAttr = PyUnicode_FromString("I_joint");
+    PyObject* I_jointVal = PyObject_GetAttr(p_engineObject, I_jointAttr);
+    ASSERT_EQ(p_engine.I_joint, static_cast<float>(PyFloat_AsDouble(I_jointVal)));
+
+    PyObject* fuelconsAttr = PyUnicode_FromString("fuelcons");
+    PyObject* fuelconsVal = PyObject_GetAttr(p_engineObject, fuelconsAttr);
+    ASSERT_EQ(p_engine.fuelcons, static_cast<float>(PyFloat_AsDouble(fuelconsVal)));
+
+    PyObject* brakeCoeffAttr = PyUnicode_FromString("brakeCoeff");
+    PyObject* brakeCoeffVal = PyObject_GetAttr(p_engineObject, brakeCoeffAttr);
+    ASSERT_EQ(p_engine.brakeCoeff, static_cast<float>(PyFloat_AsDouble(brakeCoeffVal)));
+
+    PyObject* brakeLinCoeffAttr = PyUnicode_FromString("brakeLinCoeff");
+    PyObject* brakeLinCoeffVal = PyObject_GetAttr(p_engineObject, brakeLinCoeffAttr);
+    ASSERT_EQ(p_engine.brakeLinCoeff, static_cast<float>(PyFloat_AsDouble(brakeLinCoeffVal)));
+
+    PyObject* pressureAttr = PyUnicode_FromString("pressure");
+    PyObject* pressureVal = PyObject_GetAttr(p_engineObject, pressureAttr);
+    ASSERT_EQ(p_engine.pressure, static_cast<float>(PyFloat_AsDouble(pressureVal)));
+
+    PyObject* exhaust_presureAttr = PyUnicode_FromString("exhaust_pressure");
+    PyObject* exhaust_presureVal = PyObject_GetAttr(p_engineObject, exhaust_presureAttr);
+    ASSERT_EQ(p_engine.exhaust_pressure, static_cast<float>(PyFloat_AsDouble(exhaust_presureVal)));
+
+    PyObject* exhaust_refractAttr = PyUnicode_FromString("exhaust_refract");
+    PyObject* exhaust_refractVal = PyObject_GetAttr(p_engineObject, exhaust_refractAttr);
+    ASSERT_EQ(p_engine.exhaust_refract, static_cast<float>(PyFloat_AsDouble(exhaust_refractVal)));
+
+    PyObject* timeInLimiterAttr = PyUnicode_FromString("timeInLimiter");
+    PyObject* timeInLimiterVal = PyObject_GetAttr(p_engineObject, timeInLimiterAttr);
+    ASSERT_EQ(p_engine.timeInLimiter, static_cast<float>(PyFloat_AsDouble(timeInLimiterVal)));
+
+    PyObject* TCLAttr = PyUnicode_FromString("TCL");
+    PyObject* TCLVal = PyObject_GetAttr(p_engineObject, TCLAttr);
+    ASSERT_EQ(p_engine.TCL, static_cast<float>(PyFloat_AsDouble(TCLVal)));
+
+    PyObject* EnableTCLAttr = PyUnicode_FromString("EnableTCL");
+    PyObject* EnableTCLVal = PyObject_GetAttr(p_engineObject, EnableTCLAttr);
+    ASSERT_TRUE(p_engine.EnableTCL == static_cast<bool>(PyLong_AsLong(EnableTCLVal)));
+}
 
 void CheckSimCarData(tCar p_car, PyObject* p_carObject)
 {
