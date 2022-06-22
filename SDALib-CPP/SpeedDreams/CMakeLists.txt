@@ -5,7 +5,7 @@
 SET(_HEADERS SDStructs.hpp SDConstants.hpp)
 SET(_SOURCES SDStructs.cpp)
 
-ADD_LIBRARY(SpeedDreamsLib ${_HEADERS} ${_SOURCES})
+ADD_LIBRARY(SpeedDreamsLib STATIC ${_HEADERS} ${_SOURCES})
 
 add_subdirectory ("math")
 add_subdirectory ("portability")
