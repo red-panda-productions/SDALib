@@ -1952,6 +1952,11 @@ void CheckSimCarData(tCar p_car, PyObject* p_carObject)
     ASSERT_EQ(p_car.collisionAware, static_cast<float>(PyFloat_AsDouble(collisionAwareVal)));
 }
 
+void CheckWheelSystData(tWheel p_wheelSyst, PyObject* p_wheelSystObject)
+{
+    
+}
+
 
 /// @brief tests the sda data c++ data correctly translated to python and back
 TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
