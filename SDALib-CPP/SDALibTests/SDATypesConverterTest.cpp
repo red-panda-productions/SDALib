@@ -1495,7 +1495,7 @@ void CheckDemperDefData(tDamperDef p_demperDef, PyObject* p_demperDefObject)
 
     PyObject* v1Attr = PyUnicode_FromString("v1");
     PyObject* v1Val = PyObject_GetAttr(p_demperDefObject, v1Attr);
-    ASSERT_EQ(p_demperDef.C2, static_cast<float>(PyFloat_AsDouble(v1Val)));
+    ASSERT_EQ(p_demperDef.v1, static_cast<float>(PyFloat_AsDouble(v1Val)));
 
     PyObject* C2Attr = PyUnicode_FromString("C2");
     PyObject* C2Val = PyObject_GetAttr(p_demperDefObject, C2Attr);
