@@ -1743,11 +1743,11 @@ void CheckAxleData(tAxle p_axle, PyObject* p_axleObject)
 
     PyObject* arbSuspAttr = PyUnicode_FromString("arbSusparbSusp");
     PyObject* arbSuspVal = PyObject_GetAttr(p_axleObject, arbSuspAttr);
-    CheckSuspensionData(p_axle.heaveSusp, arbSuspVal);
+    //CheckSuspensionData(p_axle.arbSusparbSusp, arbSuspVal);
 
     PyObject* heaveSuspAttr = PyUnicode_FromString("heaveSusp");
     PyObject* heaveSuspVal = PyObject_GetAttr(p_axleObject, heaveSuspAttr);
-    CheckSuspensionData(p_axle.heaveSusp, heaveSuspVal);
+    //CheckSuspensionData(p_axle.heaveSusp, heaveSuspVal);
 
     PyObject* wheight0Attr = PyUnicode_FromString("wheight0");
     PyObject* wheight0Val = PyObject_GetAttr(p_axleObject, wheight0Attr);
@@ -1785,7 +1785,7 @@ void CheckWheelSystData(tWheel p_wheelSyst, PyObject* p_wheelSystObject)
 {
     PyObject* suspAttr = PyUnicode_FromString("susp");
     PyObject* suspVal = PyObject_GetAttr(p_wheelSystObject, suspAttr);
-    CheckSuspensionData(p_wheelSyst.susp, suspVal);
+    //CheckSuspensionData(p_wheelSyst.susp, suspVal);
 
     PyObject* brakeAttr = PyUnicode_FromString("brake");
     PyObject* brakeVal = PyObject_GetAttr(p_wheelSystObject, brakeAttr);
@@ -2165,7 +2165,6 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     CheckDifferentialData(p_transmission.differential[0], PyTuple_GetItem(differentialVal, 0));
     CheckDifferentialData(p_transmission.differential[1], PyTuple_GetItem(differentialVal, 1));
     CheckDifferentialData(p_transmission.differential[2], PyTuple_GetItem(differentialVal, 2));
-    CheckDifferentialData(p_transmission.differential[3], PyTuple_GetItem(differentialVal, 3));
 }
 
 /// @brief checks the engineCurveElem python object corresponds to the original clutch values
