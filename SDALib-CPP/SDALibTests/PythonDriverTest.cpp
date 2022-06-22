@@ -82,5 +82,4 @@ TEST(PythonDriverTests, SDASpeedDreamsTest)
     SDAData newData = sdaSpeedDreams.UpdateSimulator(sdaData, sdaAction);
 
     ASSERT_EQ(sdaData.TickCount, newData.TickCount);
-
 }

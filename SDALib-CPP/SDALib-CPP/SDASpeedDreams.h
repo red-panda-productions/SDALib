@@ -6,17 +6,18 @@
 class SDASpeedDreams
 {
 public:
-    SDAData UpdateSimulator(const SDAData& p_data, SDAAction& p_action);
+    SDAData UpdateSimulator(const SDAData &p_data, SDAAction &p_action);
 
 private:
-    tCar CarConstructor(const tCar& p_other, tCarElt* p_carElt);
+    tCar CarConstructor(const tCar &p_other, tCarElt *p_carElt);
     tCar SimCarTable[1];
     tdble SimDeltaTime;
     tdble simSkidFactor[6]{0.4f, 0.3f, 0.2f, 0.1f, 0.0f, 0.0f};
     tdble simDammageFactor[6]{0.0f, 0.1f, 0.3f, 0.5f, 0.8f, 1.0f};
     void SimUpdate(tSituation *s, double deltaTime);
     tdble SimTimeOfDay = 0;
-    double Tair = 273.15;;
+    double Tair = 273.15;
+    ;
     double simDegree = 0.000000023;
     double startDay = 0.0;
     double endDay = 0.0;
@@ -37,10 +38,10 @@ private:
     void SimCarUpdateWheelPos(tCar *car);
     void SimBrakeSystemUpdate(tCar *car);
     void SimAeroUpdate(tCar *car, tSituation *s);
-    void SimWingUpdate(tCar *car, int index, tSituation* s);
+    void SimWingUpdate(tCar *car, int index, tSituation *s);
     void SimWheelUpdateRide(tCar *car, int index);
-    tdble CliftFromAoA(tWing* wing);
-    tdble F(tWing* wing);
+    tdble CliftFromAoA(tWing *wing);
+    tdble F(tWing *wing);
     void RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, tTrkLocPos *p, int type);
     void SimSuspCheckIn(tSuspension *susp);
     void SimBrakeUpdate(tCar *car, tWheel *wheel, tBrake *brake);
@@ -70,8 +71,3 @@ private:
     int SimTelemetry = -1;
     void SimTelemetryOut(tCar *car);
 };
-
-
-
-
-

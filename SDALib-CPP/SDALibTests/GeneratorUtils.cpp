@@ -636,7 +636,7 @@ tCar GenerateSimCar()
     car.params = nullptr;
     car.carElt = nullptr;
 
-    //preCtrl
+    // preCtrl
     car.preCtrl.accelCmd = random.NextFloat();
     car.preCtrl.brakeCmd = random.NextFloat();
     car.preCtrl.brakeFrontLeftCmd = random.NextFloat();
@@ -646,9 +646,9 @@ tCar GenerateSimCar()
     car.preCtrl.clutchCmd = random.NextFloat();
     car.preCtrl.ebrakeCmd = random.NextInt(0, 2);
     car.preCtrl.gear = random.NextInt(-1, 2);
-    car.preCtrl.lightCmd = random.NextInt(0,2);
+    car.preCtrl.lightCmd = random.NextInt(0, 2);
 
-    //axle
+    // axle
     for (int i = 0; i < 2; i++)
     {
         car.axle[i].I = random.NextFloat();
@@ -657,7 +657,7 @@ tCar GenerateSimCar()
         car.axle[i].wheight0 = random.NextFloat();
         car.axle[i].xpos = random.NextFloat();
 
-        //suspension
+        // suspension
         car.axle[i].arbSusp.a = random.NextFloat();
         car.axle[i].arbSusp.force = random.NextFloat();
         car.axle[i].arbSusp.inertance = random.NextFloat();
@@ -665,7 +665,7 @@ tCar GenerateSimCar()
         car.axle[i].arbSusp.x = random.NextFloat();
         car.axle[i].arbSusp.state = random.NextInt(0, 1);
 
-        //damper
+        // damper
         car.axle[i].arbSusp.damper.bump.C1 = random.NextFloat();
         car.axle[i].arbSusp.damper.bump.C2 = random.NextFloat();
         car.axle[i].arbSusp.damper.bump.b1 = random.NextFloat();
@@ -678,7 +678,7 @@ tCar GenerateSimCar()
         car.axle[i].arbSusp.damper.rebound.b2 = random.NextFloat();
         car.axle[i].arbSusp.damper.rebound.v1 = random.NextFloat();
 
-        //spring
+        // spring
         car.axle[i].arbSusp.spring.F0 = random.NextFloat();
         car.axle[i].arbSusp.spring.K = random.NextFloat();
         car.axle[i].arbSusp.spring.bellcrank = random.NextFloat();
@@ -687,7 +687,7 @@ tCar GenerateSimCar()
         car.axle[i].arbSusp.spring.xMax = random.NextFloat();
     }
 
-    //wheels
+    // wheels
     for (int i = 0; i < 4; i++)
     {
         car.wheel[i].AlignTqFactor = random.NextFloat();
@@ -701,7 +701,7 @@ tCar GenerateSimCar()
         car.wheel[i].camber = random.NextFloat();
         car.wheel[i].rollRes = random.NextFloat();
 
-        //susp
+        // susp
         car.wheel[i].susp.force = random.NextFloat();
         car.wheel[i].susp.a = random.NextFloat();
         car.wheel[i].susp.inertance = random.NextFloat();
@@ -709,26 +709,25 @@ tCar GenerateSimCar()
         car.wheel[i].susp.x = random.NextFloat();
         car.wheel[i].susp.state = random.NextInt();
 
-        //brake
+        // brake
         car.wheel[i].brake.I = random.NextFloat();
         car.wheel[i].brake.ABS = random.NextFloat();
         car.wheel[i].brake.TCL = random.NextFloat();
         car.wheel[i].brake.Tq = random.NextFloat();
         car.wheel[i].brake.pressure = random.NextFloat();
-
     }
 
-    //steer
+    // steer
     car.steer.steer = random.NextFloat();
     car.steer.maxSpeed = random.NextFloat();
     car.steer.steerLock = random.NextFloat();
 
-    //brakeSyst
+    // brakeSyst
     car.brkSyst.coeff = random.NextFloat();
     car.brkSyst.ebrake_pressure = random.NextFloat();
     car.brkSyst.rep = random.NextFloat();
 
-    //aero
+    // aero
     car.aero.Cd = random.NextFloat();
     car.aero.CdBody = random.NextFloat();
     car.aero.Clift[0] = random.NextFloat();
@@ -737,7 +736,7 @@ tCar GenerateSimCar()
     car.aero.lift[0] = random.NextFloat();
     car.aero.lift[1] = random.NextFloat();
 
-    //transmission
+    // transmission
     car.transmission.clutch.mode = random.NextInt(0, 2);
     car.transmission.clutch.releaseTime = random.NextFloat();
     car.transmission.clutch.state = random.NextInt(0, 2);
@@ -763,7 +762,7 @@ tCar GenerateSimCar(tCarElt& p_car)
     car.carElt = &p_car;
     car.trkPos = p_car.pub.trkPos;
 
-    for(int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         car.wheel[i].trkPos = p_car.pub.trkPos;
     }

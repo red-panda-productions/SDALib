@@ -1,18 +1,18 @@
 #include "SDASpeedDreams.h"
 
-#define FLOAT_RELAXATION2(target, prev, rate) 			\
-do {								\
-    tdble __tmp__;						\
-    __tmp__ = target;						\
-    target = (prev) + (rate) * ((target) - (prev)) * 0.01f;	\
-    prev = __tmp__;						\
-} while (0)
+#define FLOAT_RELAXATION2(target, prev, rate)                   \
+    do {                                                        \
+        tdble __tmp__;                                          \
+        __tmp__ = target;                                       \
+        target = (prev) + (rate) * ((target) - (prev)) * 0.01f; \
+        prev = __tmp__;                                         \
+    } while (0)
 
 /// @brief sets tCarElt to tCar
 /// @param p_other the tCar car
 /// @param p_carElt the tCarElt car
 /// @return a new tCar
-tCar SDASpeedDreams::CarConstructor(const tCar& p_other, tCarElt* p_carElt)
+tCar SDASpeedDreams::CarConstructor(const tCar &p_other, tCarElt *p_carElt)
 {
     tCar car(p_other);
     car.carElt = p_carElt;
@@ -43,12 +43,12 @@ tCar SDASpeedDreams::CarConstructor(const tCar& p_other, tCarElt* p_carElt)
 /// @param p_data the current situation
 /// @param p_action the current action
 /// @return new SDAData with the new situation
-SDAData SDASpeedDreams::UpdateSimulator(const SDAData& p_data, SDAAction& p_action)
+SDAData SDASpeedDreams::UpdateSimulator(const SDAData &p_data, SDAAction &p_action)
 {
     SDAData data(p_data);
 
     // update the car
-    data.Situation.cars = new tCarElt*[1] ;
+    data.Situation.cars = new tCarElt *[1];
     data.Situation.cars[0] = new tCarElt(p_data.Car);
     data.Situation.cars[0]->ctrl.accelCmd = p_action.Accel;
     data.Situation.cars[0]->ctrl.brakeCmd = p_action.Brake;
@@ -69,7 +69,6 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData& p_data, SDAAction& p_acti
     data.SimCar = SimCarTable[0];
 
     return data;
-
 }
 
 void SDASpeedDreams::SimUpdate(tSituation *s, double deltaTime)
@@ -79,7 +78,7 @@ void SDASpeedDreams::SimUpdate(tSituation *s, double deltaTime)
     tCarElt *carElt;
     tCar *car;
 
-    SimDeltaTime = (tdble) deltaTime;
+    SimDeltaTime = (tdble)deltaTime;
 
     SimAtmosphereUpdate(s);
 
@@ -136,39 +135,31 @@ void SDASpeedDreams::SimUpdate(tSituation *s, double deltaTime)
 
             SimAeroUpdate(car, s);
 
-
             for (i = 0; i < 2; i++)
             {
                 SimWingUpdate(car, i, s);
             }
-
 
             for (i = 0; i < 4; i++)
             {
                 SimWheelUpdateRide(car, i);
             }
 
-
             for (i = 0; i < 2; i++)
             {
                 SimAxleUpdate(car, i);
             }
-
 
             for (i = 0; i < 4; i++)
             {
                 SimWheelUpdateForce(car, i);
             }
 
-
             SimTransmissionUpdate(car);
-
 
             SimWheelUpdateRotation(car);
 
-
             SimCarUpdate(car, s);
-
         }
         else
         {
@@ -192,7 +183,6 @@ void SDASpeedDreams::SimUpdate(tSituation *s, double deltaTime)
             continue;
         }
 
-
         SimCarUpdate2(car, s); /* telemetry */
 
         /* copy back the data to carElt */
@@ -200,7 +190,7 @@ void SDASpeedDreams::SimUpdate(tSituation *s, double deltaTime)
         carElt->pub.DynGC = car->DynGC;
         carElt->pub.DynGCg = car->DynGCg;
         sgMakeCoordMat4(carElt->pub.posMat, carElt->_pos_X, carElt->_pos_Y, carElt->_pos_Z - carElt->_statGC_z,
-                        (float) RAD2DEG(carElt->_yaw), (float) RAD2DEG(carElt->_roll), (float) RAD2DEG(carElt->_pitch));
+                        (float)RAD2DEG(carElt->_yaw), (float)RAD2DEG(carElt->_roll), (float)RAD2DEG(carElt->_pitch));
         carElt->_trkPos = car->trkPos;
 
         for (i = 0; i < 4; i++)
@@ -220,7 +210,6 @@ void SDASpeedDreams::SimUpdate(tSituation *s, double deltaTime)
 
         carElt->_steerTqCenter = -car->ctrl->steer;
         carElt->_steerTqAlign = car->wheel[FRNT_RGT].torqueAlign + car->wheel[FRNT_LFT].torqueAlign;
-
     }
 }
 
@@ -261,7 +250,7 @@ void SDASpeedDreams::RemoveCar(tCar *car, tSituation *s)
         carElt->_roll += car->restPos.vel.ax * SimDeltaTime;
         carElt->_pitch += car->restPos.vel.ay * SimDeltaTime;
         sgMakeCoordMat4(carElt->pub.posMat, carElt->_pos_X, carElt->_pos_Y, carElt->_pos_Z - carElt->_statGC_z,
-                        (float) RAD2DEG(carElt->_yaw), (float) RAD2DEG(carElt->_roll), (float) RAD2DEG(carElt->_pitch));
+                        (float)RAD2DEG(carElt->_yaw), (float)RAD2DEG(carElt->_roll), (float)RAD2DEG(carElt->_pitch));
 
         if (carElt->_pos_Z > (car->restPos.pos.z + PULL_Z_OFFSET))
         {
@@ -288,7 +277,7 @@ void SDASpeedDreams::RemoveCar(tCar *car, tSituation *s)
         carElt->_pos_X += car->restPos.vel.x * SimDeltaTime;
         carElt->_pos_Y += car->restPos.vel.y * SimDeltaTime;
         sgMakeCoordMat4(carElt->pub.posMat, carElt->_pos_X, carElt->_pos_Y, carElt->_pos_Z - carElt->_statGC_z,
-                        (float) RAD2DEG(carElt->_yaw), (float) RAD2DEG(carElt->_roll), (float) RAD2DEG(carElt->_pitch));
+                        (float)RAD2DEG(carElt->_yaw), (float)RAD2DEG(carElt->_roll), (float)RAD2DEG(carElt->_pitch));
 
         if ((fabs(car->restPos.pos.x - carElt->_pos_X) < 0.5) && (fabs(car->restPos.pos.y - carElt->_pos_Y) < 0.5))
         {
@@ -303,7 +292,7 @@ void SDASpeedDreams::RemoveCar(tCar *car, tSituation *s)
     {
         carElt->_pos_Z -= car->restPos.vel.z * SimDeltaTime;
         sgMakeCoordMat4(carElt->pub.posMat, carElt->_pos_X, carElt->_pos_Y, carElt->_pos_Z - carElt->_statGC_z,
-                        (float) RAD2DEG(carElt->_yaw), (float) RAD2DEG(carElt->_roll), (float) RAD2DEG(carElt->_pitch));
+                        (float)RAD2DEG(carElt->_yaw), (float)RAD2DEG(carElt->_roll), (float)RAD2DEG(carElt->_pitch));
 
         if (carElt->_pos_Z < car->restPos.pos.z)
         {
@@ -360,7 +349,7 @@ void SDASpeedDreams::RemoveCar(tCar *car, tSituation *s)
 
     carElt->priv.collision = car->collision = 0;
 
-    for(i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++)
     {
         carElt->_skid[i] = 0;
         carElt->_wheelSpinVel(i) = 0;
@@ -372,7 +361,7 @@ void SDASpeedDreams::RemoveCar(tCar *car, tSituation *s)
 
     // Compute the target zone for the wrecked car.
     trkPos = car->trkPos;
-    if (trkPos.toRight >  trkPos.seg->width / 2.0)
+    if (trkPos.toRight > trkPos.seg->width / 2.0)
     {
         while (trkPos.seg->lside != 0)
         {
@@ -419,14 +408,17 @@ void SDASpeedDreams::SimCollideRemoveCar(tCar *car, int nbcars)
 {
     // Find the car to remove.
     int i;
-    for (i = 0; i < nbcars; i++) {
-        if (&SimCarTable[i] == car) {
+    for (i = 0; i < nbcars; i++)
+    {
+        if (&SimCarTable[i] == car)
+        {
             break;
         }
     }
 
     // Remove it.
-    if (SimCarTable[i].shape != NULL) {
+    if (SimCarTable[i].shape != NULL)
+    {
         SimCarTable[i].shape = NULL;
     }
 }
@@ -437,9 +429,11 @@ void SDASpeedDreams::RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int 
     tdble tr;
 
     tTrackSeg *seg = p->seg;
-    switch (flag) {
+    switch (flag)
+    {
         case TR_TOMIDDLE:
-            switch(seg->type){
+            switch (seg->type)
+            {
                 case TR_STR:
                     /* Jussi Pajala: must be divided by two to get middle of the track ! */
                     tr = p->toMiddle + seg->startWidth / 2.0f;
@@ -464,9 +458,11 @@ void SDASpeedDreams::RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int 
             break;
 
         case TR_TORIGHT:
-            switch(seg->type){
+            switch (seg->type)
+            {
                 case TR_STR:
-                    switch (seg->type2) {
+                    switch (seg->type2)
+                    {
                         case TR_MAIN:
                         case TR_LSIDE:
                         case TR_LBORDER:
@@ -486,15 +482,16 @@ void SDASpeedDreams::RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int 
 
                 case TR_LFT:
                     a = seg->angle[TR_ZS] + p->toStart;
-                    switch (seg->type2) {
+                    switch (seg->type2)
+                    {
                         case TR_MAIN:
                         case TR_LSIDE:
                         case TR_LBORDER:
-                            r = seg->radiusr - p->toRight ;
+                            r = seg->radiusr - p->toRight;
                             break;
                         case TR_RSIDE:
                         case TR_RBORDER:
-                            r = seg->radiusl + seg->startWidth + seg->Kyl * p->toStart - p->toRight ;
+                            r = seg->radiusl + seg->startWidth + seg->Kyl * p->toStart - p->toRight;
                             break;
                         default:
                             r = 0;
@@ -506,15 +503,16 @@ void SDASpeedDreams::RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int 
 
                 case TR_RGT:
                     a = seg->angle[TR_ZS] - p->toStart;
-                    switch (seg->type2) {
+                    switch (seg->type2)
+                    {
                         case TR_MAIN:
                         case TR_LSIDE:
                         case TR_LBORDER:
-                            r = seg->radiusr + p->toRight ;
+                            r = seg->radiusr + p->toRight;
                             break;
                         case TR_RSIDE:
                         case TR_RBORDER:
-                            r = seg->radiusl - seg->startWidth - seg->Kyl * p->toStart + p->toRight ;
+                            r = seg->radiusl - seg->startWidth - seg->Kyl * p->toStart + p->toRight;
                             break;
                         default:
                             r = 0;
@@ -527,7 +525,8 @@ void SDASpeedDreams::RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int 
             break;
 
         case TR_TOLEFT:
-            switch(seg->type){
+            switch (seg->type)
+            {
                 case TR_STR:
                     tr = seg->startWidth + seg->Kyl * p->toStart - p->toLeft;
                     *X = seg->vertex[TR_SR].x + p->toStart * seg->cos - tr * seg->sin;
@@ -554,30 +553,36 @@ void SDASpeedDreams::RtTrackLocal2Global(tTrkLocPos *p, tdble *X, tdble *Y, int 
 
 tdble SDASpeedDreams::RtTrackHeightL(tTrkLocPos *p)
 {
-    tdble	lg;
-    tdble	tr = p->toRight;
-    tTrackSeg	*seg = p->seg;
-    //bool left_side = true; // Never used.
-    if ((tr < 0) && (seg->rside != NULL)) {
+    tdble lg;
+    tdble tr = p->toRight;
+    tTrackSeg *seg = p->seg;
+    // bool left_side = true; // Never used.
+    if ((tr < 0) && (seg->rside != NULL))
+    {
         //    left_side = false; // Never used.
 
         seg = seg->rside;
         tr += seg->width;
 
-        if ((tr < 0) && (seg->rside != NULL)) {
+        if ((tr < 0) && (seg->rside != NULL))
+        {
             seg = seg->rside;
             tr += RtTrackGetWidth(seg, p->toStart);
         }
-    } else if ((tr > seg->width) && (seg->lside != NULL)) {
+    }
+    else if ((tr > seg->width) && (seg->lside != NULL))
+    {
         tr -= seg->width;
         seg = seg->lside;
-        if ((tr > seg->width) && (seg->lside != NULL)) {
+        if ((tr > seg->width) && (seg->lside != NULL))
+        {
             tr -= RtTrackGetWidth(seg, p->toStart);
             seg = seg->lside;
         }
     }
 
-    switch (seg->type) {
+    switch (seg->type)
+    {
         case TR_STR:
             lg = p->toStart;
             break;
@@ -585,25 +590,25 @@ tdble SDASpeedDreams::RtTrackHeightL(tTrkLocPos *p)
             lg = p->toStart * seg->radius;
             break;
     }
-    if (seg->style == TR_CURB) {
+    if (seg->style == TR_CURB)
+    {
         // The final height = starting height + height difference due
         // to track angle + height difference due to curb (this seems
         // to be the way it is implemented in the graphics too: the
         // curb does not adding an angle to the main track, but a
         // height in global coords).
-        if (seg->type2 == TR_RBORDER) {
+        if (seg->type2 == TR_RBORDER)
+        {
             // alpha shows how far we've moved into this segment.
             tdble alpha = seg->width - tr;
             tdble angle = seg->angle[TR_XS] + p->toStart * seg->Kzw;
             tdble noise = 0 * sin(6.28318548 * lg) * alpha / seg->width;
             tdble start_height = seg->vertex[TR_SR].z + p->toStart * seg->Kzl;
             return start_height + tr * tan(angle) + alpha * atan2(seg->height, seg->width) + noise;
-
         }
 
         return seg->vertex[TR_SR].z + p->toStart * seg->Kzl +
-               tr * (tan(seg->angle[TR_XS] + p->toStart * seg->Kzw)
-                     + atan2(seg->height, seg->width)) +
+               tr * (tan(seg->angle[TR_XS] + p->toStart * seg->Kzw) + atan2(seg->height, seg->width)) +
                0 * sin(6.28318548 * lg) * tr / seg->width;
     }
 
@@ -613,7 +618,8 @@ tdble SDASpeedDreams::RtTrackHeightL(tTrkLocPos *p)
 
 tdble SDASpeedDreams::RtTrackSideTgAngleL(tTrkLocPos *p)
 {
-    switch (p->seg->type) {
+    switch (p->seg->type)
+    {
         case TR_STR:
             return p->seg->angle[TR_ZS];
             break;
@@ -634,8 +640,8 @@ tdble SDASpeedDreams::RtTrackGetWidth(tTrackSeg *seg, tdble toStart)
 
 void SDASpeedDreams::ctrlCheck(tCar *car)
 {
-    tTransmission	*trans = &(car->transmission);
-    tClutch		*clutch = &(trans->clutch);
+    tTransmission *trans = &(car->transmission);
+    tClutch *clutch = &(trans->clutch);
 
     /* sanity check */
 #ifndef WIN32
@@ -669,7 +675,7 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
         car->ctrl->brakeCmd = 0.1f;
         car->ctrl->gear = 0;
 
-        if (car->trkPos.toRight >  car->trkPos.seg->width / 2.0)
+        if (car->trkPos.toRight > car->trkPos.seg->width / 2.0)
         {
             car->ctrl->steer = 0.1f;
         }
@@ -683,7 +689,7 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
         car->ctrl->accelCmd = 0.0f;
         car->ctrl->brakeCmd = 0.1f;
         car->ctrl->gear = 0;
-        if (car->trkPos.toRight >  car->trkPos.seg->width / 2.0)
+        if (car->trkPos.toRight > car->trkPos.seg->width / 2.0)
         {
             car->ctrl->steer = 0.1f;
         }
@@ -695,10 +701,10 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
     else if (car->carElt->_state & RM_CAR_STATE_FINISH)
     {
         /* when the finish line is passed, continue at "slow" pace */
-        car->ctrl->accelCmd = (tdble) MIN(car->ctrl->accelCmd, 0.20);
+        car->ctrl->accelCmd = (tdble)MIN(car->ctrl->accelCmd, 0.20);
         if (car->DynGC.vel.x > 30.0)
         {
-            car->ctrl->brakeCmd = (tdble) MAX(car->ctrl->brakeCmd, 0.05);
+            car->ctrl->brakeCmd = (tdble)MAX(car->ctrl->brakeCmd, 0.05);
         }
     }
 
@@ -740,18 +746,18 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
 
     clutch->transferValue = 1.0f - car->ctrl->clutchCmd;
 
-    if (car->ctrl->wingFrontCmd > (float) (PI_2))
+    if (car->ctrl->wingFrontCmd > (float)(PI_2))
     {
-        car->ctrl->wingFrontCmd = (float) (PI_2);
+        car->ctrl->wingFrontCmd = (float)(PI_2);
     }
     else if (car->ctrl->wingFrontCmd < 0.0)
     {
         car->ctrl->wingFrontCmd = 0.0;
     }
 
-    if (car->ctrl->wingRearCmd > (float) (PI_2))
+    if (car->ctrl->wingRearCmd > (float)(PI_2))
     {
-        car->ctrl->wingRearCmd = (float) (PI_2);
+        car->ctrl->wingRearCmd = (float)(PI_2);
     }
     else if (car->ctrl->wingRearCmd < 0.0)
     {
@@ -776,7 +782,8 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
         car->ctrl->brakeFrontRightCmd = 1.0f;
     }
 
-    if (car->ctrl->brakeRearLeftCmd < 0) {
+    if (car->ctrl->brakeRearLeftCmd < 0)
+    {
         car->ctrl->brakeRearLeftCmd = 0;
     }
     else if (car->ctrl->brakeRearLeftCmd > 1.0f)
@@ -784,7 +791,8 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
         car->ctrl->brakeRearLeftCmd = 1.0f;
     }
 
-    if (car->ctrl->brakeRearRightCmd < 0) {
+    if (car->ctrl->brakeRearRightCmd < 0)
+    {
         car->ctrl->brakeRearRightCmd = 0;
     }
     else if (car->ctrl->brakeRearRightCmd > 1.0f)
@@ -801,9 +809,11 @@ void SDASpeedDreams::SimInstantReConfig(tCar *car)
     {
         setup = (car->ctrl->setupChangeCmd->setup);
     }
-    else return;
+    else
+        return;
 
-    switch (car->ctrl->setupChangeCmd->type) {
+    switch (car->ctrl->setupChangeCmd->type)
+    {
         case DI_BRAKE_REPARTITION:
             SimBrakeSystemReConfig(car);
             break;
@@ -849,17 +859,19 @@ void SDASpeedDreams::SimInstantReConfig(tCar *car)
 }
 
 void SDASpeedDreams::SimBrakeSystemReConfig(tCar *car)
-{/* called by SimCarReConfig() in car.cpp */
+{ /* called by SimCarReConfig() in car.cpp */
     tCarSetupItem *setupBrkRep = &(car->carElt->setup.brakeRepartition);
     tCarSetupItem *setupBrkPress = &(car->carElt->setup.brakePressure);
 
-    if (setupBrkRep->changed) {
+    if (setupBrkRep->changed)
+    {
         car->brkSyst.rep = MIN(setupBrkRep->max, MAX(setupBrkRep->min, setupBrkRep->desired_value));
         setupBrkRep->value = car->brkSyst.rep;
         setupBrkRep->changed = FALSE;
     }
 
-    if (setupBrkPress->changed) {
+    if (setupBrkPress->changed)
+    {
         car->brkSyst.coeff = MIN(setupBrkPress->max, MAX(setupBrkPress->min, setupBrkPress->desired_value));
         setupBrkPress->value = car->brkSyst.coeff;
         setupBrkPress->changed = FALSE;
@@ -870,7 +882,8 @@ void SDASpeedDreams::SimArbReConfig(tCar *car, int index)
 {
     tCarSetupItem *setupArbK = &(car->carElt->setup.arbSpring[index]);
     tSuspension *arb = &(car->axle[index].arbSusp);
-    if (setupArbK->changed) {
+    if (setupArbK->changed)
+    {
         arb->spring.K = MIN(setupArbK->max, MAX(setupArbK->min, setupArbK->desired_value));
         setupArbK->value = arb->spring.K;
         setupArbK->changed = FALSE;
@@ -888,22 +901,26 @@ void SDASpeedDreams::SimSteerUpdate(tCar *car)
     steer *= car->steer.steerLock;
     stdelta = steer - car->steer.steer;
 
-    if ((fabs(stdelta) / SimDeltaTime) > car->steer.maxSpeed) {
+    if ((fabs(stdelta) / SimDeltaTime) > car->steer.maxSpeed)
+    {
         steer = (float)(SIGN(stdelta) * car->steer.maxSpeed * SimDeltaTime + car->steer.steer);
     }
 
     car->steer.steer = steer;
     tanSteer = fabs(tan(steer));
-    steer2 = atan2((car->wheelbase * tanSteer) , (car->wheelbase - tanSteer * car->wheeltrack));
+    steer2 = atan2((car->wheelbase * tanSteer), (car->wheelbase - tanSteer * car->wheeltrack));
 
-    if (steer > 0) {
+    if (steer > 0)
+    {
         car->wheel[FRNT_RGT].torques.x =
             car->wheel->cosax * (steer2 - car->wheel[FRNT_RGT].steer) * car->wheel[FRNT_RGT].prespinVel * car->wheel[FRNT_RGT].I / SimDeltaTime;
         car->wheel[FRNT_RGT].steer = steer2;
         car->wheel[FRNT_LFT].torques.x =
             car->wheel->cosax * (steer - car->wheel[FRNT_LFT].steer) * car->wheel[FRNT_LFT].prespinVel * car->wheel[FRNT_LFT].I / SimDeltaTime;
         car->wheel[FRNT_LFT].steer = steer;
-    } else {
+    }
+    else
+    {
         car->wheel[FRNT_RGT].torques.x =
             car->wheel->cosax * (steer - car->wheel[FRNT_RGT].steer) * car->wheel[FRNT_RGT].prespinVel * car->wheel[FRNT_RGT].I / SimDeltaTime;
         car->wheel[FRNT_RGT].steer = steer;
@@ -916,12 +933,13 @@ void SDASpeedDreams::SimSteerUpdate(tCar *car)
 void SDASpeedDreams::SimGearboxUpdate(tCar *car)
 {
     /* manages gear change */
-    tTransmission	*trans = &(car->transmission);
-    tClutch		*clutch = &(trans->clutch);
-    tGearbox		*gearbox = &(trans->gearbox);
-    tDifferential	*differential = NULL;
+    tTransmission *trans = &(car->transmission);
+    tClutch *clutch = &(trans->clutch);
+    tGearbox *gearbox = &(trans->gearbox);
+    tDifferential *differential = NULL;
 
-    switch(trans->type) {
+    switch (trans->type)
+    {
         case TRANS_RWD:
             differential = &(trans->differential[TRANS_REAR_DIFF]);
             break;
@@ -933,86 +951,115 @@ void SDASpeedDreams::SimGearboxUpdate(tCar *car)
             break;
     }
 
-    trans->curI = trans->driveI[gearbox->gear + 1] * clutch->transferValue + trans->freeI[gearbox->gear +  1] * (1.0f - clutch->transferValue);
+    trans->curI = trans->driveI[gearbox->gear + 1] * clutch->transferValue + trans->freeI[gearbox->gear + 1] * (1.0f - clutch->transferValue);
 
-    if (car->features & FEAT_REALGEARCHANGE) {/* simuv4 new gear change code */
-        if ( (car->ctrl->gear != gearbox->gear) && (car->ctrl->gear <= gearbox->gearMax) && (car->ctrl->gear >= gearbox->gearMin) ) {
+    if (car->features & FEAT_REALGEARCHANGE)
+    { /* simuv4 new gear change code */
+        if ((car->ctrl->gear != gearbox->gear) && (car->ctrl->gear <= gearbox->gearMax) && (car->ctrl->gear >= gearbox->gearMin))
+        {
             /* initiate a shift, go to neutral */
             gearbox->gearNext = car->ctrl->gear;
-            if (gearbox->timeToEngage <= 0.0f) {
-                if (gearbox->gearNext == 0) {gearbox->timeToEngage = 0.0f;} /* disengaging gears happens immediately */
-                else {gearbox->timeToEngage = gearbox->shiftTime * 0.67f;}
+            if (gearbox->timeToEngage <= 0.0f)
+            {
+                if (gearbox->gearNext == 0) { gearbox->timeToEngage = 0.0f; } /* disengaging gears happens immediately */
+                else
+                {
+                    gearbox->timeToEngage = gearbox->shiftTime * 0.67f;
+                }
                 gearbox->gear = 0;
                 trans->curOverallRatio = trans->overallRatio[1];
                 trans->curI = trans->driveI[1] * clutch->transferValue + trans->freeI[1] * (1.0f - clutch->transferValue);
             }
         }
 
-        if (gearbox->timeToEngage > 0.0f) {
+        if (gearbox->timeToEngage > 0.0f)
+        {
             gearbox->timeToEngage -= SimDeltaTime;
-            if (gearbox->timeToEngage <= 0.0f) {
+            if (gearbox->timeToEngage <= 0.0f)
+            {
                 /* engage new gear */
                 gearbox->gear = gearbox->gearNext;
                 gearbox->gearNext = 0;
-                trans->curOverallRatio = trans->overallRatio[gearbox->gear+1];
-                trans->curI = trans->driveI[gearbox->gear + 1] * clutch->transferValue + trans->freeI[gearbox->gear +  1] * (1.0f - clutch->transferValue);
+                trans->curOverallRatio = trans->overallRatio[gearbox->gear + 1];
+                trans->curI = trans->driveI[gearbox->gear + 1] * clutch->transferValue + trans->freeI[gearbox->gear + 1] * (1.0f - clutch->transferValue);
             }
         }
-    } else {/* old gear change code */
-        if (clutch->state == CLUTCH_RELEASING && gearbox->gear != car->ctrl->gear) {
+    }
+    else
+    { /* old gear change code */
+        if (clutch->state == CLUTCH_RELEASING && gearbox->gear != car->ctrl->gear)
+        {
             /* Fast change during clutch release, re-releasing it */
             clutch->state = CLUTCH_RELEASED;
         }
-        if (clutch->state == CLUTCH_RELEASING) {
+        if (clutch->state == CLUTCH_RELEASING)
+        {
             clutch->timeToRelease -= SimDeltaTime;
-            if (clutch->timeToRelease <= 0.0f) {
+            if (clutch->timeToRelease <= 0.0f)
+            {
                 clutch->state = CLUTCH_RELEASED;
-            } else  {
+            }
+            else
+            {
                 // If user does not engage clutch, we do it automatically.
-                if (clutch->transferValue > 0.99f) {
+                if (clutch->transferValue > 0.99f)
+                {
                     clutch->transferValue = 0.0f;
                     trans->curI = trans->freeI[gearbox->gear + 1];
 
                     // NOTE: Shouldn't usage of accelerator when shifting be let
                     // to the user to decide? Especially when shifting down
                     // in order to accelerate more, this could be annoying.
-                    if (car->ctrl->accelCmd > 0.1f) {
+                    if (car->ctrl->accelCmd > 0.1f)
+                    {
                         car->ctrl->accelCmd = 0.1f;
                     }
                 }
             }
-        } else if ((car->ctrl->gear > gearbox->gear)) {
-            if (car->ctrl->gear <= gearbox->gearMax) {
+        }
+        else if ((car->ctrl->gear > gearbox->gear))
+        {
+            if (car->ctrl->gear <= gearbox->gearMax)
+            {
                 gearbox->gear = car->ctrl->gear;
                 clutch->state = CLUTCH_RELEASING;
-                if (gearbox->gear != 0) {
+                if (gearbox->gear != 0)
+                {
                     clutch->timeToRelease = clutch->releaseTime;
-                } else {
+                }
+                else
+                {
                     clutch->timeToRelease = 0;
                 }
-                trans->curOverallRatio = trans->overallRatio[gearbox->gear+1];
-                trans->curI = trans->freeI[gearbox->gear+1];
+                trans->curOverallRatio = trans->overallRatio[gearbox->gear + 1];
+                trans->curI = trans->freeI[gearbox->gear + 1];
             }
-        } else if ((car->ctrl->gear < gearbox->gear)) {
-            if (car->ctrl->gear >= gearbox->gearMin) {
+        }
+        else if ((car->ctrl->gear < gearbox->gear))
+        {
+            if (car->ctrl->gear >= gearbox->gearMin)
+            {
                 gearbox->gear = car->ctrl->gear;
                 clutch->state = CLUTCH_RELEASING;
-                if (gearbox->gear != 0) {
+                if (gearbox->gear != 0)
+                {
                     clutch->timeToRelease = clutch->releaseTime;
-                } else {
+                }
+                else
+                {
                     clutch->timeToRelease = 0;
                 }
-                trans->curOverallRatio = trans->overallRatio[gearbox->gear+1];
-                trans->curI = trans->freeI[gearbox->gear+1];
+                trans->curOverallRatio = trans->overallRatio[gearbox->gear + 1];
+                trans->curI = trans->freeI[gearbox->gear + 1];
             }
         }
     }
 
-
     differential->in.I = trans->curI + differential->feedBack.I;
     differential->outAxis[0]->I = trans->curI / 2.0f + differential->inAxis[0]->I;
     differential->outAxis[1]->I = trans->curI / 2.0f + differential->inAxis[1]->I;
-    if (trans->type == TRANS_4WD) {
+    if (trans->type == TRANS_4WD)
+    {
         differential = &(trans->differential[TRANS_FRONT_DIFF]);
         differential->outAxis[0]->I = trans->curI / 4.0f + differential->inAxis[0]->I;
         differential->outAxis[1]->I = trans->curI / 4.0f + differential->inAxis[1]->I;
@@ -1026,19 +1073,21 @@ void SDASpeedDreams::SimGearboxUpdate(tCar *car)
 void SDASpeedDreams::SimEngineUpdateTq(tCar *car)
 {
     int i;
-    tEngine	*engine = &(car->engine);
+    tEngine *engine = &(car->engine);
     tEngineCurve *curve = &(engine->curve);
-    tTransmission	*trans = &(car->transmission);
-    tClutch		*clutch = &(trans->clutch);
+    tTransmission *trans = &(car->transmission);
+    tClutch *clutch = &(trans->clutch);
 
-    if ((car->fuel <= 0.0f) || (car->carElt->_state & (RM_CAR_STATE_BROKEN | RM_CAR_STATE_ELIMINATED))) {
+    if ((car->fuel <= 0.0f) || (car->carElt->_state & (RM_CAR_STATE_BROKEN | RM_CAR_STATE_ELIMINATED)))
+    {
         engine->rads = 0;
         engine->Tq = 0;
         return;
     }
 
     // set clutch on when engine revs too low
-    if (engine->rads < engine->tickover) {
+    if (engine->rads < engine->tickover)
+    {
         clutch->state = CLUTCH_APPLIED;
         clutch->transferValue = 0.0f;
         //		engine->rads = engine->tickover;
@@ -1047,22 +1096,29 @@ void SDASpeedDreams::SimEngineUpdateTq(tCar *car)
     engine->rads = MIN(engine->rads, engine->revsMax);
     tdble EngBrkK = engine->brakeLinCoeff * engine->rads;
 
-    if ( (engine->rads < engine->tickover) ||
-        ( (engine->rads == engine->tickover) && (car->ctrl->accelCmd <= 1e-6) ) ) {
+    if ((engine->rads < engine->tickover) ||
+        ((engine->rads == engine->tickover) && (car->ctrl->accelCmd <= 1e-6)))
+    {
         engine->Tq = 0.0f;
         engine->rads = engine->tickover;
-    } else {
+    }
+    else
+    {
         tdble Tq_max = 0.0;
-        for (i = 0; i < car->engine.curve.nbPts; i++) {
-            if (engine->rads < curve->data[i].rads) {
+        for (i = 0; i < car->engine.curve.nbPts; i++)
+        {
+            if (engine->rads < curve->data[i].rads)
+            {
                 Tq_max = engine->rads * curve->data[i].a + curve->data[i].b;
                 break;
             }
         }
         tdble alpha = car->ctrl->accelCmd;
-        if (engine->rads > engine->revsLimiter) {
+        if (engine->rads > engine->revsLimiter)
+        {
             alpha = 0.0;
-            if (car->features & FEAT_REVLIMIT) {
+            if (car->features & FEAT_REVLIMIT)
+            {
                 engine->timeInLimiter = 0.1f;
             }
         }
@@ -1071,7 +1127,7 @@ void SDASpeedDreams::SimEngineUpdateTq(tCar *car)
         if (car->features & FEAT_TCLINSIMU)
         {
             if (engine->EnableTCL)
-                Tq_max *= (tdble) MAX(0.0,MIN(1.0,engine->TCL));
+                Tq_max *= (tdble)MAX(0.0, MIN(1.0, engine->TCL));
             /*
                             if (engine->EnableTCL)
                                     fprintf(stderr,"TCL: %.1f %%\n", engine->TCL * 100);
@@ -1079,22 +1135,25 @@ void SDASpeedDreams::SimEngineUpdateTq(tCar *car)
         }
         // ... Option TCL
 
-        if ( (car->features & FEAT_REVLIMIT) && (engine->timeInLimiter > 0.0f) ) {
+        if ((car->features & FEAT_REVLIMIT) && (engine->timeInLimiter > 0.0f))
+        {
             alpha = 0.0;
             engine->timeInLimiter -= SimDeltaTime;
         }
         tdble Tq_cur = (Tq_max + EngBrkK) * alpha;
         engine->Tq = Tq_cur;
         engine->Tq -= EngBrkK;
-        if (alpha <= 1e-6) {
+        if (alpha <= 1e-6)
+        {
             engine->Tq -= engine->brakeCoeff;
         }
 
         tdble cons = Tq_cur * 0.75f;
-        if (cons > 0) {
-            car->fuel -= (tdble) (cons * engine->rads * engine->fuelcons * 0.0000001 * SimDeltaTime);
+        if (cons > 0)
+        {
+            car->fuel -= (tdble)(cons * engine->rads * engine->fuelcons * 0.0000001 * SimDeltaTime);
         }
-        car->fuel = (tdble) MAX(car->fuel, 0.0);
+        car->fuel = (tdble)MAX(car->fuel, 0.0);
     }
 }
 
@@ -1111,7 +1170,8 @@ void SDASpeedDreams::SimCarUpdateWheelPos(tCar *car)
     vy = car->DynGC.vel.y;
 
     /* Wheels data */
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++)
+    {
         tdble x = car->wheel[i].staticPos.x;
         tdble y = car->wheel[i].staticPos.y;
         tdble dx = x * Cosz - y * Sinz;
@@ -1128,21 +1188,21 @@ void SDASpeedDreams::SimCarUpdateWheelPos(tCar *car)
 
 void SDASpeedDreams::SimBrakeSystemUpdate(tCar *car)
 {
-    tBrakeSyst	*brkSyst = &(car->brkSyst);
+    tBrakeSyst *brkSyst = &(car->brkSyst);
 
     // Option ESP ...
     if (car->features & FEAT_ESPINSIMU)
     {
-        tCarElt	*carElt = car->carElt;
+        tCarElt *carElt = car->carElt;
         tdble driftAngle = atan2(carElt->_speed_Y, carElt->_speed_X) - carElt->_yaw;
         FLOAT_NORM_PI_PI(driftAngle);
         tdble absDriftAngle = fabs(driftAngle);
-        //fprintf(stderr,"driftAngle: %.2f deg\n",driftAngle * 180/PI);
+        // fprintf(stderr,"driftAngle: %.2f deg\n",driftAngle * 180/PI);
 
         // Make it be parameters later
-        tdble driftAngleLimit = (tdble) (7.5 * PI / 180);       // 7.5 deg activation level
-        tdble brakeSide = 0.0025f * driftAngle/driftAngleLimit; // Car side brake command
-        tdble brakeBalance = 0.005f;                            // Front/Rear brake command
+        tdble driftAngleLimit = (tdble)(7.5 * PI / 180);           // 7.5 deg activation level
+        tdble brakeSide = 0.0025f * driftAngle / driftAngleLimit;  // Car side brake command
+        tdble brakeBalance = 0.005f;                               // Front/Rear brake command
 
         if (absDriftAngle > driftAngleLimit)
         {
@@ -1155,28 +1215,28 @@ void SDASpeedDreams::SimBrakeSystemUpdate(tCar *car)
         if (car->ctrl->singleWheelBrakeMode == 1)
         {
             // Sanity check needed
-            car->ctrl->brakeFrontRightCmd = (tdble) MIN(1.0,MAX(0.0,car->ctrl->brakeFrontRightCmd));
-            car->ctrl->brakeFrontLeftCmd = (tdble) MIN(1.0,MAX(0.0,car->ctrl->brakeFrontLeftCmd));
-            car->ctrl->brakeRearRightCmd = (tdble) MIN(1.0,MAX(0.0,car->ctrl->brakeRearRightCmd));
-            car->ctrl->brakeRearLeftCmd = (tdble) MIN(1.0,MAX(0.0,car->ctrl->brakeRearRightCmd));
+            car->ctrl->brakeFrontRightCmd = (tdble)MIN(1.0, MAX(0.0, car->ctrl->brakeFrontRightCmd));
+            car->ctrl->brakeFrontLeftCmd = (tdble)MIN(1.0, MAX(0.0, car->ctrl->brakeFrontLeftCmd));
+            car->ctrl->brakeRearRightCmd = (tdble)MIN(1.0, MAX(0.0, car->ctrl->brakeRearRightCmd));
+            car->ctrl->brakeRearLeftCmd = (tdble)MIN(1.0, MAX(0.0, car->ctrl->brakeRearRightCmd));
 
             car->wheel[FRNT_RGT].brake.pressure = brkSyst->coeff * car->ctrl->brakeFrontRightCmd;
             car->wheel[FRNT_LFT].brake.pressure = brkSyst->coeff * car->ctrl->brakeFrontLeftCmd;
             car->wheel[REAR_RGT].brake.pressure = brkSyst->coeff * car->ctrl->brakeRearRightCmd;
             car->wheel[REAR_LFT].brake.pressure = brkSyst->coeff * car->ctrl->brakeRearLeftCmd;
-            //fprintf(stderr,"FR: %.2f FL: %.2f / RR: %.2f RL: %.2f\n",car->ctrl->brakeFrontRightCmd,car->ctrl->brakeFrontLeftCmd,car->ctrl->brakeRearRightCmd,car->ctrl->brakeRearLeftCmd);
+            // fprintf(stderr,"FR: %.2f FL: %.2f / RR: %.2f RL: %.2f\n",car->ctrl->brakeFrontRightCmd,car->ctrl->brakeFrontLeftCmd,car->ctrl->brakeRearRightCmd,car->ctrl->brakeRearLeftCmd);
         }
         else
         {
-            tdble	ctrl = car->ctrl->brakeCmd;
+            tdble ctrl = car->ctrl->brakeCmd;
 
             if (absDriftAngle > driftAngleLimit)
             {
                 // Sanity check needed
-                car->wheel[FRNT_RGT].brake.pressure = (tdble) MIN(1.0,MAX(0.0,ctrl - brakeSide));
-                car->wheel[FRNT_LFT].brake.pressure = (tdble) MIN(1.0,MAX(0.0,ctrl + brakeSide));
-                car->wheel[REAR_RGT].brake.pressure = (tdble) MIN(1.0,MAX(0.0,ctrl - brakeSide - brakeBalance));
-                car->wheel[REAR_LFT].brake.pressure = (tdble) MIN(1.0,MAX(0.0,ctrl + brakeSide - brakeBalance));
+                car->wheel[FRNT_RGT].brake.pressure = (tdble)MIN(1.0, MAX(0.0, ctrl - brakeSide));
+                car->wheel[FRNT_LFT].brake.pressure = (tdble)MIN(1.0, MAX(0.0, ctrl + brakeSide));
+                car->wheel[REAR_RGT].brake.pressure = (tdble)MIN(1.0, MAX(0.0, ctrl - brakeSide - brakeBalance));
+                car->wheel[REAR_LFT].brake.pressure = (tdble)MIN(1.0, MAX(0.0, ctrl + brakeSide - brakeBalance));
 
                 car->wheel[FRNT_RGT].brake.pressure *= brkSyst->coeff * brkSyst->rep;
                 car->wheel[FRNT_LFT].brake.pressure *= brkSyst->coeff * brkSyst->rep;
@@ -1190,7 +1250,7 @@ void SDASpeedDreams::SimBrakeSystemUpdate(tCar *car)
                 car->wheel[REAR_RGT].brake.pressure = car->wheel[REAR_LFT].brake.pressure = ctrl * (1 - brkSyst->rep);
             }
         }
-    } // ... Option ESP
+    }  // ... Option ESP
     else if (car->ctrl->singleWheelBrakeMode == 1)
     {
         /*
@@ -1206,25 +1266,26 @@ void SDASpeedDreams::SimBrakeSystemUpdate(tCar *car)
     }
     else
     {
-        tdble	ctrl = car->ctrl->brakeCmd;
+        tdble ctrl = car->ctrl->brakeCmd;
         ctrl *= brkSyst->coeff;
         car->wheel[FRNT_RGT].brake.pressure = car->wheel[FRNT_LFT].brake.pressure = ctrl * brkSyst->rep;
         car->wheel[REAR_RGT].brake.pressure = car->wheel[REAR_LFT].brake.pressure = ctrl * (1 - brkSyst->rep);
     }
 
-    if ( (car->ctrl->ebrakeCmd > 0) && (car->wheel[REAR_RGT].brake.pressure < brkSyst->ebrake_pressure) ) {
+    if ((car->ctrl->ebrakeCmd > 0) && (car->wheel[REAR_RGT].brake.pressure < brkSyst->ebrake_pressure))
+    {
         car->wheel[REAR_RGT].brake.pressure = car->wheel[REAR_LFT].brake.pressure = brkSyst->ebrake_pressure;
     }
 }
 
 void SDASpeedDreams::SimAeroUpdate(tCar *car, tSituation *s)
 {
-    tdble	hm;
-    int		i;
-    tCar	*otherCar;
-    tdble	x, y;
-    tdble	yaw, otherYaw, airSpeed, tmpas, spdang, tmpsdpang, dyaw;
-    tdble	dragK = 1.0;
+    tdble hm;
+    int i;
+    tCar *otherCar;
+    tdble x, y;
+    tdble yaw, otherYaw, airSpeed, tmpas, spdang, tmpsdpang, dyaw;
+    tdble dragK = 1.0;
 
     x = car->DynGCg.pos.x;
     y = car->DynGCg.pos.y;
@@ -1232,9 +1293,12 @@ void SDASpeedDreams::SimAeroUpdate(tCar *car, tSituation *s)
     airSpeed = car->DynGC.vel.x;
     spdang = atan2(car->DynGCg.vel.y, car->DynGCg.vel.x);
 
-    if (airSpeed > 10.0) {
-        for (i = 0; i < s->_ncars; i++) {
-            if (i == car->carElt->index) {
+    if (airSpeed > 10.0)
+    {
+        for (i = 0; i < s->_ncars; i++)
+        {
+            if (i == car->carElt->index)
+            {
                 continue;
             }
             otherCar = &(SimCarTable[i]);
@@ -1244,18 +1308,24 @@ void SDASpeedDreams::SimAeroUpdate(tCar *car, tSituation *s)
             dyaw = yaw - otherYaw;
             FLOAT_NORM_PI_PI(dyaw);
             if ((otherCar->DynGC.vel.x > 10.0) &&
-                (fabs(dyaw) < 0.1396)) {
-                if (fabs(tmpsdpang) > 2.9671) {	    /* 10 degrees */
+                (fabs(dyaw) < 0.1396))
+            {
+                if (fabs(tmpsdpang) > 2.9671)
+                { /* 10 degrees */
                     /* behind another car */
-                    tmpas = (tdble) (1.0 - exp(- 2.0 * DIST(x, y, otherCar->DynGCg.pos.x, otherCar->DynGCg.pos.y) /
+                    tmpas = (tdble)(1.0 - exp(-2.0 * DIST(x, y, otherCar->DynGCg.pos.x, otherCar->DynGCg.pos.y) /
                                               (otherCar->aero.Cd * otherCar->DynGC.vel.x)));
-                    if (tmpas < dragK) {
+                    if (tmpas < dragK)
+                    {
                         dragK = tmpas;
                     }
-                } else if (fabs(tmpsdpang) < 0.1396) {	    /* 8 degrees */
+                }
+                else if (fabs(tmpsdpang) < 0.1396)
+                { /* 8 degrees */
                     /* before another car [not sure how much the drag should be reduced in this case. In no case it should be lowered more than 50% I think. - Christos] */
-                    tmpas = (tdble) (1.0 - 0.5f * exp(- 8.0 * DIST(x, y, otherCar->DynGCg.pos.x, otherCar->DynGCg.pos.y) / (car->aero.Cd * car->DynGC.vel.x)));
-                    if (tmpas < dragK) {
+                    tmpas = (tdble)(1.0 - 0.5f * exp(-8.0 * DIST(x, y, otherCar->DynGCg.pos.x, otherCar->DynGCg.pos.y) / (car->aero.Cd * car->DynGC.vel.x)));
+                    if (tmpas < dragK)
+                    {
                         dragK = tmpas;
                     }
                 }
@@ -1268,35 +1338,37 @@ void SDASpeedDreams::SimAeroUpdate(tCar *car, tSituation *s)
     // simulate ground effect drop off caused by non-frontal airflow (diffusor stops working etc.)
 
     // Never used : remove ?
-    //tdble speed = sqrt(car->DynGC.vel.x*car->DynGC.vel.x + car->DynGC.vel.y*car->DynGC.vel.y);
-    //tdble cosa = 1.0f;
+    // tdble speed = sqrt(car->DynGC.vel.x*car->DynGC.vel.x + car->DynGC.vel.y*car->DynGC.vel.y);
+    // tdble cosa = 1.0f;
 
-    car->aero.drag = (tdble) (-SIGN(car->DynGC.vel.x) * car->aero.CdBody * v2 * (1.0f + (tdble)car->dammage / 10000.0f) * dragK * dragK);
+    car->aero.drag = (tdble)(-SIGN(car->DynGC.vel.x) * car->aero.CdBody * v2 * (1.0f + (tdble)car->dammage / 10000.0f) * dragK * dragK);
 
     hm = 1.5f * (car->wheel[0].rideHeight + car->wheel[1].rideHeight + car->wheel[2].rideHeight + car->wheel[3].rideHeight);
-    hm = hm*hm;
-    hm = hm*hm;
-    hm = 2 * exp(-3.0f*hm);
-    car->aero.lift[0] = - car->aero.Clift[0] * v2 * hm;
-    car->aero.lift[1] = - car->aero.Clift[1] * v2 * hm;
+    hm = hm * hm;
+    hm = hm * hm;
+    hm = 2 * exp(-3.0f * hm);
+    car->aero.lift[0] = -car->aero.Clift[0] * v2 * hm;
+    car->aero.lift[1] = -car->aero.Clift[1] * v2 * hm;
 }
 
-void SDASpeedDreams::SimWingUpdate(tCar *car, int index, tSituation* s)
+void SDASpeedDreams::SimWingUpdate(tCar *car, int index, tSituation *s)
 {
-    tWing  *wing = &(car->wing[index]);
+    tWing *wing = &(car->wing[index]);
 
     /* return with 0 if no wing present */
-    if (wing->WingType == -1) {
+    if (wing->WingType == -1)
+    {
         wing->forces.x = wing->forces.z = 0.0f;
         return;
     }
 
-    if (index == 1) {
+    if (index == 1)
+    {
         // Check wing angle controller
         if (car->ctrl->wingControlMode == 2)
             // Update wing angle
             wing->angle = car->ctrl->wingRearCmd;
-        car->aero.Cd = car->aero.CdBody - wing->Kx*sin(wing->angle);
+        car->aero.Cd = car->aero.CdBody - wing->Kx * sin(wing->angle);
     }
     else
         // Check wing angle controller
@@ -1310,75 +1382,92 @@ void SDASpeedDreams::SimWingUpdate(tCar *car, int index, tSituation* s)
 
     aoa += wing->angle;
 
-    if (wing->WingType == 2) //thin wing works for every direction
+    if (wing->WingType == 2)  // thin wing works for every direction
     {
         tdble x;
-        while (aoa > PI) aoa -= (tdble) (2 * PI);
-        while (aoa < -PI) aoa += (tdble) (2 * PI);
+        while (aoa > PI) aoa -= (tdble)(2 * PI);
+        while (aoa < -PI) aoa += (tdble)(2 * PI);
         /* first calculate coefficients */
         if (aoa > PI_2)
         {
-            if (aoa > PI - wing->AoStall) wing->forces.x = (tdble) (wing->Kx1 * (PI - aoa) * (PI - aoa) + wing->Kx2);
-            else wing->forces.x = (tdble) (wing->Kx3 - wing->Kx4 * cos(2*aoa));
+            if (aoa > PI - wing->AoStall)
+                wing->forces.x = (tdble)(wing->Kx1 * (PI - aoa) * (PI - aoa) + wing->Kx2);
+            else
+                wing->forces.x = (tdble)(wing->Kx3 - wing->Kx4 * cos(2 * aoa));
             if (aoa > PI - wing->AoStall + wing->Stallw)
-            {x = (tdble)0.0;}
+            {
+                x = (tdble)0.0;
+            }
             else
             {
-                x = (tdble) (aoa - PI + wing->AoStall - wing->Stallw);
-                x = (tdble) (x * x / (x * x + wing->Stallw * wing->Stallw));
+                x = (tdble)(aoa - PI + wing->AoStall - wing->Stallw);
+                x = (tdble)(x * x / (x * x + wing->Stallw * wing->Stallw));
             }
-            wing->forces.z = (tdble) (-(1-x) * wing->Kz1 * (aoa - PI + wing->AoAatZero) - x * (wing->Kz2 * sin(2*aoa) + wing->Kz3));
+            wing->forces.z = (tdble)(-(1 - x) * wing->Kz1 * (aoa - PI + wing->AoAatZero) - x * (wing->Kz2 * sin(2 * aoa) + wing->Kz3));
         }
         else if (aoa > 0)
         {
-            if (aoa < wing->AoStall) wing->forces.x = wing->Kx1 * aoa * aoa + wing->Kx2;
-            else wing->forces.x = wing->Kx3 - wing->Kx4 * cos(2*aoa);
+            if (aoa < wing->AoStall)
+                wing->forces.x = wing->Kx1 * aoa * aoa + wing->Kx2;
+            else
+                wing->forces.x = wing->Kx3 - wing->Kx4 * cos(2 * aoa);
             if (aoa < wing->AoStall - wing->Stallw)
-            {x = (tdble)0.0;}
+            {
+                x = (tdble)0.0;
+            }
             else
             {
                 x = aoa - wing->AoStall + wing->Stallw;
                 x = x * x / (x * x + wing->Stallw * wing->Stallw);
             }
-            wing->forces.z = -(1-x) * wing->Kz1 * (aoa - wing->AoAatZero) - x * (wing->Kz2 * sin(2*aoa) + wing->Kz3);
+            wing->forces.z = -(1 - x) * wing->Kz1 * (aoa - wing->AoAatZero) - x * (wing->Kz2 * sin(2 * aoa) + wing->Kz3);
         }
         else if (aoa > -PI_2)
         {
-            if (aoa > -wing->AoStall) wing->forces.x = wing->Kx1 * aoa * aoa + wing->Kx2;
-            else wing->forces.x = wing->Kx3 - wing->Kx4 * cos(2*aoa);
+            if (aoa > -wing->AoStall)
+                wing->forces.x = wing->Kx1 * aoa * aoa + wing->Kx2;
+            else
+                wing->forces.x = wing->Kx3 - wing->Kx4 * cos(2 * aoa);
             if (aoa > -wing->AoStall + wing->Stallw)
-            {x = (tdble)0.0;}
+            {
+                x = (tdble)0.0;
+            }
             else
             {
                 x = aoa + wing->AoStall - wing->Stallw;
                 x = x * x / (x * x + wing->Stallw * wing->Stallw);
             }
-            wing->forces.z = -(1-x) * wing->Kz1 * (aoa - wing->AoAatZero) - x * (wing->Kz2 * sin(2*aoa) - wing->Kz3);
+            wing->forces.z = -(1 - x) * wing->Kz1 * (aoa - wing->AoAatZero) - x * (wing->Kz2 * sin(2 * aoa) - wing->Kz3);
         }
         else
         {
-            if (aoa < wing->AoStall - PI) wing->forces.x = (tdble) (wing->Kx1 * (PI + aoa) * (PI + aoa) + wing->Kx2);
-            else wing->forces.x = wing->Kx3 - wing->Kx4 * cos(2*aoa);
+            if (aoa < wing->AoStall - PI)
+                wing->forces.x = (tdble)(wing->Kx1 * (PI + aoa) * (PI + aoa) + wing->Kx2);
+            else
+                wing->forces.x = wing->Kx3 - wing->Kx4 * cos(2 * aoa);
             if (aoa < wing->AoStall - wing->Stallw - PI)
-            {x = (tdble)0.0;}
+            {
+                x = (tdble)0.0;
+            }
             else
             {
-                x = (tdble) (aoa - wing->AoStall + wing->Stallw + PI);
+                x = (tdble)(aoa - wing->AoStall + wing->Stallw + PI);
                 x = x * x / (x * x + wing->Stallw * wing->Stallw);
             }
-            wing->forces.z = (tdble) (-(1-x) * wing->Kz1 * (aoa + wing->AoAatZero + PI) - x * (wing->Kz2 * sin(2*aoa) - wing->Kz3));
+            wing->forces.z = (tdble)(-(1 - x) * wing->Kz1 * (aoa + wing->AoAatZero + PI) - x * (wing->Kz2 * sin(2 * aoa) - wing->Kz3));
         }
 
         /* add induced drag */
         if (wing->AR > 0.001)
         {
             if (wing->forces.x > 0.0)
-                wing->forces.x += (tdble) (wing->forces.z * wing->forces.z / (wing->AR * 2.8274)); //0.9*PI
-            else wing->forces.x -= (tdble) (wing->forces.z * wing->forces.z / (wing->AR * 2.8274));
+                wing->forces.x += (tdble)(wing->forces.z * wing->forces.z / (wing->AR * 2.8274));  // 0.9*PI
+            else
+                wing->forces.x -= (tdble)(wing->forces.z * wing->forces.z / (wing->AR * 2.8274));
         }
 
         /* then multiply with 0.5*rho*area and the square of velocity */
-        wing->forces.x *= (tdble)(- car->DynGC.vel.x * fabs(car->DynGC.vel.x) * wing->Kx * (1.0f + (tdble)car->dammage / 10000.0));
+        wing->forces.x *= (tdble)(-car->DynGC.vel.x * fabs(car->DynGC.vel.x) * wing->Kx * (1.0f + (tdble)car->dammage / 10000.0));
         wing->forces.z *= wing->Kx * vt2;
     }
     else if (car->DynGC.vel.x > 0.0f)
@@ -1389,7 +1478,7 @@ void SDASpeedDreams::SimWingUpdate(tCar *car, int index, tSituation* s)
             tdble sinaoa = sin(aoa);
 
             // make drag always negative and have a minimal angle of attack
-            wing->forces.x = (tdble) (wing->Kx * vt2 * (1.0f + (tdble)car->dammage / 10000.0) * MAX(fabs(sinaoa), 0.02));
+            wing->forces.x = (tdble)(wing->Kx * vt2 * (1.0f + (tdble)car->dammage / 10000.0) * MAX(fabs(sinaoa), 0.02));
 
             // If angle of attack is too large, no downforce, only drag
             if (fabs(aoa) > PI_2)
@@ -1403,17 +1492,17 @@ void SDASpeedDreams::SimWingUpdate(tCar *car, int index, tSituation* s)
                 {
                     sinaoa = sin(aoa);
                 }
-                else // 30 deg -> 90 deg smoothly reduced downforce
+                else  // 30 deg -> 90 deg smoothly reduced downforce
                 {
-                    sinaoa = (tdble) (0.25f * (1.0f - ((aoa-PI_3)/PI_6)*((aoa-PI_3)/PI_6)*((aoa-PI_3)/PI_6)));
+                    sinaoa = (tdble)(0.25f * (1.0f - ((aoa - PI_3) / PI_6) * ((aoa - PI_3) / PI_6) * ((aoa - PI_3) / PI_6)));
                 }
-                wing->forces.z = (tdble) MIN(0.0,wing->Kz * vt2 * sinaoa);
+                wing->forces.z = (tdble)MIN(0.0, wing->Kz * vt2 * sinaoa);
             }
         }
         else if (wing->WingType == 1)
         {
-            wing->forces.x = (tdble) (wing->Kx * vt2 * (1.0f + (tdble)car->dammage / 10000.0) * MAX(fabs(sin(aoa - wing->AoAatZRad)), 0.02));
-            wing->forces.z = (tdble) MIN(0.0,wing->Kx* vt2 * CliftFromAoA(wing));
+            wing->forces.x = (tdble)(wing->Kx * vt2 * (1.0f + (tdble)car->dammage / 10000.0) * MAX(fabs(sin(aoa - wing->AoAatZRad)), 0.02));
+            wing->forces.z = (tdble)MIN(0.0, wing->Kx * vt2 * CliftFromAoA(wing));
             // fprintf(stderr,"%d fz: %g (%g)\n",index,wing->forces.z,CliftFromAoA(wing));
         }
     }
@@ -1434,7 +1523,7 @@ void SDASpeedDreams::SimWheelUpdateRide(tCar *car, int index)
     // susp->spring.bellcrank, so we invert this here.
 
     tdble new_susp_x = (wheel->susp.x - wheel->susp.v * SimDeltaTime) / wheel->susp.spring.bellcrank;
-    tdble max_extend =  wheel->pos.z - Zroad;
+    tdble max_extend = wheel->pos.z - Zroad;
     wheel->rideHeight = max_extend;
 
     if (max_extend > new_susp_x + 0.01)
@@ -1467,57 +1556,58 @@ void SDASpeedDreams::SimWheelUpdateRide(tCar *car, int index)
     if (car->features & FEAT_TCLINSIMU)
     {
         if (index == 3)
-        {	// After using the values for the last wheel
-            tEngine	*engine = &(car->engine);
-            engine->TCL = 1.0;			// Reset the TCL accel command
+        {  // After using the values for the last wheel
+            tEngine *engine = &(car->engine);
+            engine->TCL = 1.0;  // Reset the TCL accel command
         }
     }
     // ... Option TCL
 }
 
-tdble SDASpeedDreams::CliftFromAoA(tWing* wing)
+tdble SDASpeedDreams::CliftFromAoA(tWing *wing)
 {
-    tdble angle = (tdble) (wing->angle * 180/PI);
-    //fprintf(stderr,"wing->angle: %g rad = angle: %g deg\n",wing->angle,angle);
+    tdble angle = (tdble)(wing->angle * 180 / PI);
+    // fprintf(stderr,"wing->angle: %g rad = angle: %g deg\n",wing->angle,angle);
 
     wing->Kz_org = 4.0f * wing->Kx;
 
     if (angle <= wing->AoAatMax)
     {
         wing->a = wing->f * (angle + wing->AoAOffset);
-        //fprintf(stderr,"a: %g\n",wing->a);
-        double s = sin(wing->a/180.0*PI);
-        //fprintf(stderr,"s: %g\n",s);
+        // fprintf(stderr,"a: %g\n",wing->a);
+        double s = sin(wing->a / 180.0 * PI);
+        // fprintf(stderr,"s: %g\n",s);
         return (tdble)(s * s * (wing->CliftMax + wing->d) - wing->d);
     }
     else
     {
         wing->a = (angle - wing->AoAatMax - 90.0f);
-        //fprintf(stderr,"a: %g F(a): %g\n",wing->a,F(wing));
+        // fprintf(stderr,"a: %g F(a): %g\n",wing->a,F(wing));
         return (tdble)((wing->CliftMax - F(wing) * (wing->CliftMax - wing->CliftAsymp)) * wing->Kx);
     }
 }
 
-tdble SDASpeedDreams::F(tWing* wing)
+tdble SDASpeedDreams::F(tWing *wing)
 {
-    return 1 - exp( pow(-(wing->a / wing->b),wing->c));
+    return 1 - exp(pow(-(wing->a / wing->b), wing->c));
 }
 
 void SDASpeedDreams::RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, tTrkLocPos *p, int type)
 {
-    int 	segnotfound = 1;
-    tdble 	x, y;
-    tTrackSeg 	*seg = segment;
-    tTrackSeg 	*sseg;
-    tdble 	theta, a2;
-    int 	depl = 0;
-    tdble	curWidth;
+    int segnotfound = 1;
+    tdble x, y;
+    tTrackSeg *seg = segment;
+    tTrackSeg *sseg;
+    tdble theta, a2;
+    int depl = 0;
+    tdble curWidth;
 
     p->type = type;
 
-    while (segnotfound) {
-
-        switch(seg->type) {
+    while (segnotfound)
+    {
+        switch (seg->type)
+        {
             case TR_STR:
                 /* rotation */
                 tdble ts;
@@ -1528,14 +1618,19 @@ void SDASpeedDreams::RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, t
                 p->seg = seg;
                 p->toStart = ts;
                 p->toRight = y * seg->cos - x * seg->sin;
-                if ((ts < 0) && (depl < 1)) {
+                if ((ts < 0) && (depl < 1))
+                {
                     /* get back */
                     seg = seg->prev;
                     depl = -1;
-                } else if ((ts > seg->length) && (depl > -1)) {
+                }
+                else if ((ts > seg->length) && (depl > -1))
+                {
                     seg = seg->next;
                     depl = 1;
-                } else {
+                }
+                else
+                {
                     segnotfound = 0;
                 }
                 break;
@@ -1549,14 +1644,19 @@ void SDASpeedDreams::RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, t
                 FLOAT_NORM_PI_PI(theta);
                 p->seg = seg;
                 p->toStart = theta + a2;
-                p->toRight = seg->radiusr - sqrt(x*x + y*y);
-                if ((theta < -a2) && (depl < 1)) {
+                p->toRight = seg->radiusr - sqrt(x * x + y * y);
+                if ((theta < -a2) && (depl < 1))
+                {
                     seg = seg->prev;
                     depl = -1;
-                } else if ((theta > a2) && (depl > -1)) {
+                }
+                else if ((theta > a2) && (depl > -1))
+                {
                     seg = seg->next;
                     depl = 1;
-                } else {
+                }
+                else
+                {
                     segnotfound = 0;
                 }
                 break;
@@ -1571,14 +1671,19 @@ void SDASpeedDreams::RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, t
                 FLOAT_NORM_PI_PI(theta);
                 p->seg = seg;
                 p->toStart = theta + a2;
-                p->toRight = sqrt(x*x + y*y) - seg->radiusr;
-                if ((theta < -a2) && (depl < 1)) {
+                p->toRight = sqrt(x * x + y * y) - seg->radiusr;
+                if ((theta < -a2) && (depl < 1))
+                {
                     seg = seg->prev;
                     depl = -1;
-                } else if ((theta > a2) && (depl > -1)) {
+                }
+                else if ((theta > a2) && (depl > -1))
+                {
                     seg = seg->next;
                     depl = 1;
-                } else {
+                }
+                else
+                {
                     segnotfound = 0;
                 }
                 break;
@@ -1592,52 +1697,63 @@ void SDASpeedDreams::RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, t
 
     /* Consider all the track with the sides */
     /* Stay on main segment */
-    if (type == TR_LPOS_TRACK) {
-        if (seg->rside != NULL) {
+    if (type == TR_LPOS_TRACK)
+    {
+        if (seg->rside != NULL)
+        {
             sseg = seg->rside;
             p->toRight += RtTrackGetWidth(sseg, p->toStart);
             sseg = sseg->rside;
-            if (sseg) {
+            if (sseg)
+            {
                 p->toRight += RtTrackGetWidth(sseg, p->toStart);
             }
         }
-        if (seg->lside != NULL) {
+        if (seg->lside != NULL)
+        {
             sseg = seg->lside;
             p->toLeft += RtTrackGetWidth(sseg, p->toStart);
             sseg = sseg->lside;
-            if (sseg) {
+            if (sseg)
+            {
                 p->toLeft += RtTrackGetWidth(sseg, p->toStart);
             }
         }
     }
 
     /* Relative to a segment, change to the side segment if necessary */
-    if (type == TR_LPOS_SEGMENT) {
-        if ((p->toRight < 0) && (seg->rside != NULL)) {
+    if (type == TR_LPOS_SEGMENT)
+    {
+        if ((p->toRight < 0) && (seg->rside != NULL))
+        {
             sseg = seg->rside;
             p->seg = sseg;
             curWidth = RtTrackGetWidth(sseg, p->toStart);
-            p->toRight +=  curWidth;
+            p->toRight += curWidth;
             p->toLeft -= seg->width;
             p->toMiddle += (seg->width + curWidth) / 2.0f;
-            if ((p->toRight < 0) && (sseg->rside != NULL)) {
+            if ((p->toRight < 0) && (sseg->rside != NULL))
+            {
                 p->toLeft -= curWidth;
                 p->toMiddle += curWidth / 2.0f;
                 seg = sseg;
                 sseg = seg->rside;
                 curWidth = RtTrackGetWidth(sseg, p->toStart);
                 p->seg = sseg;
-                p->toRight +=  curWidth;
+                p->toRight += curWidth;
                 p->toMiddle += curWidth / 2.0f;
             }
-        } else if ((p->toLeft < 0) && (seg->lside != NULL)) {
+        }
+        else if ((p->toLeft < 0) && (seg->lside != NULL))
+        {
             sseg = seg->lside;
             p->seg = sseg;
             curWidth = RtTrackGetWidth(sseg, p->toStart);
             p->toRight += -seg->width;
             p->toMiddle -= (seg->width + curWidth) / 2.0f;
             p->toLeft += curWidth;
-            if ((p->toLeft < 0) && (sseg->lside != NULL)) {
+            if ((p->toLeft < 0) && (sseg->lside != NULL))
+            {
                 p->toRight -= curWidth;
                 p->toMiddle -= curWidth / 2.0f;
                 seg = sseg;
@@ -1655,11 +1771,13 @@ void SDASpeedDreams::SimSuspCheckIn(tSuspension *susp)
 {
     /*susp->state = 0;*/
     /* note: susp->state is reset in SimWheelUpdateRide in wheel.cpp */
-    if (susp->x < susp->spring.packers) {
+    if (susp->x < susp->spring.packers)
+    {
         susp->x = susp->spring.packers;
         susp->state |= SIM_SUSP_COMP;
     }
-    if (susp->x >= susp->spring.xMax) {
+    if (susp->x >= susp->spring.xMax)
+    {
         susp->x = susp->spring.xMax;
         susp->state |= SIM_SUSP_EXT;
     }
@@ -1682,15 +1800,15 @@ void SDASpeedDreams::SimBrakeUpdate(tCar *car, tWheel *wheel, tBrake *brake)
     if (car->features & FEAT_TCLINSIMU)
     {
         // Brake most spinning wheel
-        tdble TCL_BrakeScale = 125.0f;	// Make it be a parameter later
-        brake->Tq += (tdble) MAX(0.0,MIN(5000.0,TCL_BrakeScale * brake->TCL)); // Sanity check
-        brake->TCL = 0.0; // Reset for next timestep
+        tdble TCL_BrakeScale = 125.0f;                                           // Make it be a parameter later
+        brake->Tq += (tdble)MAX(0.0, MIN(5000.0, TCL_BrakeScale * brake->TCL));  // Sanity check
+        brake->TCL = 0.0;                                                        // Reset for next timestep
     }
     // ... Option TCL
 
-    brake->temp -= (tdble) (fabs(car->DynGC.vel.x) * 0.0001 + 0.0002);
-    if (brake->temp < 0 ) brake->temp = 0;
-    brake->temp += (tdble) (brake->pressure * brake->radius * fabs(wheel->spinVel) * 0.00000000005);
+    brake->temp -= (tdble)(fabs(car->DynGC.vel.x) * 0.0001 + 0.0002);
+    if (brake->temp < 0) brake->temp = 0;
+    brake->temp += (tdble)(brake->pressure * brake->radius * fabs(wheel->spinVel) * 0.00000000005);
     if (brake->temp > 1.0) brake->temp = 1.0;
 }
 
@@ -1699,12 +1817,12 @@ void SDASpeedDreams::SimAxleUpdate(tCar *car, int index)
     tAxle *axle = &(car->axle[index]);
     tdble str, stl, sgn, vtl, vtr;
 
-    str = car->wheel[index*2].susp.x;
-    stl = car->wheel[index*2+1].susp.x;
-    vtr = car->wheel[index*2].susp.v;
-    vtl = car->wheel[index*2+1].susp.v;
+    str = car->wheel[index * 2].susp.x;
+    stl = car->wheel[index * 2 + 1].susp.x;
+    vtr = car->wheel[index * 2].susp.v;
+    vtl = car->wheel[index * 2 + 1].susp.v;
 
-    sgn = (tdble) (SIGN(stl - str));
+    sgn = (tdble)(SIGN(stl - str));
     axle->arbSusp.x = fabs(stl - str);
     tSpring *spring = &(axle->arbSusp.spring);
 
@@ -1714,24 +1832,24 @@ void SDASpeedDreams::SimAxleUpdate(tCar *car, int index)
     f = spring->K * axle->arbSusp.x;
 
     // right
-    car->wheel[index*2].axleFz =  + sgn * f;
+    car->wheel[index * 2].axleFz = +sgn * f;
     // left
-    car->wheel[index*2+1].axleFz = - sgn * f;
+    car->wheel[index * 2 + 1].axleFz = -sgn * f;
 
     /* heave/center spring */
-    axle->heaveSusp.x = (tdble) (0.5 * (stl + str));
-    axle->heaveSusp.v = (tdble) (0.5 * (vtl + vtr));
+    axle->heaveSusp.x = (tdble)(0.5 * (stl + str));
+    axle->heaveSusp.v = (tdble)(0.5 * (vtl + vtr));
     SimSuspUpdate(&(axle->heaveSusp));
-    f = (tdble) (0.5 * axle->heaveSusp.force);
-    car->wheel[index*2].axleFz3rd = f;
-    car->wheel[index*2+1].axleFz3rd = f;
+    f = (tdble)(0.5 * axle->heaveSusp.force);
+    car->wheel[index * 2].axleFz3rd = f;
+    car->wheel[index * 2 + 1].axleFz3rd = f;
 }
 
 void SDASpeedDreams::SimSuspUpdate(tSuspension *susp)
 {
     tdble prevforce = susp->force;
     susp->force = (springForce(susp) + damperForce(susp) + susp->inertance * susp->a) * susp->spring.bellcrank;
-    if (susp->force * prevforce < 0.0) {susp->force = 0.0;}
+    if (susp->force * prevforce < 0.0) { susp->force = 0.0; }
 }
 
 tdble SDASpeedDreams::springForce(tSuspension *susp)
@@ -1741,7 +1859,8 @@ tdble SDASpeedDreams::springForce(tSuspension *susp)
 
     /* K is < 0 */
     f = spring->K * (susp->x - spring->x0) + spring->F0;
-    if (f < 0.0f) {
+    if (f < 0.0f)
+    {
         f = 0.0f;
     }
 
@@ -1751,28 +1870,35 @@ tdble SDASpeedDreams::springForce(tSuspension *susp)
 tdble SDASpeedDreams::damperForce(tSuspension *susp)
 {
     tDamperDef *dampdef;
-    tdble     f;
-    tdble     av;
-    tdble     v;
+    tdble f;
+    tdble av;
+    tdble v;
 
     v = susp->v;
 
-    if (fabs(v) > 10.0f) {
+    if (fabs(v) > 10.0f)
+    {
         v = (float)(SIGN(v) * 10.0);
     }
 
-    if (v < 0.0f) {
+    if (v < 0.0f)
+    {
         /* rebound */
         dampdef = &(susp->damper.rebound);
-    } else {
+    }
+    else
+    {
         /* bump */
         dampdef = &(susp->damper.bump);
     }
 
     av = fabs(v);
-    if (av < dampdef->v1) {
+    if (av < dampdef->v1)
+    {
         f = (dampdef->C1 * av + dampdef->b1);
-    } else {
+    }
+    else
+    {
         f = (dampdef->C2 * av + dampdef->b2);
     }
 
@@ -2081,16 +2207,17 @@ void SDASpeedDreams::SimWheelUpdateForce(tCar *car, int index)
 
 void SDASpeedDreams::SimTransmissionUpdate(tCar *car)
 {
-    tTransmission	*trans = &(car->transmission);
-    tClutch		*clutch = &(trans->clutch);
-    tGearbox		*gearbox = &(trans->gearbox);
-    tDifferential	*differential, *differential0, *differential1;
-    tdble		transfer = MIN(clutch->transferValue * 3.0f, 1.0f);
+    tTransmission *trans = &(car->transmission);
+    tClutch *clutch = &(trans->clutch);
+    tGearbox *gearbox = &(trans->gearbox);
+    tDifferential *differential, *differential0, *differential1;
+    tdble transfer = MIN(clutch->transferValue * 3.0f, 1.0f);
 
-    switch(trans->type) {
+    switch (trans->type)
+    {
         case TRANS_RWD:
             differential = &(trans->differential[TRANS_REAR_DIFF]);
-            differential->in.Tq = (car->engine.Tq_response + car->engine.Tq) * trans->curOverallRatio * transfer * trans->gearEff[gearbox->gear+1];
+            differential->in.Tq = (car->engine.Tq_response + car->engine.Tq) * trans->curOverallRatio * transfer * trans->gearEff[gearbox->gear + 1];
             SimDifferentialUpdate(car, differential, 1);
             SimUpdateFreeWheels(car, 0);
             /* 	printf("s0 %f - s1 %f (%f)	inTq %f -- Tq0 %f - Tq1 %f (%f)\n", */
@@ -2100,7 +2227,7 @@ void SDASpeedDreams::SimTransmissionUpdate(tCar *car)
             break;
         case TRANS_FWD:
             differential = &(trans->differential[TRANS_FRONT_DIFF]);
-            differential->in.Tq = (car->engine.Tq_response + car->engine.Tq) * trans->curOverallRatio * transfer * trans->gearEff[gearbox->gear+1];
+            differential->in.Tq = (car->engine.Tq_response + car->engine.Tq) * trans->curOverallRatio * transfer * trans->gearEff[gearbox->gear + 1];
             SimDifferentialUpdate(car, differential, 1);
             SimUpdateFreeWheels(car, 1);
             /* 	printf("s0 %f - s1 %f (%f)	inTq %f -- Tq0 %f - Tq1 %f (%f)\n", */
@@ -2113,7 +2240,7 @@ void SDASpeedDreams::SimTransmissionUpdate(tCar *car)
             differential0 = &(trans->differential[TRANS_FRONT_DIFF]);
             differential1 = &(trans->differential[TRANS_REAR_DIFF]);
 
-            differential->in.Tq = (car->engine.Tq_response + car->engine.Tq) * trans->curOverallRatio * transfer * trans->gearEff[gearbox->gear+1];
+            differential->in.Tq = (car->engine.Tq_response + car->engine.Tq) * trans->curOverallRatio * transfer * trans->gearEff[gearbox->gear + 1];
             differential->inAxis[0]->spinVel = (differential0->inAxis[0]->spinVel + differential0->inAxis[1]->spinVel) / 2.0f;
             differential->inAxis[1]->spinVel = (differential1->inAxis[0]->spinVel + differential1->inAxis[1]->spinVel) / 2.0f;
             //		differential->inAxis[0]->Tq = (differential0->inAxis[0]->Tq + differential0->inAxis[1]->Tq) / differential->ratio;
@@ -2150,17 +2277,18 @@ void SDASpeedDreams::SimTransmissionUpdate(tCar *car)
 
 void SDASpeedDreams::SimDifferentialUpdate(tCar *car, tDifferential *differential, int first)
 {
-    tdble   DrTq, DrTq0, DrTq1;
-    tdble   ndot0, ndot1;
-    tdble   spinVel0, spinVel1;
-    tdble   inTq0, inTq1;
-    tdble   spdRatio/*, spdRatioMax*/;
-    tdble   /*deltaSpd,*/ deltaTq;
-    tdble   BrTq;
-    tdble   engineReaction;
-    tdble   meanv;
+    tdble DrTq, DrTq0, DrTq1;
+    tdble ndot0, ndot1;
+    tdble spinVel0, spinVel1;
+    tdble inTq0, inTq1;
+    tdble spdRatio /*, spdRatioMax*/;
+    tdble /*deltaSpd,*/ deltaTq;
+    tdble BrTq;
+    tdble engineReaction;
+    tdble meanv;
 
-    if (differential->type == DIFF_SPOOL) {
+    if (differential->type == DIFF_SPOOL)
+    {
         updateSpool(car, differential, first);
         return;
     }
@@ -2173,12 +2301,13 @@ void SDASpeedDreams::SimDifferentialUpdate(tCar *car, tDifferential *differentia
     inTq0 = differential->inAxis[0]->Tq;
     inTq1 = differential->inAxis[1]->Tq;
 
-
     spdRatio = fabs(spinVel0 + spinVel1);
-    if (spdRatio != 0) {
+    if (spdRatio != 0)
+    {
         spdRatio = fabs(spinVel0 - spinVel1) / spdRatio;
 
-        switch (differential->type) {
+        switch (differential->type)
+        {
             case DIFF_FREE:
                 // I would think that the following is what a FREE
                 // differential should look like, with both wheels
@@ -2219,11 +2348,10 @@ void SDASpeedDreams::SimDifferentialUpdate(tCar *car, tDifferential *differentia
 
                 {
                     float spiderTq = inTq1 - inTq0;
-                    DrTq0 = DrTq*0.5f + spiderTq;
-                    DrTq1 = DrTq*0.5f - spiderTq;
+                    DrTq0 = DrTq * 0.5f + spiderTq;
+                    DrTq1 = DrTq * 0.5f - spiderTq;
                 }
                 break;
-
 
             case DIFF_LIMITED_SLIP:
                 // Limited slip differential with:
@@ -2242,48 +2370,52 @@ void SDASpeedDreams::SimDifferentialUpdate(tCar *car, tDifferential *differentia
                 // more torque should go to the slower moving wheel.
                 {
                     float spiderTq = inTq1 - inTq0;
-                    float propTq = DrTq/differential->lockInputTq;
+                    float propTq = DrTq / differential->lockInputTq;
                     float rate = 0.0f;
-                    if (propTq > 0.0f) {
-                        rate = 1.0f - exp(-propTq*propTq);
+                    if (propTq > 0.0f)
+                    {
+                        rate = 1.0f - exp(-propTq * propTq);
                     }
 
-                    float pressure = tanh(rate*(spinVel1-spinVel0));
-                    float bias = differential->dSlipMax * 0.5f* pressure;
-                    float open = 1.0f;// - rate;
-                    DrTq0 = DrTq*(0.5f+bias) + spiderTq*open;
-                    DrTq1 = DrTq*(0.5f-bias) - spiderTq*open;
+                    float pressure = tanh(rate * (spinVel1 - spinVel0));
+                    float bias = differential->dSlipMax * 0.5f * pressure;
+                    float open = 1.0f;  // - rate;
+                    DrTq0 = DrTq * (0.5f + bias) + spiderTq * open;
+                    DrTq1 = DrTq * (0.5f - bias) - spiderTq * open;
                 }
                 break;
 
-            case DIFF_ELECTRONIC_LSD: ;
+            case DIFF_ELECTRONIC_LSD:;
             case DIFF_15WAY_LSD:
-                //Similar to DIFF_LIMITED_SLIP,
-                //but has different dSlipMax for power (acceleration)
-                //and coast (deceleration), instead working as a free
-                //differential in coast direction.
-                //Electronic LSD has the same working, but its parameters
-                //can be changed during driving.
+                // Similar to DIFF_LIMITED_SLIP,
+                // but has different dSlipMax for power (acceleration)
+                // and coast (deceleration), instead working as a free
+                // differential in coast direction.
+                // Electronic LSD has the same working, but its parameters
+                // can be changed during driving.
                 {
                     float spiderTq = inTq1 - inTq0;
-                    float propTq = DrTq/differential->lockInputTq;
+                    float propTq = DrTq / differential->lockInputTq;
                     float rate = 0.0f;
-                    rate = 1.0f - exp(-propTq*propTq);
+                    rate = 1.0f - exp(-propTq * propTq);
 
-                    float pressure = tanh(rate*(spinVel1-spinVel0));
-                    float bias = (DrTq >= 0 ? differential->dSlipMax : differential->dCoastSlipMax) * 0.5f* pressure;
-                    float open = 1.0f;// - rate;
-                    DrTq0 = DrTq*(0.5f+bias) + spiderTq*open;
-                    DrTq1 = DrTq*(0.5f-bias) - spiderTq*open;
+                    float pressure = tanh(rate * (spinVel1 - spinVel0));
+                    float bias = (DrTq >= 0 ? differential->dSlipMax : differential->dCoastSlipMax) * 0.5f * pressure;
+                    float open = 1.0f;  // - rate;
+                    DrTq0 = DrTq * (0.5f + bias) + spiderTq * open;
+                    DrTq1 = DrTq * (0.5f - bias) - spiderTq * open;
                 }
                 break;
 
             case DIFF_VISCOUS_COUPLER:
-                if (spinVel0 >= spinVel1) {
+                if (spinVel0 >= spinVel1)
+                {
                     DrTq0 = DrTq * differential->dTqMin;
                     DrTq1 = DrTq * (1 - differential->dTqMin);
-                } else {
-                    deltaTq = (tdble) (differential->dTqMin + (1.0 - exp(-fabs(differential->viscosity * spinVel0 - spinVel1))) /
+                }
+                else
+                {
+                    deltaTq = (tdble)(differential->dTqMin + (1.0 - exp(-fabs(differential->viscosity * spinVel0 - spinVel1))) /
                                                                  differential->viscomax * differential->dTqMax);
                     DrTq0 = DrTq * deltaTq;
                     DrTq1 = DrTq * (1 - deltaTq);
@@ -2294,40 +2426,47 @@ void SDASpeedDreams::SimDifferentialUpdate(tCar *car, tDifferential *differentia
                 DrTq0 = DrTq1 = 0;
                 break;
         }
-    } else {
-        DrTq0 = (tdble) (DrTq / 2.0);
-        DrTq1 = (tdble) (DrTq / 2.0);
     }
-
+    else
+    {
+        DrTq0 = (tdble)(DrTq / 2.0);
+        DrTq1 = (tdble)(DrTq / 2.0);
+    }
 
     ndot0 = SimDeltaTime * (DrTq0 - inTq0) / differential->outAxis[0]->I;
     spinVel0 += ndot0;
     ndot1 = SimDeltaTime * (DrTq1 - inTq1) / differential->outAxis[1]->I;
     spinVel1 += ndot1;
 
-    BrTq = (tdble) (- SIGN(spinVel0) * differential->inAxis[0]->brkTq);
+    BrTq = (tdble)(-SIGN(spinVel0) * differential->inAxis[0]->brkTq);
     ndot0 = SimDeltaTime * BrTq / differential->outAxis[0]->I;
-    if (((ndot0 * spinVel0) < 0.0) && (fabs(ndot0) > fabs(spinVel0))) {
+    if (((ndot0 * spinVel0) < 0.0) && (fabs(ndot0) > fabs(spinVel0)))
+    {
         ndot0 = -spinVel0;
     }
     if ((spinVel0 == 0.0) && (ndot0 < 0.0)) ndot0 = 0;
     spinVel0 += ndot0;
 
-    BrTq = (tdble) (- SIGN(spinVel1) * differential->inAxis[1]->brkTq);
+    BrTq = (tdble)(-SIGN(spinVel1) * differential->inAxis[1]->brkTq);
     ndot1 = SimDeltaTime * BrTq / differential->outAxis[1]->I;
-    if (((ndot1 * spinVel1) < 0.0) && (fabs(ndot1) > fabs(spinVel1))) {
+    if (((ndot1 * spinVel1) < 0.0) && (fabs(ndot1) > fabs(spinVel1)))
+    {
         ndot1 = -spinVel1;
     }
     if ((spinVel1 == 0.0) && (ndot1 < 0.0)) ndot1 = 0;
     spinVel1 += ndot1;
 
-    if (first) {
-        meanv = (tdble) ((spinVel0 + spinVel1) / 2.0);
+    if (first)
+    {
+        meanv = (tdble)((spinVel0 + spinVel1) / 2.0);
         engineReaction = SimEngineUpdateRpm(car, meanv);
-        if (meanv != 0.0) {
-            engineReaction = engineReaction/meanv;
-            if ((spinVel1*spinVel0)>0) {
-                if (engineReaction != 0.0) {
+        if (meanv != 0.0)
+        {
+            engineReaction = engineReaction / meanv;
+            if ((spinVel1 * spinVel0) > 0)
+            {
+                if (engineReaction != 0.0)
+                {
                     spinVel1 *= engineReaction;
                     spinVel0 *= engineReaction;
                 }
@@ -2344,13 +2483,13 @@ void SDASpeedDreams::SimDifferentialUpdate(tCar *car, tDifferential *differentia
 
 void SDASpeedDreams::updateSpool(tCar *car, tDifferential *differential, int first)
 {
-    tdble   DrTq;
-    tdble   ndot;
-    tdble   spinVel;
-    tdble   BrTq;
-    tdble   engineReaction;
-    tdble   I;
-    tdble   inTq, brkTq;
+    tdble DrTq;
+    tdble ndot;
+    tdble spinVel;
+    tdble BrTq;
+    tdble engineReaction;
+    tdble I;
+    tdble inTq, brkTq;
 
     DrTq = differential->in.Tq * differential->efficiency;
 
@@ -2361,18 +2500,21 @@ void SDASpeedDreams::updateSpool(tCar *car, tDifferential *differential, int fir
     ndot = SimDeltaTime * (DrTq - inTq) / I;
     spinVel = differential->inAxis[0]->spinVel + ndot;
 
-    BrTq = (tdble) (- SIGN(spinVel) * brkTq);
+    BrTq = (tdble)(-SIGN(spinVel) * brkTq);
     ndot = SimDeltaTime * BrTq / I;
 
-    if (((ndot * spinVel) < 0.0) && (fabs(ndot) > fabs(spinVel))) {
+    if (((ndot * spinVel) < 0.0) && (fabs(ndot) > fabs(spinVel)))
+    {
         ndot = -spinVel;
     }
     if ((spinVel == 0.0) && (ndot < 0.0)) ndot = 0;
 
     spinVel += ndot;
-    if (first) {
+    if (first)
+    {
         engineReaction = SimEngineUpdateRpm(car, spinVel);
-        if (engineReaction != 0.0) {
+        if (engineReaction != 0.0)
+        {
             spinVel = engineReaction;
         }
     }
@@ -2390,8 +2532,8 @@ tdble SDASpeedDreams::SimEngineUpdateRpm(tCar *car, tdble axleRpm)
     float freerads;
     float transfer;
 
-
-    if (car->fuel <= 0.0) {
+    if (car->fuel <= 0.0)
+    {
         engine->rads = 0;
         clutch->state = CLUTCH_APPLIED;
         clutch->transferValue = 0.0;
@@ -2402,18 +2544,18 @@ tdble SDASpeedDreams::SimEngineUpdateRpm(tCar *car, tdble axleRpm)
     freerads += engine->Tq / engine->I * SimDeltaTime;
     {
         tdble dp = engine->pressure;
-        engine->pressure = engine->pressure*0.9f + 0.1f*engine->Tq;
-        dp = (0.001f*fabs(engine->pressure - dp));
+        engine->pressure = engine->pressure * 0.9f + 0.1f * engine->Tq;
+        dp = (0.001f * fabs(engine->pressure - dp));
         dp = fabs(dp);
         tdble rth = urandom();
-        if (dp > rth) {
+        if (dp > rth)
+        {
             engine->exhaust_pressure += rth;
         }
         engine->exhaust_pressure *= 0.9f;
-        car->carElt->priv.smoke += 5.0f*engine->exhaust_pressure;
+        car->carElt->priv.smoke += 5.0f * engine->exhaust_pressure;
         car->carElt->priv.smoke *= 0.99f;
     }
-
 
     // This is a method for the joint torque that the engine experiences
     // to be changed smoothly and not instantaneously.
@@ -2426,56 +2568,70 @@ tdble SDASpeedDreams::SimEngineUpdateRpm(tCar *car, tdble axleRpm)
     tdble sdI = dI;
 
     // limit the difference to avoid model instability
-    if (sdI>1.0) {
+    if (sdI > 1.0)
+    {
         sdI = 1.0;
     }
 
-    float alpha = 0.1f; // transition coefficient
-    engine->I_joint = (tdble) (engine->I_joint*(1.0-alpha) +  alpha*trans->curI);
+    float alpha = 0.1f;  // transition coefficient
+    engine->I_joint = (tdble)(engine->I_joint * (1.0 - alpha) + alpha * trans->curI);
 
     // only use these values when the clutch is engaged or the gear
     // has changed.
-    if ((clutch->transferValue > 0.01) && (trans->gearbox.gear)) {
-
+    if ((clutch->transferValue > 0.01) && (trans->gearbox.gear))
+    {
         transfer = clutch->transferValue * clutch->transferValue * clutch->transferValue * clutch->transferValue;
 
-        ttq = (float) (dI* tanh(0.01*(axleRpm * trans->curOverallRatio * transfer + freerads * (1.0-transfer) -engine->rads))*100.0);
-        engine->rads = (tdble) ((1.0-sdI) * (axleRpm * trans->curOverallRatio * transfer + freerads * (1.0-transfer)) + sdI *(engine->rads + ((ttq)*SimDeltaTime)/(engine->I)));
-        if (engine->rads < 0.0) {
+        ttq = (float)(dI * tanh(0.01 * (axleRpm * trans->curOverallRatio * transfer + freerads * (1.0 - transfer) - engine->rads)) * 100.0);
+        engine->rads = (tdble)((1.0 - sdI) * (axleRpm * trans->curOverallRatio * transfer + freerads * (1.0 - transfer)) + sdI * (engine->rads + ((ttq)*SimDeltaTime) / (engine->I)));
+        if (engine->rads < 0.0)
+        {
             engine->rads = 0;
             engine->Tq = 0.0;
         }
-    } else {
+    }
+    else
+    {
         engine->rads = freerads;
     }
-    if (engine->rads < engine->tickover) {
+    if (engine->rads < engine->tickover)
+    {
         engine->rads = engine->tickover;
         engine->Tq = 0.0;
-    } else if (engine->rads > engine->revsMax) {
+    }
+    else if (engine->rads > engine->revsMax)
+    {
         engine->rads = engine->revsMax;
-        if ( (clutch->transferValue > 0.01) &&
-            ((trans->curOverallRatio > 0.01) || (trans->curOverallRatio < -0.01)) )
+        if ((clutch->transferValue > 0.01) &&
+            ((trans->curOverallRatio > 0.01) || (trans->curOverallRatio < -0.01)))
             return engine->revsMax / trans->curOverallRatio;
-        else {return 0.0;}
+        else
+        {
+            return 0.0;
+        }
     }
 
-    if ((trans->curOverallRatio!=0.0) && (I_response > 0)) {
-        return axleRpm - sdI * ttq * trans->curOverallRatio   * SimDeltaTime / ( I_response);
-    } else {
+    if ((trans->curOverallRatio != 0.0) && (I_response > 0))
+    {
+        return axleRpm - sdI * ttq * trans->curOverallRatio * SimDeltaTime / (I_response);
+    }
+    else
+    {
         return 0.0;
     }
 }
 
-float SDASpeedDreams::urandom() {
-    return ((((float)rand()-1)/((float)RAND_MAX)));
+float SDASpeedDreams::urandom()
+{
+    return ((((float)rand() - 1) / ((float)RAND_MAX)));
 }
 
 void SDASpeedDreams::SimUpdateFreeWheels(tCar *car, int axlenb)
 {
     int i;
     tWheel *wheel;
-    tdble BrTq;		// brake torque
-    tdble ndot;		// rotation acceleration
+    tdble BrTq;  // brake torque
+    tdble ndot;  // rotation acceleration
     tdble I;
 
     for (i = axlenb * 2; i < axlenb * 2 + 2; i++)
@@ -2487,7 +2643,7 @@ void SDASpeedDreams::SimUpdateFreeWheels(tCar *car, int axlenb)
         ndot = SimDeltaTime * wheel->spinTq / I;
         wheel->spinVel -= ndot;
 
-        BrTq = (tdble)(- SIGN(wheel->spinVel) * wheel->brake.Tq);
+        BrTq = (tdble)(-SIGN(wheel->spinVel) * wheel->brake.Tq);
         ndot = SimDeltaTime * BrTq / I;
 
         if (fabs(ndot) > fabs(wheel->spinVel))
@@ -2516,31 +2672,32 @@ void SDASpeedDreams::SimWheelUpdateRotation(tCar *car)
         cosaz = cos(wheel->relPos.az);
         sinaz = sin(wheel->relPos.az);
 
-        if( (i == 0) || (i == 1) )
+        if ((i == 0) || (i == 1))
         {
             wheel->torques.y = wheel->torques.x * sinaz;
             wheel->torques.x = wheel->torques.x * cosaz;
         }
         else
         {
-            wheel->torques.x = wheel->torques.y =0.0;
+            wheel->torques.x = wheel->torques.y = 0.0;
         }
 
         deltan = -(wheel->in.spinVel - wheel->prespinVel) * wheel->I / SimDeltaTime;
-        wheel->torques.x -= deltan * wheel->cosax *sinaz;
-        wheel->torques.y += deltan * wheel->cosax *cosaz;
+        wheel->torques.x -= deltan * wheel->cosax * sinaz;
+        wheel->torques.y += deltan * wheel->cosax * cosaz;
         wheel->torques.z = deltan * wheel->sinax;
         /*update rotation*/
         wheel->spinVel = wheel->in.spinVel;
 
-        if ( (car->features & FEAT_SLOWGRIP) && (wheel->brake.Tq <= 1.0) && (car->ctrl->accelCmd * car->transmission.clutch.transferValue < 0.05) )
+        if ((car->features & FEAT_SLOWGRIP) && (wheel->brake.Tq <= 1.0) && (car->ctrl->accelCmd * car->transmission.clutch.transferValue < 0.05))
         {
             /* prevent wheelspin value oscillating around wheel tangential velocity */
             tdble waz = wheel->steer + wheel->staticPos.az;
             tdble vt = wheel->bodyVel.x * cos(waz) + wheel->bodyVel.y * sin(waz);
             tdble wrl = wheel->spinVel * wheel->radius;
             tdble oldwrl = wheel->prespinVel * wheel->radius;
-            if( (vt-wrl)*(vt-oldwrl) < 0.0 ) {
+            if ((vt - wrl) * (vt - oldwrl) < 0.0)
+            {
                 wheel->spinVel = vt / wheel->radius;
             }
 
@@ -2591,26 +2748,27 @@ void SDASpeedDreams::SimCarUpdate(tCar *car, tSituation * /* s */)
 
     SimCarCollideXYScene(car);
 
-
     /* update car->carElt->setup.reqRepair with damage */
     tCarSetupItem *repair = &(car->carElt->setup.reqRepair);
-    if ((repair->desired_value > 0.0) && (repair->max == repair->desired_value)) {
-        repair->max = repair->desired_value = (tdble) car->dammage;
-    } else {
-        repair->max = (tdble) car->dammage;
+    if ((repair->desired_value > 0.0) && (repair->max == repair->desired_value))
+    {
+        repair->max = repair->desired_value = (tdble)car->dammage;
     }
-
+    else
+    {
+        repair->max = (tdble)car->dammage;
+    }
 }
 
 void SDASpeedDreams::SimCarUpdateForces(tCar *car)
 {
-    tForces	F;
-    int		i;
-    tdble	m, w, minv;
-    tdble	SinTheta;
-    tdble	Cosz, Sinz;
-    tdble	v, R, Rv, Rm, Rx, Ry;
-    tdble	desiredF, desiredTq;
+    tForces F;
+    int i;
+    tdble m, w, minv;
+    tdble SinTheta;
+    tdble Cosz, Sinz;
+    tdble v, R, Rv, Rm, Rx, Ry;
+    tdble desiredF, desiredTq;
 
     Cosz = car->Cosz = cos(car->DynGCg.pos.az);
     Sinz = car->Sinz = sin(car->DynGCg.pos.az);
@@ -2619,21 +2777,20 @@ void SDASpeedDreams::SimCarUpdateForces(tCar *car)
 
     /* total mass */
     m = car->mass + car->fuel;
-    minv = (tdble) (1.0 / m);
+    minv = (tdble)(1.0 / m);
     w = -m * G;
 
     /* Weight */
-    SinTheta = (tdble) ((-car->wheel[FRNT_RGT].zRoad - car->wheel[FRNT_LFT].zRoad
-                        + car->wheel[REAR_RGT].zRoad + car->wheel[REAR_LFT].zRoad) / (2.0 * car->wheelbase));
+    SinTheta = (tdble)((-car->wheel[FRNT_RGT].zRoad - car->wheel[FRNT_LFT].zRoad + car->wheel[REAR_RGT].zRoad + car->wheel[REAR_LFT].zRoad) / (2.0 * car->wheelbase));
     F.F.x = -w * SinTheta;
-    SinTheta = (tdble) ((-car->wheel[FRNT_RGT].zRoad - car->wheel[REAR_RGT].zRoad
-                        + car->wheel[FRNT_LFT].zRoad + car->wheel[REAR_LFT].zRoad) / (2.0 * car->wheeltrack));
+    SinTheta = (tdble)((-car->wheel[FRNT_RGT].zRoad - car->wheel[REAR_RGT].zRoad + car->wheel[FRNT_LFT].zRoad + car->wheel[REAR_LFT].zRoad) / (2.0 * car->wheeltrack));
     F.F.y = -w * SinTheta;
-    F.F.z = (tdble) (w - (F.F.x*F.F.x + F.F.y*F.F.y)/(2.0*w));/*Taylor-polinom of sqrt(w^2-F.F.x^2-F.F.y^2)*/
+    F.F.z = (tdble)(w - (F.F.x * F.F.x + F.F.y * F.F.y) / (2.0 * w)); /*Taylor-polinom of sqrt(w^2-F.F.x^2-F.F.y^2)*/
     F.M.x = F.M.y = F.M.z = 0;
 
     /* Wheels */
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++)
+    {
         /* forces */
         F.F.x += car->wheel[i].forces.x;
         F.F.y += car->wheel[i].forces.y;
@@ -2654,7 +2811,8 @@ void SDASpeedDreams::SimCarUpdateForces(tCar *car)
     F.F.x += car->aero.drag;
 
     /* Wings & Aero Downforce */
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 2; i++)
+    {
         /* forces */
         F.F.z += car->wing[i].forces.z + car->aero.lift[i];
         F.F.x += car->wing[i].forces.x;
@@ -2666,19 +2824,27 @@ void SDASpeedDreams::SimCarUpdateForces(tCar *car)
     /* Rolling Resistance */
     v = car->DynGC.vel.xy;
     R = 0;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++)
+    {
         R += car->wheel[i].rollRes;
     }
-    if (v > 0.00001) {
-        if (v > 10.0) {
+    if (v > 0.00001)
+    {
+        if (v > 10.0)
+        {
             Rv = R / v;
-        } else {
-            Rv = (tdble) (R / 10.0);
         }
-        if ((Rv * minv * SimDeltaTime) > v) {
+        else
+        {
+            Rv = (tdble)(R / 10.0);
+        }
+        if ((Rv * minv * SimDeltaTime) > v)
+        {
             Rv = v * m / SimDeltaTime;
         }
-    } else {
+    }
+    else
+    {
         Rv = 0;
     }
     Rx = Rv * car->DynGC.vel.x;
@@ -2687,35 +2853,56 @@ void SDASpeedDreams::SimCarUpdateForces(tCar *car)
     F.F.x -= Rx;
     F.F.y -= Ry;
 
-    if ((R * car->wheelbase / 2.0 * car->Iinv.z) > fabs(car->DynGCg.vel.az)) {
+    if ((R * car->wheelbase / 2.0 * car->Iinv.z) > fabs(car->DynGCg.vel.az))
+    {
         Rm = car->DynGCg.vel.az / car->Iinv.z;
-    } else {
-        Rm = (tdble) (SIGN(car->DynGCg.vel.az) * R * car->wheelbase / 2.0);
+    }
+    else
+    {
+        Rm = (tdble)(SIGN(car->DynGCg.vel.az) * R * car->wheelbase / 2.0);
     }
     F.M.z -= Rm;
 
     /* simulate sticking when car almost stationary */
-    if ((car->features & FEAT_SLOWGRIP) && ( v < 0.1 ) ) {
-        w = -w; //make it positive
+    if ((car->features & FEAT_SLOWGRIP) && (v < 0.1))
+    {
+        w = -w;  // make it positive
         /* desired force to stop sideway slide */
-        desiredF = - m * car->DynGC.vel.y / SimDeltaTime;
-        if ( (fabs(desiredF - F.F.y)) < w ) {F.F.y = desiredF;}
-        else if ( (desiredF - F.F.y) > 0.0 ) {F.F.y += w;}
-        else {F.F.y -= w;}
+        desiredF = -m * car->DynGC.vel.y / SimDeltaTime;
+        if ((fabs(desiredF - F.F.y)) < w) { F.F.y = desiredF; }
+        else if ((desiredF - F.F.y) > 0.0)
+        {
+            F.F.y += w;
+        }
+        else
+        {
+            F.F.y -= w;
+        }
         /* desired torque to stop yaw */
-        desiredTq = - car->DynGC.vel.az / ( SimDeltaTime * car->Iinv.z );
-        if ( (fabs(desiredTq - F.M.z)) < 0.5 * w * car->wheelbase) {F.M.z = desiredTq;}
-        else if ( (desiredTq - F.M.z) > 0.0 ) {F.M.z += 0.5f * w * car->wheelbase;}
-        else {F.M.z -= 0.5f * w * car->wheelbase;}
+        desiredTq = -car->DynGC.vel.az / (SimDeltaTime * car->Iinv.z);
+        if ((fabs(desiredTq - F.M.z)) < 0.5 * w * car->wheelbase) { F.M.z = desiredTq; }
+        else if ((desiredTq - F.M.z) > 0.0)
+        {
+            F.M.z += 0.5f * w * car->wheelbase;
+        }
+        else
+        {
+            F.M.z -= 0.5f * w * car->wheelbase;
+        }
         /* desired force to really stop the car when braking to 0 */
-        if ( ((car->ctrl->brakeCmd > 0.05) || (car->ctrl->ebrakeCmd > 0.1) || (car->ctrl->brakeFrontLeftCmd > 0.02)
-             || (car->ctrl->brakeFrontRightCmd > 0.02) || (car->ctrl->brakeRearLeftCmd > 0.02) || (car->ctrl->brakeRearRightCmd > 0.02) )
-            && (car->ctrl->accelCmd * car->transmission.clutch.transferValue < 0.05) && (fabs(car->DynGC.vel.x) < 0.02) ) {
-            desiredF = - m * car->DynGC.vel.x / SimDeltaTime;
+        if (((car->ctrl->brakeCmd > 0.05) || (car->ctrl->ebrakeCmd > 0.1) || (car->ctrl->brakeFrontLeftCmd > 0.02) || (car->ctrl->brakeFrontRightCmd > 0.02) || (car->ctrl->brakeRearLeftCmd > 0.02) || (car->ctrl->brakeRearRightCmd > 0.02)) && (car->ctrl->accelCmd * car->transmission.clutch.transferValue < 0.05) && (fabs(car->DynGC.vel.x) < 0.02))
+        {
+            desiredF = -m * car->DynGC.vel.x / SimDeltaTime;
             w *= 0.5;
-            if ( (fabs(desiredF - F.F.x)) < w ) {F.F.x = desiredF;}
-            else if ( (desiredF - F.F.x) > 0.0 ) {F.F.x += w;}
-            else {F.F.x -= w;}
+            if ((fabs(desiredF - F.F.x)) < w) { F.F.x = desiredF; }
+            else if ((desiredF - F.F.x) > 0.0)
+            {
+                F.F.x += w;
+            }
+            else
+            {
+                F.F.x -= w;
+            }
         }
     }
 
@@ -2738,23 +2925,27 @@ void SDASpeedDreams::SimCarUpdateSpeed(tCar *car)
     // fuel consumption
     tdble delta_fuel = car->fuel_prev - car->fuel;
     car->fuel_prev = car->fuel;
-    if (delta_fuel > 0) {
+    if (delta_fuel > 0)
+    {
         car->carElt->_fuelTotal += delta_fuel;
     }
     tdble fi;
     tdble as = sqrt(car->airSpeed2);
-    if (as<0.1) {
+    if (as < 0.1)
+    {
         fi = 99.9f;
-    } else {
-        fi = 100000 * delta_fuel / (as*SimDeltaTime);
+    }
+    else
+    {
+        fi = 100000 * delta_fuel / (as * SimDeltaTime);
     }
     tdble alpha = 0.1f;
-    car->carElt->_fuelInstant = (tdble)((1.0-alpha)*car->carElt->_fuelInstant + alpha*fi);
+    car->carElt->_fuelInstant = (tdble)((1.0 - alpha) * car->carElt->_fuelInstant + alpha * fi);
 
-    tdble	Cosz, Sinz;
-    //tdble	mass;
+    tdble Cosz, Sinz;
+    // tdble	mass;
 
-    //mass = car->mass + car->fuel;
+    // mass = car->mass + car->fuel;
 
     Cosz = car->Cosz;
     Sinz = car->Sinz;
@@ -2768,8 +2959,9 @@ void SDASpeedDreams::SimCarUpdateSpeed(tCar *car)
     car->DynGCg.vel.az += car->DynGCg.acc.az * SimDeltaTime;
 
     /* spin limitation */
-    if (fabs(car->DynGCg.vel.az) > 9.0) {
-        car->DynGCg.vel.az = (tdble) (SIGN(car->DynGCg.vel.az) * 9.0);
+    if (fabs(car->DynGCg.vel.az) > 9.0)
+    {
+        car->DynGCg.vel.az = (tdble)(SIGN(car->DynGCg.vel.az) * 9.0);
     }
 
     car->DynGC.vel.ax = car->DynGCg.vel.ax;
@@ -2781,21 +2973,20 @@ void SDASpeedDreams::SimCarUpdateSpeed(tCar *car)
     car->DynGC.vel.z = car->DynGCg.vel.z;
 
     /* 2D speed */
-    car->DynGC.vel.xy = sqrt(car->DynGCg.vel.x * car->DynGCg.vel.x  +
+    car->DynGC.vel.xy = sqrt(car->DynGCg.vel.x * car->DynGCg.vel.x +
                              car->DynGCg.vel.y * car->DynGCg.vel.y);
 }
-
 
 void SDASpeedDreams::SimCarUpdatePos(tCar *car)
 {
     tdble vx, vy;
-    //tdble accx, accy;
+    // tdble accx, accy;
 
     vx = car->DynGCg.vel.x;
     vy = car->DynGCg.vel.y;
 
-    //accx = car->DynGCg.acc.x;
-    //accy = car->DynGCg.acc.y;
+    // accx = car->DynGCg.acc.x;
+    // accy = car->DynGCg.acc.y;
 
     car->DynGCg.pos.x += vx * SimDeltaTime;
     car->DynGCg.pos.y += vy * SimDeltaTime;
@@ -2807,19 +2998,23 @@ void SDASpeedDreams::SimCarUpdatePos(tCar *car)
 
     FLOAT_NORM_PI_PI(car->DynGCg.pos.az);
 
-    if (car->DynGCg.pos.ax > aMax) {
+    if (car->DynGCg.pos.ax > aMax)
+    {
         car->DynGCg.pos.ax = aMax;
         car->DynGCg.vel.ax = 0;
     }
-    if (car->DynGCg.pos.ax < -aMax) {
+    if (car->DynGCg.pos.ax < -aMax)
+    {
         car->DynGCg.pos.ax = -aMax;
         car->DynGCg.vel.ax = 0;
     }
-    if (car->DynGCg.pos.ay > aMax) {
+    if (car->DynGCg.pos.ay > aMax)
+    {
         car->DynGCg.pos.ay = aMax;
         car->DynGCg.vel.ay = 0;
     }
-    if (car->DynGCg.pos.ay < -aMax) {
+    if (car->DynGCg.pos.ay < -aMax)
+    {
         car->DynGCg.pos.ay = -aMax;
         car->DynGCg.vel.ay = 0;
     }
@@ -2843,7 +3038,8 @@ void SDASpeedDreams::SimCarUpdateCornerPos(tCar *car)
     tdble vy = car->DynGCg.vel.y;
     int i;
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++)
+    {
         tdble x = car->corner[i].pos.x + car->statGC.x;
         tdble y = car->corner[i].pos.y + car->statGC.y;
         tdble dx = x * Cosz - y * Sinz;
@@ -2858,15 +3054,13 @@ void SDASpeedDreams::SimCarUpdateCornerPos(tCar *car)
         /* where r = sqrt(x*x + y*y)                 */
         /* the tangent vector is -y / r and x / r    */
         // compute corner velocity at local frame
-        car->corner[i].vel.ax = - car->DynGC.vel.az * y;
+        car->corner[i].vel.ax = -car->DynGC.vel.az * y;
         car->corner[i].vel.ay = car->DynGC.vel.az * x;
 
         // rotate to global and add global center of mass velocity
         // note: global to local.
-        car->corner[i].vel.x = vx
-                               + car->corner[i].vel.ax * Cosz - car->corner[i].vel.ay * Sinz;
-        car->corner[i].vel.y = vy
-                               + car->corner[i].vel.ax * Sinz + car->corner[i].vel.ay * Cosz;
+        car->corner[i].vel.x = vx + car->corner[i].vel.ax * Cosz - car->corner[i].vel.ay * Sinz;
+        car->corner[i].vel.y = vy + car->corner[i].vel.ax * Sinz + car->corner[i].vel.ay * Cosz;
 
         // add local center of mass velocity
         car->corner[i].vel.ax += car->DynGC.vel.x;
@@ -2883,23 +3077,29 @@ void SDASpeedDreams::SimCarCollideZ(tCar *car)
     const float CRASH_THRESHOLD = -5.0f;
     tdble dz = 0.0f;
 
-    if (car->carElt->_state & RM_CAR_STATE_NO_SIMU) {
+    if (car->carElt->_state & RM_CAR_STATE_NO_SIMU)
+    {
         return;
     }
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++)
+    {
         wheel = &(car->wheel[i]);
-        if ( (wheel->state & SIM_SUSP_COMP)&&(!(wheel->state & SIM_WH_INAIR)) ) {
+        if ((wheel->state & SIM_SUSP_COMP) && (!(wheel->state & SIM_WH_INAIR)))
+        {
             dz = MAX(dz, wheel->susp.spring.packers - wheel->rideHeight);
             wheel->rideHeight = wheel->susp.spring.packers;
             RtTrackSurfaceNormalL(&(wheel->trkPos), &normal);
             dotProd = (car->DynGCg.vel.x * normal.x + car->DynGCg.vel.y * normal.y + car->DynGCg.vel.z * normal.z) * wheel->trkPos.seg->surface->kRebound;
-            if (dotProd < 0.0f) {
-                if (dotProd < CRASH_THRESHOLD) {
+            if (dotProd < 0.0f)
+            {
+                if (dotProd < CRASH_THRESHOLD)
+                {
                     car->collision |= SEM_COLLISION_Z_CRASH;
                 }
 
-                if ((car->carElt->_state & RM_CAR_STATE_FINISH) == 0) {
+                if ((car->carElt->_state & RM_CAR_STATE_FINISH) == 0)
+                {
                     int deltaDamage = (int)(wheel->trkPos.seg->surface->kDammage * fabs(dotProd) * simDammageFactor[car->carElt->_skillLevel]);
                     if (deltaDamage > 1)
                     {
@@ -2913,15 +3113,15 @@ void SDASpeedDreams::SimCarCollideZ(tCar *car)
             }
         }
     }
-    car->DynGCg.pos.z += dz; //elevate car when it is slightly sinken into ground
+    car->DynGCg.pos.z += dz;  // elevate car when it is slightly sinken into ground
 }
 
 void SDASpeedDreams::RtTrackSurfaceNormalL(tTrkLocPos *p, t3Dd *norm)
 {
-    tTrkLocPos	p1;
-    t3Dd	px1, px2, py1, py2;
-    t3Dd	v1, v2;
-    tdble	lg;
+    tTrkLocPos p1;
+    t3Dd px1, px2, py1, py2;
+    t3Dd v1, v2;
+    tdble lg;
 
     p1.seg = p->seg;
 
@@ -2930,9 +3130,12 @@ void SDASpeedDreams::RtTrackSurfaceNormalL(tTrkLocPos *p, t3Dd *norm)
     RtTrackLocal2Global(&p1, &px1.x, &px1.y, TR_TORIGHT);
     px1.z = RtTrackHeightL(&p1);
 
-    if (p1.seg->type == TR_STR) {
+    if (p1.seg->type == TR_STR)
+    {
         p1.toStart = p1.seg->length;
-    } else {
+    }
+    else
+    {
         p1.toStart = p1.seg->arc;
     }
     RtTrackLocal2Global(&p1, &px2.x, &px2.y, TR_TORIGHT);
@@ -2947,7 +3150,6 @@ void SDASpeedDreams::RtTrackSurfaceNormalL(tTrkLocPos *p, t3Dd *norm)
     RtTrackLocal2Global(&p1, &py2.x, &py2.y, TR_TORIGHT);
     py2.z = RtTrackHeightL(&p1);
 
-
     v1.x = px2.x - px1.x;
     v1.y = px2.y - px1.y;
     v1.z = px2.z - px1.z;
@@ -2959,9 +3161,12 @@ void SDASpeedDreams::RtTrackSurfaceNormalL(tTrkLocPos *p, t3Dd *norm)
     norm->y = v2.x * v1.z - v1.x * v2.z;
     norm->z = v1.x * v2.y - v2.x * v1.y;
     lg = sqrt(norm->x * norm->x + norm->y * norm->y + norm->z * norm->z);
-    if (lg == 0.0) {
+    if (lg == 0.0)
+    {
         lg = 1.0f;
-    } else {
+    }
+    else
+    {
         lg = 1.0f / lg;
     }
     norm->x *= lg;
@@ -2980,31 +3185,38 @@ void SDASpeedDreams::SimCarCollideXYScene(tCar *car)
     tTrackBarrier *curBarrier;
     tdble dmg;
 
-    if (car->carElt->_state & RM_CAR_STATE_NO_SIMU) {
+    if (car->carElt->_state & RM_CAR_STATE_NO_SIMU)
+    {
         return;
     }
 
     corner = &(car->corner[0]);
-    for (i = 0; i < 4; i++, corner++) {
+    for (i = 0; i < 4; i++, corner++)
+    {
         seg = car->trkPos.seg;
         RtTrackGlobal2Local(seg, corner->pos.ax, corner->pos.ay, &trkpos, TR_LPOS_TRACK);
         seg = trkpos.seg;
         tdble toSide;
 
-        if (trkpos.toRight < 0.0) {
+        if (trkpos.toRight < 0.0)
+        {
             // collision with right border.
             curBarrier = seg->barrier[TR_SIDE_RGT];
             toSide = trkpos.toRight;
-        } else if (trkpos.toLeft < 0.0) {
+        }
+        else if (trkpos.toLeft < 0.0)
+        {
             // collision with left border.
             curBarrier = seg->barrier[TR_SIDE_LFT];
             toSide = trkpos.toLeft;
-        } else {
+        }
+        else
+        {
             continue;
         }
 
-        const tdble& nx = curBarrier->normal.x;
-        const tdble& ny = curBarrier->normal.y;
+        const tdble &nx = curBarrier->normal.x;
+        const tdble &ny = curBarrier->normal.y;
 
         car->DynGCg.pos.x -= nx * toSide;
         car->DynGCg.pos.y -= ny * toSide;
@@ -3020,10 +3232,10 @@ void SDASpeedDreams::SimCarCollideXYScene(tCar *car)
         initDotProd = nx * corner->vel.x + ny * corner->vel.y;
 
         // Compute dmgDotProd (base value for later damage) with a heuristic.
-        tdble absvel = (tdble) (MAX(1.0, sqrt(car->DynGCg.vel.x*car->DynGCg.vel.x + car->DynGCg.vel.y*car->DynGCg.vel.y)));
-        tdble GCgnormvel = car->DynGCg.vel.x*nx + car->DynGCg.vel.y*ny;
-        tdble cosa = GCgnormvel/absvel;
-        tdble dmgDotProd = GCgnormvel*cosa;
+        tdble absvel = (tdble)(MAX(1.0, sqrt(car->DynGCg.vel.x * car->DynGCg.vel.x + car->DynGCg.vel.y * car->DynGCg.vel.y)));
+        tdble GCgnormvel = car->DynGCg.vel.x * nx + car->DynGCg.vel.y * ny;
+        tdble cosa = GCgnormvel / absvel;
+        tdble dmgDotProd = GCgnormvel * cosa;
 
         dotProd = initDotProd * curBarrier->surface->kFriction;
         car->DynGCg.vel.x -= nx * dotProd;
@@ -3034,23 +3246,28 @@ void SDASpeedDreams::SimCarCollideXYScene(tCar *car)
         static tdble VELSCALE = 10.0f;
         static tdble VELMAX = 6.0f;
         car->DynGCg.vel.az -= dotprod2 * dotProd / VELSCALE;
-        if (fabs(car->DynGCg.vel.az) > VELMAX) {
-            car->DynGCg.vel.az = (tdble) (SIGN(car->DynGCg.vel.az) * VELMAX);
+        if (fabs(car->DynGCg.vel.az) > VELMAX)
+        {
+            car->DynGCg.vel.az = (tdble)(SIGN(car->DynGCg.vel.az) * VELMAX);
         }
 
         // Dammage.
         dotProd = initDotProd;
-        if (dotProd < 0.0f && (car->carElt->_state & RM_CAR_STATE_FINISH) == 0) {
-            dmg = (tdble) (curBarrier->surface->kDammage * fabs(0.5*dmgDotProd*dmgDotProd) * simDammageFactor[car->carElt->_skillLevel]);
+        if (dotProd < 0.0f && (car->carElt->_state & RM_CAR_STATE_FINISH) == 0)
+        {
+            dmg = (tdble)(curBarrier->surface->kDammage * fabs(0.5 * dmgDotProd * dmgDotProd) * simDammageFactor[car->carElt->_skillLevel]);
             car->dammage += (int)dmg;
-        } else {
+        }
+        else
+        {
             dmg = 0.0f;
         }
 
         dotProd *= curBarrier->surface->kRebound;
 
         // If the car moves toward the barrier, rebound.
-        if (dotProd < 0.0f) {
+        if (dotProd < 0.0f)
+        {
             car->collision |= SEM_COLLISION_XYSCENE;
             car->normal.x = nx * dmg;
             car->normal.y = ny * dmg;
@@ -3068,35 +3285,40 @@ void SDASpeedDreams::SimCarCollideCars(tSituation *s)
     tCarElt *carElt;
     int i;
 
-    for (i = 0; i < s->_ncars; i++) {
+    for (i = 0; i < s->_ncars; i++)
+    {
         carElt = s->cars[i];
-        if (carElt->_state & RM_CAR_STATE_NO_SIMU) {
+        if (carElt->_state & RM_CAR_STATE_NO_SIMU)
+        {
             continue;
         }
 
         car = &(SimCarTable[carElt->index]);
-        //dtSelectObject(car);
-        // Fit the bounding box around the car, statGC's are the static offsets.
-        //dtLoadIdentity();
-        //dtTranslate(-carElt->_statGC_x, -carElt->_statGC_y, 0.0f);
-        // Place the bounding box such that it fits the car in the world.
-        //dtMultMatrixf((const float *)(carElt->_posMat));
+        // dtSelectObject(car);
+        //  Fit the bounding box around the car, statGC's are the static offsets.
+        // dtLoadIdentity();
+        // dtTranslate(-carElt->_statGC_x, -carElt->_statGC_y, 0.0f);
+        //  Place the bounding box such that it fits the car in the world.
+        // dtMultMatrixf((const float *)(carElt->_posMat));
         memset(&(car->VelColl), 0, sizeof(tPosd));
     }
 
     // Running the collision detection. If no collision is detected, call dtProceed.
     // dtProceed just works if all objects are disjoint.
-    //if (dtTest() == 0) {
+    // if (dtTest() == 0) {
     //    dtProceed();
     //}
 
-    for (i = 0; i < s->_ncars; i++) {
+    for (i = 0; i < s->_ncars; i++)
+    {
         carElt = s->cars[i];
-        if (carElt->_state & RM_CAR_STATE_NO_SIMU) {
+        if (carElt->_state & RM_CAR_STATE_NO_SIMU)
+        {
             continue;
         }
         car = &(SimCarTable[carElt->index]);
-        if (car->collision & SEM_COLLISION_CAR) {
+        if (car->collision & SEM_COLLISION_CAR)
+        {
             car->DynGCg.vel.x = car->VelColl.x;
             car->DynGCg.vel.y = car->VelColl.y;
             car->DynGCg.vel.az = car->VelColl.az;
@@ -3106,8 +3328,7 @@ void SDASpeedDreams::SimCarCollideCars(tSituation *s)
 
 void SDASpeedDreams::SimCarUpdate2(tCar *car, tSituation * /* s */)
 {
-    if ((SimTelemetry == car->carElt->index)
-        || (car->ctrl->telemetryMode > 0))
+    if ((SimTelemetry == car->carElt->index) || (car->ctrl->telemetryMode > 0))
         SimTelemetryOut(car);
 }
 
