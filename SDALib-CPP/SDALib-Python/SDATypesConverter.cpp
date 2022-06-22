@@ -2580,8 +2580,8 @@ tWheel SDATypesConverter::GetCppWheelSystObject(PyObject* p_wheel)
     wheel.in = GetCppDynAxisSystObject(PyObject_GetAttrString(p_wheel, "invar"));
     wheel.feedBack = GetCppDynAxisSystObject(PyObject_GetAttrString(p_wheel, "feedBack"));
 
-    wheel.treadDepth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheel, "treadDepth")));
-    wheel.treadDepth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheel, "treadDepth")));
+    wheel.preFn = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheel, "preFn")));
+    wheel.preFt = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_wheel, "preFt")));
 
     return wheel;
 }
@@ -2917,7 +2917,7 @@ tEngineCurve SDATypesConverter::GetCppEngineCurveObject(PyObject* p_engineCurve)
     engineCurve.rpmMaxPw = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_engineCurve, "rpmMaxPw")));
     engineCurve.TqAtMaxPw = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_engineCurve, "TqAtMaxPw")));
     engineCurve.rpmMaxTq = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_engineCurve, "rpmMaxTq")));
-    engineCurve.nbPts = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_engineCurve, "nbPts")));
+    engineCurve.nbPts = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_engineCurve, "npPts")));
 
     return engineCurve;
 }

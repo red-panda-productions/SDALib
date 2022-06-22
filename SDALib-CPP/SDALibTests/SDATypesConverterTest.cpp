@@ -1379,7 +1379,7 @@ void CheckWingData(tWing p_wing, PyObject* p_wingObject)
     PyObject* Kz_orgVal = PyObject_GetAttr(p_wingObject, Kz_orgAttr);
     ASSERT_EQ(p_wing.Kz_org, static_cast<float>(PyFloat_AsDouble(Kz_orgVal)));
 
-    PyObject* angleAttr = PyUnicode_FromString("angleMax");
+    PyObject* angleAttr = PyUnicode_FromString("angle");
     PyObject* angleVal = PyObject_GetAttr(p_wingObject, angleAttr);
     ASSERT_EQ(p_wing.angle, static_cast<float>(PyFloat_AsDouble(angleVal)));
 
@@ -1627,7 +1627,7 @@ void CheckBrakeData(tBrake p_brake, PyObject* p_brakeObject)
 
     PyObject* EnableABSAttr = PyUnicode_FromString("EnableABS");
     PyObject* EnableABSVal = PyObject_GetAttr(p_brakeObject, EnableABSAttr);
-    ASSERT_EQ(p_brake.EnableABS, static_cast<bool>(EnableABSVal));
+    ASSERT_EQ(p_brake.EnableABS, static_cast<bool>(PyLong_AsLong(EnableABSVal)));
 }
 
 /// @brief checks the BrakeSyst python object corresponds to the original BrakeSyst values
@@ -2210,7 +2210,7 @@ void CheckEngineCurveData(tEngineCurve p_engineCurve, PyObject* p_engineCurveObj
     PyObject* rpmMaxTqVal = PyObject_GetAttr(p_engineCurveObject, rpmMaxTqAttr);
     ASSERT_EQ(p_engineCurve.rpmMaxTq, static_cast<float>(PyFloat_AsDouble(rpmMaxTqVal)));
 
-    PyObject* nbPtsAttr = PyUnicode_FromString("nbPts");
+    PyObject* nbPtsAttr = PyUnicode_FromString("npPts");
     PyObject* nbPtsVal = PyObject_GetAttr(p_engineCurveObject, nbPtsAttr);
     ASSERT_EQ(p_engineCurve.nbPts, static_cast<int>(PyLong_AsLong(nbPtsVal)));
 }
