@@ -58,7 +58,7 @@ jobs:
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
-      run: cmake --build .
+      run: cmake --build . --config Debug
 
     - name: Run code coverage
       working-directory: ${{github.workspace}}
