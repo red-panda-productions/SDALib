@@ -1521,6 +1521,174 @@ void CheckDemperDefData(tDamperDef p_demperDef, PyObject* p_demperDefObject)
 
 
 
+void CheckSimCarData(tCar p_car, PyObject* p_carObject)
+{
+    PyObject* preCtrlAttr = PyUnicode_FromString("preCtrl");
+    PyObject* preCtrlVal = PyObject_GetAttr(p_carObject, preCtrlAttr);
+    CheckCarCtrlData(p_car.preCtrl, preCtrlVal);
+
+    PyObject* axleAttr = PyUnicode_FromString("axle");
+    PyObject* axleVal = PyObject_GetAttr(p_carObject, axleAttr);
+    CheckAxleData(p_car.axle[0], PyTuple_GetItem(axleVal, 0));
+    CheckAxleData(p_car.axle[1], PyTuple_GetItem(axleVal, 1));
+
+    PyObject* wheelAttr = PyUnicode_FromString("wheel");
+    PyObject* wheelVal = PyObject_GetAttr(p_carObject, wheelAttr);
+    CheckWheelSystData(p_car.wheel[0], PyTuple_GetItem(wheelVal,0));
+    CheckWheelSystData(p_car.wheel[1], PyTuple_GetItem(wheelVal,1));
+    CheckWheelSystData(p_car.wheel[2], PyTuple_GetItem(wheelVal,2));
+    CheckWheelSystData(p_car.wheel[3], PyTuple_GetItem(wheelVal,3));
+
+    PyObject* steerAttr = PyUnicode_FromString("steer");
+    PyObject* steerVal = PyObject_GetAttr(p_carObject, steerAttr);
+    CheckSteerData(p_car.steer, steerVal);
+
+    PyObject* brkSystAttr = PyUnicode_FromString("brkSyst");
+    PyObject* brkSystVal = PyObject_GetAttr(p_carObject, brkSystAttr);
+    CheckBrkSystData(p_car.brkSyst, brkSystVal);
+
+    PyObject* aeroAttr = PyUnicode_FromString("aero");
+    PyObject* aeroVal = PyObject_GetAttr(p_carObject, aeroAttr);
+    CheckAeroData(p_car.aero, aeroVal);
+
+    PyObject* wingAttr = PyUnicode_FromString("wing");
+    PyObject* wingVal = PyObject_GetAttr(p_carObject, wingAttr);
+    CheckWingData(p_car.wing[0], PyTuple_GetItem(wingVal, 0));
+    CheckWingData(p_car.wing[1], PyTuple_GetItem(wingVal, 1));
+
+    PyObject* transmissionAttr = PyUnicode_FromString("transmission");
+    PyObject* transmissionVal = PyObject_GetAttr(p_carObject, transmissionAttr);
+    CheckTransMissionData(p_car.transmission, transmissionVal);
+
+    PyObject* engineAttr = PyUnicode_FromString("engine");
+    PyObject* engineVal = PyObject_GetAttr(p_carObject, engineAttr);
+    CheckEngineData(p_car.engine, engineVal);
+
+    PyObject* dimensionAttr = PyUnicode_FromString("dimension");
+    PyObject* dimensionVal = PyObject_GetAttr(p_carObject, dimensionAttr);
+    CheckVectorData(p_car.dimension.x, p_car.dimension.y, p_car.dimension.z, dimensionVal);
+
+    PyObject* massAttr = PyUnicode_FromString("mass");
+    PyObject* massVal = PyObject_GetAttr(p_carObject, massAttr);
+    ASSERT_EQ(p_car.mass, static_cast<float>(PyFloat_AsDouble(massVal)));
+
+    PyObject* MinvAttr = PyUnicode_FromString("Minv");
+    PyObject* MinvVal = PyObject_GetAttr(p_carObject, MinvAttr);
+    ASSERT_EQ(p_car.Minv, static_cast<float>(PyFloat_AsDouble(MinvVal)));
+
+    PyObject* tankAttr = PyUnicode_FromString("tank");
+    PyObject* tankVal = PyObject_GetAttr(p_carObject, tankAttr);
+    ASSERT_EQ(p_car.tank, static_cast<float>(PyFloat_AsDouble(tankVal)));
+
+    PyObject* statGCAttr = PyUnicode_FromString("statGC");
+    PyObject* statGCVal = PyObject_GetAttr(p_carObject, statGCAttr);
+    CheckVectorData(p_car.statGC.x, p_car.statGC.y, p_car.statGC.z, statGCVal);
+
+    PyObject* IinvAttr = PyUnicode_FromString("Iinv");
+    PyObject* IinvVal = PyObject_GetAttr(p_carObject, IinvAttr);
+    CheckVectorData(p_car.Iinv.x, p_car.Iinv.y, p_car.Iinv.z, IinvVal);
+
+    PyObject* fuelAttr = PyUnicode_FromString("fuel");
+    PyObject* fuelVal = PyObject_GetAttr(p_carObject, fuelAttr);
+    ASSERT_EQ(p_car.fuel, static_cast<float>(PyFloat_AsDouble(fuelVal)));
+
+    PyObject* fuel_consumptionAttr = PyUnicode_FromString("fuel_consumption");
+    PyObject* fuel_consumptionVal = PyObject_GetAttr(p_carObject, fuel_consumptionAttr);
+    ASSERT_EQ(p_car.fuel_consumption, static_cast<float>(PyFloat_AsDouble(fuel_consumptionVal)));
+
+    PyObject* fuel_prevAttr = PyUnicode_FromString("fuel_prev");
+    PyObject* fuel_prevVal = PyObject_GetAttr(p_carObject, fuel_prevAttr);
+    ASSERT_EQ(p_car.fuel_prev, static_cast<float>(PyFloat_AsDouble(fuel_prevVal)));
+
+    PyObject* fuel_timeAttr = PyUnicode_FromString("fuel_time");
+    PyObject* fuel_timeVal = PyObject_GetAttr(p_carObject, fuel_timeAttr);
+    ASSERT_EQ(p_car.fuel_time, static_cast<float>(PyFloat_AsDouble(fuel_timeVal)));
+
+    PyObject* DynGCAttr = PyUnicode_FromString("DynGC");
+    PyObject* DynGCVal = PyObject_GetAttr(p_carObject, DynGCAttr);
+    CheckDynamicPointData(p_car.DynGC, DynGCVal);
+
+    PyObject* DynGCgAttr = PyUnicode_FromString("DynGCg");
+    PyObject* DynGCgVal = PyObject_GetAttr(p_carObject, DynGCgAttr);
+    CheckDynamicPointData(p_car.DynGCg, DynGCgVal);
+
+    PyObject* VelCollAttr = PyUnicode_FromString("VelColl");
+    PyObject* VelCollVal = PyObject_GetAttr(p_carObject, VelCollAttr);
+    CheckPosDObject(p_car.VelColl, VelCollVal);
+
+    PyObject* preDynGCAttr = PyUnicode_FromString("preDynGC");
+    PyObject* preDynGCVal = PyObject_GetAttr(p_carObject, preDynGCAttr);
+    CheckDynamicPointData(p_car.preDynGC, preDynGCVal);
+
+    PyObject* trkPosAttr = PyUnicode_FromString("trkPos");
+    PyObject* trkPosVal = PyObject_GetAttr(p_carObject, trkPosAttr);
+    CheckTrackLocationData(p_car.trkPos, trkPosVal);
+
+    PyObject* airSpeed2Attr = PyUnicode_FromString("airSpeed2");
+    PyObject* airSpeed2Val = PyObject_GetAttr(p_carObject, airSpeed2Attr);
+    ASSERT_EQ(p_car.airSpeed2, static_cast<float>(PyFloat_AsDouble(airSpeed2Val)));
+
+    PyObject* CoszAttr = PyUnicode_FromString("Cosz");
+    PyObject* CoszVal = PyObject_GetAttr(p_carObject, CoszAttr);
+    ASSERT_EQ(p_car.Cosz, static_cast<float>(PyFloat_AsDouble(CoszVal)));
+
+    PyObject* SinzAttr = PyUnicode_FromString("Sinz");
+    PyObject* SinzVal = PyObject_GetAttr(p_carObject, SinzAttr);
+    ASSERT_EQ(p_car.Sinz, static_cast<float>(PyFloat_AsDouble(SinzVal)));
+
+    PyObject* cornerAttr = PyUnicode_FromString("corner");
+    PyObject* cornerVal = PyObject_GetAttr(p_carObject, cornerAttr);
+    CheckDynamicPointData(p_car.corner[0], PyTuple_GetItem(cornerVal, 0));
+    CheckDynamicPointData(p_car.corner[1], PyTuple_GetItem(cornerVal, 1));
+    CheckDynamicPointData(p_car.corner[2], PyTuple_GetItem(cornerVal, 2));
+    CheckDynamicPointData(p_car.corner[3], PyTuple_GetItem(cornerVal, 3));
+
+    PyObject* collisionAttr = PyUnicode_FromString("collision");
+    PyObject* collisionVal = PyObject_GetAttr(p_carObject, collisionAttr);
+    ASSERT_EQ(p_car.collision, static_cast<int>(PyLong_AsLong(collisionVal)));
+
+    PyObject* normalAttr = PyUnicode_FromString("normal");
+    PyObject* normalVal = PyObject_GetAttr(p_carObject, normalAttr);
+    CheckVectorData(p_car.normal.x, p_car.normal.y, p_car.normal.z, normalVal);
+
+    PyObject* collposAttr = PyUnicode_FromString("collpos");
+    PyObject* collposVal = PyObject_GetAttr(p_carObject, collposAttr);
+    CheckVectorData(p_car.collpos.x, p_car.collpos.y, p_car.collpos.z, collposVal);
+
+    PyObject* wheelbaseAttr = PyUnicode_FromString("wheelbase");
+    PyObject* wheelbaseVal = PyObject_GetAttr(p_carObject, wheelbaseAttr);
+    ASSERT_EQ(p_car.wheelbase, static_cast<float>(PyFloat_AsDouble(wheelbaseVal)));
+
+    PyObject* wheeltrackAttr = PyUnicode_FromString("wheeltrack");
+    PyObject* wheeltrackVal = PyObject_GetAttr(p_carObject, wheeltrackAttr);
+    ASSERT_EQ(p_car.wheeltrack, static_cast<float>(PyFloat_AsDouble(wheeltrackVal)));
+
+    PyObject* posMatAttr = PyUnicode_FromString("posMat");
+    PyObject* posMatVal = PyObject_GetAttr(p_carObject, posMatAttr);
+    CheckMatrixData(p_car.posMat, posMatVal);
+
+    PyObject* blockedAttr = PyUnicode_FromString("blocked");
+    PyObject* blockedVal = PyObject_GetAttr(p_carObject, blockedAttr);
+    ASSERT_EQ(p_car.blocked, static_cast<int>(PyLong_AsLong(blockedVal)));
+
+    PyObject* dammageAttr = PyUnicode_FromString("dammage");
+    PyObject* dammageVal = PyObject_GetAttr(p_carObject, dammageAttr);
+    ASSERT_EQ(p_car.dammage, static_cast<int>(PyLong_AsLong(dammageVal)));
+
+    PyObject* featuresAttr = PyUnicode_FromString("features");
+    PyObject* featuresVal = PyObject_GetAttr(p_carObject, featuresAttr);
+    ASSERT_EQ(p_car.features, static_cast<int>(PyLong_AsLong(featuresVal)));
+
+    PyObject* restPosAttr = PyUnicode_FromString("restPos");
+    PyObject* restPosVal = PyObject_GetAttr(p_carObject, restPosAttr);
+    CheckDynamicPointData(p_car.restPos, restPosVal);
+    
+    PyObject* collisionAwareAttr = PyUnicode_FromString("collisionAware");
+    PyObject* collisionAwareVal = PyObject_GetAttr(p_carObject, collisionAwareAttr);
+    ASSERT_EQ(p_car.collisionAware, static_cast<float>(PyFloat_AsDouble(collisionAwareVal)));
+}
+
+
 /// @brief tests the sda data c++ data correctly translated to python and back
 TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
 {
