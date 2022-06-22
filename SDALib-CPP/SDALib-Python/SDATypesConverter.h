@@ -156,9 +156,25 @@ public:
     tWheel GetCppWheelSystObject(PyObject* p_wheel);
     void SetPythonWheelSystObject(PyObject* p_target, PyObject* p_data);
 
+    PyObject* GetPythonGearBoxObject(tGearbox& p_gearBox);
+    tGearbox GetCppGearBoxObject(PyObject* p_gearBox);
+    void SetPythonGearBoxObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonClutchObject(tClutch& p_clutch);
+    tClutch GetCppClutchObject(PyObject* p_clutch);
+    void SetPythonClutchObject(PyObject* p_target, PyObject* p_data);
+
     PyObject* GetPythonTransmissionSystObject(tTransmission& p_transmission);
     tTransmission GetCppTransmissionSystObject(PyObject* p_transmission);
     void SetPythonTransmissionSystObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonEngineCurveElemObject(tEngineCurveElem& p_engineCurveElem);
+    tEngineCurveElem GetCppEngineCurveElemObject(PyObject* p_engineCurveElem);
+    void SetPythonEngineCurveElemObject(PyObject* p_target, PyObject* p_data);
+
+    PyObject* GetPythonEngineCurveObject(tEngineCurve& p_engineCurve);
+    tEngineCurve GetCppEngineCurveObject(PyObject* p_engineCurve);
+    void SetPythonEngineCurveObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonEngineSystObject(tEngine& p_engine);
     tEngine GetCppEngineSystObject(PyObject* p_engine);
@@ -176,7 +192,8 @@ public:
         *m_privCarClass, *m_posDClass, *m_collisionStateClass, *m_carCtrlClass, *m_carSetupClass, *m_carSetupItemClass,
         *m_carPitCmdClass, *m_situationClass, *m_raceInfoClass, *m_vectorClass, *m_aeroClass, *m_wingClass, *m_damperDefClass,
         *m_damperClass, *m_springClass, *m_suspensionClass, *m_brakeClass, *m_brakeSystClass, *m_dynAxisClass, *m_differentialClass,
-        *m_axleClass, *m_steerClass, *m_wheelClass;
+        *m_axleClass, *m_steerClass, *m_wheelClass, *m_gearBoxClass, *m_clutchClass, *m_transmissionClass, *m_engineCurveElemClass,
+        *m_engineCurveClass, *m_engineClass, *m_simCarClass;
 
     void FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetupArray[], tCarSetupItem* p_carSetupItems);
 

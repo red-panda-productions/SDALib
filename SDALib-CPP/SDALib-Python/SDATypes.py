@@ -648,7 +648,7 @@ class Transmission:
         self.freeI = [freeI1, freeI2, freeI3, freeI4, freeI5, freeI6, freeI7, freeI8, freeI9, freeI10] #float[10]
         self.gearEff = [gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6, gearEff7, gearEff8, gearEff9, gearEff10] #float[10]
         self.currI = currI #float
-        self.differential = [differential1, differential2, differential3] #float[3]
+        self.differential = [differential1, differential2, differential3] #differential[3]
 
 
 class EngineCurveElem:
@@ -694,7 +694,7 @@ class SimCar:
                  engine, dimension, mass, Minv, tank, statGC, Iinv, fuel, fuel_consumption, fuel_prev, fuel_time, DynGC, DynGCg,
                  VelColl, preDynGC,  trkPos, airSpeed2, Cosz, Sinz, corner1, corner2, corner3, corner4, collision, normal, collpos,
                  wheelbase, wheeltrack, posMat1, posMat2, posMat3, posMat4, posMat5, posMat6, posMat7, posMat8, posMat9, posMat10, 
-                 posMat11, posMat12, posMat13, posMat14, posMat15, posMat16, shape, blocked, dammage, features, restPos, collisionAware):
+                 posMat11, posMat12, posMat13, posMat14, posMat15, posMat16, blocked, dammage, features, restPos, collisionAware):
         self.preCtrl = preCtrl #CarCtrl
         self.axle = [axle1, axle2] #Axle[2]
         self.wheel = [wheel1, wheel2, wheel3, wheel4] #Wheel[4]
@@ -730,7 +730,6 @@ class SimCar:
         self.wheeltrack = wheeltrack #float
         self.posMat = [[posMat1, posMat2, posMat3, posMat4], [posMat5, posMat6, posMat7, posMat8],
                        [posMat9, posMat10, posMat11, posMat12], [posMat13, posMat14, posMat15, posMat16]]  # float[][]
-        self.shape = shape #DtShapeRef?? seems like inheritance or smthing
         self.blocked = blocked #int
         self.dammage = dammage #int
         self.features = features #int

@@ -1355,6 +1355,7 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
         TestSegments segments = GenerateSegments();
         sdaData.TickCount = random.NextUInt();
         sdaData.Car = GenerateCar(segments);
+        sdaData.SimCar = GenerateSimCar(sdaData.Car);
         sdaData.Situation = GenerateSituation();
 
         // checks the data is correctly translated from SDAData to PyObject
@@ -1369,6 +1370,7 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
         TestSegments newSegments = GenerateSegments();
         newSDAData.TickCount = random.NextUInt();
         newSDAData.Car = GenerateCar(newSegments);
+        newSDAData.SimCar = GenerateSimCar(newSDAData.Car);
         newSDAData.Situation = GenerateSituation();
 
         PyObject* newSDADataObject = converter.GetPythonSDATypeObject(newSDAData);

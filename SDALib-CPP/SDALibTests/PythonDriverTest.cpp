@@ -72,7 +72,6 @@ TEST(PythonDriverTests, SDASpeedDreamsTest)
     sdaData.TickCount = random.NextUInt();
     sdaData.Car = GenerateCar(segments);
     sdaData.Situation = GenerateSituation();
-    sdaData.Situation.raceInfo.ncars = 1;
     sdaData.SimCar = GenerateSimCar(sdaData.Car);
 
     SDAAction sdaAction;

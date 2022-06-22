@@ -597,7 +597,7 @@ tSituation GenerateSituation()
 {
     Random random;
     tSituation situation{};
-    situation.raceInfo.ncars = 0;
+    situation.raceInfo.ncars = 1;
     situation.raceInfo.totLaps = random.NextInt();
     situation.raceInfo.extraLaps = random.NextInt();
     situation.raceInfo.totTime = random.NextFloat();
@@ -756,5 +756,10 @@ tCar GenerateSimCar(tCarElt& p_car)
     car.ctrl = &p_car.ctrl;
     car.carElt = &p_car;
     car.trkPos = p_car.pub.trkPos;
+
+    for(int i = 0; i < 4; i++)
+    {
+        car.wheel[i].trkPos = p_car.pub.trkPos;
+    }
     return car;
 }
