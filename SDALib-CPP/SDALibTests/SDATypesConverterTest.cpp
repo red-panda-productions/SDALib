@@ -1511,7 +1511,7 @@ void CheckDemperDefData(tDamperDef p_demperDef, PyObject* p_demperDefObject)
 /// @param  p_demperObject The python Demper object
 void CheckDemperData(tDamper p_demper, PyObject* p_demperObject)
 {
-    PyObject* bumpAttr = PyUnicode_FromString("bump");
+    PyObject* bumpAttr = PyUnicode_FromString("bumb");
     PyObject* bumpVal = PyObject_GetAttr(p_demperObject, bumpAttr);
     CheckDemperDefData(p_demper.bump, bumpVal);
 
@@ -1743,11 +1743,11 @@ void CheckAxleData(tAxle p_axle, PyObject* p_axleObject)
 
     PyObject* arbSuspAttr = PyUnicode_FromString("arbSusparbSusp");
     PyObject* arbSuspVal = PyObject_GetAttr(p_axleObject, arbSuspAttr);
-    //CheckSuspensionData(p_axle.arbSusparbSusp, arbSuspVal);
+    CheckSuspensionData(p_axle.arbSusp, arbSuspVal);
 
     PyObject* heaveSuspAttr = PyUnicode_FromString("heaveSusp");
     PyObject* heaveSuspVal = PyObject_GetAttr(p_axleObject, heaveSuspAttr);
-    //CheckSuspensionData(p_axle.heaveSusp, heaveSuspVal);
+    CheckSuspensionData(p_axle.heaveSusp, heaveSuspVal);
 
     PyObject* wheight0Attr = PyUnicode_FromString("wheight0");
     PyObject* wheight0Val = PyObject_GetAttr(p_axleObject, wheight0Attr);
@@ -1785,7 +1785,7 @@ void CheckWheelSystData(tWheel p_wheelSyst, PyObject* p_wheelSystObject)
 {
     PyObject* suspAttr = PyUnicode_FromString("susp");
     PyObject* suspVal = PyObject_GetAttr(p_wheelSystObject, suspAttr);
-    //CheckSuspensionData(p_wheelSyst.susp, suspVal);
+    CheckSuspensionData(p_wheelSyst.susp, suspVal);
 
     PyObject* brakeAttr = PyUnicode_FromString("brake");
     PyObject* brakeVal = PyObject_GetAttr(p_wheelSystObject, brakeAttr);
