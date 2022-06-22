@@ -66,6 +66,8 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData& p_data, SDAAction& p_acti
         elapsed += RCM_MAX_DT_SIMU;
     }
 
+    data.SimCar = SimCarTable[0];
+
     return data;
 
 }
