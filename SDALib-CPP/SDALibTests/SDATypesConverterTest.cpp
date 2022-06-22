@@ -1324,24 +1324,6 @@ void CheckCarData(tCarElt& p_car, PyObject* p_carObject)
     CheckCarPitCmdData(p_car.pitcmd, pitcmdVal);
 }
 
-/// @brief checks the sda data python object corresponds to the original sda data values
-/// @param  p_data The original sda data value
-/// @param  p_dataObject The python sda data object
-void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
-{
-    PyObject* tickAttr = PyUnicode_FromString("tickCount");
-    PyObject* tickVal = PyObject_GetAttr(p_dataObject, tickAttr);
-    ASSERT_TRUE(p_data.TickCount == static_cast<unsigned long>(PyLong_AsLong(tickVal)));
-
-    PyObject* carAttr = PyUnicode_FromString("car");
-    PyObject* carVal = PyObject_GetAttr(p_dataObject, carAttr);
-    CheckCarData(p_data.Car, carVal);
-
-    PyObject* situationAttr = PyUnicode_FromString("situation");
-    PyObject* situationVal = PyObject_GetAttr(p_dataObject, situationAttr);
-    CheckSituationData(p_data.Situation, situationVal);
-}
-
 /// @brief checks the aero python object corresponds to the original aero values
 /// @param  p_aero The original aero value
 /// @param  p_aeroObject The python aero object
@@ -1352,12 +1334,12 @@ void CheckAeroData(tAero p_aero, PyObject* p_aeroObject)
     ASSERT_EQ(p_aero.drag, static_cast<float>(PyFloat_AsDouble(dragVal)));
 
     PyObject* liftAttr = PyUnicode_FromString("lift");
-    PyObject* liftVal = PyObject_GetAttr(p_aeroObject, liftAttr);
+    PyObject* liftVal = PyList_AsTuple(PyObject_GetAttr(p_aeroObject, liftAttr));
     ASSERT_EQ(p_aero.lift[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftVal, 0))));
     ASSERT_EQ(p_aero.lift[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftVal, 1))));
 
     PyObject* CliftAttr = PyUnicode_FromString("Clift");
-    PyObject* CliftVal = PyObject_GetAttr(p_aeroObject, CliftAttr);
+    PyObject* CliftVal = PyList_AsTuple(PyObject_GetAttr(p_aeroObject, CliftAttr));
     ASSERT_EQ(p_aero.Clift[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(CliftVal, 0))));
     ASSERT_EQ(p_aero.Clift[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(CliftVal, 1))));
 
@@ -1753,7 +1735,7 @@ void CheckAxleData(tAxle p_axle, PyObject* p_axleObject)
     PyObject* xposVal = PyObject_GetAttr(p_axleObject, xposAttr);
     ASSERT_EQ(p_axle.xpos, static_cast<float>(PyFloat_AsDouble(xposVal)));
 
-    PyObject* arbSuspAttr = PyUnicode_FromString("arbSuspSusp");
+    PyObject* arbSuspAttr = PyUnicode_FromString("arbSusparbSusp");
     PyObject* arbSuspVal = PyObject_GetAttr(p_axleObject, arbSuspAttr);
     CheckSuspensionData(p_axle.heaveSusp, arbSuspVal);
 
@@ -1766,7 +1748,7 @@ void CheckAxleData(tAxle p_axle, PyObject* p_axleObject)
     ASSERT_EQ(p_axle.wheight0, static_cast<float>(PyFloat_AsDouble(wheight0Val)));
 
     PyObject* forceAttr = PyUnicode_FromString("force");
-    PyObject* forceVal = PyObject_GetAttr(p_axleObject, forceAttr);
+    PyObject* forceVal = PyList_AsTuple(PyObject_GetAttr(p_axleObject, forceAttr));
     ASSERT_EQ(p_axle.force[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(forceVal, 0))));
     ASSERT_EQ(p_axle.force[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(forceVal, 1))));
 
@@ -2012,12 +1994,12 @@ void CheckWheelSystData(tWheel p_wheelSyst, PyObject* p_wheelSystObject)
     CheckDynAxisData(p_wheelSyst.in, invarVal);
 
     PyObject* muTDmultAttr = PyUnicode_FromString("muTDmult");
-    PyObject* muTDmultVal = PyObject_GetAttr(p_wheelSystObject, muTDmultAttr);
+    PyObject* muTDmultVal = PyList_AsTuple(PyObject_GetAttr(p_wheelSystObject, muTDmultAttr));
     ASSERT_EQ(p_wheelSyst.muTDmult[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDmultVal, 0))));
     ASSERT_EQ(p_wheelSyst.muTDmult[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDmultVal, 1))));
 
     PyObject* muTDoffsetAttr = PyUnicode_FromString("muTDoffset");
-    PyObject* muTDoffsetVal = PyObject_GetAttr(p_wheelSystObject, muTDoffsetAttr);
+    PyObject* muTDoffsetVal = PyList_AsTuple(PyObject_GetAttr(p_wheelSystObject, muTDoffsetAttr));
     ASSERT_EQ(p_wheelSyst.muTDoffset[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDoffsetVal, 0))));
     ASSERT_EQ(p_wheelSyst.muTDoffset[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDoffsetVal, 1))));
 
@@ -2104,7 +2086,7 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     CheckClutchData(p_transmission.clutch, clutchVal);
 
     PyObject* overallRatioAttr = PyUnicode_FromString("overallRatio");
-    PyObject* overallRatioVal = PyObject_GetAttr(p_transmissionObject, overallRatioAttr);
+    PyObject* overallRatioVal = PyList_AsTuple(PyObject_GetAttr(p_transmissionObject, overallRatioAttr));
     ASSERT_EQ(p_transmission.overallRatio[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(overallRatioVal, 0))));
     ASSERT_EQ(p_transmission.overallRatio[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(overallRatioVal, 1))));
     ASSERT_EQ(p_transmission.overallRatio[2], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(overallRatioVal, 2))));
@@ -2117,7 +2099,7 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     ASSERT_EQ(p_transmission.overallRatio[9], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(overallRatioVal, 9))));
 
     PyObject* gearIAttr = PyUnicode_FromString("gearI");
-    PyObject* gearIVal = PyObject_GetAttr(p_transmissionObject, gearIAttr);
+    PyObject* gearIVal = PyList_AsTuple(PyObject_GetAttr(p_transmissionObject, gearIAttr));
     ASSERT_EQ(p_transmission.gearI[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 0))));
     ASSERT_EQ(p_transmission.gearI[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 1))));
     ASSERT_EQ(p_transmission.gearI[2], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 2))));
@@ -2130,7 +2112,7 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     ASSERT_EQ(p_transmission.gearI[9], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 9))));
 
     PyObject* driveIAttr = PyUnicode_FromString("driveI");
-    PyObject* driveIVal = PyObject_GetAttr(p_transmissionObject, driveIAttr);
+    PyObject* driveIVal = PyList_AsTuple(PyObject_GetAttr(p_transmissionObject, driveIAttr));
     ASSERT_EQ(p_transmission.driveI[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 0))));
     ASSERT_EQ(p_transmission.driveI[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 1))));
     ASSERT_EQ(p_transmission.driveI[2], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 2))));
@@ -2143,7 +2125,7 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     ASSERT_EQ(p_transmission.driveI[9], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 9))));
 
     PyObject* freeIAttr = PyUnicode_FromString("freeI");
-    PyObject* freeIVal = PyObject_GetAttr(p_transmissionObject, freeIAttr);
+    PyObject* freeIVal = PyList_AsTuple(PyObject_GetAttr(p_transmissionObject, freeIAttr));
     ASSERT_EQ(p_transmission.freeI[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 0))));
     ASSERT_EQ(p_transmission.freeI[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 1))));
     ASSERT_EQ(p_transmission.freeI[2], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 2))));
@@ -2156,7 +2138,7 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     ASSERT_EQ(p_transmission.freeI[9], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 9))));
 
     PyObject* gearEffAttr = PyUnicode_FromString("gearEff");
-    PyObject* gearEffVal = PyObject_GetAttr(p_transmissionObject, gearEffAttr);
+    PyObject* gearEffVal = PyList_AsTuple(PyObject_GetAttr(p_transmissionObject, gearEffAttr));
     ASSERT_EQ(p_transmission.gearEff[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 0))));
     ASSERT_EQ(p_transmission.gearEff[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 1))));
     ASSERT_EQ(p_transmission.gearEff[2], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 2))));
@@ -2173,7 +2155,7 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     ASSERT_EQ(p_transmission.curI, static_cast<float>(PyFloat_AsDouble(currIVal)));
 
     PyObject* differentialAttr = PyUnicode_FromString("differential");
-    PyObject* differentialVal = PyObject_GetAttr(p_transmissionObject, differentialAttr);
+    PyObject* differentialVal = PyList_AsTuple(PyObject_GetAttr(p_transmissionObject, differentialAttr));
     CheckDifferentialData(p_transmission.differential[0], PyTuple_GetItem(differentialVal, 0));
     CheckDifferentialData(p_transmission.differential[1], PyTuple_GetItem(differentialVal, 1));
     CheckDifferentialData(p_transmission.differential[2], PyTuple_GetItem(differentialVal, 2));
@@ -2316,12 +2298,12 @@ void CheckSimCarData(tCar p_car, PyObject* p_carObject)
     CheckCarCtrlData(p_car.preCtrl, preCtrlVal);
 
     PyObject* axleAttr = PyUnicode_FromString("axle");
-    PyObject* axleVal = PyObject_GetAttr(p_carObject, axleAttr);
+    PyObject* axleVal = PyList_AsTuple(PyObject_GetAttr(p_carObject, axleAttr));
     CheckAxleData(p_car.axle[0], PyTuple_GetItem(axleVal, 0));
     CheckAxleData(p_car.axle[1], PyTuple_GetItem(axleVal, 1));
 
     PyObject* wheelAttr = PyUnicode_FromString("wheel");
-    PyObject* wheelVal = PyObject_GetAttr(p_carObject, wheelAttr);
+    PyObject* wheelVal = PyList_AsTuple(PyObject_GetAttr(p_carObject, wheelAttr));
     CheckWheelSystData(p_car.wheel[0], PyTuple_GetItem(wheelVal, 0));
     CheckWheelSystData(p_car.wheel[1], PyTuple_GetItem(wheelVal, 1));
     CheckWheelSystData(p_car.wheel[2], PyTuple_GetItem(wheelVal, 2));
@@ -2340,7 +2322,7 @@ void CheckSimCarData(tCar p_car, PyObject* p_carObject)
     CheckAeroData(p_car.aero, aeroVal);
 
     PyObject* wingAttr = PyUnicode_FromString("wing");
-    PyObject* wingVal = PyObject_GetAttr(p_carObject, wingAttr);
+    PyObject* wingVal = PyList_AsTuple(PyObject_GetAttr(p_carObject, wingAttr));
     CheckWingData(p_car.wing[0], PyTuple_GetItem(wingVal, 0));
     CheckWingData(p_car.wing[1], PyTuple_GetItem(wingVal, 1));
 
@@ -2425,7 +2407,7 @@ void CheckSimCarData(tCar p_car, PyObject* p_carObject)
     ASSERT_EQ(p_car.Sinz, static_cast<float>(PyFloat_AsDouble(SinzVal)));
 
     PyObject* cornerAttr = PyUnicode_FromString("corner");
-    PyObject* cornerVal = PyObject_GetAttr(p_carObject, cornerAttr);
+    PyObject* cornerVal = PyList_AsTuple(PyObject_GetAttr(p_carObject, cornerAttr));
     CheckDynamicPointData(p_car.corner[0], PyTuple_GetItem(cornerVal, 0));
     CheckDynamicPointData(p_car.corner[1], PyTuple_GetItem(cornerVal, 1));
     CheckDynamicPointData(p_car.corner[2], PyTuple_GetItem(cornerVal, 2));
@@ -2474,6 +2456,28 @@ void CheckSimCarData(tCar p_car, PyObject* p_carObject)
     PyObject* collisionAwareAttr = PyUnicode_FromString("collisionAware");
     PyObject* collisionAwareVal = PyObject_GetAttr(p_carObject, collisionAwareAttr);
     ASSERT_EQ(p_car.collisionAware, static_cast<float>(PyFloat_AsDouble(collisionAwareVal)));
+}
+
+/// @brief checks the sda data python object corresponds to the original sda data values
+/// @param  p_data The original sda data value
+/// @param  p_dataObject The python sda data object
+void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
+{
+    PyObject* tickAttr = PyUnicode_FromString("tickCount");
+    PyObject* tickVal = PyObject_GetAttr(p_dataObject, tickAttr);
+    ASSERT_TRUE(p_data.TickCount == static_cast<unsigned long>(PyLong_AsLong(tickVal)));
+
+    PyObject* carAttr = PyUnicode_FromString("car");
+    PyObject* carVal = PyObject_GetAttr(p_dataObject, carAttr);
+    CheckCarData(p_data.Car, carVal);
+
+    PyObject* situationAttr = PyUnicode_FromString("situation");
+    PyObject* situationVal = PyObject_GetAttr(p_dataObject, situationAttr);
+    CheckSituationData(p_data.Situation, situationVal);
+
+    PyObject* simCarAttr = PyUnicode_FromString("simCar");
+    PyObject* simCarVal = PyObject_GetAttr(p_dataObject, simCarAttr);
+    CheckSimCarData(p_data.SimCar, simCarVal);
 }
 
 /// @brief tests the sda data c++ data correctly translated to python and back

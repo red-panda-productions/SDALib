@@ -209,6 +209,7 @@ SDAData SDATypesConverter::GetCppSDAData(PyObject *p_data)
     return data;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSDATypeObject(PyObject *p_target, PyObject *p_data)
 {
     SetPythonCarObject(PyObject_GetAttrString(p_target, "car"), PyObject_GetAttrString(p_data, "car"));
@@ -258,6 +259,7 @@ tCarElt SDATypesConverter::GetCppCarObject(PyObject *p_car)
     return car;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarObject(PyObject *p_target, PyObject *p_data)
 {
     COPY_PYTHON_OBJECT(p_target, p_data, "index");
@@ -360,6 +362,7 @@ tInitCar SDATypesConverter::GetCppCarInitObject(PyObject *p_initCar)
     return initCar;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarInitObject(PyObject *p_target, PyObject *p_data)
 {
     const char* attributeList[16]{"name", "sName","codename","teamName","carName","category","raceNumber",
@@ -416,6 +419,7 @@ tWheelSpec SDATypesConverter::GetCppWheelSpecificationObject(PyObject *p_wheelSp
     return wheelSpec;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonWheelSpecificationObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[5]{"rimRadius", "tireHeight", "tireWidth", "brakeDiskRadius", "wheelRadius"};
@@ -461,6 +465,7 @@ tVisualAttributes SDATypesConverter::GetCppVisualAttributesObject(PyObject *p_vi
     return visualAttributes;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonVisualAttributesObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[2]{"exhaustNb", "exhaustPower"};
@@ -551,6 +556,7 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
     return publicCar;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarPublicObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[2]{"speed", "state"};
@@ -605,6 +611,7 @@ tDynPt SDATypesConverter::GetCppDynamicPointObject(PyObject *p_dynPt)
     return dynPt;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDynamicPointObject(PyObject* p_target, PyObject* p_data)
 {
     SetPythonPosDObject(PyObject_GetAttrString(p_target, "pos"), PyObject_GetAttrString(p_data, "pos"));
@@ -650,6 +657,7 @@ tTrkLocPos SDATypesConverter::GetCppTrackLocationObject(PyObject *p_trackLoc)
     return trackLocPos;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonTrackLocationObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[5]{"type", "toStart", "toRight", "toMiddle", "toLeft"};
@@ -767,6 +775,7 @@ tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
     return segment;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonTrackSegmentObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[24]{"id", "type", "type2", "style", "length", "time", "width", "startWidth", "endWidth", "lgFromStart", "radius", "radiusR",
@@ -860,6 +869,7 @@ tCarRaceInfo SDATypesConverter::GetCppCarRaceInfoObject(PyObject *p_carRaceInfo)
     return carRaceInfo;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarRaceInfoObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[27]{"bestLapTime", "commitBestLapTime", "deltaBestLapTime", "curLapTime",
@@ -1028,6 +1038,7 @@ tPrivCar SDATypesConverter::GetCppCarPrivObject(PyObject *p_privCar)
     return privCar;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarPrivObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[29]{"driverIndex", "moduleIndex", "modName",  "gear", "gearNext", "fuel",
@@ -1092,6 +1103,7 @@ tPosd SDATypesConverter::GetCppPosDObject(PyObject *p_posD)
     return posD;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonPosDObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[7]{"x", "y", "z", "xy", "ax", "ay", "az"};
@@ -1132,6 +1144,7 @@ tCollisionState SDATypesConverter::GetCppCollisionStateObject(PyObject *p_collis
     return collisionState;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCollisionStateObject(PyObject* p_target, PyObject* p_data)
 {
     COPY_PYTHON_OBJECT(p_target, p_data, "collisionCount");
@@ -1183,6 +1196,7 @@ t3Dd SDATypesConverter::GetCppTVectorObject(PyObject *p_vec)
     return vec;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonVectorObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[3]{"x", "y", "z"};
@@ -1277,6 +1291,7 @@ tCarCtrl SDATypesConverter::GetCppCarCtrlObject(PyObject *p_carCtrl)
     return carCtrl;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarCtrlObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[20]{"steer", "accelCmd", "brakeCmd", "clutchCmd", "brakeFrontLeftCmd", "brakeFrontRightCmd", "brakeRearLeftCmd",
@@ -1595,7 +1610,7 @@ tCarSetup SDATypesConverter::GetCppCarSetupObject(PyObject *p_carSetup)
     return carSetup;
 }
 
-
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarSetupObject(PyObject* p_target, PyObject* p_data)
 {
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "wingAngle", 2);
@@ -1686,6 +1701,7 @@ tCarSetupItem SDATypesConverter::GetCppCarSetupItemObject(PyObject *p_carSetupIt
     return carSetupItem;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarSetupItemObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[6]{"value", "min", "max", "desiredValue", "stepSize", "changed"};
@@ -1727,6 +1743,7 @@ tCarPitCmd SDATypesConverter::GetCppCarPitCmdObject(PyObject *p_carPitCmd)
     return carPitCmd;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarPitCmdObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[5]{"fuel", "repair", "stopType", "setupChanged", "tireChange"};
@@ -1769,6 +1786,7 @@ tSituation SDATypesConverter::GetCppSituationObject(PyObject *p_situation)
     return situation;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSituationObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[4]{"deltaTime", "currentTime", "accelTime", "nbPlayers"};
@@ -1821,6 +1839,7 @@ tRaceAdmInfo SDATypesConverter::GetCppRaceInfoObject(PyObject *p_raceInfo)
     return raceAdmInfo;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonRaceInfoObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[9]{"ncars", "totLaps", "extraLaps", "totTime", "state", "type", "maxDamage", "fps", "features"};
@@ -1851,6 +1870,7 @@ PyObject *SDATypesConverter::GetObjectFromArgs(PyObject *p_classInit, PyObject *
     return objectInit;
 }
 
+///@brief replaces the characters in a string
 void SDATypesConverter::ReplaceString(char *p_toFill, const char *p_data, int p_length)
 {
     for (int i = 0; i < p_length; i++)
@@ -1859,6 +1879,7 @@ void SDATypesConverter::ReplaceString(char *p_toFill, const char *p_data, int p_
     }
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonAeroObject(tAero& p_aero)
 {
     const int size = 7;
@@ -1877,6 +1898,7 @@ PyObject* SDATypesConverter::GetPythonAeroObject(tAero& p_aero)
     return aero;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tAero SDATypesConverter::GetCppAeroObject(PyObject* p_aero)
 {
     tAero aero;
@@ -1897,6 +1919,7 @@ tAero SDATypesConverter::GetCppAeroObject(PyObject* p_aero)
     return aero;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonAeroObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[3]{"drag", "Cd", "CdBody"};
@@ -1905,6 +1928,7 @@ void SDATypesConverter::SetPythonAeroObject(PyObject* p_target, PyObject* p_data
     COPY_PYTHON_ARRAY(p_target, p_data, "Clift", 2);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonWingObject(tWing& p_wing)
 {
     const int size = 29;
@@ -1945,6 +1969,7 @@ PyObject* SDATypesConverter::GetPythonWingObject(tWing& p_wing)
     return aero;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tWing SDATypesConverter::GetCppWingObject(PyObject* p_wing)
 {
     tWing wing;
@@ -1982,6 +2007,7 @@ tWing SDATypesConverter::GetCppWingObject(PyObject* p_wing)
     return wing;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonWingObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[27]{  "Kx", "Kz", "Kz_org", "angle", "AoAatMax", "AoAatZero", "AoAatZRad",
@@ -1995,6 +2021,7 @@ void SDATypesConverter::SetPythonWingObject(PyObject* p_target, PyObject* p_data
 
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonDamperDefObject(tDamperDef& p_damperDef)
 {
     const int size = 5;
@@ -2011,6 +2038,7 @@ PyObject* SDATypesConverter::GetPythonDamperDefObject(tDamperDef& p_damperDef)
     return damperDef;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tDamperDef SDATypesConverter::GetCppDamperDefObject(PyObject* p_damperDef)
 {
     tDamperDef damperDef;
@@ -2024,12 +2052,14 @@ tDamperDef SDATypesConverter::GetCppDamperDefObject(PyObject* p_damperDef)
     return damperDef;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDamperDefObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[5]{ "C1", "b1", "v1", "C2", "b2"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonDamperObject(tDamper& p_damper)
 {
     const int size = 2;
@@ -2043,6 +2073,7 @@ PyObject* SDATypesConverter::GetPythonDamperObject(tDamper& p_damper)
     return damper;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tDamper SDATypesConverter::GetCppDamperObject(PyObject* p_damper)
 {
     tDamper damper;
@@ -2053,12 +2084,14 @@ tDamper SDATypesConverter::GetCppDamperObject(PyObject* p_damper)
     return damper;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDamperObject(PyObject* p_target, PyObject* p_data)
 {
     SetPythonDamperDefObject(PyObject_GetAttrString(p_target, "bumb"), PyObject_GetAttrString(p_data, "bumb"));
     SetPythonDamperDefObject(PyObject_GetAttrString(p_target, "rebound"), PyObject_GetAttrString(p_data, "rebound"));
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonSpringObject(tSpring& p_spring)
 {
     const int size = 6;
@@ -2075,6 +2108,8 @@ PyObject* SDATypesConverter::GetPythonSpringObject(tSpring& p_spring)
 
     return spring;
 }
+
+/// @brief gets the Cpp struct of the Python object
 tSpring SDATypesConverter::GetCppSpringObject(PyObject* p_spring)
 {
     tSpring spring;
@@ -2089,12 +2124,14 @@ tSpring SDATypesConverter::GetCppSpringObject(PyObject* p_spring)
     return spring;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSpringObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[6]{ "K", "F0", "x0", "xMax", "bellcrank", "packers"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonSuspensionObject(tSuspension& p_suspension)
 {
     const int size = 8;
@@ -2113,6 +2150,8 @@ PyObject* SDATypesConverter::GetPythonSuspensionObject(tSuspension& p_suspension
 
     return suspension;
 }
+
+/// @brief gets the Cpp struct of the Python object
 tSuspension SDATypesConverter::GetCppSuspensionObject(PyObject* p_suspension)
 {
     tSuspension suspension;
@@ -2129,6 +2168,7 @@ tSuspension SDATypesConverter::GetCppSuspensionObject(PyObject* p_suspension)
     return suspension;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSuspensionObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[6]{ "inertance", "x", "v", "a", "force", "state"};
@@ -2138,6 +2178,7 @@ void SDATypesConverter::SetPythonSuspensionObject(PyObject* p_target, PyObject* 
     SetPythonDamperObject(PyObject_GetAttrString(p_target, "damper"), PyObject_GetAttrString(p_data, "damper"));
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonBrakeObject(tBrake& p_brake)
 {
     const int size = 9;
@@ -2158,6 +2199,7 @@ PyObject* SDATypesConverter::GetPythonBrakeObject(tBrake& p_brake)
     return brake;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tBrake SDATypesConverter::GetCppBrakeObject(PyObject* p_brake)
 {
     tBrake brake;
@@ -2175,12 +2217,14 @@ tBrake SDATypesConverter::GetCppBrakeObject(PyObject* p_brake)
     return brake;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonBrakeObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[9]{ "pressure", "Tq", "coeff", "I", "radius", "temp", "TCL", "ABS", "EnableABS"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 9);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonBrakeSystObject(tBrakeSyst& p_brakeSyst)
 {
     const int size = 3;
@@ -2194,6 +2238,8 @@ PyObject* SDATypesConverter::GetPythonBrakeSystObject(tBrakeSyst& p_brakeSyst)
 
     return brakeSyst;
 }
+
+/// @brief gets the Cpp struct of the Python object
 tBrakeSyst SDATypesConverter::GetCppBrakeSystObject(PyObject* p_brakeSyst)
 {
     tBrakeSyst brakeSyst;
@@ -2204,12 +2250,15 @@ tBrakeSyst SDATypesConverter::GetCppBrakeSystObject(PyObject* p_brakeSyst)
 
     return brakeSyst;
 }
+
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonBrakeSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[3]{ "rep", "coeff", "ebrake_pressure"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonDynAxisSystObject(tDynAxis& p_dynAxis)
 {
     const int size = 4;
@@ -2225,6 +2274,7 @@ PyObject* SDATypesConverter::GetPythonDynAxisSystObject(tDynAxis& p_dynAxis)
     return dynAxisSyst;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tDynAxis SDATypesConverter::GetCppDynAxisSystObject(PyObject* p_dynAxis)
 {
     tDynAxis dynAxis;
@@ -2237,12 +2287,14 @@ tDynAxis SDATypesConverter::GetCppDynAxisSystObject(PyObject* p_dynAxis)
     return dynAxis;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDynAxisSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[4]{ "spinVel", "Tq", "brkTq", "I"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 4);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonDifferentialSystObject(tDifferential& p_differential)
 {
     const int size = 14;
@@ -2268,6 +2320,7 @@ PyObject* SDATypesConverter::GetPythonDifferentialSystObject(tDifferential& p_di
     return differential;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tDifferential SDATypesConverter::GetCppDifferentialSystObject(PyObject* p_differential)
 {
     tDifferential differential;
@@ -2290,6 +2343,7 @@ tDifferential SDATypesConverter::GetCppDifferentialSystObject(PyObject* p_differ
     return differential;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDifferentialSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[12]{ "type", "ratio", "I", "efficiency", "bias", "dTqMin", "dTqMax", "dSlipMax", "dCoastSlipMax",
@@ -2300,6 +2354,7 @@ void SDATypesConverter::SetPythonDifferentialSystObject(PyObject* p_target, PyOb
     SetPythonDynAxisSystObject(PyObject_GetAttrString(p_target, "feedback"), PyObject_GetAttrString(p_data, "feedback"));
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonAxleSystObject(tAxle& p_axle)
 {
     const int size = 7;
@@ -2318,6 +2373,7 @@ PyObject* SDATypesConverter::GetPythonAxleSystObject(tAxle& p_axle)
     return axle;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tAxle SDATypesConverter::GetCppAxleSystObject(PyObject* p_axle)
 {
     tAxle axle;
@@ -2335,6 +2391,8 @@ tAxle SDATypesConverter::GetCppAxleSystObject(PyObject* p_axle)
 
     return axle;
 }
+
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonAxleSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[3]{ "xpos", "wheight0", "I"};
@@ -2345,6 +2403,7 @@ void SDATypesConverter::SetPythonAxleSystObject(PyObject* p_target, PyObject* p_
     COPY_PYTHON_ARRAY(p_target, p_data, "force", 2);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonSteerSystObject(tSteer& p_steer)
 {
     const int size = 3;
@@ -2359,6 +2418,7 @@ PyObject* SDATypesConverter::GetPythonSteerSystObject(tSteer& p_steer)
     return steer;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tSteer SDATypesConverter::GetCppSteerSystObject(PyObject* p_steer)
 {
     tSteer steer;
@@ -2370,12 +2430,14 @@ tSteer SDATypesConverter::GetCppSteerSystObject(PyObject* p_steer)
     return steer;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSteerSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[3]{ "steerLock", "maxSpeed", "steer"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonWheelSystObject(tWheel& p_wheel)
 {
     const int size = 61;
@@ -2448,6 +2510,7 @@ PyObject* SDATypesConverter::GetPythonWheelSystObject(tWheel& p_wheel)
     return wheel;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tWheel SDATypesConverter::GetCppWheelSystObject(PyObject* p_wheel)
 {
     tWheel wheel;
@@ -2522,6 +2585,8 @@ tWheel SDATypesConverter::GetCppWheelSystObject(PyObject* p_wheel)
 
     return wheel;
 }
+
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonWheelSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[46]{ "torqueAlign", "roolRes", "rideHeight", "zRoad", "driveTq", "vt", "spinTq","spinVel", "prespinVel", "state",
@@ -2547,7 +2612,7 @@ void SDATypesConverter::SetPythonWheelSystObject(PyObject* p_target, PyObject* p
     SetPythonDynAxisSystObject(PyObject_GetAttrString(p_target, "feedBack"), PyObject_GetAttrString(p_data, "feedBack"));
 }
 
-
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonGearBoxObject(tGearbox& p_gearBox)
 {
     const int size = 6;
@@ -2565,6 +2630,7 @@ PyObject* SDATypesConverter::GetPythonGearBoxObject(tGearbox& p_gearBox)
     return gearbox;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tGearbox SDATypesConverter::GetCppGearBoxObject(PyObject* p_gearBox)
 {
     tGearbox gearbox;
@@ -2579,12 +2645,14 @@ tGearbox SDATypesConverter::GetCppGearBoxObject(PyObject* p_gearBox)
     return gearbox;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonGearBoxObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[6]{ "gear", "gearMin", "gearMax", "gearNext", "shiftTime", "timeToEngage" };
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonClutchObject(tClutch& p_clutch)
 {
     const int size = 5;
@@ -2601,6 +2669,7 @@ PyObject* SDATypesConverter::GetPythonClutchObject(tClutch& p_clutch)
     return clutch;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tClutch SDATypesConverter::GetCppClutchObject(PyObject* p_clutch)
 {
     tClutch clutch;
@@ -2614,12 +2683,14 @@ tClutch SDATypesConverter::GetCppClutchObject(PyObject* p_clutch)
     return clutch;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonClutchObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[5]{ "state", "mode", "timeToRelease", "releaseTime", "transferValue" };
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonTransmissionSystObject(tTransmission& p_transmission)
 {
     const int size = 56;
@@ -2687,6 +2758,7 @@ PyObject* SDATypesConverter::GetPythonTransmissionSystObject(tTransmission& p_tr
     return transmission;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject* p_transmission)
 {
     tTransmission transmission;
@@ -2764,6 +2836,8 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject* p_transm
     return transmission;
 
 }
+
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonTransmissionSystObject(PyObject* p_target, PyObject* p_data)
 {
     COPY_PYTHON_OBJECT(p_target, p_data, "currI");
@@ -2781,6 +2855,7 @@ void SDATypesConverter::SetPythonTransmissionSystObject(PyObject* p_target, PyOb
     SetPythonDifferentialSystObject(PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_target, "differential")), 2), PyTuple_GetItem(PyList_AsTuple(PyObject_GetAttrString(p_data, "differential")), 2));
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonEngineCurveElemObject(tEngineCurveElem& p_engineCurveElem)
 {
     const int size = 3;
@@ -2795,6 +2870,7 @@ PyObject* SDATypesConverter::GetPythonEngineCurveElemObject(tEngineCurveElem& p_
     return engineCurveElem;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tEngineCurveElem SDATypesConverter::GetCppEngineCurveElemObject(PyObject* p_engineCurveElem)
 {
     tEngineCurveElem engineCurveElem;
@@ -2806,12 +2882,14 @@ tEngineCurveElem SDATypesConverter::GetCppEngineCurveElemObject(PyObject* p_engi
     return engineCurveElem;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonEngineCurveElemObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[3]{ "rad", "a", "b"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonEngineCurveObject(tEngineCurve& p_engineCurve)
 {
     const int size = 6;
@@ -2828,6 +2906,8 @@ PyObject* SDATypesConverter::GetPythonEngineCurveObject(tEngineCurve& p_engineCu
 
     return engineCurve;
 }
+
+/// @brief gets the Cpp struct of the Python object
 tEngineCurve SDATypesConverter::GetCppEngineCurveObject(PyObject* p_engineCurve)
 {
     tEngineCurve engineCurve;
@@ -2842,12 +2922,14 @@ tEngineCurve SDATypesConverter::GetCppEngineCurveObject(PyObject* p_engineCurve)
     return engineCurve;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonEngineCurveObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[6]{ "maxTq", "maxPw", "rpmMaxPw", "TqAtMaxPw", "rpmMaxTq", "npPts"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonEngineSystObject(tEngine& p_engine)
 {
     const int size = 18;
@@ -2877,6 +2959,7 @@ PyObject* SDATypesConverter::GetPythonEngineSystObject(tEngine& p_engine)
     return engine;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tEngine SDATypesConverter::GetCppEngineSystObject(PyObject* p_engine)
 {
     tEngine engine;
@@ -2903,6 +2986,7 @@ tEngine SDATypesConverter::GetCppEngineSystObject(PyObject* p_engine)
     return engine;
 }
 
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonEngineSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[17]{ "revsLimiter", "revsMax", "tickover", "I", "rads", "Tq", "Tq_response", "I_joint", "fuelcons",
@@ -2912,6 +2996,7 @@ void SDATypesConverter::SetPythonEngineSystObject(PyObject* p_target, PyObject* 
     SetPythonEngineCurveObject(PyObject_GetAttrString(p_target, "curve"), PyObject_GetAttrString(p_data, "curve"));
 }
 
+/// @brief converts a cpp struct to a PyObject
 PyObject* SDATypesConverter::GetPythonCarSystObject(tCar& p_car)
 {
     const int size = 62;
@@ -2987,6 +3072,7 @@ PyObject* SDATypesConverter::GetPythonCarSystObject(tCar& p_car)
     return simCar;
 }
 
+/// @brief gets the Cpp struct of the Python object
 tCar SDATypesConverter::GetCppCarSystObject(PyObject* p_car)
 {
     tCar car;
@@ -3081,7 +3167,7 @@ tCar SDATypesConverter::GetCppCarSystObject(PyObject* p_car)
     return car;
 }
 
-
+/// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarSystObject(PyObject* p_target, PyObject* p_data)
 {
     const char* attributeList[17]{"mass", "Minv", "tank", "fuel", "fuel_consumption", "fuel_prev", "fuel_time","airSpeed2", "Cosz", "Sinz", "collision", "wheelbase", "wheeltrack",
