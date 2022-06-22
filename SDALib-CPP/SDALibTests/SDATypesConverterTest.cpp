@@ -1342,6 +1342,185 @@ void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
     CheckSituationData(p_data.Situation, situationVal);
 }
 
+/// @brief checks the aero python object corresponds to the original aero values
+/// @param  p_aero The original aero value
+/// @param  p_aeroObject The python aero object
+void CheckAeroData(tAero p_aero, PyObject* p_aeroObject)
+{
+    PyObject* dragAttr = PyUnicode_FromString("drag");
+    PyObject* dragVal = PyObject_GetAttr(p_aeroObject, dragAttr);
+    ASSERT_EQ(p_aero.drag, static_cast<float>(PyFloat_AsDouble(dragVal)));
+
+    PyObject* liftAttr = PyUnicode_FromString("lift");
+    PyObject* liftVal = PyObject_GetAttr(p_aeroObject, liftAttr);
+    ASSERT_EQ(p_aero.lift[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftVal, 0))));
+    ASSERT_EQ(p_aero.lift[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftVal, 1))));
+
+    PyObject* CliftAttr = PyUnicode_FromString("Clift");
+    PyObject* CliftVal = PyObject_GetAttr(p_aeroObject, CliftAttr);
+    ASSERT_EQ(p_aero.Clift[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(CliftVal, 0))));
+    ASSERT_EQ(p_aero.Clift[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(CliftVal, 1))));
+
+    PyObject* CdAttr = PyUnicode_FromString("Cd");
+    PyObject* CdVal = PyObject_GetAttr(p_aeroObject, CdAttr);
+    ASSERT_EQ(p_aero.Cd, static_cast<float>(PyFloat_AsDouble(CdVal)));
+
+    PyObject* CdBodyAttr = PyUnicode_FromString("CdBody");
+    PyObject* CdBodyVal = PyObject_GetAttr(p_aeroObject, CdBodyAttr);
+    ASSERT_EQ(p_aero.CdBody, static_cast<float>(PyFloat_AsDouble(CdBodyVal)));
+
+}
+
+/// @brief checks the wing python object corresponds to the original wing values
+/// @param  p_data The original wing value
+/// @param  p_dataObject The python wing object
+void CheckWingData(tWing p_wing, PyObject* p_wingObject)
+{
+    PyObject* forcesAttr = PyUnicode_FromString("forces");
+    PyObject* forcesVal = PyObject_GetAttr(p_wingObject, forcesAttr);
+    CheckVectorData(p_wing.forces.x, p_wing.forces.y, p_wing.forces.z, forcesVal);
+
+    PyObject* KxAttr = PyUnicode_FromString("Kx");
+    PyObject* KxVal = PyObject_GetAttr(p_wingObject, KxAttr);
+    ASSERT_EQ(p_wing.Kx, static_cast<float>(PyFloat_AsDouble(KxVal)));
+
+    PyObject* KzAttr = PyUnicode_FromString("Kz");
+    PyObject* KzVal = PyObject_GetAttr(p_wingObject, KzAttr);
+    ASSERT_EQ(p_wing.Kz, static_cast<float>(PyFloat_AsDouble(KzVal)));
+
+    PyObject* Kz_orgAttr = PyUnicode_FromString("Kz_org");
+    PyObject* Kz_orgVal = PyObject_GetAttr(p_wingObject, Kz_orgAttr);
+    ASSERT_EQ(p_wing.Kz_org, static_cast<float>(PyFloat_AsDouble(Kz_orgVal)));
+
+    PyObject* angleAttr = PyUnicode_FromString("angleMax");
+    PyObject* angleVal = PyObject_GetAttr(p_wingObject, angleAttr);
+    ASSERT_EQ(p_wing.angle, static_cast<float>(PyFloat_AsDouble(angleVal)));
+
+    PyObject* staticPosAttr = PyUnicode_FromString("staticPos");
+    PyObject* staticPosVal = PyObject_GetAttr(p_wingObject, staticPosAttr);
+    CheckVectorData(p_wing.staticPos.x, p_wing.staticPos.y, p_wing.staticPos.z, staticPosVal);
+
+    PyObject* AoAatMaxAttr = PyUnicode_FromString("AoAatMax");
+    PyObject* AoAatMaxVal = PyObject_GetAttr(p_wingObject, AoAatMaxAttr);
+    ASSERT_EQ(p_wing.AoAatMax, static_cast<float>(PyFloat_AsDouble(AoAatMaxVal)));
+
+    PyObject* AoAatZeroAttr = PyUnicode_FromString("AoAatZero");
+    PyObject* AoAatZeroVal = PyObject_GetAttr(p_wingObject, AoAatZeroAttr);
+    ASSERT_EQ(p_wing.AoAatZero, static_cast<float>(PyFloat_AsDouble(AoAatZeroVal)));
+
+    PyObject* AoAatZRadAttr = PyUnicode_FromString("AoAatZRad");
+    PyObject* AoAatZRadVal = PyObject_GetAttr(p_wingObject, AoAatZRadAttr);
+    ASSERT_EQ(p_wing.AoAatZRad, static_cast<float>(PyFloat_AsDouble(AoAatZRadVal)));
+
+    PyObject* AoAOffsetAttr = PyUnicode_FromString("AoAOffset");
+    PyObject* AoAOffsetVal = PyObject_GetAttr(p_wingObject, AoAOffsetAttr);
+    ASSERT_EQ(p_wing.AoAOffset, static_cast<float>(PyFloat_AsDouble(AoAOffsetVal)));
+
+    PyObject* CliftMaxAttr = PyUnicode_FromString("CliftMax");
+    PyObject* CliftMaxVal = PyObject_GetAttr(p_wingObject, CliftMaxAttr);
+    ASSERT_EQ(p_wing.CliftMax, static_cast<float>(PyFloat_AsDouble(CliftMaxVal)));
+
+    PyObject* CliftZeroAttr = PyUnicode_FromString("CliftZero");
+    PyObject* CliftZeroVal = PyObject_GetAttr(p_wingObject, CliftZeroAttr);
+    ASSERT_EQ(p_wing.CliftZero, static_cast<float>(PyFloat_AsDouble(CliftZeroVal)));
+
+    PyObject* CliftAsympAttr = PyUnicode_FromString("CliftAsymp");
+    PyObject* CliftAsympVal = PyObject_GetAttr(p_wingObject, CliftAsympAttr);
+    ASSERT_EQ(p_wing.CliftAsymp, static_cast<float>(PyFloat_AsDouble(CliftAsympVal)));
+
+    PyObject* aAttr = PyUnicode_FromString("a");
+    PyObject* aVal = PyObject_GetAttr(p_wingObject, aAttr);
+    ASSERT_EQ(p_wing.a, static_cast<float>(PyFloat_AsDouble(aVal)));
+
+    PyObject* bAttr = PyUnicode_FromString("b");
+    PyObject* bVal = PyObject_GetAttr(p_wingObject, bAttr);
+    ASSERT_EQ(p_wing.b, static_cast<float>(PyFloat_AsDouble(bVal)));
+
+    PyObject* cAttr = PyUnicode_FromString("c");
+    PyObject* cVal = PyObject_GetAttr(p_wingObject, cAttr);
+    ASSERT_EQ(p_wing.c, static_cast<float>(PyFloat_AsDouble(cVal)));
+
+    PyObject* dAttr = PyUnicode_FromString("d");
+    PyObject* dVal = PyObject_GetAttr(p_wingObject, dAttr);
+    ASSERT_EQ(p_wing.d, static_cast<float>(PyFloat_AsDouble(dVal)));
+
+    PyObject* fAttr = PyUnicode_FromString("f");
+    PyObject* fVal = PyObject_GetAttr(p_wingObject, fAttr);
+    ASSERT_EQ(p_wing.f, static_cast<float>(PyFloat_AsDouble(fVal)));
+
+    PyObject* AoStallAttr = PyUnicode_FromString("AoStall");
+    PyObject* AoStallVal = PyObject_GetAttr(p_wingObject, AoStallAttr);
+    ASSERT_EQ(p_wing.AoStall, static_cast<float>(PyFloat_AsDouble(AoStallVal)));
+    
+    PyObject* StallwAttr = PyUnicode_FromString("Stallw");
+    PyObject* StallwVal = PyObject_GetAttr(p_wingObject, StallwAttr);
+    ASSERT_EQ(p_wing.Stallw, static_cast<float>(PyFloat_AsDouble(StallwVal)));
+
+    PyObject* ARAttr = PyUnicode_FromString("AR");
+    PyObject* ARVal = PyObject_GetAttr(p_wingObject, ARAttr);
+    ASSERT_EQ(p_wing.AR, static_cast<float>(PyFloat_AsDouble(ARVal)));
+
+    PyObject* Kx1Attr = PyUnicode_FromString("Kx1");
+    PyObject* Kx1Val = PyObject_GetAttr(p_wingObject, Kx1Attr);
+    ASSERT_EQ(p_wing.Kx1, static_cast<float>(PyFloat_AsDouble(Kx1Val)));
+
+    PyObject* Kx2Attr = PyUnicode_FromString("Kx2");
+    PyObject* Kx2Val = PyObject_GetAttr(p_wingObject, Kx2Attr);
+    ASSERT_EQ(p_wing.Kx2, static_cast<float>(PyFloat_AsDouble(Kx2Val)));
+
+    PyObject* Kx3Attr = PyUnicode_FromString("Kx3");
+    PyObject* Kx3Val = PyObject_GetAttr(p_wingObject, Kx3Attr);
+    ASSERT_EQ(p_wing.Kx3, static_cast<float>(PyFloat_AsDouble(Kx3Val)));
+
+    PyObject* Kx4Attr = PyUnicode_FromString("Kx4");
+    PyObject* Kx4Val = PyObject_GetAttr(p_wingObject, Kx4Attr);
+    ASSERT_EQ(p_wing.Kx4, static_cast<float>(PyFloat_AsDouble(Kx4Val)));
+
+    PyObject* Kz1Attr = PyUnicode_FromString("Kz1");
+    PyObject* Kz1Val = PyObject_GetAttr(p_wingObject, Kz1Attr);
+    ASSERT_EQ(p_wing.Kz1, static_cast<float>(PyFloat_AsDouble(Kz1Val)));
+
+    PyObject* Kz2Attr = PyUnicode_FromString("Kz2");
+    PyObject* Kz2Val = PyObject_GetAttr(p_wingObject, Kz2Attr);
+    ASSERT_EQ(p_wing.Kz2, static_cast<float>(PyFloat_AsDouble(Kz2Val)));
+
+    PyObject* Kz3Attr = PyUnicode_FromString("Kz3");
+    PyObject* Kz3Val = PyObject_GetAttr(p_wingObject, Kz3Attr);
+    ASSERT_EQ(p_wing.Kz3, static_cast<float>(PyFloat_AsDouble(Kz3Val)));
+
+    PyObject* WingTypeAttr = PyUnicode_FromString("WingType");
+    PyObject* WingTypeVal = PyObject_GetAttr(p_wingObject, WingTypeAttr);
+    ASSERT_EQ(p_wing.WingType, static_cast<int>(PyLong_AsLong(WingTypeVal)));
+}
+
+/// @brief checks the DemperDef python object corresponds to the original DemperDef values
+/// @param  p_demperDef The original DemperDef value
+/// @param  p_demperDefObject The python DemperDef object
+void CheckDemperDefData(tDamperDef p_demperDef, PyObject* p_demperDefObject)
+{
+    PyObject* C1Attr = PyUnicode_FromString("C1");
+    PyObject* C1Val = PyObject_GetAttr(p_demperDefObject, C1Attr);
+    ASSERT_EQ(p_demperDef.C1, static_cast<float>(PyFloat_AsDouble(C1Val)));
+
+    PyObject* b1Attr = PyUnicode_FromString("b1");
+    PyObject* b1Val = PyObject_GetAttr(p_demperDefObject, b1Attr);
+    ASSERT_EQ(p_demperDef.b1, static_cast<float>(PyFloat_AsDouble(b1Val)));
+
+    PyObject* v1Attr = PyUnicode_FromString("v1");
+    PyObject* v1Val = PyObject_GetAttr(p_demperDefObject, v1Attr);
+    ASSERT_EQ(p_demperDef.C2, static_cast<float>(PyFloat_AsDouble(v1Val)));
+
+    PyObject* C2Attr = PyUnicode_FromString("C2");
+    PyObject* C2Val = PyObject_GetAttr(p_demperDefObject, C2Attr);
+    ASSERT_EQ(p_demperDef.C2, static_cast<float>(PyFloat_AsDouble(C2Val)));
+
+    PyObject* b2Attr = PyUnicode_FromString("b2");
+    PyObject* b2Val = PyObject_GetAttr(p_demperDefObject, b2Attr);
+    ASSERT_EQ(p_demperDef.b2, static_cast<float>(PyFloat_AsDouble(b2Val)));
+}
+
+
+
 /// @brief tests the sda data c++ data correctly translated to python and back
 TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
 {
