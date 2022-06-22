@@ -1342,6 +1342,622 @@ void CheckSDAData(SDAData p_data, PyObject* p_dataObject)
     CheckSituationData(p_data.Situation, situationVal);
 }
 
+/// @brief checks the aero python object corresponds to the original aero values
+/// @param  p_aero The original aero value
+/// @param  p_aeroObject The python aero object
+void CheckAeroData(tAero p_aero, PyObject* p_aeroObject)
+{
+    PyObject* dragAttr = PyUnicode_FromString("drag");
+    PyObject* dragVal = PyObject_GetAttr(p_aeroObject, dragAttr);
+    ASSERT_EQ(p_aero.drag, static_cast<float>(PyFloat_AsDouble(dragVal)));
+
+    PyObject* liftAttr = PyUnicode_FromString("lift");
+    PyObject* liftVal = PyObject_GetAttr(p_aeroObject, liftAttr);
+    ASSERT_EQ(p_aero.lift[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftVal, 0))));
+    ASSERT_EQ(p_aero.lift[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftVal, 1))));
+
+    PyObject* CliftAttr = PyUnicode_FromString("Clift");
+    PyObject* CliftVal = PyObject_GetAttr(p_aeroObject, CliftAttr);
+    ASSERT_EQ(p_aero.Clift[0], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(CliftVal, 0))));
+    ASSERT_EQ(p_aero.Clift[1], static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(CliftVal, 1))));
+
+    PyObject* CdAttr = PyUnicode_FromString("Cd");
+    PyObject* CdVal = PyObject_GetAttr(p_aeroObject, CdAttr);
+    ASSERT_EQ(p_aero.Cd, static_cast<float>(PyFloat_AsDouble(CdVal)));
+
+    PyObject* CdBodyAttr = PyUnicode_FromString("CdBody");
+    PyObject* CdBodyVal = PyObject_GetAttr(p_aeroObject, CdBodyAttr);
+    ASSERT_EQ(p_aero.CdBody, static_cast<float>(PyFloat_AsDouble(CdBodyVal)));
+
+}
+
+/// @brief checks the wing python object corresponds to the original wing values
+/// @param  p_data The original wing value
+/// @param  p_dataObject The python wing object
+void CheckWingData(tWing p_wing, PyObject* p_wingObject)
+{
+    PyObject* forcesAttr = PyUnicode_FromString("forces");
+    PyObject* forcesVal = PyObject_GetAttr(p_wingObject, forcesAttr);
+    CheckVectorData(p_wing.forces.x, p_wing.forces.y, p_wing.forces.z, forcesVal);
+
+    PyObject* KxAttr = PyUnicode_FromString("Kx");
+    PyObject* KxVal = PyObject_GetAttr(p_wingObject, KxAttr);
+    ASSERT_EQ(p_wing.Kx, static_cast<float>(PyFloat_AsDouble(KxVal)));
+
+    PyObject* KzAttr = PyUnicode_FromString("Kz");
+    PyObject* KzVal = PyObject_GetAttr(p_wingObject, KzAttr);
+    ASSERT_EQ(p_wing.Kz, static_cast<float>(PyFloat_AsDouble(KzVal)));
+
+    PyObject* Kz_orgAttr = PyUnicode_FromString("Kz_org");
+    PyObject* Kz_orgVal = PyObject_GetAttr(p_wingObject, Kz_orgAttr);
+    ASSERT_EQ(p_wing.Kz_org, static_cast<float>(PyFloat_AsDouble(Kz_orgVal)));
+
+    PyObject* angleAttr = PyUnicode_FromString("angleMax");
+    PyObject* angleVal = PyObject_GetAttr(p_wingObject, angleAttr);
+    ASSERT_EQ(p_wing.angle, static_cast<float>(PyFloat_AsDouble(angleVal)));
+
+    PyObject* staticPosAttr = PyUnicode_FromString("staticPos");
+    PyObject* staticPosVal = PyObject_GetAttr(p_wingObject, staticPosAttr);
+    CheckVectorData(p_wing.staticPos.x, p_wing.staticPos.y, p_wing.staticPos.z, staticPosVal);
+
+    PyObject* AoAatMaxAttr = PyUnicode_FromString("AoAatMax");
+    PyObject* AoAatMaxVal = PyObject_GetAttr(p_wingObject, AoAatMaxAttr);
+    ASSERT_EQ(p_wing.AoAatMax, static_cast<float>(PyFloat_AsDouble(AoAatMaxVal)));
+
+    PyObject* AoAatZeroAttr = PyUnicode_FromString("AoAatZero");
+    PyObject* AoAatZeroVal = PyObject_GetAttr(p_wingObject, AoAatZeroAttr);
+    ASSERT_EQ(p_wing.AoAatZero, static_cast<float>(PyFloat_AsDouble(AoAatZeroVal)));
+
+    PyObject* AoAatZRadAttr = PyUnicode_FromString("AoAatZRad");
+    PyObject* AoAatZRadVal = PyObject_GetAttr(p_wingObject, AoAatZRadAttr);
+    ASSERT_EQ(p_wing.AoAatZRad, static_cast<float>(PyFloat_AsDouble(AoAatZRadVal)));
+
+    PyObject* AoAOffsetAttr = PyUnicode_FromString("AoAOffset");
+    PyObject* AoAOffsetVal = PyObject_GetAttr(p_wingObject, AoAOffsetAttr);
+    ASSERT_EQ(p_wing.AoAOffset, static_cast<float>(PyFloat_AsDouble(AoAOffsetVal)));
+
+    PyObject* CliftMaxAttr = PyUnicode_FromString("CliftMax");
+    PyObject* CliftMaxVal = PyObject_GetAttr(p_wingObject, CliftMaxAttr);
+    ASSERT_EQ(p_wing.CliftMax, static_cast<float>(PyFloat_AsDouble(CliftMaxVal)));
+
+    PyObject* CliftZeroAttr = PyUnicode_FromString("CliftZero");
+    PyObject* CliftZeroVal = PyObject_GetAttr(p_wingObject, CliftZeroAttr);
+    ASSERT_EQ(p_wing.CliftZero, static_cast<float>(PyFloat_AsDouble(CliftZeroVal)));
+
+    PyObject* CliftAsympAttr = PyUnicode_FromString("CliftAsymp");
+    PyObject* CliftAsympVal = PyObject_GetAttr(p_wingObject, CliftAsympAttr);
+    ASSERT_EQ(p_wing.CliftAsymp, static_cast<float>(PyFloat_AsDouble(CliftAsympVal)));
+
+    PyObject* aAttr = PyUnicode_FromString("a");
+    PyObject* aVal = PyObject_GetAttr(p_wingObject, aAttr);
+    ASSERT_EQ(p_wing.a, static_cast<float>(PyFloat_AsDouble(aVal)));
+
+    PyObject* bAttr = PyUnicode_FromString("b");
+    PyObject* bVal = PyObject_GetAttr(p_wingObject, bAttr);
+    ASSERT_EQ(p_wing.b, static_cast<float>(PyFloat_AsDouble(bVal)));
+
+    PyObject* cAttr = PyUnicode_FromString("c");
+    PyObject* cVal = PyObject_GetAttr(p_wingObject, cAttr);
+    ASSERT_EQ(p_wing.c, static_cast<float>(PyFloat_AsDouble(cVal)));
+
+    PyObject* dAttr = PyUnicode_FromString("d");
+    PyObject* dVal = PyObject_GetAttr(p_wingObject, dAttr);
+    ASSERT_EQ(p_wing.d, static_cast<float>(PyFloat_AsDouble(dVal)));
+
+    PyObject* fAttr = PyUnicode_FromString("f");
+    PyObject* fVal = PyObject_GetAttr(p_wingObject, fAttr);
+    ASSERT_EQ(p_wing.f, static_cast<float>(PyFloat_AsDouble(fVal)));
+
+    PyObject* AoStallAttr = PyUnicode_FromString("AoStall");
+    PyObject* AoStallVal = PyObject_GetAttr(p_wingObject, AoStallAttr);
+    ASSERT_EQ(p_wing.AoStall, static_cast<float>(PyFloat_AsDouble(AoStallVal)));
+    
+    PyObject* StallwAttr = PyUnicode_FromString("Stallw");
+    PyObject* StallwVal = PyObject_GetAttr(p_wingObject, StallwAttr);
+    ASSERT_EQ(p_wing.Stallw, static_cast<float>(PyFloat_AsDouble(StallwVal)));
+
+    PyObject* ARAttr = PyUnicode_FromString("AR");
+    PyObject* ARVal = PyObject_GetAttr(p_wingObject, ARAttr);
+    ASSERT_EQ(p_wing.AR, static_cast<float>(PyFloat_AsDouble(ARVal)));
+
+    PyObject* Kx1Attr = PyUnicode_FromString("Kx1");
+    PyObject* Kx1Val = PyObject_GetAttr(p_wingObject, Kx1Attr);
+    ASSERT_EQ(p_wing.Kx1, static_cast<float>(PyFloat_AsDouble(Kx1Val)));
+
+    PyObject* Kx2Attr = PyUnicode_FromString("Kx2");
+    PyObject* Kx2Val = PyObject_GetAttr(p_wingObject, Kx2Attr);
+    ASSERT_EQ(p_wing.Kx2, static_cast<float>(PyFloat_AsDouble(Kx2Val)));
+
+    PyObject* Kx3Attr = PyUnicode_FromString("Kx3");
+    PyObject* Kx3Val = PyObject_GetAttr(p_wingObject, Kx3Attr);
+    ASSERT_EQ(p_wing.Kx3, static_cast<float>(PyFloat_AsDouble(Kx3Val)));
+
+    PyObject* Kx4Attr = PyUnicode_FromString("Kx4");
+    PyObject* Kx4Val = PyObject_GetAttr(p_wingObject, Kx4Attr);
+    ASSERT_EQ(p_wing.Kx4, static_cast<float>(PyFloat_AsDouble(Kx4Val)));
+
+    PyObject* Kz1Attr = PyUnicode_FromString("Kz1");
+    PyObject* Kz1Val = PyObject_GetAttr(p_wingObject, Kz1Attr);
+    ASSERT_EQ(p_wing.Kz1, static_cast<float>(PyFloat_AsDouble(Kz1Val)));
+
+    PyObject* Kz2Attr = PyUnicode_FromString("Kz2");
+    PyObject* Kz2Val = PyObject_GetAttr(p_wingObject, Kz2Attr);
+    ASSERT_EQ(p_wing.Kz2, static_cast<float>(PyFloat_AsDouble(Kz2Val)));
+
+    PyObject* Kz3Attr = PyUnicode_FromString("Kz3");
+    PyObject* Kz3Val = PyObject_GetAttr(p_wingObject, Kz3Attr);
+    ASSERT_EQ(p_wing.Kz3, static_cast<float>(PyFloat_AsDouble(Kz3Val)));
+
+    PyObject* WingTypeAttr = PyUnicode_FromString("WingType");
+    PyObject* WingTypeVal = PyObject_GetAttr(p_wingObject, WingTypeAttr);
+    ASSERT_EQ(p_wing.WingType, static_cast<int>(PyLong_AsLong(WingTypeVal)));
+}
+
+/// @brief checks the DemperDef python object corresponds to the original DemperDef values
+/// @param  p_demperDef The original DemperDef value
+/// @param  p_demperDefObject The python DemperDef object
+void CheckDemperDefData(tDamperDef p_demperDef, PyObject* p_demperDefObject)
+{
+    PyObject* C1Attr = PyUnicode_FromString("C1");
+    PyObject* C1Val = PyObject_GetAttr(p_demperDefObject, C1Attr);
+    ASSERT_EQ(p_demperDef.C1, static_cast<float>(PyFloat_AsDouble(C1Val)));
+
+    PyObject* b1Attr = PyUnicode_FromString("b1");
+    PyObject* b1Val = PyObject_GetAttr(p_demperDefObject, b1Attr);
+    ASSERT_EQ(p_demperDef.b1, static_cast<float>(PyFloat_AsDouble(b1Val)));
+
+    PyObject* v1Attr = PyUnicode_FromString("v1");
+    PyObject* v1Val = PyObject_GetAttr(p_demperDefObject, v1Attr);
+    ASSERT_EQ(p_demperDef.C2, static_cast<float>(PyFloat_AsDouble(v1Val)));
+
+    PyObject* C2Attr = PyUnicode_FromString("C2");
+    PyObject* C2Val = PyObject_GetAttr(p_demperDefObject, C2Attr);
+    ASSERT_EQ(p_demperDef.C2, static_cast<float>(PyFloat_AsDouble(C2Val)));
+
+    PyObject* b2Attr = PyUnicode_FromString("b2");
+    PyObject* b2Val = PyObject_GetAttr(p_demperDefObject, b2Attr);
+    ASSERT_EQ(p_demperDef.b2, static_cast<float>(PyFloat_AsDouble(b2Val)));
+}
+
+/// @brief checks the Demper python object corresponds to the original Demper values
+/// @param  p_demper The original Demper value
+/// @param  p_demperObject The python Demper object
+void CheckDemperData(tDamper p_demper, PyObject* p_demperObject)
+{
+    PyObject* bumpAttr = PyUnicode_FromString("bump");
+    PyObject* bumpVal = PyObject_GetAttr(p_demperObject, bumpAttr);
+    CheckDemperDefData(p_demper.bump, bumpVal);
+
+    PyObject* reboundAttr = PyUnicode_FromString("rebound");
+    PyObject* reboundVal = PyObject_GetAttr(p_demperObject, reboundAttr);
+    CheckDemperDefData(p_demper.rebound, reboundVal);
+}
+
+/// @brief checks the Spring python object corresponds to the original Spring values
+/// @param  p_spring The original Spring value
+/// @param  p_springObject The python Spring object
+void CheckSpringData(tSpring p_spring, PyObject* p_springObject)
+{
+    PyObject* KAttr = PyUnicode_FromString("K");
+    PyObject* KVal = PyObject_GetAttr(p_springObject, KAttr);
+    ASSERT_EQ(p_spring.K, static_cast<float>(PyFloat_AsDouble(KVal)));
+
+    PyObject* F0Attr = PyUnicode_FromString("F0");
+    PyObject* F0Val = PyObject_GetAttr(p_springObject, F0Attr);
+    ASSERT_EQ(p_spring.F0, static_cast<float>(PyFloat_AsDouble(F0Val)));
+
+    PyObject* x0Attr = PyUnicode_FromString("x0");
+    PyObject* x0Val = PyObject_GetAttr(p_springObject, x0Attr);
+    ASSERT_EQ(p_spring.x0, static_cast<float>(PyFloat_AsDouble(x0Val)));
+
+    PyObject* xMaxAttr = PyUnicode_FromString("xMax");
+    PyObject* xMaxVal = PyObject_GetAttr(p_springObject, xMaxAttr);
+    ASSERT_EQ(p_spring.xMax, static_cast<float>(PyFloat_AsDouble(xMaxVal)));
+
+    PyObject* bellcrankAttr = PyUnicode_FromString("bellcrank");
+    PyObject* bellcrankVal = PyObject_GetAttr(p_springObject, bellcrankAttr);
+    ASSERT_EQ(p_spring.bellcrank, static_cast<float>(PyFloat_AsDouble(bellcrankVal)));
+
+    PyObject* packersAttr = PyUnicode_FromString("packers");
+    PyObject* packersVal = PyObject_GetAttr(p_springObject, packersAttr);
+    ASSERT_EQ(p_spring.packers, static_cast<float>(PyFloat_AsDouble(packersVal)));
+}
+
+/// @brief checks the Suspension python object corresponds to the original Suspension values
+/// @param  p_suspension The original Suspension value
+/// @param  p_suspensionObject The python Suspension object
+void CheckSuspensionData(tSuspension p_suspension, PyObject* p_suspensionObject)
+{
+    PyObject* springAttr = PyUnicode_FromString("spring");
+    PyObject* springVal = PyObject_GetAttr(p_suspensionObject, springAttr);
+    CheckSpringData(p_suspension.spring, springVal);
+
+    PyObject* damperAttr = PyUnicode_FromString("damper");
+    PyObject* damperVal = PyObject_GetAttr(p_suspensionObject, damperAttr);
+    CheckDemperData(p_suspension.damper, damperVal);
+
+    PyObject* inertanceAttr = PyUnicode_FromString("inertance");
+    PyObject* inertanceVal = PyObject_GetAttr(p_suspensionObject, inertanceAttr);
+    ASSERT_EQ(p_suspension.inertance, static_cast<float>(PyFloat_AsDouble(inertanceVal)));
+
+    PyObject* xAttr = PyUnicode_FromString("x");
+    PyObject* xVal = PyObject_GetAttr(p_suspensionObject, xAttr);
+    ASSERT_EQ(p_suspension.x, static_cast<float>(PyFloat_AsDouble(xVal)));
+
+    PyObject* vAttr = PyUnicode_FromString("v");
+    PyObject* vVal = PyObject_GetAttr(p_suspensionObject, vAttr);
+    ASSERT_EQ(p_suspension.v, static_cast<float>(PyFloat_AsDouble(vVal)));
+
+    PyObject* aAttr = PyUnicode_FromString("a");
+    PyObject* aVal = PyObject_GetAttr(p_suspensionObject, aAttr);
+    ASSERT_EQ(p_suspension.a, static_cast<float>(PyFloat_AsDouble(aVal)));
+
+    PyObject* forceAttr = PyUnicode_FromString("force");
+    PyObject* forceVal = PyObject_GetAttr(p_suspensionObject, forceAttr);
+    ASSERT_EQ(p_suspension.force, static_cast<float>(PyFloat_AsDouble(forceVal)));
+
+    PyObject* stateAttr = PyUnicode_FromString("state");
+    PyObject* stateVal = PyObject_GetAttr(p_suspensionObject, stateAttr);
+    ASSERT_EQ(p_suspension.state, static_cast<int>(PyLong_AsLong(stateVal)));
+}
+
+/// @brief checks the Brake python object corresponds to the original Brake values
+/// @param  p_brake The original Brake value
+/// @param  p_brakeObject The python Brake object
+void CheckBrakeData(tBrake p_brake, PyObject* p_brakeObject)
+{
+    PyObject* pressureAttr = PyUnicode_FromString("pressure");
+    PyObject* pressureVal = PyObject_GetAttr(p_brakeObject, pressureAttr);
+    ASSERT_EQ(p_brake.pressure, static_cast<float>(PyFloat_AsDouble(pressureVal)));
+
+    PyObject* TqAttr = PyUnicode_FromString("Tq");
+    PyObject* TqVal = PyObject_GetAttr(p_brakeObject, TqAttr);
+    ASSERT_EQ(p_brake.Tq, static_cast<float>(PyFloat_AsDouble(TqVal)));
+
+    PyObject* coeffAttr = PyUnicode_FromString("coeff");
+    PyObject* coeffVal = PyObject_GetAttr(p_brakeObject, coeffAttr);
+    ASSERT_EQ(p_brake.coeff, static_cast<float>(PyFloat_AsDouble(coeffVal)));
+
+    PyObject* IAttr = PyUnicode_FromString("I");
+    PyObject* IVal = PyObject_GetAttr(p_brakeObject, IAttr);
+    ASSERT_EQ(p_brake.I, static_cast<float>(PyFloat_AsDouble(IVal)));
+
+    PyObject* radiusAttr = PyUnicode_FromString("radius");
+    PyObject* radiusVal = PyObject_GetAttr(p_brakeObject, radiusAttr);
+    ASSERT_EQ(p_brake.radius, static_cast<float>(PyFloat_AsDouble(radiusVal)));
+
+    PyObject* tempAttr = PyUnicode_FromString("temp");
+    PyObject* tempVal = PyObject_GetAttr(p_brakeObject, tempAttr);
+    ASSERT_EQ(p_brake.temp, static_cast<float>(PyFloat_AsDouble(tempVal)));
+
+    PyObject* TCLAttr = PyUnicode_FromString("TCL");
+    PyObject* TCLVal = PyObject_GetAttr(p_brakeObject, TCLAttr);
+    ASSERT_EQ(p_brake.TCL, static_cast<float>(PyFloat_AsDouble(TCLVal)));
+
+    PyObject* ABSAttr = PyUnicode_FromString("ABS");
+    PyObject* ABSVal = PyObject_GetAttr(p_brakeObject, ABSAttr);
+    ASSERT_EQ(p_brake.ABS, static_cast<float>(PyFloat_AsDouble(ABSVal)));
+
+    PyObject* EnableABSAttr = PyUnicode_FromString("EnableABS");
+    PyObject* EnableABSVal = PyObject_GetAttr(p_brakeObject, EnableABSAttr);
+    ASSERT_EQ(p_brake.EnableABS, static_cast<bool>(EnableABSVal));
+}
+
+/// @brief checks the BrakeSyst python object corresponds to the original BrakeSyst values
+/// @param  p_brakeSyst The original BrakeSyst value
+/// @param  p_brakeSystObject The python Brake object
+void CheckBrakeSystData(tBrakeSyst p_brakeSyst, PyObject* p_brakeSystObject)
+{
+    PyObject* repAttr = PyUnicode_FromString("rep");
+    PyObject* repVal = PyObject_GetAttr(p_brakeSystObject, repAttr);
+    ASSERT_EQ(p_brakeSyst.rep, static_cast<float>(PyFloat_AsDouble(repVal)));
+
+    PyObject* coeffAttr = PyUnicode_FromString("coeff");
+    PyObject* coeffVal = PyObject_GetAttr(p_brakeSystObject, coeffAttr);
+    ASSERT_EQ(p_brakeSyst.coeff, static_cast<float>(PyFloat_AsDouble(coeffVal)));
+
+    PyObject* ebrake_pressureAttr = PyUnicode_FromString("ebrake_pressure");
+    PyObject* ebrake_pressureVal = PyObject_GetAttr(p_brakeSystObject, ebrake_pressureAttr);
+    ASSERT_EQ(p_brakeSyst.ebrake_pressure, static_cast<float>(PyFloat_AsDouble(ebrake_pressureVal)));
+}
+
+/// @brief checks the DynAxis python object corresponds to the original DynAxis values
+/// @param  p_dynAxis The original DynAxis value
+/// @param  p_dynAxisObject The python DynAxis object
+void CheckDynAxisData(tDynAxis p_dynAxis, PyObject* p_dynAxisObject)
+{
+    PyObject* spinVelAttr = PyUnicode_FromString("spinVel");
+    PyObject* spinVelVal = PyObject_GetAttr(p_dynAxisObject, spinVelAttr);
+    ASSERT_EQ(p_dynAxis.spinVel, static_cast<float>(PyFloat_AsDouble(spinVelVal)));
+
+    PyObject* TqAttr = PyUnicode_FromString("Tq");
+    PyObject* TqVal = PyObject_GetAttr(p_dynAxisObject, TqAttr);
+    ASSERT_EQ(p_dynAxis.Tq, static_cast<float>(PyFloat_AsDouble(TqVal)));
+
+    PyObject* brkTqAttr = PyUnicode_FromString("brkTq");
+    PyObject* brkTqVal = PyObject_GetAttr(p_dynAxisObject, brkTqAttr);
+    ASSERT_EQ(p_dynAxis.brkTq, static_cast<float>(PyFloat_AsDouble(brkTqVal)));
+
+    PyObject* IAttr = PyUnicode_FromString("I");
+    PyObject* IVal = PyObject_GetAttr(p_dynAxisObject, IAttr);
+    ASSERT_EQ(p_dynAxis.I, static_cast<float>(PyFloat_AsDouble(IVal)));
+}
+
+void CheckEngineCurveData(tEngineCurve p_engineCurve, PyObject* p_engineCurveObject)
+{
+    PyObject* maxTqAttr = PyUnicode_FromString("maxTq");
+    PyObject* maxTqVal = PyObject_GetAttr(p_engineCurveObject, maxTqAttr);
+    ASSERT_EQ(p_engineCurve.maxTq, static_cast<float>(PyFloat_AsDouble(maxTqVal)));
+
+    PyObject* maxPwAttr = PyUnicode_FromString("maxPw");
+    PyObject* maxPwVal = PyObject_GetAttr(p_engineCurveObject, maxPwAttr);
+    ASSERT_EQ(p_engineCurve.maxPw, static_cast<float>(PyFloat_AsDouble(maxPwVal)));
+
+    PyObject* rpmMaxPwAttr = PyUnicode_FromString("rpmMaxPw");
+    PyObject* rpmMaxPwVal = PyObject_GetAttr(p_engineCurveObject, rpmMaxPwAttr);
+    ASSERT_EQ(p_engineCurve.rpmMaxPw, static_cast<float>(PyFloat_AsDouble(rpmMaxPwVal)));
+
+    PyObject* TqAtMaxPwAttr = PyUnicode_FromString("TqAtMaxPw");
+    PyObject* TqAtMaxPwVal = PyObject_GetAttr(p_engineCurveObject, TqAtMaxPwAttr);
+    ASSERT_EQ(p_engineCurve.TqAtMaxPw, static_cast<float>(PyFloat_AsDouble(TqAtMaxPwVal)));
+
+    PyObject* rpmMaxTqAttr = PyUnicode_FromString("rpmMaxTq");
+    PyObject* rpmMaxTqVal = PyObject_GetAttr(p_engineCurveObject, rpmMaxTqAttr);
+    ASSERT_EQ(p_engineCurve.rpmMaxTq, static_cast<float>(PyFloat_AsDouble(rpmMaxTqVal)));
+
+    PyObject* nbPtsAttr = PyUnicode_FromString("nbPts");
+    PyObject* nbPtsVal = PyObject_GetAttr(p_engineCurveObject, nbPtsAttr);
+    ASSERT_EQ(p_engineCurve.nbPts, static_cast<int>(PyLong_AsLong(nbPtsVal)));
+}
+
+void CheckEngineData(tEngine p_engine, PyObject* p_engineObject)
+{
+    PyObject* curveAttr = PyUnicode_FromString("curve");
+    PyObject* curveVal = PyObject_GetAttr(p_engineObject, curveAttr);
+    CheckEngineCurveData(p_engine.curve, curveVal);
+
+    PyObject* revsLimiterAttr = PyUnicode_FromString("revsLimiter");
+    PyObject* revsLimiterVal = PyObject_GetAttr(p_engineObject, revsLimiterAttr);
+    ASSERT_EQ(p_engine.revsLimiter, static_cast<float>(PyFloat_AsDouble(revsLimiterVal)));
+
+    PyObject* revsMaxAttr = PyUnicode_FromString("revsMax");
+    PyObject* revsMaxVal = PyObject_GetAttr(p_engineObject, revsMaxAttr);
+    ASSERT_EQ(p_engine.revsMax, static_cast<float>(PyFloat_AsDouble(revsMaxVal)));
+
+    PyObject* tickoverAttr = PyUnicode_FromString("tickover");
+    PyObject* tickoverVal = PyObject_GetAttr(p_engineObject, tickoverAttr);
+    ASSERT_EQ(p_engine.tickover, static_cast<float>(PyFloat_AsDouble(tickoverVal)));
+
+    PyObject* IAttr = PyUnicode_FromString("I");
+    PyObject* IVal = PyObject_GetAttr(p_engineObject, IAttr);
+    ASSERT_EQ(p_engine.I, static_cast<float>(PyFloat_AsDouble(IVal)));
+
+    PyObject* radsAttr = PyUnicode_FromString("rads");
+    PyObject* radsVal = PyObject_GetAttr(p_engineObject, radsAttr);
+    ASSERT_EQ(p_engine.rads, static_cast<float>(PyFloat_AsDouble(radsVal)));
+
+    PyObject* TqAttr = PyUnicode_FromString("Tq");
+    PyObject* TqVal = PyObject_GetAttr(p_engineObject, TqAttr);
+    ASSERT_EQ(p_engine.Tq, static_cast<float>(PyFloat_AsDouble(TqVal)));
+
+    PyObject* Tq_responseAttr = PyUnicode_FromString("Tq_response");
+    PyObject* Tq_responseVal = PyObject_GetAttr(p_engineObject, Tq_responseAttr);
+    ASSERT_EQ(p_engine.Tq_response, static_cast<float>(PyFloat_AsDouble(Tq_responseVal)));
+
+    PyObject* I_jointAttr = PyUnicode_FromString("I_joint");
+    PyObject* I_jointVal = PyObject_GetAttr(p_engineObject, I_jointAttr);
+    ASSERT_EQ(p_engine.I_joint, static_cast<float>(PyFloat_AsDouble(I_jointVal)));
+
+    PyObject* fuelconsAttr = PyUnicode_FromString("fuelcons");
+    PyObject* fuelconsVal = PyObject_GetAttr(p_engineObject, fuelconsAttr);
+    ASSERT_EQ(p_engine.fuelcons, static_cast<float>(PyFloat_AsDouble(fuelconsVal)));
+
+    PyObject* brakeCoeffAttr = PyUnicode_FromString("brakeCoeff");
+    PyObject* brakeCoeffVal = PyObject_GetAttr(p_engineObject, brakeCoeffAttr);
+    ASSERT_EQ(p_engine.brakeCoeff, static_cast<float>(PyFloat_AsDouble(brakeCoeffVal)));
+
+    PyObject* brakeLinCoeffAttr = PyUnicode_FromString("brakeLinCoeff");
+    PyObject* brakeLinCoeffVal = PyObject_GetAttr(p_engineObject, brakeLinCoeffAttr);
+    ASSERT_EQ(p_engine.brakeLinCoeff, static_cast<float>(PyFloat_AsDouble(brakeLinCoeffVal)));
+
+    PyObject* pressureAttr = PyUnicode_FromString("pressure");
+    PyObject* pressureVal = PyObject_GetAttr(p_engineObject, pressureAttr);
+    ASSERT_EQ(p_engine.pressure, static_cast<float>(PyFloat_AsDouble(pressureVal)));
+
+    PyObject* exhaust_presureAttr = PyUnicode_FromString("exhaust_pressure");
+    PyObject* exhaust_presureVal = PyObject_GetAttr(p_engineObject, exhaust_presureAttr);
+    ASSERT_EQ(p_engine.exhaust_pressure, static_cast<float>(PyFloat_AsDouble(exhaust_presureVal)));
+
+    PyObject* exhaust_refractAttr = PyUnicode_FromString("exhaust_refract");
+    PyObject* exhaust_refractVal = PyObject_GetAttr(p_engineObject, exhaust_refractAttr);
+    ASSERT_EQ(p_engine.exhaust_refract, static_cast<float>(PyFloat_AsDouble(exhaust_refractVal)));
+
+    PyObject* timeInLimiterAttr = PyUnicode_FromString("timeInLimiter");
+    PyObject* timeInLimiterVal = PyObject_GetAttr(p_engineObject, timeInLimiterAttr);
+    ASSERT_EQ(p_engine.timeInLimiter, static_cast<float>(PyFloat_AsDouble(timeInLimiterVal)));
+
+    PyObject* TCLAttr = PyUnicode_FromString("TCL");
+    PyObject* TCLVal = PyObject_GetAttr(p_engineObject, TCLAttr);
+    ASSERT_EQ(p_engine.TCL, static_cast<float>(PyFloat_AsDouble(TCLVal)));
+
+    PyObject* EnableTCLAttr = PyUnicode_FromString("EnableTCL");
+    PyObject* EnableTCLVal = PyObject_GetAttr(p_engineObject, EnableTCLAttr);
+    ASSERT_TRUE(p_engine.EnableTCL == static_cast<bool>(PyLong_AsLong(EnableTCLVal)));
+}
+
+void CheckSimCarData(tCar p_car, PyObject* p_carObject)
+{
+    PyObject* preCtrlAttr = PyUnicode_FromString("preCtrl");
+    PyObject* preCtrlVal = PyObject_GetAttr(p_carObject, preCtrlAttr);
+    CheckCarCtrlData(p_car.preCtrl, preCtrlVal);
+
+    PyObject* axleAttr = PyUnicode_FromString("axle");
+    PyObject* axleVal = PyObject_GetAttr(p_carObject, axleAttr);
+    CheckAxleData(p_car.axle[0], PyTuple_GetItem(axleVal, 0));
+    CheckAxleData(p_car.axle[1], PyTuple_GetItem(axleVal, 1));
+
+    PyObject* wheelAttr = PyUnicode_FromString("wheel");
+    PyObject* wheelVal = PyObject_GetAttr(p_carObject, wheelAttr);
+    CheckWheelSystData(p_car.wheel[0], PyTuple_GetItem(wheelVal,0));
+    CheckWheelSystData(p_car.wheel[1], PyTuple_GetItem(wheelVal,1));
+    CheckWheelSystData(p_car.wheel[2], PyTuple_GetItem(wheelVal,2));
+    CheckWheelSystData(p_car.wheel[3], PyTuple_GetItem(wheelVal,3));
+
+    PyObject* steerAttr = PyUnicode_FromString("steer");
+    PyObject* steerVal = PyObject_GetAttr(p_carObject, steerAttr);
+    CheckSteerData(p_car.steer, steerVal);
+
+    PyObject* brkSystAttr = PyUnicode_FromString("brkSyst");
+    PyObject* brkSystVal = PyObject_GetAttr(p_carObject, brkSystAttr);
+    CheckBrkSystData(p_car.brkSyst, brkSystVal);
+
+    PyObject* aeroAttr = PyUnicode_FromString("aero");
+    PyObject* aeroVal = PyObject_GetAttr(p_carObject, aeroAttr);
+    CheckAeroData(p_car.aero, aeroVal);
+
+    PyObject* wingAttr = PyUnicode_FromString("wing");
+    PyObject* wingVal = PyObject_GetAttr(p_carObject, wingAttr);
+    CheckWingData(p_car.wing[0], PyTuple_GetItem(wingVal, 0));
+    CheckWingData(p_car.wing[1], PyTuple_GetItem(wingVal, 1));
+
+    PyObject* transmissionAttr = PyUnicode_FromString("transmission");
+    PyObject* transmissionVal = PyObject_GetAttr(p_carObject, transmissionAttr);
+    CheckTransMissionData(p_car.transmission, transmissionVal);
+
+    PyObject* engineAttr = PyUnicode_FromString("engine");
+    PyObject* engineVal = PyObject_GetAttr(p_carObject, engineAttr);
+    CheckEngineData(p_car.engine, engineVal);
+
+    PyObject* dimensionAttr = PyUnicode_FromString("dimension");
+    PyObject* dimensionVal = PyObject_GetAttr(p_carObject, dimensionAttr);
+    CheckVectorData(p_car.dimension.x, p_car.dimension.y, p_car.dimension.z, dimensionVal);
+
+    PyObject* massAttr = PyUnicode_FromString("mass");
+    PyObject* massVal = PyObject_GetAttr(p_carObject, massAttr);
+    ASSERT_EQ(p_car.mass, static_cast<float>(PyFloat_AsDouble(massVal)));
+
+    PyObject* MinvAttr = PyUnicode_FromString("Minv");
+    PyObject* MinvVal = PyObject_GetAttr(p_carObject, MinvAttr);
+    ASSERT_EQ(p_car.Minv, static_cast<float>(PyFloat_AsDouble(MinvVal)));
+
+    PyObject* tankAttr = PyUnicode_FromString("tank");
+    PyObject* tankVal = PyObject_GetAttr(p_carObject, tankAttr);
+    ASSERT_EQ(p_car.tank, static_cast<float>(PyFloat_AsDouble(tankVal)));
+
+    PyObject* statGCAttr = PyUnicode_FromString("statGC");
+    PyObject* statGCVal = PyObject_GetAttr(p_carObject, statGCAttr);
+    CheckVectorData(p_car.statGC.x, p_car.statGC.y, p_car.statGC.z, statGCVal);
+
+    PyObject* IinvAttr = PyUnicode_FromString("Iinv");
+    PyObject* IinvVal = PyObject_GetAttr(p_carObject, IinvAttr);
+    CheckVectorData(p_car.Iinv.x, p_car.Iinv.y, p_car.Iinv.z, IinvVal);
+
+    PyObject* fuelAttr = PyUnicode_FromString("fuel");
+    PyObject* fuelVal = PyObject_GetAttr(p_carObject, fuelAttr);
+    ASSERT_EQ(p_car.fuel, static_cast<float>(PyFloat_AsDouble(fuelVal)));
+
+    PyObject* fuel_consumptionAttr = PyUnicode_FromString("fuel_consumption");
+    PyObject* fuel_consumptionVal = PyObject_GetAttr(p_carObject, fuel_consumptionAttr);
+    ASSERT_EQ(p_car.fuel_consumption, static_cast<float>(PyFloat_AsDouble(fuel_consumptionVal)));
+
+    PyObject* fuel_prevAttr = PyUnicode_FromString("fuel_prev");
+    PyObject* fuel_prevVal = PyObject_GetAttr(p_carObject, fuel_prevAttr);
+    ASSERT_EQ(p_car.fuel_prev, static_cast<float>(PyFloat_AsDouble(fuel_prevVal)));
+
+    PyObject* fuel_timeAttr = PyUnicode_FromString("fuel_time");
+    PyObject* fuel_timeVal = PyObject_GetAttr(p_carObject, fuel_timeAttr);
+    ASSERT_EQ(p_car.fuel_time, static_cast<float>(PyFloat_AsDouble(fuel_timeVal)));
+
+    PyObject* DynGCAttr = PyUnicode_FromString("DynGC");
+    PyObject* DynGCVal = PyObject_GetAttr(p_carObject, DynGCAttr);
+    CheckDynamicPointData(p_car.DynGC, DynGCVal);
+
+    PyObject* DynGCgAttr = PyUnicode_FromString("DynGCg");
+    PyObject* DynGCgVal = PyObject_GetAttr(p_carObject, DynGCgAttr);
+    CheckDynamicPointData(p_car.DynGCg, DynGCgVal);
+
+    PyObject* VelCollAttr = PyUnicode_FromString("VelColl");
+    PyObject* VelCollVal = PyObject_GetAttr(p_carObject, VelCollAttr);
+    CheckPosDObject(p_car.VelColl, VelCollVal);
+
+    PyObject* preDynGCAttr = PyUnicode_FromString("preDynGC");
+    PyObject* preDynGCVal = PyObject_GetAttr(p_carObject, preDynGCAttr);
+    CheckDynamicPointData(p_car.preDynGC, preDynGCVal);
+
+    PyObject* trkPosAttr = PyUnicode_FromString("trkPos");
+    PyObject* trkPosVal = PyObject_GetAttr(p_carObject, trkPosAttr);
+    CheckTrackLocationData(p_car.trkPos, trkPosVal);
+
+    PyObject* airSpeed2Attr = PyUnicode_FromString("airSpeed2");
+    PyObject* airSpeed2Val = PyObject_GetAttr(p_carObject, airSpeed2Attr);
+    ASSERT_EQ(p_car.airSpeed2, static_cast<float>(PyFloat_AsDouble(airSpeed2Val)));
+
+    PyObject* CoszAttr = PyUnicode_FromString("Cosz");
+    PyObject* CoszVal = PyObject_GetAttr(p_carObject, CoszAttr);
+    ASSERT_EQ(p_car.Cosz, static_cast<float>(PyFloat_AsDouble(CoszVal)));
+
+    PyObject* SinzAttr = PyUnicode_FromString("Sinz");
+    PyObject* SinzVal = PyObject_GetAttr(p_carObject, SinzAttr);
+    ASSERT_EQ(p_car.Sinz, static_cast<float>(PyFloat_AsDouble(SinzVal)));
+
+    PyObject* cornerAttr = PyUnicode_FromString("corner");
+    PyObject* cornerVal = PyObject_GetAttr(p_carObject, cornerAttr);
+    CheckDynamicPointData(p_car.corner[0], PyTuple_GetItem(cornerVal, 0));
+    CheckDynamicPointData(p_car.corner[1], PyTuple_GetItem(cornerVal, 1));
+    CheckDynamicPointData(p_car.corner[2], PyTuple_GetItem(cornerVal, 2));
+    CheckDynamicPointData(p_car.corner[3], PyTuple_GetItem(cornerVal, 3));
+
+    PyObject* collisionAttr = PyUnicode_FromString("collision");
+    PyObject* collisionVal = PyObject_GetAttr(p_carObject, collisionAttr);
+    ASSERT_EQ(p_car.collision, static_cast<int>(PyLong_AsLong(collisionVal)));
+
+    PyObject* normalAttr = PyUnicode_FromString("normal");
+    PyObject* normalVal = PyObject_GetAttr(p_carObject, normalAttr);
+    CheckVectorData(p_car.normal.x, p_car.normal.y, p_car.normal.z, normalVal);
+
+    PyObject* collposAttr = PyUnicode_FromString("collpos");
+    PyObject* collposVal = PyObject_GetAttr(p_carObject, collposAttr);
+    CheckVectorData(p_car.collpos.x, p_car.collpos.y, p_car.collpos.z, collposVal);
+
+    PyObject* wheelbaseAttr = PyUnicode_FromString("wheelbase");
+    PyObject* wheelbaseVal = PyObject_GetAttr(p_carObject, wheelbaseAttr);
+    ASSERT_EQ(p_car.wheelbase, static_cast<float>(PyFloat_AsDouble(wheelbaseVal)));
+
+    PyObject* wheeltrackAttr = PyUnicode_FromString("wheeltrack");
+    PyObject* wheeltrackVal = PyObject_GetAttr(p_carObject, wheeltrackAttr);
+    ASSERT_EQ(p_car.wheeltrack, static_cast<float>(PyFloat_AsDouble(wheeltrackVal)));
+
+    PyObject* posMatAttr = PyUnicode_FromString("posMat");
+    PyObject* posMatVal = PyObject_GetAttr(p_carObject, posMatAttr);
+    CheckMatrixData(p_car.posMat, posMatVal);
+
+    PyObject* blockedAttr = PyUnicode_FromString("blocked");
+    PyObject* blockedVal = PyObject_GetAttr(p_carObject, blockedAttr);
+    ASSERT_EQ(p_car.blocked, static_cast<int>(PyLong_AsLong(blockedVal)));
+
+    PyObject* dammageAttr = PyUnicode_FromString("dammage");
+    PyObject* dammageVal = PyObject_GetAttr(p_carObject, dammageAttr);
+    ASSERT_EQ(p_car.dammage, static_cast<int>(PyLong_AsLong(dammageVal)));
+
+    PyObject* featuresAttr = PyUnicode_FromString("features");
+    PyObject* featuresVal = PyObject_GetAttr(p_carObject, featuresAttr);
+    ASSERT_EQ(p_car.features, static_cast<int>(PyLong_AsLong(featuresVal)));
+
+    PyObject* restPosAttr = PyUnicode_FromString("restPos");
+    PyObject* restPosVal = PyObject_GetAttr(p_carObject, restPosAttr);
+    CheckDynamicPointData(p_car.restPos, restPosVal);
+    
+    PyObject* collisionAwareAttr = PyUnicode_FromString("collisionAware");
+    PyObject* collisionAwareVal = PyObject_GetAttr(p_carObject, collisionAwareAttr);
+    ASSERT_EQ(p_car.collisionAware, static_cast<float>(PyFloat_AsDouble(collisionAwareVal)));
+}
+
+void CheckWheelSystData(tWheel p_wheelSyst, PyObject* p_wheelSystObject)
+{
+    
+}
+
+
 /// @brief tests the sda data c++ data correctly translated to python and back
 TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
 {
