@@ -3,6 +3,9 @@
 #  © Copyright Utrecht University (Department of Information and Computing Sciences)
 
 import site
+import sys
+
+sys.path.append(site.getsitepackages())
 
 import SDATypes
 import simulator
