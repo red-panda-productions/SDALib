@@ -28,6 +28,7 @@ TEST(PythonDriverTests, PythonDriverUpdateAITest)
     sdaData.TickCount = random.NextUInt();
     sdaData.Car = GenerateCar(segments);
     sdaData.Situation = GenerateSituation();
+    sdaData.SimCar = GenerateSimCar(sdaData.Car);
 
     SDAAction action = pythonDriver.UpdateAI(sdaData);
 
