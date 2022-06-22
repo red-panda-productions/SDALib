@@ -1,8 +1,9 @@
 # object containing all data send to the decision maker
 class SDATypes:
-    def __init__(self, car, situation, tickCount):
+    def __init__(self, car, situation, simCar, tickCount):
         self.car = car  # Car
         self.situation = situation  # Situation
+        self.simCar = simCar # SimCar
         self.tickCount = tickCount  # long
 
 
