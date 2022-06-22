@@ -10,4 +10,4 @@ SDAData::SDAData(tCar* p_simCar, tCarElt* p_car, tSituation* p_situation, unsign
     : SimCar(*p_simCar), Car(*p_car), Situation(*p_situation), TickCount(p_tickCount) {}
 
 SDAData::SDAData()
-    : Car(), Situation(), TickCount(0) {}
+    : SimCar(), Car(), Situation(), TickCount(0) {}
