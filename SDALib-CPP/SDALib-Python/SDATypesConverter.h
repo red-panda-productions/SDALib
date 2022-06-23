@@ -168,10 +168,6 @@ public:
     tTransmission GetCppTransmissionSystObject(PyObject* p_transmission);
     void SetPythonTransmissionSystObject(PyObject* p_target, PyObject* p_data);
 
-    PyObject* GetPythonEngineCurveElemObject(tEngineCurveElem& p_engineCurveElem);
-    tEngineCurveElem GetCppEngineCurveElemObject(PyObject* p_engineCurveElem);
-    void SetPythonEngineCurveElemObject(PyObject* p_target, PyObject* p_data);
-
     PyObject* GetPythonEngineCurveObject(tEngineCurve& p_engineCurve);
     tEngineCurve GetCppEngineCurveObject(PyObject* p_engineCurve);
     void SetPythonEngineCurveObject(PyObject* p_target, PyObject* p_data);

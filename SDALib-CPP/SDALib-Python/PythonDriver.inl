@@ -11,7 +11,6 @@
 #define CREATE_PYTHON_DRIVER_IMPLEMENTATION(p_type)                                      \
     template PythonDriver<p_type>::PythonDriver();                                       \
     template void PythonDriver<p_type>::SetPythonDriverFileName(std::string p_fileName); \
-    template PyObject *PythonDriver<p_type>::GetPythonDriverObject();                    \
     template std::string PythonDriver<p_type>::GetPythonDriverFileName();
 
 /// @brief Constructs PythonDriver and sets up python code
@@ -65,12 +64,4 @@ template <typename PointerManager>
 std::string PythonDriver<PointerManager>::GetPythonDriverFileName()
 {
     return m_pythonDriverFileName;
-}
-
-/// @brief gets the python driver object
-/// @return the python driver object
-template <typename PointerManager>
-PyObject *PythonDriver<PointerManager>::GetPythonDriverObject()
-{
-    return m_pythonDriver;
 }

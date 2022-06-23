@@ -33,7 +33,6 @@ public:
 
     void SetPythonDriverFileName(std::string p_fileName);
     std::string GetPythonDriverFileName();
-    PyObject* GetPythonDriverObject();
 
     PyObject* m_pythonDriver;
     std::string m_pythonDriverFileName = "Driver";
