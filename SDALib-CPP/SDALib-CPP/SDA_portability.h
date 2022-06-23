@@ -7,6 +7,9 @@
 #pragma once
 
 #include "ipclib_portability.h"
+#include "portability.h"
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
+#include <experimental/filesystem>
 
 #ifdef WIN32
 #define SDA_IP_TYPE PCWSTR
@@ -15,6 +18,14 @@
 #define SDA_THROW_EXCEPTION(p_msg)     \
     std::cerr << (p_msg) << std::endl; \
     throw std::exception(p_msg)
+
+#include "Windows.h"
+
+#define SET_WORKING_DIR()                                                                                \
+    char exeDir[260];                                                                                    \
+    GetModuleFileName(NULL, exeDir, 260);                                                                \
+    const char* workingDir = std::experimental::filesystem::path(exeDir).parent_path().string().c_str(); \
+    chdir(workingDir)
 #endif
 
 #ifdef __linux__
@@ -23,6 +34,11 @@
 #define SDA_THROW_EXCEPTION(p_msg)     \
     std::cerr << (p_msg) << std::endl; \
     throw std::exception();
+
+#define SET_WORKING_DIR()                                                                                \
+    const char* exeDir = std::experimental::filesystem::canonical("/proc/self/exe").string().c_str();    \
+    const char* workingDir = std::experimental::filesystem::path(exeDir).parent_path().string().c_str(); \
+    chdir(workingDir)
 
 #endif
 
