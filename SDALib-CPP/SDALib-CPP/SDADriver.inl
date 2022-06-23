@@ -68,6 +68,14 @@ bool AIInterface<PointerManager>::Update()
     SDAData* data = m_pointerManager.GetDataPointer();
 
     data->Car.pub.trkPos.seg = m_pointerManager.GetSegmentPointer();
+    data->SimCar.ctrl = &data->Car.ctrl;
+    data->SimCar.carElt = &data->Car;
+    data->SimCar.trkPos = data->Car.pub.trkPos;
+
+    for (int i = 0; i < 4; i++)
+    {
+        data->SimCar.wheel[i].trkPos = data->Car.pub.trkPos;
+    }
 
     const SDAAction action = UpdateAI(*data);
 
