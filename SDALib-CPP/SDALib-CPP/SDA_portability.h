@@ -45,7 +45,7 @@
     {                                                             \
         path = dirname(result);                                   \
     }                                                             \
-    chdir(path);
+    chdir(path)
 
 #endif
 
