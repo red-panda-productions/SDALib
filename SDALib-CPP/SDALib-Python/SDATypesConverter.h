@@ -191,6 +191,10 @@ public:
         *m_axleClass, *m_steerClass, *m_wheelClass, *m_gearBoxClass, *m_clutchClass, *m_transmissionClass, *m_engineCurveElemClass,
         *m_engineCurveClass, *m_engineClass, *m_simCarClass;
 
+    PyObject* m_sdaTypesDict;
+    PyObject* m_sdaTypesModuleName;
+    PyObject* m_sdaTypesModule;
+
     void FillCarSetupArray(int p_start, int p_end, PyObject* p_carSetupArray[], tCarSetupItem* p_carSetupItems);
 
     void ReplaceString(char* p_toFill, const char* p_data, int p_length);

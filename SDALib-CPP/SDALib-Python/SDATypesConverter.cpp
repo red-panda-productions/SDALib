@@ -24,137 +24,143 @@ SDATypesConverter::SDATypesConverter()
     char buffer[256];
     getcwd(buffer, 256);
 
-    std::cout << buffer << std::endl;
+    int index = 0;
+    while (buffer[index] != '\0')
+    {
+        if (buffer[index] == '\\') buffer[index] = '/';
+        index++;
+    }
+
     PyRun_SimpleString("import sys\n");
     std::string s = "sys.path.append(\"" + std::string(buffer) + "\")";
     PyRun_SimpleString(s.c_str());  // the folder where the pythonTest.py is located
 
     // initialize the SDAType data type
-    PyObject *sdaTypesModuleName = PyUnicode_FromString("SDATypes");
-    PyObject *sdaTypesModule = PyImport_Import(sdaTypesModuleName);
+    m_sdaTypesModuleName = PyUnicode_FromString("SDATypes");
+    m_sdaTypesModule = PyImport_Import(m_sdaTypesModuleName);
 
-    if (!PyModule_Check(sdaTypesModule)) return;
-    PyObject *sdaTypesDict = PyModule_GetDict(sdaTypesModule);
+    if (!PyModule_Check(m_sdaTypesModule)) return;
+    m_sdaTypesDict = PyModule_GetDict(m_sdaTypesModule);
 
     std::string py_class_name = "SDATypes";
-    m_sdaTypesClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_sdaTypesClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Car";
-    m_carClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_carClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "InitCar";
-    m_initCarClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_initCarClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "WheelSpecifications";
-    m_wheelSpecificationsClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_wheelSpecificationsClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "VisualAttributes";
-    m_visualAttributesClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_visualAttributesClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "PublicCar";
-    m_publicCarClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_publicCarClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "DynamicPoint";
-    m_dynamicPointClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_dynamicPointClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "TrackLocation";
-    m_trackLocationClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_trackLocationClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "TrackSegment";
-    m_trackSegmentClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_trackSegmentClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "CarRaceInfo";
-    m_carRaceInfoClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_carRaceInfoClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "PrivCar";
-    m_privCarClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_privCarClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "PosD";
-    m_posDClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_posDClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "CollisionState";
-    m_collisionStateClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_collisionStateClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "CarCtrl";
-    m_carCtrlClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_carCtrlClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "CarSetup";
-    m_carSetupClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_carSetupClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "CarSetupItem";
-    m_carSetupItemClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_carSetupItemClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "CarPitCmd";
-    m_carPitCmdClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_carPitCmdClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Situation";
-    m_situationClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_situationClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "RaceInfo";
-    m_raceInfoClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_raceInfoClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Vector";
-    m_vectorClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_vectorClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Aero";
-    m_aeroClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_aeroClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Wing";
-    m_wingClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_wingClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "DemperDef";
-    m_damperDefClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_damperDefClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Demper";
-    m_damperClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_damperClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Spring";
-    m_springClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_springClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Suspension";
-    m_suspensionClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_suspensionClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Brake";
-    m_brakeClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_brakeClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "BrakeSyst";
-    m_brakeSystClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_brakeSystClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "DynAxis";
-    m_dynAxisClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_dynAxisClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Differential";
-    m_differentialClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_differentialClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Axle";
-    m_axleClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_axleClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Steer";
-    m_steerClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_steerClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Wheel";
-    m_wheelClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_wheelClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Gearbox";
-    m_gearBoxClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_gearBoxClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Clutch";
-    m_clutchClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_clutchClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Transmission";
-    m_transmissionClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_transmissionClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "EngineCurveElem";
-    m_engineCurveElemClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_engineCurveElemClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "EngineCurve";
-    m_engineCurveClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_engineCurveClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Engine";
-    m_engineClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_engineClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "SimCar";
-    m_simCarClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
+    m_simCarClass = PyDict_GetItemString(m_sdaTypesDict, py_class_name.c_str());
 }
 
 /// @brief          Translates a python object to SDAAction
@@ -179,6 +185,7 @@ SDAAction SDATypesConverter::GetCppSDAAction(PyObject *p_action)
 /// @return         The python object
 PyObject *SDATypesConverter::GetPythonSDATypeObject(SDAData &p_data)
 {
+
     const int size = 4;
     PyObject *sdaTypesArgs[size];
 
