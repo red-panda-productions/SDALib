@@ -46,7 +46,6 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
     PyObject *sdaType = m_sdaTypesConverter.GetPythonSDATypeObject(p_data);
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
     PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
-
     return m_sdaTypesConverter.GetCppSDAAction(result);
 }
 
