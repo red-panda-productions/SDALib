@@ -108,7 +108,7 @@ void AIInterface<PointerManager>::Loop()
 template <class PointerManager>
 void AIInterface<PointerManager>::SetupSocket()
 {
-    std::cerr << "Trying to connect to Speed Dreams" << std::endl;
+    std::cerr << "Trying to connect to DAISI" << std::endl;
     int tries = 0;
     while (m_client.Initialize() != IPCLIB_SUCCEED && tries++ < 10)
     {

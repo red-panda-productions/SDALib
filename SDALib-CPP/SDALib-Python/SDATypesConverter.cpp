@@ -195,7 +195,7 @@ PyObject *SDATypesConverter::GetPythonSDATypeObject(SDAData &p_data)
 
     // initialize SDAType
     PyObject *SDATypes = GetObjectFromArgs(m_sdaTypesClass, sdaTypesArgs, size);
-  
+
     return SDATypes;
 }
 
@@ -1916,6 +1916,8 @@ PyObject *SDATypesConverter::GetObjectFromArgs(PyObject *p_classInit, PyObject *
 
     // initialize SDAType
     PyObject *objectInit = PyObject_CallObject(p_classInit, initArgsPy);
+
+    Py_CLEAR(initArgsPy);
 
     return objectInit;
 }
