@@ -50,6 +50,11 @@ template <typename PointerManager>
 SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
 {
     PyObject *sdaType = m_sdaTypesConverter.GetPythonSDATypeObject(p_data);
+    if (sdaType == nullptr)
+    {
+        std::cout << "Not a valid SDATYpe" << std::endl;
+        return {0, 0, 0, 0};
+    }
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
     PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
     SDAAction action = m_sdaTypesConverter.GetCppSDAAction(result);

@@ -94,6 +94,14 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData &p_data, SDAAction &p_acti
 
     data.SimCar = SimCarTable[0];
 
+    delete data.Situation.cars[0];
+    delete[] data.Situation.cars;
+    delete SimCarTable[0].engine.curve.data;
+    delete SimCarTable[0].transmission.differential->inAxis[0];
+    delete SimCarTable[0].transmission.differential->inAxis[1];
+    delete SimCarTable[0].transmission.differential->outAxis[0];
+    delete SimCarTable[0].transmission.differential->outAxis[1];
+
     return data;
 }
 
