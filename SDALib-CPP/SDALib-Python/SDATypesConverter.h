@@ -10,12 +10,8 @@
 #endif
 #include <stdlib.h>
 #include <iostream>
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
-#include <experimental/filesystem>
 
-namespace filesystem = std::experimental::filesystem;
-
-///@broef class for converting structs from Python to Cpp and back
+///@brief class for converting structs from Python to Cpp and back
 class SDATypesConverter
 {
 public:

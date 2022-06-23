@@ -10,6 +10,8 @@
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
 #include <experimental/filesystem>
 
+namespace filesystem = std::experimental::filesystem;
+
 #ifdef WIN32
 #define SDA_IP_TYPE PCWSTR
 #define LOCALHOST   L"127.0.0.1"
@@ -21,12 +23,12 @@
 #include "Windows.h"
 #include <direct.h>
 #define chdir _chdir
-#define SET_WORKING_DIR()                                                                                      \
-    char exeDir[260];                                                                                          \
-    GetModuleFileName(NULL, exeDir, 260);                                                                      \
-    std::experimental::filesystem::path directory = std::experimental::filesystem::path(exeDir).parent_path(); \
-    std::string workingDirStr = directory.string();                                                            \
-    const char* workingDir = workingDirStr.c_str();                                                            \
+#define SET_WORKING_DIR()                                                \
+    char exeDir[260];                                                    \
+    GetModuleFileName(NULL, exeDir, 260);                                \
+    filesystem::path directory = filesystem::path(exeDir).parent_path(); \
+    std::string workingDirStr = directory.string();                      \
+    const char* workingDir = workingDirStr.c_str();                      \
     chdir(workingDir)
 #endif
 

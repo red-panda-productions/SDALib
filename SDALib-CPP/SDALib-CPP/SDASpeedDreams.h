@@ -17,7 +17,6 @@ private:
     void SimUpdate(tSituation *s, double deltaTime);
     tdble SimTimeOfDay = 0;
     double Tair = 273.15;
-    ;
     double simDegree = 0.000000023;
     double startDay = 0.0;
     double endDay = 0.0;
