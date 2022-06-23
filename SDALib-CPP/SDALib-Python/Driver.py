@@ -14,8 +14,6 @@ class SDADriver:
     def UpdateAI(self, sdaData):
         # find the velocity of the car
         speed = sdaData.car.pub.dynGC.vel.x * 3.6
-        print(speed)
-        print("hi")
         self.speedLimit = sdaData.car.pub.trkPos.seg.speedLimit
 
         accel = 0  # float between 0 and 1
