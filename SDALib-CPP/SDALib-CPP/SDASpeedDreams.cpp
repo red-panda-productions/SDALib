@@ -57,6 +57,32 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData &p_data, SDAAction &p_acti
 
     SimCarTable[0] = CarConstructor(p_data.SimCar, data.Situation.cars[0]);
 
+    SimCarTable[0].engine.curve.data = new tEngineCurveElem();
+    SimCarTable[0].engine.curve.data->a = 0;
+    SimCarTable[0].engine.curve.data->b = 0;
+    SimCarTable[0].engine.curve.data->rads = SimCarTable[0].engine.rads;
+
+    SimCarTable[0].transmission.differential->inAxis[0] = new tDynAxis();
+    SimCarTable[0].transmission.differential->inAxis[0]->brkTq = 0;
+    SimCarTable[0].transmission.differential->inAxis[0]->I = 0;
+    SimCarTable[0].transmission.differential->inAxis[0]->Tq = 0;
+    SimCarTable[0].transmission.differential->inAxis[0]->spinVel = 0;
+    SimCarTable[0].transmission.differential->inAxis[1] = new tDynAxis();
+    SimCarTable[0].transmission.differential->inAxis[1]->brkTq = 0;
+    SimCarTable[0].transmission.differential->inAxis[1]->I = 0;
+    SimCarTable[0].transmission.differential->inAxis[1]->Tq = 0;
+    SimCarTable[0].transmission.differential->inAxis[1]->spinVel = 0;
+    SimCarTable[0].transmission.differential->outAxis[0] = new tDynAxis();
+    SimCarTable[0].transmission.differential->outAxis[0]->brkTq = 0;
+    SimCarTable[0].transmission.differential->outAxis[0]->I = 0;
+    SimCarTable[0].transmission.differential->outAxis[0]->Tq = 0;
+    SimCarTable[0].transmission.differential->outAxis[0]->spinVel = 0;
+    SimCarTable[0].transmission.differential->outAxis[1] = new tDynAxis();
+    SimCarTable[0].transmission.differential->outAxis[1]->brkTq = 0;
+    SimCarTable[0].transmission.differential->outAxis[1]->I = 0;
+    SimCarTable[0].transmission.differential->outAxis[1]->Tq = 0;
+    SimCarTable[0].transmission.differential->outAxis[1]->spinVel = 0;
+
     // update the simulator
     double elapsed = 0;
     while (elapsed <= RCM_MAX_DT_ROBOTS + RCM_MAX_DT_SIMU)
