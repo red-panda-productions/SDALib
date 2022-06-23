@@ -2167,24 +2167,6 @@ void CheckTransmissionData(tTransmission p_transmission, PyObject* p_transmissio
     CheckDifferentialData(p_transmission.differential[2], PyTuple_GetItem(differentialVal, 2));
 }
 
-/// @brief checks the engineCurveElem python object corresponds to the original clutch values
-/// @param  p_engineCurveElem The original EngineCurveElem value
-/// @param  p_engineCurveElemObject The python EngineCurveElem object
-void CheckEngineCurveElem(tEngineCurveElem p_engineCurveElem, PyObject* p_engineCurveElemObject)
-{
-    PyObject* radsAttr = PyUnicode_FromString("rads");
-    PyObject* radsVal = PyObject_GetAttr(p_engineCurveElemObject, radsAttr);
-    ASSERT_EQ(p_engineCurveElem.rads, static_cast<float>(PyFloat_AsDouble(radsVal)));
-
-    PyObject* aAttr = PyUnicode_FromString("a");
-    PyObject* aVal = PyObject_GetAttr(p_engineCurveElemObject, aAttr);
-    ASSERT_EQ(p_engineCurveElem.a, static_cast<float>(PyFloat_AsDouble(aVal)));
-
-    PyObject* bAttr = PyUnicode_FromString("b");
-    PyObject* bVal = PyObject_GetAttr(p_engineCurveElemObject, bAttr);
-    ASSERT_EQ(p_engineCurveElem.b, static_cast<float>(PyFloat_AsDouble(bVal)));
-}
-
 /// @brief checks the engineCurve python object corresponds to the original clutch values
 /// @param  p_engineCurve The original engineCurve value
 /// @param  p_engineCurveObject The python engineCurve object
