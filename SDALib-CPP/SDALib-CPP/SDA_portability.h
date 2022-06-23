@@ -20,10 +20,12 @@
 
 #include "Windows.h"
 #define chdir _chdir
-#define SET_WORKING_DIR()                                                                                \
-    char exeDir[260];                                                                                    \
-    GetModuleFileName(NULL, exeDir, 260);                                                                \
-    const char* workingDir = std::experimental::filesystem::path(exeDir).parent_path().string().c_str(); \
+#define SET_WORKING_DIR()                                                                                      \
+    char exeDir[260];                                                                                          \
+    GetModuleFileName(NULL, exeDir, 260);                                                                      \
+    std::experimental::filesystem::path directory = std::experimental::filesystem::path(exeDir).parent_path(); \
+    std::string workingDirStr = directory.string();                                                            \
+    const char* workingDir = workingDirStr.c_str();                                                            \
     chdir(workingDir)
 #endif
 
