@@ -65,12 +65,13 @@ TEST(PythonDriverTests, PythonDriverCrashTest)
 
     SDAData sdaData;
     TestSegments segments = GenerateSegments();
-    sdaData.TickCount = NULL;
+    sdaData.TickCount = random.NextUInt();
     sdaData.Car = GenerateCar(segments);
     sdaData.Situation = GenerateSituation();
     sdaData.SimCar = GenerateSimCar(sdaData.Car);
 
-    sdaData.Car.info.name[0] = NULL;
+    sdaData.Car.info.name[0] = 0b11101001;
+    sdaData.Car.info.name[1] = 0;
 
     SDAAction action = pythonDriver.UpdateAI(sdaData);
 
