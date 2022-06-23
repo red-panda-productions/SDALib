@@ -70,9 +70,7 @@ TEST(PythonDriverTests, PythonDriverCrashTest)
     sdaData.Situation = GenerateSituation();
     sdaData.SimCar = GenerateSimCar(sdaData.Car);
 
-    sdaData.Car.info.name[0] = (char)0b11101001;
-    sdaData.Car.info.name[1] = 0;
-
+    PyErr_BadInternalCall();
     SDAAction action = pythonDriver.UpdateAI(sdaData);
 
     ASSERT_EQ(action.Steer, 0);
