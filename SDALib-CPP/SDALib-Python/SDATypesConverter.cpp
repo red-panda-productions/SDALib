@@ -108,10 +108,10 @@ SDATypesConverter::SDATypesConverter()
     py_class_name = "Wing";
     m_wingClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "DemperDef";
+    py_class_name = "DamperDef";
     m_damperDefClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
-    py_class_name = "Demper";
+    py_class_name = "Damper";
     m_damperClass = PyDict_GetItemString(sdaTypesDict, py_class_name.c_str());
 
     py_class_name = "Spring";
@@ -2135,7 +2135,7 @@ tDamper SDATypesConverter::GetCppDamperObject(PyObject *p_damper)
 {
     tDamper damper;
 
-    damper.bump = GetCppDamperDefObject(PyObject_GetAttrString(p_damper, "bumb"));
+    damper.bump = GetCppDamperDefObject(PyObject_GetAttrString(p_damper, "bump"));
     damper.rebound = GetCppDamperDefObject(PyObject_GetAttrString(p_damper, "rebound"));
 
     return damper;
@@ -2144,7 +2144,7 @@ tDamper SDATypesConverter::GetCppDamperObject(PyObject *p_damper)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDamperObject(PyObject *p_target, PyObject *p_data)
 {
-    SetPythonDamperDefObject(PyObject_GetAttrString(p_target, "bumb"), PyObject_GetAttrString(p_data, "bumb"));
+    SetPythonDamperDefObject(PyObject_GetAttrString(p_target, "bump"), PyObject_GetAttrString(p_data, "bump"));
     SetPythonDamperDefObject(PyObject_GetAttrString(p_target, "rebound"), PyObject_GetAttrString(p_data, "rebound"));
 }
 

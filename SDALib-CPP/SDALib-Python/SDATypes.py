@@ -461,7 +461,7 @@ class Wing:
         self.WingType = WingType #int
 
 
-class DemperDef:
+class DamperDef:
     def __init__(self, C1, b1, v1, C2, b2):
         self.C1 = C1 #float
         self.b1 = b1 #float
@@ -469,10 +469,10 @@ class DemperDef:
         self.C2 = C2 #float
         self.b2 = b2 #float
 
-class Demper:
+class Damper:
     def __init__(self, bump, rebound):
-        self.bumb = bump #DemperDef
-        self.rebound = rebound #DemperDef
+        self.bump = bump #DamperDef
+        self.rebound = rebound #DamperDef
 
 class Spring:
     def __init__(self, K, F0, x0, xMax, bellcrank, packers):

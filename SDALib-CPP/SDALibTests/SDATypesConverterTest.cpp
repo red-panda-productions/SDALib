@@ -1480,44 +1480,44 @@ void CheckWingData(tWing p_wing, PyObject* p_wingObject)
     ASSERT_EQ(p_wing.WingType, static_cast<int>(PyLong_AsLong(WingTypeVal)));
 }
 
-/// @brief checks the DemperDef python object corresponds to the original DemperDef values
-/// @param  p_demperDef The original DemperDef value
-/// @param  p_demperDefObject The python DemperDef object
-void CheckDemperDefData(tDamperDef p_demperDef, PyObject* p_demperDefObject)
+/// @brief checks the DamperDef python object corresponds to the original DamperDef values
+/// @param  p_damperDef The original DamperDef value
+/// @param  p_damperDefObject The python DamperDef object
+void CheckDamperDefData(tDamperDef p_damperDef, PyObject* p_damperDefObject)
 {
     PyObject* C1Attr = PyUnicode_FromString("C1");
-    PyObject* C1Val = PyObject_GetAttr(p_demperDefObject, C1Attr);
-    ASSERT_EQ(p_demperDef.C1, static_cast<float>(PyFloat_AsDouble(C1Val)));
+    PyObject* C1Val = PyObject_GetAttr(p_damperDefObject, C1Attr);
+    ASSERT_EQ(p_damperDef.C1, static_cast<float>(PyFloat_AsDouble(C1Val)));
 
     PyObject* b1Attr = PyUnicode_FromString("b1");
-    PyObject* b1Val = PyObject_GetAttr(p_demperDefObject, b1Attr);
-    ASSERT_EQ(p_demperDef.b1, static_cast<float>(PyFloat_AsDouble(b1Val)));
+    PyObject* b1Val = PyObject_GetAttr(p_damperDefObject, b1Attr);
+    ASSERT_EQ(p_damperDef.b1, static_cast<float>(PyFloat_AsDouble(b1Val)));
 
     PyObject* v1Attr = PyUnicode_FromString("v1");
-    PyObject* v1Val = PyObject_GetAttr(p_demperDefObject, v1Attr);
-    ASSERT_EQ(p_demperDef.v1, static_cast<float>(PyFloat_AsDouble(v1Val)));
+    PyObject* v1Val = PyObject_GetAttr(p_damperDefObject, v1Attr);
+    ASSERT_EQ(p_damperDef.v1, static_cast<float>(PyFloat_AsDouble(v1Val)));
 
     PyObject* C2Attr = PyUnicode_FromString("C2");
-    PyObject* C2Val = PyObject_GetAttr(p_demperDefObject, C2Attr);
-    ASSERT_EQ(p_demperDef.C2, static_cast<float>(PyFloat_AsDouble(C2Val)));
+    PyObject* C2Val = PyObject_GetAttr(p_damperDefObject, C2Attr);
+    ASSERT_EQ(p_damperDef.C2, static_cast<float>(PyFloat_AsDouble(C2Val)));
 
     PyObject* b2Attr = PyUnicode_FromString("b2");
-    PyObject* b2Val = PyObject_GetAttr(p_demperDefObject, b2Attr);
-    ASSERT_EQ(p_demperDef.b2, static_cast<float>(PyFloat_AsDouble(b2Val)));
+    PyObject* b2Val = PyObject_GetAttr(p_damperDefObject, b2Attr);
+    ASSERT_EQ(p_damperDef.b2, static_cast<float>(PyFloat_AsDouble(b2Val)));
 }
 
-/// @brief checks the Demper python object corresponds to the original Demper values
-/// @param  p_demper The original Demper value
-/// @param  p_demperObject The python Demper object
-void CheckDemperData(tDamper p_demper, PyObject* p_demperObject)
+/// @brief checks the Damper python object corresponds to the original Damper values
+/// @param  p_damper The original Damper value
+/// @param  p_damperObject The python Damper object
+void CheckDamperData(tDamper p_damper, PyObject* p_damperObject)
 {
-    PyObject* bumpAttr = PyUnicode_FromString("bumb");
-    PyObject* bumpVal = PyObject_GetAttr(p_demperObject, bumpAttr);
-    CheckDemperDefData(p_demper.bump, bumpVal);
+    PyObject* bumpAttr = PyUnicode_FromString("bump");
+    PyObject* bumpVal = PyObject_GetAttr(p_damperObject, bumpAttr);
+    CheckDamperDefData(p_damper.bump, bumpVal);
 
     PyObject* reboundAttr = PyUnicode_FromString("rebound");
-    PyObject* reboundVal = PyObject_GetAttr(p_demperObject, reboundAttr);
-    CheckDemperDefData(p_demper.rebound, reboundVal);
+    PyObject* reboundVal = PyObject_GetAttr(p_damperObject, reboundAttr);
+    CheckDamperDefData(p_damper.rebound, reboundVal);
 }
 
 /// @brief checks the Spring python object corresponds to the original Spring values
@@ -1561,7 +1561,7 @@ void CheckSuspensionData(tSuspension p_suspension, PyObject* p_suspensionObject)
 
     PyObject* damperAttr = PyUnicode_FromString("damper");
     PyObject* damperVal = PyObject_GetAttr(p_suspensionObject, damperAttr);
-    CheckDemperData(p_suspension.damper, damperVal);
+    CheckDamperData(p_suspension.damper, damperVal);
 
     PyObject* inertanceAttr = PyUnicode_FromString("inertance");
     PyObject* inertanceVal = PyObject_GetAttr(p_suspensionObject, inertanceAttr);
