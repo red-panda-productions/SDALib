@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include "portability.h"
 #include "SDADriver.hpp"
 #include "SDA_portability.h"
 
@@ -30,6 +31,7 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 template <class PointerManager>
 void AIInterface<PointerManager>::Run()
 {
+    SET_WORKING_DIR();
     InitAI();
     SetupSocket();
     Loop();

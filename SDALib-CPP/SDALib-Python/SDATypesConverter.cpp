@@ -195,7 +195,7 @@ PyObject *SDATypesConverter::GetPythonSDATypeObject(SDAData &p_data)
 
     // initialize SDAType
     PyObject *SDATypes = GetObjectFromArgs(m_sdaTypesClass, sdaTypesArgs, size);
-
+  
     return SDATypes;
 }
 
