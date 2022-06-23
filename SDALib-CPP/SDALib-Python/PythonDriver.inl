@@ -58,6 +58,12 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
     Py_CLEAR(updateAIFuncName);
     Py_CLEAR(result);
 
+    if (PyErr_Occurred())
+    {
+        PyErr_PrintEx(0);
+        PyErr_Clear();  // this will reset the error indicator so you can run Python code again
+    }
+
     return action;
 }
 
