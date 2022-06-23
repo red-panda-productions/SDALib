@@ -2753,7 +2753,7 @@ void SDATypesConverter::SetPythonClutchObject(PyObject *p_target, PyObject *p_da
 /// @brief converts a cpp struct to a PyObject
 PyObject *SDATypesConverter::GetPythonTransmissionSystObject(tTransmission &p_transmission)
 {
-    const int size = 56;
+    const int size = 57;
     PyObject *transmissionArgs[size];
 
     transmissionArgs[0] = GetPythonGearBoxObject(p_transmission.gearbox);
@@ -2812,6 +2812,7 @@ PyObject *SDATypesConverter::GetPythonTransmissionSystObject(tTransmission &p_tr
     transmissionArgs[53] = GetPythonDifferentialSystObject(p_transmission.differential[0]);
     transmissionArgs[54] = GetPythonDifferentialSystObject(p_transmission.differential[1]);
     transmissionArgs[55] = GetPythonDifferentialSystObject(p_transmission.differential[2]);
+    transmissionArgs[56] = PyLong_FromLong(p_transmission.type);
 
     PyObject *transmission = GetObjectFromArgs(m_transmissionClass, transmissionArgs, size);
 
@@ -2899,6 +2900,8 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.differential[2] = GetCppDifferentialSystObject(PyTuple_GetItem(differentialVal, 2));
     Py_CLEAR(differentialVal);
 
+    transmission.type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_transmission, "type")));
+
     return transmission;
 }
 
@@ -2906,6 +2909,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
 void SDATypesConverter::SetPythonTransmissionSystObject(PyObject *p_target, PyObject *p_data)
 {
     COPY_PYTHON_OBJECT(p_target, p_data, "currI");
+    COPY_PYTHON_OBJECT(p_target, p_data, "type");
     COPY_PYTHON_ARRAY(p_target, p_data, "overallRatio", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "gearI", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "driveI", 10);

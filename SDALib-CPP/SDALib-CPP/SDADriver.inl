@@ -72,6 +72,7 @@ bool AIInterface<PointerManager>::Update()
     data->SimCar.ctrl = &data->Car.ctrl;
     data->SimCar.carElt = &data->Car;
     data->SimCar.trkPos = data->Car.pub.trkPos;
+    data->Car.ctrl.setupChangeCmd = nullptr;
 
     for (int i = 0; i < 4; i++)
     {

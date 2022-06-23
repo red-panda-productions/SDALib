@@ -642,7 +642,7 @@ class Transmission:
                  gearI7, gearI8, gearI9, gearI10,  driveI1, driveI2, driveI3, driveI4, driveI5, driveI6,
                  driveI7, driveI8, driveI9, driveI10, freeI1, freeI2, freeI3, freeI4, freeI5, freeI6,
                  freeI7, freeI8, freeI9, freeI10, gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6,
-                 gearEff7, gearEff8, gearEff9, gearEff10, currI, differential1, differential2, differential3):
+                 gearEff7, gearEff8, gearEff9, gearEff10, currI, differential1, differential2, differential3, type):
         self.gearbox = gearbox #Gearbox
         self.clutch = clutch #Clutch
         self.overallRatio = [overallRatio1, overallRatio2, overallRatio3, overallRatio4, overallRatio5, overallRatio6,
@@ -653,6 +653,7 @@ class Transmission:
         self.gearEff = [gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6, gearEff7, gearEff8, gearEff9, gearEff10] #float[10]
         self.currI = currI #float
         self.differential = [differential1, differential2, differential3] #differential[3]
+        self.type = type
 
 
 class EngineCurveElem:

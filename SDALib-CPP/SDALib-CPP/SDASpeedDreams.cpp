@@ -803,6 +803,8 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
 
 void SDASpeedDreams::SimInstantReConfig(tCar *car)
 {
+    return; 
+
     tCarSetupItem *setup;
 
     if (car->ctrl->setupChangeCmd)
