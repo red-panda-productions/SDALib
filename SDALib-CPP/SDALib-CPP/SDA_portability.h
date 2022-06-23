@@ -19,6 +19,7 @@
     throw std::exception(p_msg)
 
 #include "Windows.h"
+#include <direct.h>
 #define chdir _chdir
 #define SET_WORKING_DIR()                                                                                      \
     char exeDir[260];                                                                                          \
