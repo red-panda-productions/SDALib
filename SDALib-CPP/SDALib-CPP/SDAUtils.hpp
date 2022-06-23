@@ -4,10 +4,10 @@
 #include <string>
 #include "sdalib_export.h"
 
-/// @brief				      Copies a msgpack buffer
-/// @param  p_sbuffer		  The msgpack buffer
-/// @param  p_destination     The destination buffer
-///	@param  p_destinationSize The size of the destination buffer
+/// @brief Copies a msgpack buffer
+/// @param p_sbuffer         The msgpack buffer
+/// @param p_destination     The destination buffer
+/// @param p_destinationSize The size of the destination buffer
 inline void sbufferCopy(const msgpack::sbuffer& p_sbuffer, char* p_destination, int p_destinationSize)
 {
     const size_t size = p_sbuffer.size();
