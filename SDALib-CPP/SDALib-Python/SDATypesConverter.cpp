@@ -185,7 +185,6 @@ SDAAction SDATypesConverter::GetCppSDAAction(PyObject *p_action)
 /// @return         The python object
 PyObject *SDATypesConverter::GetPythonSDATypeObject(SDAData &p_data)
 {
-
     const int size = 4;
     PyObject *sdaTypesArgs[size];
 
@@ -354,6 +353,7 @@ tInitCar SDATypesConverter::GetCppCarInitObject(PyObject *p_initCar)
     initCar.tank = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_initCar, "tank")));
     initCar.steerLock = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_initCar, "steerLock")));
     initCar.statGC = GetCppTVectorObject(PyObject_GetAttrString(p_initCar, "statGC"));
+    Py_CLEAR(iconColorVal);
 
     PyObject *wheelVal = PyList_AsTuple(PyObject_GetAttrString(p_initCar, "wheel"));
     initCar.wheel[0] = GetCppWheelSpecificationObject(PyTuple_GetItem(wheelVal, 0));
@@ -364,6 +364,7 @@ tInitCar SDATypesConverter::GetCppCarInitObject(PyObject *p_initCar)
     ReplaceString(initCar.masterModel, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "masterModel")), MAX_NAME_LEN);
     ReplaceString(initCar.skinName, PyUnicode_AsUTF8(PyObject_GetAttrString(p_initCar, "skinName")), MAX_NAME_LEN);
     initCar.skinTargets = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_initCar, "skinTargets")));
+    Py_CLEAR(wheelVal);
 
     return initCar;
 }
@@ -467,6 +468,7 @@ tVisualAttributes SDATypesConverter::GetCppVisualAttributesObject(PyObject *p_vi
     visualAttributes.exhaustPos[0] = GetCppTVectorObject(PyTuple_GetItem(exhaustPos, 0));
     visualAttributes.exhaustPos[1] = GetCppTVectorObject(PyTuple_GetItem(exhaustPos, 1));
     visualAttributes.exhaustPower = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_visualAttributes, "exhaustPower")));
+    Py_CLEAR(exhaustPos);
 
     return visualAttributes;
 }
@@ -571,17 +573,24 @@ void SDATypesConverter::SetPythonCarPublicObject(PyObject *p_target, PyObject *p
     SetPythonDynamicPointObject(PyObject_GetAttrString(p_target, "dynGCg"), PyObject_GetAttrString(p_data, "dynGCg"));
     SetPythonTrackLocationObject(PyObject_GetAttrString(p_target, "trkPos"), PyObject_GetAttrString(p_data, "trkPos"));
 
-    PyObject *p_posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_data, "posMat"));
-    PyObject *row1Val = PyTuple_GetItem(p_posMatTuple, 0);
-    PyObject *row2Val = PyTuple_GetItem(p_posMatTuple, 1);
-    PyObject *row3Val = PyTuple_GetItem(p_posMatTuple, 2);
-    PyObject *row4Val = PyTuple_GetItem(p_posMatTuple, 3);
+    PyObject *posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_data, "posMat"));
+    PyObject *row1Val = PyTuple_GetItem(posMatTuple, 0);
+    PyObject *row2Val = PyTuple_GetItem(posMatTuple, 1);
+    PyObject *row3Val = PyTuple_GetItem(posMatTuple, 2);
+    PyObject *row4Val = PyTuple_GetItem(posMatTuple, 3);
 
     PyObject *matrix = PyObject_GetAttrString(p_target, "posMat");
     PyList_Insert(matrix, 0, row1Val);
     PyList_Insert(matrix, 1, row2Val);
     PyList_Insert(matrix, 2, row3Val);
     PyList_Insert(matrix, 3, row4Val);
+
+    Py_CLEAR(posMatTuple);
+    Py_CLEAR(row1Val);
+    Py_CLEAR(row2Val);
+    Py_CLEAR(row3Val);
+    Py_CLEAR(row4Val);
+    Py_CLEAR(matrix);
 }
 
 /// @brief gets the python dynamic point object of the current input
@@ -754,6 +763,7 @@ tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
     segment.vertex[1] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 1));
     segment.vertex[2] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 2));
     segment.vertex[3] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 3));
+    Py_CLEAR(vertexTuple);
 
     PyObject *angleTuple = PyList_AsTuple(PyObject_GetAttrString(p_trackSeg, "angle"));
     segment.angle[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 0)));
@@ -763,6 +773,7 @@ tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
     segment.angle[4] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 4)));
     segment.angle[5] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 5)));
     segment.angle[6] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 6)));
+    Py_CLEAR(angleTuple);
 
     segment.sin = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "sin")));
     segment.cos = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "cos")));
@@ -981,6 +992,7 @@ tPrivCar SDATypesConverter::GetCppCarPrivObject(PyObject *p_privCar)
     privCar.corner[1] = GetCppPosDObject(PyTuple_GetItem(cornerTuple, 1));
     privCar.corner[2] = GetCppPosDObject(PyTuple_GetItem(cornerTuple, 2));
     privCar.corner[3] = GetCppPosDObject(PyTuple_GetItem(cornerTuple, 3));
+    Py_CLEAR(cornerTuple);
 
     privCar.gear = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_privCar, "gear")));
     privCar.gearNext = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_privCar, "gearNext")));
@@ -1006,6 +1018,7 @@ tPrivCar SDATypesConverter::GetCppCarPrivObject(PyObject *p_privCar)
     privCar.gearRatio[7] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearTuple, 7)));
     privCar.gearRatio[8] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearTuple, 8)));
     privCar.gearRatio[9] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearTuple, 9)));
+    Py_CLEAR(gearTuple);
 
     privCar.gearNb = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_privCar, "gearNb")));
     privCar.gearOffset = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_privCar, "gearOffset")));
@@ -1015,12 +1028,14 @@ tPrivCar SDATypesConverter::GetCppCarPrivObject(PyObject *p_privCar)
     privCar.skid[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(skidTuple, 1)));
     privCar.skid[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(skidTuple, 2)));
     privCar.skid[3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(skidTuple, 3)));
+    Py_CLEAR(skidTuple);
 
     PyObject *reactionTuple = PyList_AsTuple(PyObject_GetAttrString(p_privCar, "reaction"));
     privCar.reaction[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(reactionTuple, 0)));
     privCar.reaction[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(reactionTuple, 1)));
     privCar.reaction[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(reactionTuple, 2)));
     privCar.reaction[3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(reactionTuple, 3)));
+    Py_CLEAR(reactionTuple);
 
     privCar.collision = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_privCar, "collision")));
     privCar.simcollision = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_privCar, "simCollision")));
@@ -1281,12 +1296,14 @@ tCarCtrl SDATypesConverter::GetCppCarCtrlObject(PyObject *p_carCtrl)
     ReplaceString(carCtrl.msg[1], PyUnicode_AsUTF8(PyTuple_GetItem(msgTuple, 1)), 32);
     ReplaceString(carCtrl.msg[2], PyUnicode_AsUTF8(PyTuple_GetItem(msgTuple, 2)), 32);
     ReplaceString(carCtrl.msg[3], PyUnicode_AsUTF8(PyTuple_GetItem(msgTuple, 3)), 32);
+    Py_CLEAR(msgTuple);
 
     PyObject *msgColorTuple = PyList_AsTuple(PyObject_GetAttrString(p_carCtrl, "msgColor"));
     carCtrl.msgColor[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorTuple, 0)));
     carCtrl.msgColor[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorTuple, 1)));
     carCtrl.msgColor[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorTuple, 2)));
     carCtrl.msgColor[3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(msgColorTuple, 3)));
+    Py_CLEAR(msgColorTuple);
 
     return carCtrl;
 }
@@ -1403,6 +1420,7 @@ tCarSetup SDATypesConverter::GetCppCarSetupObject(PyObject *p_carSetup)
     PyObject *wingAngleTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "wingAngle"));
     carSetup.wingAngle[0] = GetCppCarSetupItemObject(PyTuple_GetItem(wingAngleTuple, 0));
     carSetup.wingAngle[1] = GetCppCarSetupItemObject(PyTuple_GetItem(wingAngleTuple, 1));
+    Py_CLEAR(wingAngleTuple);
 
     carSetup.revsLimiter = GetCppCarSetupItemObject(PyObject_GetAttrString(p_carSetup, "revsLimiter"));
 
@@ -1417,46 +1435,55 @@ tCarSetup SDATypesConverter::GetCppCarSetupObject(PyObject *p_carSetup)
     carSetup.gearRatio[7] = GetCppCarSetupItemObject(PyTuple_GetItem(gearRatioTuple, 7));
     carSetup.gearRatio[8] = GetCppCarSetupItemObject(PyTuple_GetItem(gearRatioTuple, 8));
     carSetup.gearRatio[9] = GetCppCarSetupItemObject(PyTuple_GetItem(gearRatioTuple, 9));
+    Py_CLEAR(gearRatioTuple);
 
     PyObject *differentialTypeTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialType"));
     carSetup.differentialType[0] = static_cast<int>(PyLong_AsLong(PyTuple_GetItem(differentialTypeTuple, 0)));
     carSetup.differentialType[1] = static_cast<int>(PyLong_AsLong(PyTuple_GetItem(differentialTypeTuple, 1)));
     carSetup.differentialType[2] = static_cast<int>(PyLong_AsLong(PyTuple_GetItem(differentialTypeTuple, 2)));
+    Py_CLEAR(differentialTypeTuple);
 
     PyObject *differentialRatioTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialRatio"));
     carSetup.differentialRatio[0] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialRatioTuple, 0));
     carSetup.differentialRatio[1] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialRatioTuple, 1));
     carSetup.differentialRatio[2] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialRatioTuple, 2));
+    Py_CLEAR(differentialRatioTuple);
 
     PyObject *differentialMinTqBiasTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialMinTqBias"));
     carSetup.differentialMinTqBias[0] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMinTqBiasTuple, 0));
     carSetup.differentialMinTqBias[1] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMinTqBiasTuple, 1));
     carSetup.differentialMinTqBias[2] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMinTqBiasTuple, 2));
+    Py_CLEAR(differentialMinTqBiasTuple);
 
     PyObject *differentialMaxTqBiasTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialMaxTqBias"));
     carSetup.differentialMaxTqBias[0] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMaxTqBiasTuple, 0));
     carSetup.differentialMaxTqBias[1] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMaxTqBiasTuple, 1));
     carSetup.differentialMaxTqBias[2] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMaxTqBiasTuple, 2));
+    Py_CLEAR(differentialMaxTqBiasTuple);
 
     PyObject *differentialViscosityTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialViscosity"));
     carSetup.differentialViscosity[0] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialViscosityTuple, 0));
     carSetup.differentialViscosity[1] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialViscosityTuple, 1));
     carSetup.differentialViscosity[2] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialViscosityTuple, 2));
+    Py_CLEAR(differentialViscosityTuple);
 
     PyObject *differentialLockingTqTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialLockingTq"));
     carSetup.differentialLockingTq[0] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialLockingTqTuple, 0));
     carSetup.differentialLockingTq[1] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialLockingTqTuple, 1));
     carSetup.differentialLockingTq[2] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialLockingTqTuple, 2));
+    Py_CLEAR(differentialLockingTqTuple);
 
     PyObject *differentialMaxSlipBiasTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialMaxSlipBias"));
     carSetup.differentialMaxSlipBias[0] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMaxSlipBiasTuple, 0));
     carSetup.differentialMaxSlipBias[1] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMaxSlipBiasTuple, 1));
     carSetup.differentialMaxSlipBias[2] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialMaxSlipBiasTuple, 2));
+    Py_CLEAR(differentialMaxSlipBiasTuple);
 
     PyObject *differentialCoastMaxSlipBiasTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "differentialCoastMaxSlipBias"));
     carSetup.differentialCoastMaxSlipBias[0] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialCoastMaxSlipBiasTuple, 0));
     carSetup.differentialCoastMaxSlipBias[1] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialCoastMaxSlipBiasTuple, 1));
     carSetup.differentialCoastMaxSlipBias[2] = GetCppCarSetupItemObject(PyTuple_GetItem(differentialCoastMaxSlipBiasTuple, 2));
+    Py_CLEAR(differentialCoastMaxSlipBiasTuple);
 
     carSetup.steerLock = GetCppCarSetupItemObject(PyObject_GetAttrString(p_carSetup, "steerLock"));
     carSetup.brakeRepartition = GetCppCarSetupItemObject(PyObject_GetAttrString(p_carSetup, "brakeRepartition"));
@@ -1467,140 +1494,167 @@ tCarSetup SDATypesConverter::GetCppCarSetupObject(PyObject *p_carSetup)
     carSetup.rideHeight[1] = GetCppCarSetupItemObject(PyTuple_GetItem(rideHeightTuple, 1));
     carSetup.rideHeight[2] = GetCppCarSetupItemObject(PyTuple_GetItem(rideHeightTuple, 2));
     carSetup.rideHeight[3] = GetCppCarSetupItemObject(PyTuple_GetItem(rideHeightTuple, 3));
+    Py_CLEAR(rideHeightTuple);
 
     PyObject *toeTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "toe"));
     carSetup.toe[0] = GetCppCarSetupItemObject(PyTuple_GetItem(toeTuple, 0));
     carSetup.toe[1] = GetCppCarSetupItemObject(PyTuple_GetItem(toeTuple, 1));
     carSetup.toe[2] = GetCppCarSetupItemObject(PyTuple_GetItem(toeTuple, 2));
     carSetup.toe[3] = GetCppCarSetupItemObject(PyTuple_GetItem(toeTuple, 3));
+    Py_CLEAR(toeTuple);
 
     PyObject *camberTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "camber"));
     carSetup.camber[0] = GetCppCarSetupItemObject(PyTuple_GetItem(camberTuple, 0));
     carSetup.camber[1] = GetCppCarSetupItemObject(PyTuple_GetItem(camberTuple, 1));
     carSetup.camber[2] = GetCppCarSetupItemObject(PyTuple_GetItem(camberTuple, 2));
     carSetup.camber[3] = GetCppCarSetupItemObject(PyTuple_GetItem(camberTuple, 3));
+    Py_CLEAR(camberTuple);
 
     PyObject *tirePressureTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "tirePressure"));
     carSetup.tirePressure[0] = GetCppCarSetupItemObject(PyTuple_GetItem(tirePressureTuple, 0));
     carSetup.tirePressure[1] = GetCppCarSetupItemObject(PyTuple_GetItem(tirePressureTuple, 1));
     carSetup.tirePressure[2] = GetCppCarSetupItemObject(PyTuple_GetItem(tirePressureTuple, 2));
     carSetup.tirePressure[3] = GetCppCarSetupItemObject(PyTuple_GetItem(tirePressureTuple, 3));
+    Py_CLEAR(tirePressureTuple);
 
     PyObject *tireOpLoadTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "tireOpLoad"));
     carSetup.tireOpLoad[0] = GetCppCarSetupItemObject(PyTuple_GetItem(tireOpLoadTuple, 0));
     carSetup.tireOpLoad[1] = GetCppCarSetupItemObject(PyTuple_GetItem(tireOpLoadTuple, 1));
     carSetup.tireOpLoad[2] = GetCppCarSetupItemObject(PyTuple_GetItem(tireOpLoadTuple, 2));
     carSetup.tireOpLoad[3] = GetCppCarSetupItemObject(PyTuple_GetItem(tireOpLoadTuple, 3));
+    Py_CLEAR(tireOpLoadTuple);
 
     PyObject *arbSpringTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "arbSpring"));
     carSetup.arbSpring[0] = GetCppCarSetupItemObject(PyTuple_GetItem(arbSpringTuple, 0));
     carSetup.arbSpring[1] = GetCppCarSetupItemObject(PyTuple_GetItem(arbSpringTuple, 1));
+    Py_CLEAR(arbSpringTuple);
 
     PyObject *arbBellCrankTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "arbBellCrank"));
     carSetup.arbBellcrank[0] = GetCppCarSetupItemObject(PyTuple_GetItem(arbBellCrankTuple, 0));
     carSetup.arbBellcrank[1] = GetCppCarSetupItemObject(PyTuple_GetItem(arbBellCrankTuple, 1));
+    Py_CLEAR(arbBellCrankTuple);
 
     PyObject *heaveSpringTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveSpring"));
     carSetup.heaveSpring[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveSpringTuple, 0));
     carSetup.heaveSpring[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveSpringTuple, 1));
+    Py_CLEAR(heaveSpringTuple);
 
     PyObject *heaveBellCrankTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveBellCrank"));
     carSetup.heaveBellcrank[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveBellCrankTuple, 0));
     carSetup.heaveBellcrank[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveBellCrankTuple, 1));
+    Py_CLEAR(heaveBellCrankTuple);
 
     PyObject *heaveInertanceTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveInertance"));
     carSetup.heaveInertance[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveInertanceTuple, 0));
     carSetup.heaveInertance[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveInertanceTuple, 1));
+    Py_CLEAR(heaveInertanceTuple);
 
     PyObject *heaveFastBumpTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveFastBump"));
     carSetup.heaveFastBump[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveFastBumpTuple, 0));
     carSetup.heaveFastBump[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveFastBumpTuple, 1));
+    Py_CLEAR(heaveFastBumpTuple);
 
     PyObject *heaveSlowBumpTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveSlowBump"));
     carSetup.heaveSlowBump[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveSlowBumpTuple, 0));
     carSetup.heaveSlowBump[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveSlowBumpTuple, 1));
+    Py_CLEAR(heaveSlowBumpTuple);
 
     PyObject *heaveBumpLevelTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveBumpLevel"));
     carSetup.heaveBumpLvel[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveBumpLevelTuple, 0));
     carSetup.heaveBumpLvel[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveBumpLevelTuple, 1));
+    Py_CLEAR(heaveBumpLevelTuple);
 
     PyObject *heaveFastReboundTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveFastRebound"));
     carSetup.heaveFastRebound[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveFastReboundTuple, 0));
     carSetup.heaveFastRebound[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveFastReboundTuple, 1));
+    Py_CLEAR(heaveFastReboundTuple);
 
     PyObject *heaveSlowReboundTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveSlowRebound"));
     carSetup.heaveSlowRebound[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveSlowReboundTuple, 0));
     carSetup.heaveSlowRebound[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveSlowReboundTuple, 1));
+    Py_CLEAR(heaveSlowReboundTuple);
 
     PyObject *heaveReboundLevelTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "heaveReboundLevel"));
     carSetup.heaveReboundLvel[0] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveReboundLevelTuple, 0));
     carSetup.heaveReboundLvel[1] = GetCppCarSetupItemObject(PyTuple_GetItem(heaveReboundLevelTuple, 1));
+    Py_CLEAR(heaveReboundLevelTuple);
 
     PyObject *suspSpringTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspSpring"));
     carSetup.suspSpring[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSpringTuple, 0));
     carSetup.suspSpring[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSpringTuple, 1));
     carSetup.suspSpring[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSpringTuple, 2));
     carSetup.suspSpring[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSpringTuple, 3));
+    Py_CLEAR(suspSpringTuple);
 
     PyObject *suspBellCrankTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspBellCrank"));
     carSetup.suspBellcrank[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBellCrankTuple, 0));
     carSetup.suspBellcrank[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBellCrankTuple, 1));
     carSetup.suspBellcrank[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBellCrankTuple, 2));
     carSetup.suspBellcrank[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBellCrankTuple, 3));
+    Py_CLEAR(suspBellCrankTuple);
 
     PyObject *suspInertanceTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspInertance"));
     carSetup.suspInertance[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspInertanceTuple, 0));
     carSetup.suspInertance[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspInertanceTuple, 1));
     carSetup.suspInertance[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspInertanceTuple, 2));
     carSetup.suspInertance[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspInertanceTuple, 3));
+    Py_CLEAR(suspInertanceTuple);
 
     PyObject *suspCourseTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspCourse"));
     carSetup.suspCourse[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspCourseTuple, 0));
     carSetup.suspCourse[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspCourseTuple, 1));
     carSetup.suspCourse[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspCourseTuple, 2));
     carSetup.suspCourse[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspCourseTuple, 3));
+    Py_CLEAR(suspCourseTuple);
 
     PyObject *suspPackerTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspPacker"));
     carSetup.suspPacker[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspPackerTuple, 0));
     carSetup.suspPacker[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspPackerTuple, 1));
     carSetup.suspPacker[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspPackerTuple, 2));
     carSetup.suspPacker[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspPackerTuple, 3));
+    Py_CLEAR(suspPackerTuple);
 
     PyObject *suspFastBumpTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspFastBump"));
     carSetup.suspFastBump[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastBumpTuple, 0));
     carSetup.suspFastBump[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastBumpTuple, 1));
     carSetup.suspFastBump[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastBumpTuple, 2));
     carSetup.suspFastBump[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastBumpTuple, 3));
+    Py_CLEAR(suspFastBumpTuple);
 
     PyObject *suspSlowBumpTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspSlowBump"));
     carSetup.suspSlowBump[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowBumpTuple, 0));
     carSetup.suspSlowBump[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowBumpTuple, 1));
     carSetup.suspSlowBump[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowBumpTuple, 2));
     carSetup.suspSlowBump[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowBumpTuple, 3));
+    Py_CLEAR(suspSlowBumpTuple);
 
     PyObject *suspBumpLevelTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspBumpLevel"));
     carSetup.suspBumpLvel[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBumpLevelTuple, 0));
     carSetup.suspBumpLvel[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBumpLevelTuple, 1));
     carSetup.suspBumpLvel[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBumpLevelTuple, 2));
     carSetup.suspBumpLvel[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspBumpLevelTuple, 3));
+    Py_CLEAR(suspBumpLevelTuple);
 
     PyObject *suspFastReboundTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspFastRebound"));
     carSetup.suspFastRebound[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastReboundTuple, 0));
     carSetup.suspFastRebound[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastReboundTuple, 1));
     carSetup.suspFastRebound[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastReboundTuple, 2));
     carSetup.suspFastRebound[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspFastReboundTuple, 3));
+    Py_CLEAR(suspFastReboundTuple);
 
     PyObject *suspSlowReboundTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspSlowRebound"));
     carSetup.suspSlowRebound[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowReboundTuple, 0));
     carSetup.suspSlowRebound[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowReboundTuple, 1));
     carSetup.suspSlowRebound[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowReboundTuple, 2));
     carSetup.suspSlowRebound[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspSlowReboundTuple, 3));
+    Py_CLEAR(suspSlowReboundTuple);
 
     PyObject *suspReboundLevelTuple = PyList_AsTuple(PyObject_GetAttrString(p_carSetup, "suspReboundLevel"));
     carSetup.suspReboundLvel[0] = GetCppCarSetupItemObject(PyTuple_GetItem(suspReboundLevelTuple, 0));
     carSetup.suspReboundLvel[1] = GetCppCarSetupItemObject(PyTuple_GetItem(suspReboundLevelTuple, 1));
     carSetup.suspReboundLvel[2] = GetCppCarSetupItemObject(PyTuple_GetItem(suspReboundLevelTuple, 2));
     carSetup.suspReboundLvel[3] = GetCppCarSetupItemObject(PyTuple_GetItem(suspReboundLevelTuple, 3));
+    Py_CLEAR(suspReboundLevelTuple);
 
     carSetup.reqRepair = GetCppCarSetupItemObject(PyObject_GetAttrString(p_carSetup, "reqRepair"));
     carSetup.reqTireset = GetCppCarSetupItemObject(PyObject_GetAttrString(p_carSetup, "reqTireset"));
@@ -1904,10 +1958,12 @@ tAero SDATypesConverter::GetCppAeroObject(PyObject *p_aero)
     PyObject *liftTuple = PyList_AsTuple(PyObject_GetAttrString(p_aero, "lift"));
     aero.lift[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftTuple, 0)));
     aero.lift[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(liftTuple, 1)));
+    Py_CLEAR(liftTuple);
 
     PyObject *cliftTuple = PyList_AsTuple(PyObject_GetAttrString(p_aero, "Clift"));
     aero.Clift[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(cliftTuple, 0)));
     aero.Clift[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(cliftTuple, 1)));
+    Py_CLEAR(cliftTuple);
 
     aero.Cd = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_aero, "Cd")));
     aero.CdBody = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_aero, "CdBody")));
@@ -2380,6 +2436,7 @@ tAxle SDATypesConverter::GetCppAxleSystObject(PyObject *p_axle)
     PyObject *forceVal = PyList_AsTuple(PyObject_GetAttrString(p_axle, "force"));
     axle.force[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(forceVal, 0)));
     axle.force[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(forceVal, 1)));
+    Py_CLEAR(forceVal);
 
     axle.wheight0 = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_axle, "wheight0")));
     axle.I = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_axle, "I")));
@@ -2567,10 +2624,12 @@ tWheel SDATypesConverter::GetCppWheelSystObject(PyObject *p_wheel)
     PyObject *muTDmultVal = PyList_AsTuple(PyObject_GetAttrString(p_wheel, "muTDmult"));
     wheel.muTDmult[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDmultVal, 0)));
     wheel.muTDmult[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDmultVal, 1)));
+    Py_CLEAR(muTDmultVal);
 
     PyObject *muTDoffsetVal = PyList_AsTuple(PyObject_GetAttrString(p_wheel, "muTDoffset"));
     wheel.muTDoffset[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDoffsetVal, 0)));
     wheel.muTDoffset[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(muTDoffsetVal, 1)));
+    Py_CLEAR(muTDoffsetVal);
 
     wheel.in = GetCppDynAxisSystObject(PyObject_GetAttrString(p_wheel, "invar"));
     wheel.feedBack = GetCppDynAxisSystObject(PyObject_GetAttrString(p_wheel, "feedBack"));
@@ -2772,6 +2831,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.overallRatio[7] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(overallRatioVal, 7)));
     transmission.overallRatio[8] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(overallRatioVal, 8)));
     transmission.overallRatio[9] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(overallRatioVal, 9)));
+    Py_CLEAR(overallRatioVal);
 
     PyObject *gearIVal = PyList_AsTuple(PyObject_GetAttrString(p_transmission, "gearI"));
     transmission.gearI[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 0)));
@@ -2784,6 +2844,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.gearI[7] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 7)));
     transmission.gearI[8] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 8)));
     transmission.gearI[9] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearIVal, 9)));
+    Py_CLEAR(gearIVal);
 
     PyObject *driveIVal = PyList_AsTuple(PyObject_GetAttrString(p_transmission, "driveI"));
     transmission.driveI[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 0)));
@@ -2796,6 +2857,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.driveI[7] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 7)));
     transmission.driveI[8] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 8)));
     transmission.driveI[9] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(driveIVal, 9)));
+    Py_CLEAR(driveIVal);
 
     PyObject *freeIVal = PyList_AsTuple(PyObject_GetAttrString(p_transmission, "freeI"));
     transmission.freeI[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 0)));
@@ -2808,6 +2870,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.freeI[7] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 7)));
     transmission.freeI[8] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 8)));
     transmission.freeI[9] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(freeIVal, 9)));
+    Py_CLEAR(freeIVal);
 
     PyObject *gearEffVal = PyList_AsTuple(PyObject_GetAttrString(p_transmission, "gearEff"));
     transmission.gearEff[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 0)));
@@ -2820,6 +2883,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.gearEff[7] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 7)));
     transmission.gearEff[8] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 8)));
     transmission.gearEff[9] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 9)));
+    Py_CLEAR(gearEffVal);
 
     transmission.curI = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_transmission, "currI")));
 
@@ -2827,6 +2891,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.differential[0] = GetCppDifferentialSystObject(PyTuple_GetItem(differentialVal, 0));
     transmission.differential[1] = GetCppDifferentialSystObject(PyTuple_GetItem(differentialVal, 1));
     transmission.differential[2] = GetCppDifferentialSystObject(PyTuple_GetItem(differentialVal, 2));
+    Py_CLEAR(differentialVal);
 
     return transmission;
 }
@@ -3042,12 +3107,14 @@ tCar SDATypesConverter::GetCppCarSystObject(PyObject *p_car)
     PyObject *axleVal = PyList_AsTuple(PyObject_GetAttrString(p_car, "axle"));
     car.axle[0] = GetCppAxleSystObject(PyTuple_GetItem(axleVal, 0));
     car.axle[1] = GetCppAxleSystObject(PyTuple_GetItem(axleVal, 1));
+    Py_CLEAR(axleVal);
 
     PyObject *wheelVal = PyList_AsTuple(PyObject_GetAttrString(p_car, "wheel"));
     car.wheel[0] = GetCppWheelSystObject(PyTuple_GetItem(wheelVal, 0));
     car.wheel[1] = GetCppWheelSystObject(PyTuple_GetItem(wheelVal, 1));
     car.wheel[2] = GetCppWheelSystObject(PyTuple_GetItem(wheelVal, 2));
     car.wheel[3] = GetCppWheelSystObject(PyTuple_GetItem(wheelVal, 3));
+    Py_CLEAR(wheelVal);
 
     car.steer = GetCppSteerSystObject(PyObject_GetAttrString(p_car, "steer"));
     car.brkSyst = GetCppBrakeSystObject(PyObject_GetAttrString(p_car, "brkSyst"));
@@ -3056,6 +3123,7 @@ tCar SDATypesConverter::GetCppCarSystObject(PyObject *p_car)
     PyObject *wingVal = PyList_AsTuple(PyObject_GetAttrString(p_car, "wing"));
     car.wing[0] = GetCppWingObject(PyTuple_GetItem(wingVal, 0));
     car.wing[1] = GetCppWingObject(PyTuple_GetItem(wingVal, 1));
+    Py_CLEAR(wingVal);
 
     car.transmission = GetCppTransmissionSystObject(PyObject_GetAttrString(p_car, "transmission"));
     car.engine = GetCppEngineSystObject(PyObject_GetAttrString(p_car, "engine"));
@@ -3085,6 +3153,7 @@ tCar SDATypesConverter::GetCppCarSystObject(PyObject *p_car)
     car.corner[1] = GetCppDynamicPointObject(PyTuple_GetItem(cornerVal, 1));
     car.corner[2] = GetCppDynamicPointObject(PyTuple_GetItem(cornerVal, 2));
     car.corner[3] = GetCppDynamicPointObject(PyTuple_GetItem(cornerVal, 3));
+    Py_CLEAR(cornerVal);
 
     car.collision = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_car, "collision")));
     car.normal = GetCppTVectorObject(PyObject_GetAttrString(p_car, "normal"));
@@ -3092,11 +3161,11 @@ tCar SDATypesConverter::GetCppCarSystObject(PyObject *p_car)
     car.wheelbase = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_car, "wheelbase")));
     car.wheeltrack = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_car, "wheeltrack")));
 
-    PyObject *p_posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_car, "posMat"));
-    PyObject *row1Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 0));
-    PyObject *row2Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 1));
-    PyObject *row3Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 2));
-    PyObject *row4Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 3));
+    PyObject *posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_car, "posMat"));
+    PyObject *row1Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 0));
+    PyObject *row2Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 1));
+    PyObject *row3Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 2));
+    PyObject *row4Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 3));
 
     car.posMat[0][0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 0)));
     car.posMat[0][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 1)));
@@ -3117,6 +3186,12 @@ tCar SDATypesConverter::GetCppCarSystObject(PyObject *p_car)
     car.posMat[3][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 1)));
     car.posMat[3][2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 2)));
     car.posMat[3][3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 3)));
+
+    Py_CLEAR(posMatTuple);
+    Py_CLEAR(row1Val);
+    Py_CLEAR(row2Val);
+    Py_CLEAR(row3Val);
+    Py_CLEAR(row4Val);
 
     car.blocked = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_car, "blocked")));
     car.dammage = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_car, "dammage")));
@@ -3162,17 +3237,24 @@ void SDATypesConverter::SetPythonCarSystObject(PyObject *p_target, PyObject *p_d
     SetPythonVectorObject(PyObject_GetAttrString(p_target, "normal"), PyObject_GetAttrString(p_data, "normal"));
     SetPythonVectorObject(PyObject_GetAttrString(p_target, "collpos"), PyObject_GetAttrString(p_data, "collpos"));
 
-    PyObject *p_posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_data, "posMat"));
-    PyObject *row1Val = PyTuple_GetItem(p_posMatTuple, 0);
-    PyObject *row2Val = PyTuple_GetItem(p_posMatTuple, 1);
-    PyObject *row3Val = PyTuple_GetItem(p_posMatTuple, 2);
-    PyObject *row4Val = PyTuple_GetItem(p_posMatTuple, 3);
+    PyObject *posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_data, "posMat"));
+    PyObject *row1Val = PyTuple_GetItem(posMatTuple, 0);
+    PyObject *row2Val = PyTuple_GetItem(posMatTuple, 1);
+    PyObject *row3Val = PyTuple_GetItem(posMatTuple, 2);
+    PyObject *row4Val = PyTuple_GetItem(posMatTuple, 3);
 
     PyObject *matrix = PyObject_GetAttrString(p_target, "posMat");
     PyList_Insert(matrix, 0, row1Val);
     PyList_Insert(matrix, 1, row2Val);
     PyList_Insert(matrix, 2, row3Val);
     PyList_Insert(matrix, 3, row4Val);
+
+    Py_CLEAR(posMatTuple);
+    Py_CLEAR(row1Val);
+    Py_CLEAR(row2Val);
+    Py_CLEAR(row3Val);
+    Py_CLEAR(row4Val);
+    Py_CLEAR(matrix);
 
     SetPythonDynamicPointObject(PyObject_GetAttrString(p_target, "restPos"), PyObject_GetAttrString(p_data, "restPos"));
 }

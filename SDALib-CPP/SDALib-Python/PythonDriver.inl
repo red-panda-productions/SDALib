@@ -35,6 +35,12 @@ void PythonDriver<PointerManager>::InitAI()
     if (!PyCallable_Check(driverClass)) return;
     PyObject *py_arg_tuple = PyTuple_New(0);
     m_pythonDriver = PyObject_CallObject(driverClass, py_arg_tuple);
+
+    Py_CLEAR(driverModuleName);
+    Py_CLEAR(driverModule);
+    Py_CLEAR(driverDict);
+    Py_CLEAR(driverClass);
+    Py_CLEAR(py_arg_tuple);
 }
 
 /// @brief          Updates the python AI by passing the data to python
@@ -46,8 +52,13 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
     PyObject *sdaType = m_sdaTypesConverter.GetPythonSDATypeObject(p_data);
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
     PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
+    SDAAction action = m_sdaTypesConverter.GetCppSDAAction(result);
 
-    return m_sdaTypesConverter.GetCppSDAAction(result);
+    Py_CLEAR(sdaType);
+    Py_CLEAR(updateAIFuncName);
+    Py_CLEAR(result);
+
+    return action;
 }
 
 /// @brief sets the python driver file name
