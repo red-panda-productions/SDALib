@@ -52,6 +52,40 @@ TEST(PythonDriverTests, PythonDriverUpdateAITest)
     Py_Finalize();
 }
 
+/// @brief tests whether the python function UpdateAI gives back an error
+TEST(PythonDriverTests, PythonDriverCrashTest)
+{
+    Py_Initialize();
+
+    Random random;
+
+    TPythonDriver pythonDriver = TPythonDriver();
+    pythonDriver.SetPythonDriverFileName("DriverTest");
+    pythonDriver.InitAI();
+
+    SDAData sdaData;
+    TestSegments segments = GenerateSegments();
+    sdaData.TickCount = NULL;
+    sdaData.Car = GenerateCar(segments);
+    sdaData.Situation = GenerateSituation();
+    sdaData.SimCar = GenerateSimCar(sdaData.Car);
+
+    sdaData.Car.info.name[0] = NULL;
+
+    SDAAction action = pythonDriver.UpdateAI(sdaData);
+
+    ASSERT_EQ(action.Steer, 0);
+    ASSERT_EQ(action.Accel, 0);
+    ASSERT_EQ(action.Brake, 0);
+    ASSERT_EQ(action.Gear, 0);
+
+    DestroySegments(segments);
+    DestroyCar(sdaData.Car);
+    DestroySituation(sdaData.Situation);
+
+    Py_Finalize();
+}
+
 /// @brief tests whether the driver file name is correctly get and set
 TEST(PythonDriverTests, PythonDriverPythonDriverFileNameTest)
 {
