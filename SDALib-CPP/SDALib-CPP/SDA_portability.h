@@ -47,7 +47,6 @@
         path = dirname(result);                                   \
     }                                                             \
     chdir(path)
-
 #endif
 
 /// @brief		   Checks if the action was reported successfully from IPCLib
