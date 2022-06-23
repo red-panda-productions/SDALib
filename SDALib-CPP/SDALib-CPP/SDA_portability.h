@@ -7,7 +7,6 @@
 #pragma once
 
 #include "ipclib_portability.h"
-#include "portability.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
 #include <experimental/filesystem>
 
@@ -20,7 +19,7 @@
     throw std::exception(p_msg)
 
 #include "Windows.h"
-
+#define chdir _chdir
 #define SET_WORKING_DIR()                                                                                \
     char exeDir[260];                                                                                    \
     GetModuleFileName(NULL, exeDir, 260);                                                                \
@@ -35,10 +34,16 @@
     std::cerr << (p_msg) << std::endl; \
     throw std::exception();
 
-#define SET_WORKING_DIR()                                                                                \
-    const char* exeDir = std::experimental::filesystem::canonical("/proc/self/exe").string().c_str();    \
-    const char* workingDir = std::experimental::filesystem::path(exeDir).parent_path().string().c_str(); \
-    chdir(workingDir)
+#include <libgen.h>
+#define SET_WORKING_DIR()                                         \
+    char result[PATH_MAX];                                        \
+    ssize_t count = readlink("/proc/self/exe", result, PATH_MAX); \
+    const char* path;                                             \
+    if (count != -1)                                              \
+    {                                                             \
+        path = dirname(result);                                   \
+    }                                                             \
+    chdir(path);
 
 #endif
 

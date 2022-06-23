@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <libgen.h>
 #include "portability.h"
 #include "SDADriver.hpp"
 #include "SDA_portability.h"
