@@ -6,9 +6,11 @@ SET(SDALIB_HEADERS
 	SDADriver.hpp
 	SDAAction.hpp
 	SDAData.hpp
-	SDASpeedDreams.hpp
+	SDAUtils.hpp
+	SDASpeedDreams.h
 	IPCPointerManager.h
-        SDA_portability.h)
+	SDA_portability.h
+)
 
 SET(SDALIB_INLINES
 	SDADriver.inl
@@ -29,7 +31,11 @@ GENERATE_EXPORT_HEADER(SDALib)
 
 TARGET_LINK_LIBRARIES(SDALib ${IPCLIB_LIBRARY} msgpackc-cxx math SpeedDreamsLib simu)
 
-TARGET_INCLUDE_DIRECTORIES(SDALib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${CMAKE_BINARY_DIR}/SDALib-CPP ${CMAKE_SOURCE_DIR}/SpeedDreams/math ${CMAKE_SOURCE_DIR}/SpeedDreams ${CMAKE_SOURCE_DIR}/SpeedDreams/simuv4) 
+IF(UNIX)
+	TARGET_LINK_LIBRARIES(SDALib stdc++fs)
+ENDIF(UNIX)
+
+TARGET_INCLUDE_DIRECTORIES(SDALib PUBLIC ${IPCLIB_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${CMAKE_BINARY_DIR}/SDALib-CPP ${CMAKE_SOURCE_DIR}/SpeedDreams/math ${CMAKE_SOURCE_DIR}/SpeedDreams ${CMAKE_SOURCE_DIR}/SpeedDreams/simuv4)
 
 set_target_properties(SDALib PROPERTIES LINKER_LANGUAGE CXX)
 

@@ -5,6 +5,8 @@
  */
 
 #include "SDAAction.hpp"
+#include "msgpack.hpp"
+#include "SDAUtils.hpp"
 
 /// @brief                Serializes the data into a buffer
 /// @param  p_buffer	  The buffer that will store the data

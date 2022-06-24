@@ -30,6 +30,7 @@ inline void GetMsgVector(const char* p_buffer, int p_bufferSize, std::vector<std
 template <class PointerManager>
 void AIInterface<PointerManager>::Run()
 {
+    SET_WORKING_DIR();
     InitAI();
     SetupSocket();
     Loop();
@@ -68,6 +69,15 @@ bool AIInterface<PointerManager>::Update()
     SDAData* data = m_pointerManager.GetDataPointer();
 
     data->Car.pub.trkPos.seg = m_pointerManager.GetSegmentPointer();
+    data->SimCar.ctrl = &data->Car.ctrl;
+    data->SimCar.carElt = &data->Car;
+    data->SimCar.trkPos = data->Car.pub.trkPos;
+    data->Car.ctrl.setupChangeCmd = nullptr;
+
+    for (int i = 0; i < 4; i++)
+    {
+        data->SimCar.wheel[i].trkPos = data->Car.pub.trkPos;
+    }
 
     const SDAAction action = UpdateAI(*data);
 
@@ -98,7 +108,7 @@ void AIInterface<PointerManager>::Loop()
 template <class PointerManager>
 void AIInterface<PointerManager>::SetupSocket()
 {
-    std::cerr << "Trying to connect to Speed Dreams" << std::endl;
+    std::cerr << "Trying to connect to DAISI" << std::endl;
     int tries = 0;
     while (m_client.Initialize() != IPCLIB_SUCCEED && tries++ < 10)
     {

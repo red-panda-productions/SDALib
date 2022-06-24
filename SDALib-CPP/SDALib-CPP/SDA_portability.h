@@ -7,6 +7,10 @@
 #pragma once
 
 #include "ipclib_portability.h"
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
+#include <experimental/filesystem>
+
+namespace filesystem = std::experimental::filesystem;
 
 #ifdef WIN32
 #define SDA_IP_TYPE PCWSTR
@@ -15,6 +19,17 @@
 #define SDA_THROW_EXCEPTION(p_msg)     \
     std::cerr << (p_msg) << std::endl; \
     throw std::exception(p_msg)
+
+#include "Windows.h"
+#include <direct.h>
+#define chdir _chdir
+#define SET_WORKING_DIR()                                                \
+    char exeDir[260];                                                    \
+    GetModuleFileName(NULL, exeDir, 260);                                \
+    filesystem::path directory = filesystem::path(exeDir).parent_path(); \
+    std::string workingDirStr = directory.string();                      \
+    const char* workingDir = workingDirStr.c_str();                      \
+    chdir(workingDir)
 #endif
 
 #ifdef __linux__
@@ -24,6 +39,16 @@
     std::cerr << (p_msg) << std::endl; \
     throw std::exception();
 
+#include <libgen.h>
+#define SET_WORKING_DIR()                                         \
+    char result[PATH_MAX];                                        \
+    ssize_t count = readlink("/proc/self/exe", result, PATH_MAX); \
+    const char* path;                                             \
+    if (count != -1)                                              \
+    {                                                             \
+        path = dirname(result);                                   \
+    }                                                             \
+    chdir(path)
 #endif
 
 /// @brief		   Checks if the action was reported successfully from IPCLib

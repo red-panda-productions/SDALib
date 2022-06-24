@@ -1,9 +1,14 @@
 #  This program has been developed by students from the bachelor Computer Science at
 #  Utrecht University within the Software Project course.
-#  © Copyright Utrecht University (Department of Information and Computing Sciences)
+#  Copyright Utrecht University (Department of Information and Computing Sciences)
+
+import site
+import sys
+
+sys.path.append(site.getsitepackages())
 
 import SDATypes
-
+import simulator
 
 class SDADriver:
     speedLimit = 80
@@ -12,10 +17,11 @@ class SDADriver:
         return
 
     # returns the decision maker action from the current SDAData
-    def UpdateAI(self, SDAData):
+    def UpdateAI(self, sdaData):
+
         # find the velocity of the car
-        speed = SDAData.car.pub.dynGC.vel.x * 3.6
-        self.speedLimit = SDAData.speedLimit
+        speed = sdaData.car.pub.dynGC.vel.x * 3.6
+        self.speedLimit = sdaData.car.pub.trkPos.seg.speedLimit
 
         accel = 0  # float between 0 and 1
         brake = 0  # float between 0 and 1
@@ -27,7 +33,7 @@ class SDADriver:
         elif speed < self.speedLimit:
             accel = (self.speedLimit - speed) / 10
 
-        return 0, self.clamp(accel, 0, 1), self.clamp(brake, 0, 1), 0  # steer, accel, brake, clutch
+        return SDATypes.SDAAction(0, self.clamp(accel, 0, 1), self.clamp(brake, 0, 1), 0)  # steer, accel, brake, clutch
 
     # clamps the values value between min_value and max_value
     def clamp(self, value, min_value, max_value):

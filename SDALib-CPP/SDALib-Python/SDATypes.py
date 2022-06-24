@@ -1,12 +1,13 @@
 #  This program has been developed by students from the bachelor Computer Science at
 #  Utrecht University within the Software Project course.
-#  © Copyright Utrecht University (Department of Information and Computing Sciences)
+#  Copyright Utrecht University (Department of Information and Computing Sciences)
 
 # object containing all data send to the decision maker
 class SDATypes:
-    def __init__(self, car, situation, tickCount):
+    def __init__(self, car, situation, simCar, tickCount):
         self.car = car  # Car
         self.situation = situation  # Situation
+        self.simCar = simCar # SimCar
         self.tickCount = tickCount  # long
 
 
@@ -109,7 +110,7 @@ class TrackSegment:
                  radiusL, arc, center, vertex1, vertex2, vertex3, vertex4, angle1, angle2, angle3, angle4, angle5,
                  angle6, angle7, sin, cos, kzl, kzw, kyl, rgtSideNormal, envIndex, height,
                  raceInfo, doVFactor, speedLimit):
-        self.id = id  # int
+        self.trackId = id  # int
         self.type = type  # int
         self.type2 = type2  # int
         self.style = style  # int
@@ -409,3 +410,333 @@ class RaceInfo:
         self.maxDamage = maxDamage  # int
         self.fps = fps  # int
         self.features = features  # int
+
+# reaction from the decision maker
+class SDAAction:
+    def __init__(self, steer, accel, brake, clutch):
+        self.steer = steer
+        self.accel = accel
+        self.brake = brake
+        self.clutch = clutch
+
+class Aero:
+    def __init__(self, drag, lift1, lift2, Clift1, Clift2, Cd, CdBody):
+        self.drag = drag              #float
+        self.lift = [lift1, lift2]    #float[2]
+        self.Clift = [Clift1, Clift2] #float[2]
+        self.Cd = Cd                  #float
+        self.CdBody = CdBody          #float
+
+class Wing:
+    def __init__(self, forces, Kx, Kz, Kz_org, angle, staticPos, AoAatMax, AoAatZero, AoAatZRad, AoAOffset, CliftMax, CliftZero, CliftAsymp,
+                 a, b, c, d, f, AoStall, Stallw, AR, Kx1, Kx2, Kx3, Kx4, Kz1, Kz2, Kz3, WingType):
+        self.forces = forces #Vector
+        self.Kx = Kx #float
+        self.Kz = Kz #float
+        self.Kz_org = Kz_org #float
+        self.angle = angle #float
+        self.staticPos = staticPos #Vector
+        self.AoAatMax = AoAatMax #float
+        self.AoAatZero = AoAatZero #float
+        self.AoAatZRad = AoAatZRad #float
+        self.AoAOffset = AoAOffset #float
+        self.CliftMax = CliftMax #float
+        self.CliftZero = CliftZero #float
+        self.CliftAsymp = CliftAsymp #float
+        self.a = a #float
+        self.b = b #float
+        self.c = c #float
+        self.d = d #float   YES NO e FOR SOME REASON
+        self.f = f #float
+        self.AoStall = AoStall #float
+        self.Stallw = Stallw #float
+        self.AR = AR #float
+        self.Kx1 = Kx1 #float
+        self.Kx2 = Kx2 #float
+        self.Kx3 = Kx3 #float
+        self.Kx4 = Kx4 #float
+        self.Kz1 = Kz1 #float
+        self.Kz2 = Kz2 #float
+        self.Kz3 = Kz3 #float
+        self.WingType = WingType #int
+
+
+class DamperDef:
+    def __init__(self, C1, b1, v1, C2, b2):
+        self.C1 = C1 #float
+        self.b1 = b1 #float
+        self.v1 = v1 #float
+        self.C2 = C2 #float
+        self.b2 = b2 #float
+
+class Damper:
+    def __init__(self, bump, rebound):
+        self.bump = bump #DamperDef
+        self.rebound = rebound #DamperDef
+
+class Spring:
+    def __init__(self, K, F0, x0, xMax, bellcrank, packers):
+        self.K = K #float
+        self.F0 = F0 #float
+        self.x0 = x0 #float 
+        self.xMax = xMax #float
+        self.bellcrank = bellcrank #float
+        self.packers = packers #float
+
+class Suspension:
+    def __init__(self, spring, damper, inertance, x, v, a, force, state):
+        self.spring = spring #Spring
+        self.damper = damper #Damper
+        self.inertance = inertance #float
+        self.x = x #float
+        self.v = v #float
+        self.a = a #float
+        self.force = force #float
+        self.state = state #int
+
+class Brake:
+    def __init__(self, pressure, Tq, coeff, I, radius, temp, TCL, ABS, EnableABS):
+        self.pressure = pressure #float
+        self.Tq = Tq #float
+        self.coeff = coeff #float
+        self.I = I #float
+        self.radius = radius #float
+        self.temp = temp #float
+        self.TCL = TCL #float
+        self.ABS = ABS #float
+        self.EnableABS = EnableABS #bool
+
+class BrakeSyst:
+    def __init__(self, rep, coeff, ebrake_pressure):
+        self.rep = rep #float
+        self.coeff = coeff #float
+        self.ebrake_pressure = ebrake_pressure #float
+
+class DynAxis:
+    def __init__(self, spinVel, Tq, brkTq, I):
+        self.spinVel = spinVel #float
+        self.Tq = Tq #float
+        self.brkTq = brkTq #float
+        self.I = I #float
+
+class Differential:
+    def __init__(self, type, ratio, I, efficiency, bias, dTqMin, dTqMax, dSlipMax, dCoastSlipMax, lockInputTq, viscosity, viscomax, invar, feedback):
+        self.type = type #int
+        self.ratio = ratio #float
+        self.I = I #float
+        self.efficiency = efficiency #float
+        self.bias = bias #float
+        self.dTqMin = dTqMin #float
+        self.dTqMax = dTqMax #float
+        self.dSlipMax = dSlipMax #float
+        self.dCoastSlipMax = dCoastSlipMax #float
+        self.lockInputTq = lockInputTq #float
+        self.viscosity = viscosity #float
+        self.viscomax = viscomax #float
+        self.invar = invar #DynAxis
+        self.feedback = feedback #DynAxis
+
+        #2 variables not set but simu will set them in CarConstructor
+
+class Axle:
+    def __init__(self, xpos, arbSusp, heaveSusp, wheight0, force1, force2, I):
+        self.xpos = xpos #float
+        self.arbSusparbSusp = arbSusp #Suspension
+        self.heaveSusp = heaveSusp #Suspension
+        self.wheight0 = wheight0 #float
+        self.force = [force1, force2] #float[2]
+        self.I = I #float
+
+class Steer:
+    def __init__(self, steerLock, maxSpeed, steer):
+        self.steerLock = steerLock #float
+        self.maxSpeed = maxSpeed #float
+        self.steer = steer #float
+
+class Wheel:
+    def __init__(self, susp, brake, forces, torques, torqueAlign, roolRes, rideHeight, zRoad, pos, bodyVel, driveTq, vt, spinTq,
+                 spinVel, prespinVel, state, axleFz, axleFz3rd, trkPos, relPos, sa, sx, steer, staticPos, cosax, sinax, weight0, 
+                 tireSpringRate, radius, mu, I, curI, mfC, mfB, mfE, lfMax, lfMin, lfK, opLoad, AlignTqFactor, mass, camber, pressure,
+                 Ttire, Topt, Tinit, muTmult, heatingm, aircoolm, speedcoolm, wearrate, treadDepth, critTreadDepth, muTDmult1, muTDmult2,
+                 muTDoffset1, muTDoffset2, invar, feedBack, preFn, preFt):
+        self.susp = susp #Suspension
+        self.brake = brake #Brake
+        self.forces = forces #Vector
+        self.torques = torques #Vector
+        self.torqueAlign = torqueAlign #float
+        self.roolRes = roolRes #float
+        self.rideHeight = rideHeight #float
+        self.zRoad = zRoad #float
+        self.pos = pos #Vector
+        self.bodyVel = bodyVel #Vector
+        self.driveTq = driveTq #float
+        self.vt = vt #float
+        self.spinTq = spinTq #float
+        self.spinVel = spinVel #float
+        self.prespinVel = prespinVel #float
+        self.state = state #int
+        self.axleFz = axleFz #float
+        self.axleFz3rd = axleFz3rd #float
+        self.trkPos = trkPos #TrkLocPos
+        self.relPos = relPos #Posd
+        self.sa = sa #float
+        self.sx = sx #float
+        self.steer = steer #float
+        self.staticPos = staticPos #Posd
+        self.cosax = cosax #float
+        self.sinax = sinax #float
+        self.weight0 = weight0 #float
+        self.tireSpringRate = tireSpringRate #float
+        self.radius = radius #float#float
+        self.mu = mu #float
+        self.I = I #float
+        self.curI = curI #float
+        self.mfC = mfC #float
+        self.mfB = mfB #float
+        self.mfE = mfE #float
+        self.lfMax = lfMax #float
+        self.lfMin = lfMin #float
+        self.lfK = lfK #float
+        self.opLoad = opLoad #float
+        self.AlignTqFactor = AlignTqFactor #float
+        self.mass = mass #float
+        self.camber = camber #float
+        self.pressure = pressure #float
+        self.Ttire = Ttire #float
+        self.Topt = Topt #float
+        self.Tinit = Tinit #float
+        self.muTmult = muTmult #float
+        self.heatingm = heatingm #float
+        self.aircoolm = aircoolm #float
+        self.speedcoolm = speedcoolm #float
+        self.wearrate = wearrate #float
+        self.treadDepth = treadDepth #float
+        self.critTreadDepth = critTreadDepth #float
+        self.muTDmult = [muTDmult1, muTDmult2] #float[2]
+        self.muTDoffset = [muTDoffset1, muTDoffset2] #float[2]
+        self.invar = invar #DynAxis 
+        self.feedBack = feedBack #DynAxis
+        self.preFn = preFn #float
+        self.preFt = preFt #float
+
+class Gearbox:
+    def __init__(self, gear, gearMin, gearMax, gearNext, shiftTime, timeToEngage):
+        self.gear = gear #int
+        self.gearMin = gearMin #int
+        self.gearMax = gearMax #int
+        self.gearNext = gearNext #int
+        self.shiftTime = shiftTime #float
+        self.timeToEngage = timeToEngage #float
+
+class Clutch:
+    def __init__(self, state, mode, timeToRelease, releaseTime, transferValue):
+        self.state = state #int
+        self.mode = mode #int
+        self.timeToRelease = timeToRelease #float
+        self.releaseTime = releaseTime #float
+        self.transferValue = transferValue #float
+
+class Transmission:
+    def __init__(self, gearbox, clutch, overallRatio1, overallRatio2, overallRatio3, overallRatio4, overallRatio5, overallRatio6,
+                 overallRatio7, overallRatio8, overallRatio9, overallRatio10, gearI1, gearI2, gearI3, gearI4, gearI5, gearI6,
+                 gearI7, gearI8, gearI9, gearI10,  driveI1, driveI2, driveI3, driveI4, driveI5, driveI6,
+                 driveI7, driveI8, driveI9, driveI10, freeI1, freeI2, freeI3, freeI4, freeI5, freeI6,
+                 freeI7, freeI8, freeI9, freeI10, gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6,
+                 gearEff7, gearEff8, gearEff9, gearEff10, currI, differential1, differential2, differential3, type):
+        self.gearbox = gearbox #Gearbox
+        self.clutch = clutch #Clutch
+        self.overallRatio = [overallRatio1, overallRatio2, overallRatio3, overallRatio4, overallRatio5, overallRatio6,
+                 overallRatio7, overallRatio8, overallRatio9, overallRatio10] #float[10]
+        self.gearI = [gearI1, gearI2, gearI3, gearI4, gearI5, gearI6, gearI7, gearI8, gearI9, gearI10] #float[10]
+        self.driveI = [driveI1, driveI2, driveI3, driveI4, driveI5, driveI6, driveI7, driveI8, driveI9, driveI10] #float[10]
+        self.freeI = [freeI1, freeI2, freeI3, freeI4, freeI5, freeI6, freeI7, freeI8, freeI9, freeI10] #float[10]
+        self.gearEff = [gearEff1, gearEff2, gearEff3, gearEff4, gearEff5, gearEff6, gearEff7, gearEff8, gearEff9, gearEff10] #float[10]
+        self.currI = currI #float
+        self.differential = [differential1, differential2, differential3] #differential[3]
+        self.type = type
+
+
+class EngineCurveElem:
+    def __init__(self, rad, a, b):
+        self.rad = rad #float
+        self.a = a  #float
+        self.b = b  #float
+
+class EngineCurve:
+    def __init__(self, maxTq, maxPw, rpmMaxPw, TqAtMaxPw, rpmMaxTq, npPts) :
+        self.maxTq = maxTq #float
+        self.maxPw = maxPw #float
+        self.rpmMaxPw = rpmMaxPw #float
+        self.TqAtMaxPw = TqAtMaxPw #float
+        self.rpmMaxTq = rpmMaxTq #float
+        self.npPts = npPts #int
+        #data missing tEngineCurveElem
+
+class Engine:
+    def __init__(self, curve, revsLimiter, revsMax, tickover, I, rads, Tq, Tq_response, I_joint, fuelcons, brakeCoeff, brakeLinCoeff,
+                 pressure, exhaust_pressure, exhaust_refract, timeInLimiter, TCL, EnableTCL):
+        self.curve = curve #EngineCurve
+        self.revsLimiter = revsLimiter #float
+        self.revsMax = revsMax #float
+        self.tickover = tickover #float
+        self.I = I #float#float
+        self.rads = rads #float
+        self.Tq = Tq #float
+        self.Tq_response = Tq_response #float
+        self.I_joint = I_joint #float
+        self.fuelcons = fuelcons #float
+        self.brakeCoeff = brakeCoeff #float
+        self.brakeLinCoeff = brakeLinCoeff #float
+        self.pressure = pressure #float
+        self.exhaust_pressure = exhaust_pressure #float
+        self.exhaust_refract = exhaust_refract #float
+        self.timeInLimiter = timeInLimiter #float
+        self.TCL = TCL #float
+        self.EnableTCL = EnableTCL #bool
+
+class SimCar:
+    def __init__(self, preCtrl, axle1, axle2, wheel1, wheel2, wheel3, wheel4, steer, brkSyst, aero, wing1, wing2, transmission,
+                 engine, dimension, mass, Minv, tank, statGC, Iinv, fuel, fuel_consumption, fuel_prev, fuel_time, DynGC, DynGCg,
+                 VelColl, preDynGC,  trkPos, airSpeed2, Cosz, Sinz, corner1, corner2, corner3, corner4, collision, normal, collpos,
+                 wheelbase, wheeltrack, posMat1, posMat2, posMat3, posMat4, posMat5, posMat6, posMat7, posMat8, posMat9, posMat10, 
+                 posMat11, posMat12, posMat13, posMat14, posMat15, posMat16, blocked, dammage, features, restPos, collisionAware):
+        self.preCtrl = preCtrl #CarCtrl
+        self.axle = [axle1, axle2] #Axle[2]
+        self.wheel = [wheel1, wheel2, wheel3, wheel4] #Wheel[4]
+        self.steer = steer #Steer
+        self.brkSyst = brkSyst #BrakeSyst
+        self.aero = aero #Aero
+        self.wing = [wing1, wing2] #Wing[2]
+        self.transmission = transmission #Transmission
+        self.engine = engine #Engine
+        self.dimension = dimension #Vector
+        self.mass = mass #float
+        self.Minv = Minv #float
+        self.tank = tank #float
+        self.statGC = statGC #Vector
+        self.Iinv = Iinv #Vector
+        self.fuel = fuel #float
+        self.fuel_consumption = fuel_consumption #float
+        self.fuel_prev = fuel_prev #float
+        self.fuel_time = fuel_time #float
+        self.DynGC = DynGC #DynamicPoint
+        self.DynGCg = DynGCg #DynamicPoint
+        self.VelColl = VelColl #Posd
+        self.preDynGC = preDynGC #DynamicPoint
+        self.trkPos = trkPos #TrkLocalPos
+        self.airSpeed2 = airSpeed2 #float
+        self.Cosz = Cosz #float
+        self.Sinz = Sinz #float
+        self.corner = [corner1, corner2, corner3, corner4] #DynamicPoint[4]
+        self.collision = collision #int
+        self.normal = normal #Vector
+        self.collpos = collpos #Vector
+        self.wheelbase = wheelbase #float
+        self.wheeltrack = wheeltrack #float
+        self.posMat = [[posMat1, posMat2, posMat3, posMat4], [posMat5, posMat6, posMat7, posMat8],
+                       [posMat9, posMat10, posMat11, posMat12], [posMat13, posMat14, posMat15, posMat16]]  # float[][]
+        self.blocked = blocked #int
+        self.dammage = dammage #int
+        self.features = features #int
+        self.restPos = restPos #DynamicPoint
+        self.collisionAware = collisionAware #int

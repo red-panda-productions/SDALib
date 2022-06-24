@@ -6,8 +6,8 @@
 
 #include "SDAData.hpp"
 
-SDAData::SDAData(tCarElt* p_car, tSituation* p_situation, unsigned long p_tickCount)
-    : Car(*p_car), Situation(*p_situation), TickCount(p_tickCount) {}
+SDAData::SDAData(tCar* p_simCar, tCarElt* p_car, tSituation* p_situation, unsigned long p_tickCount)
+    : SimCar(*p_simCar), Car(*p_car), Situation(*p_situation), TickCount(p_tickCount) {}
 
 SDAData::SDAData()
-    : Car(), Situation(), TickCount(0) {}
+    : SimCar(), Car(), Situation(), TickCount(0) {}

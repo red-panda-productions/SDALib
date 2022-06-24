@@ -14,6 +14,7 @@
 #include <thread>
 #include <chrono>
 #include "IPCPointerManager.h"
+#include "SDAUtils.hpp"
 
 //#define SDA_LOG_INFO(p_info) std::cout << p_info << std::endl;
 

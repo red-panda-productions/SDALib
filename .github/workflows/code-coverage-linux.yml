@@ -31,6 +31,7 @@ jobs:
     - name: Install packages
       run: |
         sudo apt-get update && sudo apt-get upgrade
+        sudo apt install ${{github.workspace}}/libraries/Packages/solid2.deb
         wget https://github.com/red-panda-productions/ipc-lib/releases/download/v1.2.0/ipclib.deb
         sudo apt install ./ipclib.deb
         sudo apt-get install libplib-dev

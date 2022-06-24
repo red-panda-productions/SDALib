@@ -23,4 +23,5 @@ ENDIF(UNIX)
 target_include_directories(SDABrakeSample PUBLIC "../../SDALib-CPP")
 
 INSTALL_SDA_PACKAGES(SDABrakeSample)
+INSTALL_SDA_DLLS(SDABrakeSample)
 

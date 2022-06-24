@@ -78,9 +78,10 @@ void TestTestAmount(ServerSocket& p_server, char* p_buffer)
 
     tCarElt car = {};
     tSituation situation = {};
+    tCar simCar = {};
     unsigned long tickCount = 0;
 
-    *pointer = SDAData(&car, &situation, tickCount);
+    *pointer = SDAData(&simCar, &car, &situation, tickCount);
 
     sbufferCopy(sbuffer, p_buffer, TEST_BUFFER_SIZE);
     p_server.ReceiveDataAsync();

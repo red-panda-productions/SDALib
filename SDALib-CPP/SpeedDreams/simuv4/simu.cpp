@@ -565,66 +565,66 @@ SimUpdate(tSituation *s, double deltaTime)
             car->ctrl->clutchCmd = 1.0;
         }
 
-        CHECK(car);
+
 
         ctrlCheck(car);
-        CHECK(car);
+
 
         SimInstantReConfig(car);
-        CHECK(car);
+
 
         SimSteerUpdate(car);
-        CHECK(car);
+
 
         SimGearboxUpdate(car);
-        CHECK(car);
+
 
         SimEngineUpdateTq(car);
-        CHECK(car);
+
 
         if (!(s->_raceState & RM_RACE_PRESTART) || car->carElt->_skillLevel == 3)
         {
             SimCarUpdateWheelPos(car);
-            CHECK(car);
+
 
             SimBrakeSystemUpdate(car);
-            CHECK(car);
+
 
             SimAeroUpdate(car, s);
-            CHECK(car);
+
 
             for (i = 0; i < 2; i++)
             {
                 SimWingUpdate(car, i, s);
             }
-            CHECK(car);
+
 
             for (i = 0; i < 4; i++)
             {
                 SimWheelUpdateRide(car, i);
             }
-            CHECK(car);
+
 
             for (i = 0; i < 2; i++)
             {
                 SimAxleUpdate(car, i);
             }
-            CHECK(car);
+
 
             for (i = 0; i < 4; i++)
             {
                 SimWheelUpdateForce(car, i);
             }
-            CHECK(car);
+
 
             SimTransmissionUpdate(car);
-            CHECK(car);
+
 
             SimWheelUpdateRotation(car);
-            CHECK(car);
+
 
             SimCarUpdate(car, s);
-            CHECK(car);
+
         }
         else
         {
@@ -640,7 +640,7 @@ SimUpdate(tSituation *s, double deltaTime)
     for (ncar = 0; ncar < s->_ncars; ncar++)
     {
         car = &(SimCarTable[ncar]);
-        CHECK(car);
+
         carElt = car->carElt;
 
         if (carElt->_state & RM_CAR_STATE_NO_SIMU)
@@ -648,7 +648,7 @@ SimUpdate(tSituation *s, double deltaTime)
             continue;
         }
 
-        CHECK(car);
+
         SimCarUpdate2(car, s); /* telemetry */
 
         /* copy back the data to carElt */
@@ -742,46 +742,46 @@ SimUpdateSingleCar(int index, double deltaTime,tSituation *s)
     car = &(SimCarTable[index]);
     carElt = car->carElt;
 
-    CHECK(car);
+
     ctrlCheck(car);
-    CHECK(car);
+
     SimInstantReConfig(car);
-    CHECK(car);
+
     SimSteerUpdate(car);
-    CHECK(car);
+
     SimGearboxUpdate(car);
-    CHECK(car);
+
     SimEngineUpdateTq(car);
-    CHECK(car);
+
 
     SimCarUpdateWheelPos(car);
-    CHECK(car);
+
     SimBrakeSystemUpdate(car);
-    CHECK(car);
+
     SimAeroUpdate(car, s);
-    CHECK(car);
+
     for (i = 0; i < 2; i++){
         SimWingUpdate(car, i, s);
     }
-    CHECK(car);
+
     for (i = 0; i < 4; i++){
         SimWheelUpdateRide(car, i);
     }
-    CHECK(car);
+
     for (i = 0; i < 2; i++){
         SimAxleUpdate(car, i);
     }
-    CHECK(car);
+
     for (i = 0; i < 4; i++){
         SimWheelUpdateForce(car, i);
     }
-    CHECK(car);
+
     SimTransmissionUpdate(car);
-    CHECK(car);
+
     SimWheelUpdateRotation(car);
-    CHECK(car);
+
     SimCarUpdate(car, s);
-    CHECK(car);
+
 
     /* copy back the data to carElt */
 
