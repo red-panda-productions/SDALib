@@ -52,7 +52,7 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
     PyObject *sdaType = m_sdaTypesConverter.GetPythonSDATypeObject(p_data);
     if (sdaType == nullptr)
     {
-        std::cout << "Not a valid SDATYpe" << std::endl;
+        std::cout << "Not a valid SDAType" << std::endl;
         return {0, 0, 0, 0};
     }
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");

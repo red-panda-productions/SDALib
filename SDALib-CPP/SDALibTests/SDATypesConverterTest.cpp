@@ -285,9 +285,9 @@ void CheckMatrixData(sgMat4& p_posMat, PyObject* p_posMatObject)
 /// @param  p_trackSeg The python track segment object
 void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
 {
-    // PyObject* idAttr = PyUnicode_FromString("trackId");
-    // PyObject* idVal = PyObject_GetAttr(p_trackSegObject, idAttr);
-    // ASSERT_TRUE(p_trackSeg.id == static_cast<int>(PyLong_AsLong(idVal)));
+    PyObject* idAttr = PyUnicode_FromString("id");
+    PyObject* idVal = PyObject_GetAttr(p_trackSegObject, idAttr);
+    ASSERT_TRUE(p_trackSeg.id == static_cast<int>(PyLong_AsLong(idVal)));
 
     PyObject* typeAttr = PyUnicode_FromString("type");
     PyObject* typeVal = PyObject_GetAttr(p_trackSegObject, typeAttr);
@@ -1741,7 +1741,7 @@ void CheckAxleData(tAxle p_axle, PyObject* p_axleObject)
     PyObject* xposVal = PyObject_GetAttr(p_axleObject, xposAttr);
     ASSERT_EQ(p_axle.xpos, static_cast<float>(PyFloat_AsDouble(xposVal)));
 
-    PyObject* arbSuspAttr = PyUnicode_FromString("arbSusparbSusp");
+    PyObject* arbSuspAttr = PyUnicode_FromString("arbSusp");
     PyObject* arbSuspVal = PyObject_GetAttr(p_axleObject, arbSuspAttr);
     CheckSuspensionData(p_axle.arbSusp, arbSuspVal);
 
@@ -2474,7 +2474,7 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
     SDATypesConverter converter = SDATypesConverter();
 
     Random random;
-    for (int i = 0; i < TEST_COUNT; i++)
+    // for (int i = 0; i < TEST_COUNT; i++)
     {
         SDAData sdaData;
         TestSegments segments = GenerateSegments();

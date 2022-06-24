@@ -30,6 +30,13 @@ static PyObject* simulator_update(PyObject *p_self, PyObject* p_args)
     SDASpeedDreams sdaSpeedDreams;
     SDAData newData = sdaSpeedDreams.UpdateSimulator(oldData, oldAction);
 
+    delete[] oldData.Car.pub.trkPos.seg;
+    delete[] oldData.SimCar.trkPos.seg;
+    delete[] oldData.SimCar.wheel[0].trkPos.seg;
+    delete[] oldData.SimCar.wheel[1].trkPos.seg;
+    delete[] oldData.SimCar.wheel[2].trkPos.seg;
+    delete[] oldData.SimCar.wheel[3].trkPos.seg;
+
     PyObject* newDataObject = sdaTypesConverter.GetPythonSDATypeObject(newData);
     sdaTypesConverter.SetPythonSDATypeObject(PyTuple_GetItem(p_args, 2), newDataObject);
 

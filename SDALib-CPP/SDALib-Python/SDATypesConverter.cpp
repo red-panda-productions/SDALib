@@ -535,11 +535,11 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
     publicCar.DynGCg = GetCppDynamicPointObject(PyObject_GetAttrString(p_publicCar, "dynGCg"));
     publicCar.speed = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_publicCar, "speed")));
 
-    PyObject *p_posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_publicCar, "posMat"));
-    PyObject *row1Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 0));
-    PyObject *row2Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 1));
-    PyObject *row3Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 2));
-    PyObject *row4Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 3));
+    PyObject *posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_publicCar, "posMat"));
+    PyObject *row1Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 0));
+    PyObject *row2Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 1));
+    PyObject *row3Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 2));
+    PyObject *row4Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 3));
 
     publicCar.posMat[0][0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 0)));
     publicCar.posMat[0][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 1)));
