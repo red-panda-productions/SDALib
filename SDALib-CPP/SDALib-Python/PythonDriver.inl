@@ -65,8 +65,8 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
 
     if (PyErr_Occurred())
     {
-        PyErr_PrintEx(0);
-        PyErr_Clear();  // this will reset the error indicator so you can run Python code again
+        PyErr_PrintEx(0); //@NOCOVERAGE
+        PyErr_Clear();  //  @NOCOVERAGE this will reset the error indicator so you can run Python code again
     }
 
     return action;

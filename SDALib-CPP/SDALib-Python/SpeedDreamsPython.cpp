@@ -31,10 +31,6 @@ static PyObject* simulator_update(PyObject *p_self, PyObject* p_args)
     SDAData newData = sdaSpeedDreams.UpdateSimulator(oldData, oldAction);
 
     PyObject* newDataObject = sdaTypesConverter.GetPythonSDATypeObject(newData);
-    if (newDataObject == nullptr)
-    {
-        return PyLong_FromDouble(0);
-    }
     sdaTypesConverter.SetPythonSDATypeObject(PyTuple_GetItem(p_args, 2), newDataObject);
 
     return PyLong_FromDouble(1);
