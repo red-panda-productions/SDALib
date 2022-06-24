@@ -746,7 +746,7 @@ tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
     tTrackSeg segment = {};
     segment.name = nullptr;
 
-    segment.id = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "trackId")));
+    segment.id = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "id")));
     segment.type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type")));
     segment.type2 = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type2")));
     segment.style = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "style")));
@@ -2436,7 +2436,7 @@ tAxle SDATypesConverter::GetCppAxleSystObject(PyObject *p_axle)
     tAxle axle;
 
     axle.xpos = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_axle, "xpos")));
-    axle.arbSusp = GetCppSuspensionObject(PyObject_GetAttrString(p_axle, "arbSusparbSusp"));
+    axle.arbSusp = GetCppSuspensionObject(PyObject_GetAttrString(p_axle, "arbSusp"));
     axle.heaveSusp = GetCppSuspensionObject(PyObject_GetAttrString(p_axle, "heaveSusp"));
 
     PyObject *forceVal = PyList_AsTuple(PyObject_GetAttrString(p_axle, "force"));
@@ -2456,7 +2456,7 @@ void SDATypesConverter::SetPythonAxleSystObject(PyObject *p_target, PyObject *p_
     const char *attributeList[3]{"xpos", "wheight0", "I"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 
-    SetPythonSuspensionObject(PyObject_GetAttrString(p_target, "arbSusparbSusp"), PyObject_GetAttrString(p_data, "arbSusparbSusp"));
+    SetPythonSuspensionObject(PyObject_GetAttrString(p_target, "arbSusp"), PyObject_GetAttrString(p_data, "arbSusp"));
     SetPythonSuspensionObject(PyObject_GetAttrString(p_target, "heaveSusp"), PyObject_GetAttrString(p_data, "heaveSusp"));
     COPY_PYTHON_ARRAY(p_target, p_data, "force", 2);
 }

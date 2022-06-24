@@ -56,7 +56,7 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
         return {0, 0, 0, 0};
     }
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
-    PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
+    PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL); // Leaks 6 allocs
     SDAAction action = m_sdaTypesConverter.GetCppSDAAction(result);
 
     Py_CLEAR(sdaType);
@@ -66,7 +66,7 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
     if (PyErr_Occurred())
     {
         PyErr_PrintEx(0); //@NOCOVERAGE
-        PyErr_Clear();  //  @NOCOVERAGE this will reset the error indicator so you can run Python code again
+        PyErr_Clear();    //@NOCOVERAGE this will reset the error indicator so you can run Python code again
     }
 
     return action;

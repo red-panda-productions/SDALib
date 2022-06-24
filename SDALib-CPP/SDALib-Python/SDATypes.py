@@ -110,7 +110,7 @@ class TrackSegment:
                  radiusL, arc, center, vertex1, vertex2, vertex3, vertex4, angle1, angle2, angle3, angle4, angle5,
                  angle6, angle7, sin, cos, kzl, kzw, kyl, rgtSideNormal, envIndex, height,
                  raceInfo, doVFactor, speedLimit):
-        self.trackId = id  # int
+        self.id = id  # int
         self.type = type  # int
         self.type2 = type2  # int
         self.style = style  # int
@@ -541,7 +541,7 @@ class Differential:
 class Axle:
     def __init__(self, xpos, arbSusp, heaveSusp, wheight0, force1, force2, I):
         self.xpos = xpos #float
-        self.arbSusparbSusp = arbSusp #Suspension
+        self.arbSusp = arbSusp #Suspension
         self.heaveSusp = heaveSusp #Suspension
         self.wheight0 = wheight0 #float
         self.force = [force1, force2] #float[2]
