@@ -561,6 +561,12 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
     publicCar.posMat[3][2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 2)));
     publicCar.posMat[3][3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 3)));
 
+    Py_CLEAR(posMatTuple);
+    Py_CLEAR(row1Val);
+    Py_CLEAR(row2Val);
+    Py_CLEAR(row3Val);
+    Py_CLEAR(row4Val);
+
     publicCar.trkPos = GetCppTrackLocationObject(PyObject_GetAttrString(p_publicCar, "trkPos"));
     publicCar.state = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_publicCar, "state")));
 

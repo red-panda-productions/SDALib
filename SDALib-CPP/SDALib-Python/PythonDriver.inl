@@ -56,7 +56,7 @@ SDAAction PythonDriver<PointerManager>::UpdateAI(SDAData &p_data)
         return {0, 0, 0, 0};
     }
     PyObject *updateAIFuncName = PyUnicode_FromString("UpdateAI");
-    PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL); // Leaks 6 allocs
+    PyObject *result = PyObject_CallMethodObjArgs(m_pythonDriver, updateAIFuncName, sdaType, NULL);
     SDAAction action = m_sdaTypesConverter.GetCppSDAAction(result);
 
     Py_CLEAR(sdaType);
