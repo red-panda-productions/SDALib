@@ -2474,7 +2474,7 @@ TEST(PythonConverterTests, PythonDriverGetSDATypeObjectTest)
     SDATypesConverter converter = SDATypesConverter();
 
     Random random;
-    // for (int i = 0; i < TEST_COUNT; i++)
+    for (int i = 0; i < TEST_COUNT; i++)
     {
         SDAData sdaData;
         TestSegments segments = GenerateSegments();
