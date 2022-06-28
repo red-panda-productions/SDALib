@@ -287,7 +287,7 @@ void CheckTrackSegmentData(tTrackSeg& p_trackSeg, PyObject* p_trackSegObject)
 {
     PyObject* idAttr = PyUnicode_FromString("id");
     PyObject* idVal = PyObject_GetAttr(p_trackSegObject, idAttr);
-    ASSERT_TRUE(p_trackSeg.id == static_cast<int>(PyLong_AsLong(idVal)));
+    ASSERT_EQ(p_trackSeg.id, static_cast<int>(PyLong_AsLong(idVal)));
 
     PyObject* typeAttr = PyUnicode_FromString("type");
     PyObject* typeVal = PyObject_GetAttr(p_trackSegObject, typeAttr);

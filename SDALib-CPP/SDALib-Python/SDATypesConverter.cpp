@@ -676,8 +676,7 @@ tTrkLocPos SDATypesConverter::GetCppTrackLocationObject(PyObject *p_trackLoc)
 {
     tTrkLocPos trackLocPos;
 
-    tTrackSeg trackSeg = GetCppTrackSegmentObject(PyObject_GetAttrString(p_trackLoc, "seg"));
-    trackLocPos.seg = &trackSeg;
+    trackLocPos.seg = GetCppTrackSegmentObject(PyObject_GetAttrString(p_trackLoc, "seg"));
     trackLocPos.type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackLoc, "type")));
     trackLocPos.toStart = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackLoc, "toStart")));
     trackLocPos.toRight = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackLoc, "toRight")));
@@ -755,55 +754,55 @@ PyObject *SDATypesConverter::GetPythonTrackSegmentObject(tTrackSeg &p_trackSeg)
 /// @brief gets the Cpp track segment object of the Python object
 /// @param  p_trackSeg The Python object
 /// @return           The Cpp object
-tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
+tTrackSeg *SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
 {
-    tTrackSeg segment = {};
-    segment.name = nullptr;
+    tTrackSeg *segment = new tTrackSeg;
+    segment->name = nullptr;
 
-    segment.id = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "id")));
-    segment.type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type")));
-    segment.type2 = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type2")));
-    segment.style = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "style")));
-    segment.length = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "length")));
-    segment.Time = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "time")));
-    segment.width = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "width")));
-    segment.startWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "startWidth")));
-    segment.endWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "endWidth")));
-    segment.lgfromstart = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "lgFromStart")));
-    segment.radius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radius")));
-    segment.radiusr = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusR")));
-    segment.radiusl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusL")));
-    segment.arc = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "arc")));
-    segment.center = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "center"));
+    segment->id = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "id")));
+    segment->type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type")));
+    segment->type2 = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type2")));
+    segment->style = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "style")));
+    segment->length = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "length")));
+    segment->Time = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "time")));
+    segment->width = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "width")));
+    segment->startWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "startWidth")));
+    segment->endWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "endWidth")));
+    segment->lgfromstart = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "lgFromStart")));
+    segment->radius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radius")));
+    segment->radiusr = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusR")));
+    segment->radiusl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusL")));
+    segment->arc = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "arc")));
+    segment->center = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "center"));
 
     PyObject *vertexTuple = PyList_AsTuple(PyObject_GetAttrString(p_trackSeg, "vertex"));
-    segment.vertex[0] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 0));
-    segment.vertex[1] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 1));
-    segment.vertex[2] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 2));
-    segment.vertex[3] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 3));
+    segment->vertex[0] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 0));
+    segment->vertex[1] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 1));
+    segment->vertex[2] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 2));
+    segment->vertex[3] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 3));
     Py_CLEAR(vertexTuple);
 
     PyObject *angleTuple = PyList_AsTuple(PyObject_GetAttrString(p_trackSeg, "angle"));
-    segment.angle[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 0)));
-    segment.angle[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 1)));
-    segment.angle[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 2)));
-    segment.angle[3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 3)));
-    segment.angle[4] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 4)));
-    segment.angle[5] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 5)));
-    segment.angle[6] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 6)));
+    segment->angle[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 0)));
+    segment->angle[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 1)));
+    segment->angle[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 2)));
+    segment->angle[3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 3)));
+    segment->angle[4] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 4)));
+    segment->angle[5] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 5)));
+    segment->angle[6] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 6)));
     Py_CLEAR(angleTuple);
 
-    segment.sin = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "sin")));
-    segment.cos = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "cos")));
-    segment.Kzl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzl")));
-    segment.Kzw = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzw")));
-    segment.Kyl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kyl")));
-    segment.rgtSideNormal = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "rgtSideNormal"));
-    segment.envIndex = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "envIndex")));
-    segment.height = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "height")));
-    segment.raceInfo = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "raceInfo")));
-    segment.DoVfactor = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "doVFactor")));
-    segment.SpeedLimit = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "speedLimit")));
+    segment->sin = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "sin")));
+    segment->cos = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "cos")));
+    segment->Kzl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzl")));
+    segment->Kzw = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzw")));
+    segment->Kyl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kyl")));
+    segment->rgtSideNormal = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "rgtSideNormal"));
+    segment->envIndex = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "envIndex")));
+    segment->height = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "height")));
+    segment->raceInfo = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "raceInfo")));
+    segment->DoVfactor = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "doVFactor")));
+    segment->SpeedLimit = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "speedLimit")));
 
     return segment;
 }
