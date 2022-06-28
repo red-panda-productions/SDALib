@@ -2932,7 +2932,7 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
     transmission.gearEff[9] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(gearEffVal, 9)));
     Py_CLEAR(gearEffVal);
 
-    transmission.curI = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_transmission, "curI")));
+    transmission.curI = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_transmission, "currI")));
 
     PyObject *differentialVal = PyList_AsTuple(PyObject_GetAttrString(p_transmission, "differential"));
     transmission.differential[0] = GetCppDifferentialSystObject(PyTuple_GetItem(differentialVal, 0));
@@ -2949,10 +2949,11 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
 void SDATypesConverter::SetPythonTransmissionSystObject(PyObject *p_target, PyObject *p_data)
 {
     if (p_target == nullptr || p_data == nullptr) return;
-    COPY_PYTHON_OBJECT(p_target, p_data, "curI");
+    COPY_PYTHON_OBJECT(p_target, p_data, "currI");
     COPY_PYTHON_OBJECT(p_target, p_data, "type");
     COPY_PYTHON_ARRAY(p_target, p_data, "overallRatio", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "gearI", 10);
+    COPY_PYTHON_ARRAY(p_target, p_data, "driveI", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "driveI", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "freeI", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "gearEff", 10);
