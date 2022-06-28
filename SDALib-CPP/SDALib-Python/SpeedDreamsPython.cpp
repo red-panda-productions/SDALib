@@ -21,16 +21,23 @@ static PyObject* simulator_update(PyObject* p_self, PyObject* p_args)
     PyObject* data = PyTuple_GetItem(p_args, 0);
     PyObject* action = PyTuple_GetItem(p_args, 1);
 
-    // SDATypesConverter sdaTypesConverter = SDATypesConverter();
+    SDATypesConverter sdaTypesConverter = SDATypesConverter();
 
-    // SDAData oldData = sdaTypesConverter.GetCppSDAData(data);
-    // SDAAction oldAction = sdaTypesConverter.GetCppSDAAction(action);
+    SDAData oldData = sdaTypesConverter.GetCppSDAData(data);
+    SDAAction oldAction = sdaTypesConverter.GetCppSDAAction(action);
 
-    // SDASpeedDreams sdaSpeedDreams;
-    // SDAData newData = sdaSpeedDreams.UpdateSimulator(oldData, oldAction);
+    SDASpeedDreams sdaSpeedDreams;
+    SDAData newData = oldData; //sdaSpeedDreams.UpdateSimulator(oldData, oldAction);
 
-    // PyObject* newDataObject = sdaTypesConverter.GetPythonSDATypeObject(newData);
-    // sdaTypesConverter.SetPythonSDATypeObject(PyTuple_GetItem(p_args, 2), newDataObject);
+    PyObject* newDataObject = sdaTypesConverter.GetPythonSDATypeObject(newData);
+    sdaTypesConverter.SetPythonSDATypeObject(PyTuple_GetItem(p_args, 2), newDataObject);
+
+    delete oldData.Car.pub.trkPos.seg;
+    delete oldData.SimCar.trkPos.seg;
+    for(int i = 0; i < 4; i++)
+    {
+        delete oldData.SimCar.wheel[i].trkPos.seg;
+    }
 
     return PyLong_FromDouble(1);
 }
