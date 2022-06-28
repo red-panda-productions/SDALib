@@ -54,6 +54,7 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData &p_data, SDAAction &p_acti
     data.Situation.cars[0]->ctrl.brakeCmd = p_action.Brake;
     data.Situation.cars[0]->ctrl.steer = p_action.Steer;
     data.Situation.cars[0]->ctrl.gear = p_action.Gear;
+    data.Situation.raceInfo.maxDammage = 0;
 
     SimCarTable[0] = CarConstructor(p_data.SimCar, data.Situation.cars[0]);
 
@@ -82,6 +83,14 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData &p_data, SDAAction &p_acti
     SimCarTable[0].transmission.differential->outAxis[1]->I = 0;
     SimCarTable[0].transmission.differential->outAxis[1]->Tq = 0;
     SimCarTable[0].transmission.differential->outAxis[1]->spinVel = 0;
+    SimCarTable[0].trkPos.seg->next = SimCarTable[0].trkPos.seg;
+    SimCarTable[0].trkPos.seg->prev = SimCarTable[0].trkPos.seg;
+    SimCarTable[0].trkPos.seg->lside = nullptr;
+    SimCarTable[0].trkPos.seg->rside = nullptr;
+    SimCarTable[0].fuel = 0;
+
+    SimCarTable[0].carElt->pub.state = RM_CAR_STATE_SIMU_NO_MOVE;
+    data.Situation.raceInfo.state = RM_RACE_RUNNING;
 
     // update the simulator
     double elapsed = 0;
@@ -836,7 +845,7 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
 
 void SDASpeedDreams::SimInstantReConfig(tCar *car)
 {
-    return; 
+    return;
 
     tCarSetupItem *setup;
 
@@ -1629,7 +1638,7 @@ tdble SDASpeedDreams::F(tWing *wing)
 
 void SDASpeedDreams::RtTrackGlobal2Local(tTrackSeg *segment, tdble X, tdble Y, tTrkLocPos *p, int type)
 {
-    int segnotfound = 1;
+    int segnotfound = 0;
     tdble x, y;
     tTrackSeg *seg = segment;
     tTrackSeg *sseg;
@@ -3211,6 +3220,7 @@ void SDASpeedDreams::RtTrackSurfaceNormalL(tTrkLocPos *p, t3Dd *norm)
 
 void SDASpeedDreams::SimCarCollideXYScene(tCar *car)
 {
+    return;
     tTrackSeg *seg = car->trkPos.seg;
     tTrkLocPos trkpos;
     int i;
