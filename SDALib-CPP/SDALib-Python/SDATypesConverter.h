@@ -52,7 +52,7 @@ public:
     void SetPythonTrackLocationObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonTrackSegmentObject(tTrackSeg& p_trackSeg);
-    tTrackSeg GetCppTrackSegmentObject(PyObject* p_trackSeg);
+    tTrackSeg* GetCppTrackSegmentObject(PyObject* p_trackSeg);
     void SetPythonTrackSegmentObject(PyObject* p_target, PyObject* p_data);
 
     PyObject* GetPythonCarRaceInfoObject(tCarRaceInfo& p_carRaceInfo);

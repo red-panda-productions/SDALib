@@ -8,7 +8,6 @@ import sys
 sys.path.append(site.getsitepackages())
 
 import SDATypes
-import simulator
 
 class SDADriver:
     speedLimit = 80
@@ -18,7 +17,6 @@ class SDADriver:
 
     # returns the decision maker action from the current SDAData
     def UpdateAI(self, sdaData):
-
         # find the velocity of the car
         speed = sdaData.car.pub.dynGC.vel.x * 3.6
         self.speedLimit = sdaData.car.pub.trkPos.seg.speedLimit

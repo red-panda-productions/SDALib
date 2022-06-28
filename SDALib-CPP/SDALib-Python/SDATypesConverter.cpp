@@ -221,6 +221,7 @@ SDAData SDATypesConverter::GetCppSDAData(PyObject *p_data)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSDATypeObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     SetPythonCarObject(PyObject_GetAttrString(p_target, "car"), PyObject_GetAttrString(p_data, "car"));
     SetPythonSituationObject(PyObject_GetAttrString(p_target, "situation"), PyObject_GetAttrString(p_data, "situation"));
     SetPythonCarSystObject(PyObject_GetAttrString(p_target, "simCar"), PyObject_GetAttrString(p_data, "simCar"));
@@ -271,6 +272,7 @@ tCarElt SDATypesConverter::GetCppCarObject(PyObject *p_car)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     COPY_PYTHON_OBJECT(p_target, p_data, "index");
     SetPythonCarInitObject(PyObject_GetAttrString(p_target, "info"), PyObject_GetAttrString(p_data, "info"));
     SetPythonCarPublicObject(PyObject_GetAttrString(p_target, "pub"), PyObject_GetAttrString(p_data, "pub"));
@@ -376,6 +378,7 @@ tInitCar SDATypesConverter::GetCppCarInitObject(PyObject *p_initCar)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarInitObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[16]{"name", "sName", "codename", "teamName", "carName", "category", "raceNumber",
                                   "startRank", "driverType", "networkPlayer", "skillLevel", "tank", "steerLock", "masterModel", "skinName", "skinTargets"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 16);
@@ -433,6 +436,7 @@ tWheelSpec SDATypesConverter::GetCppWheelSpecificationObject(PyObject *p_wheelSp
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonWheelSpecificationObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[5]{"rimRadius", "tireHeight", "tireWidth", "brakeDiskRadius", "wheelRadius"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 }
@@ -480,6 +484,7 @@ tVisualAttributes SDATypesConverter::GetCppVisualAttributesObject(PyObject *p_vi
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonVisualAttributesObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[2]{"exhaustNb", "exhaustPower"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 2);
 
@@ -535,11 +540,11 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
     publicCar.DynGCg = GetCppDynamicPointObject(PyObject_GetAttrString(p_publicCar, "dynGCg"));
     publicCar.speed = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_publicCar, "speed")));
 
-    PyObject *p_posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_publicCar, "posMat"));
-    PyObject *row1Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 0));
-    PyObject *row2Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 1));
-    PyObject *row3Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 2));
-    PyObject *row4Val = PyList_AsTuple(PyTuple_GetItem(p_posMatTuple, 3));
+    PyObject *posMatTuple = PyList_AsTuple(PyObject_GetAttrString(p_publicCar, "posMat"));
+    PyObject *row1Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 0));
+    PyObject *row2Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 1));
+    PyObject *row3Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 2));
+    PyObject *row4Val = PyList_AsTuple(PyTuple_GetItem(posMatTuple, 3));
 
     publicCar.posMat[0][0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 0)));
     publicCar.posMat[0][1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row1Val, 1)));
@@ -561,6 +566,12 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
     publicCar.posMat[3][2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 2)));
     publicCar.posMat[3][3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(row4Val, 3)));
 
+    Py_CLEAR(posMatTuple);
+    Py_CLEAR(row1Val);
+    Py_CLEAR(row2Val);
+    Py_CLEAR(row3Val);
+    Py_CLEAR(row4Val);
+
     publicCar.trkPos = GetCppTrackLocationObject(PyObject_GetAttrString(p_publicCar, "trkPos"));
     publicCar.state = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_publicCar, "state")));
 
@@ -570,6 +581,7 @@ tPublicCar SDATypesConverter::GetCppCarPublicObject(PyObject *p_publicCar)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarPublicObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[2]{"speed", "state"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 2);
 
@@ -631,6 +643,7 @@ tDynPt SDATypesConverter::GetCppDynamicPointObject(PyObject *p_dynPt)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDynamicPointObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     SetPythonPosDObject(PyObject_GetAttrString(p_target, "pos"), PyObject_GetAttrString(p_data, "pos"));
     SetPythonPosDObject(PyObject_GetAttrString(p_target, "vel"), PyObject_GetAttrString(p_data, "vel"));
     SetPythonPosDObject(PyObject_GetAttrString(p_target, "acc"), PyObject_GetAttrString(p_data, "acc"));
@@ -663,8 +676,7 @@ tTrkLocPos SDATypesConverter::GetCppTrackLocationObject(PyObject *p_trackLoc)
 {
     tTrkLocPos trackLocPos;
 
-    trackLocPos.seg = new tTrackSeg[1];
-    trackLocPos.seg[0] = GetCppTrackSegmentObject(PyObject_GetAttrString(p_trackLoc, "seg"));
+    trackLocPos.seg = GetCppTrackSegmentObject(PyObject_GetAttrString(p_trackLoc, "seg"));
     trackLocPos.type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackLoc, "type")));
     trackLocPos.toStart = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackLoc, "toStart")));
     trackLocPos.toRight = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackLoc, "toRight")));
@@ -677,6 +689,7 @@ tTrkLocPos SDATypesConverter::GetCppTrackLocationObject(PyObject *p_trackLoc)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonTrackLocationObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[5]{"type", "toStart", "toRight", "toMiddle", "toLeft"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 
@@ -741,55 +754,55 @@ PyObject *SDATypesConverter::GetPythonTrackSegmentObject(tTrackSeg &p_trackSeg)
 /// @brief gets the Cpp track segment object of the Python object
 /// @param  p_trackSeg The Python object
 /// @return           The Cpp object
-tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
+tTrackSeg *SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
 {
-    tTrackSeg segment = {};
-    segment.name = nullptr;
+    tTrackSeg *segment = new tTrackSeg;
+    segment->name = nullptr;
 
-    segment.id = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "trackId")));
-    segment.type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type")));
-    segment.type2 = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type2")));
-    segment.style = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "style")));
-    segment.length = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "length")));
-    segment.Time = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "time")));
-    segment.width = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "width")));
-    segment.startWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "startWidth")));
-    segment.endWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "endWidth")));
-    segment.lgfromstart = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "lgFromStart")));
-    segment.radius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radius")));
-    segment.radiusr = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusR")));
-    segment.radiusl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusL")));
-    segment.arc = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "arc")));
-    segment.center = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "center"));
+    segment->id = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "id")));
+    segment->type = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type")));
+    segment->type2 = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "type2")));
+    segment->style = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "style")));
+    segment->length = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "length")));
+    segment->Time = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "time")));
+    segment->width = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "width")));
+    segment->startWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "startWidth")));
+    segment->endWidth = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "endWidth")));
+    segment->lgfromstart = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "lgFromStart")));
+    segment->radius = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radius")));
+    segment->radiusr = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusR")));
+    segment->radiusl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "radiusL")));
+    segment->arc = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "arc")));
+    segment->center = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "center"));
 
     PyObject *vertexTuple = PyList_AsTuple(PyObject_GetAttrString(p_trackSeg, "vertex"));
-    segment.vertex[0] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 0));
-    segment.vertex[1] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 1));
-    segment.vertex[2] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 2));
-    segment.vertex[3] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 3));
+    segment->vertex[0] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 0));
+    segment->vertex[1] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 1));
+    segment->vertex[2] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 2));
+    segment->vertex[3] = GetCppTVectorObject(PyTuple_GetItem(vertexTuple, 3));
     Py_CLEAR(vertexTuple);
 
     PyObject *angleTuple = PyList_AsTuple(PyObject_GetAttrString(p_trackSeg, "angle"));
-    segment.angle[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 0)));
-    segment.angle[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 1)));
-    segment.angle[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 2)));
-    segment.angle[3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 3)));
-    segment.angle[4] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 4)));
-    segment.angle[5] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 5)));
-    segment.angle[6] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 6)));
+    segment->angle[0] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 0)));
+    segment->angle[1] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 1)));
+    segment->angle[2] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 2)));
+    segment->angle[3] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 3)));
+    segment->angle[4] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 4)));
+    segment->angle[5] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 5)));
+    segment->angle[6] = static_cast<float>(PyFloat_AsDouble(PyTuple_GetItem(angleTuple, 6)));
     Py_CLEAR(angleTuple);
 
-    segment.sin = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "sin")));
-    segment.cos = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "cos")));
-    segment.Kzl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzl")));
-    segment.Kzw = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzw")));
-    segment.Kyl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kyl")));
-    segment.rgtSideNormal = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "rgtSideNormal"));
-    segment.envIndex = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "envIndex")));
-    segment.height = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "height")));
-    segment.raceInfo = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "raceInfo")));
-    segment.DoVfactor = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "doVFactor")));
-    segment.SpeedLimit = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "speedLimit")));
+    segment->sin = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "sin")));
+    segment->cos = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "cos")));
+    segment->Kzl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzl")));
+    segment->Kzw = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kzw")));
+    segment->Kyl = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "kyl")));
+    segment->rgtSideNormal = GetCppTVectorObject(PyObject_GetAttrString(p_trackSeg, "rgtSideNormal"));
+    segment->envIndex = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "envIndex")));
+    segment->height = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "height")));
+    segment->raceInfo = static_cast<int>(PyLong_AsLong(PyObject_GetAttrString(p_trackSeg, "raceInfo")));
+    segment->DoVfactor = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "doVFactor")));
+    segment->SpeedLimit = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_trackSeg, "speedLimit")));
 
     return segment;
 }
@@ -797,6 +810,7 @@ tTrackSeg SDATypesConverter::GetCppTrackSegmentObject(PyObject *p_trackSeg)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonTrackSegmentObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[24]{"id", "type", "type2", "style", "length", "time", "width", "startWidth", "endWidth", "lgFromStart", "radius", "radiusR",
                                   "radiusL", "arc", "sin", "cos", "kzl", "kzw", "kyl", "envIndex", "height",
                                   "raceInfo", "doVFactor", "speedLimit"};
@@ -891,6 +905,7 @@ tCarRaceInfo SDATypesConverter::GetCppCarRaceInfoObject(PyObject *p_carRaceInfo)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarRaceInfoObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[27]{"bestLapTime", "commitBestLapTime", "deltaBestLapTime", "curLapTime",
                                   "lastLapTime", "curTime", "topSpeed", "currentMinSpeedForLap", "laps", "bestLap", "nbPitStops", "remainingLaps", "pos",
                                   "timeBehindLeader", "lapsBehindLeader", "timeBehindPrev", "timeBeforeNext", "distRaced", "distFromStartLine",
@@ -1063,6 +1078,7 @@ tPrivCar SDATypesConverter::GetCppCarPrivObject(PyObject *p_privCar)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarPrivObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[29]{"driverIndex", "moduleIndex", "modName", "gear", "gearNext", "fuel",
                                   "fuelConsumptionTotal", "fuelConsumptionInstant", "engineRPM", "engineRPMRedLine", "engineRPMMax",
                                   "engineRPMMaxTq", "engineRPMMaxPw", "engineMaxTq", "engineMaxPw", "gearNb",
@@ -1127,6 +1143,7 @@ tPosd SDATypesConverter::GetCppPosDObject(PyObject *p_posD)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonPosDObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[7]{"x", "y", "z", "xy", "ax", "ay", "az"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 7);
 }
@@ -1167,6 +1184,7 @@ tCollisionState SDATypesConverter::GetCppCollisionStateObject(PyObject *p_collis
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCollisionStateObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     COPY_PYTHON_OBJECT(p_target, p_data, "collisionCount");
     SetPythonVectorObject(PyObject_GetAttrString(p_target, "pos"), PyObject_GetAttrString(p_data, "pos"));
     SetPythonVectorObject(PyObject_GetAttrString(p_target, "force"), PyObject_GetAttrString(p_data, "force"));
@@ -1218,6 +1236,7 @@ t3Dd SDATypesConverter::GetCppTVectorObject(PyObject *p_vec)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonVectorObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[3]{"x", "y", "z"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 }
@@ -1315,6 +1334,7 @@ tCarCtrl SDATypesConverter::GetCppCarCtrlObject(PyObject *p_carCtrl)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarCtrlObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[20]{"steer", "accelCmd", "brakeCmd", "clutchCmd", "brakeFrontLeftCmd", "brakeFrontRightCmd", "brakeRearLeftCmd",
                                   "brakeRearRightCmd", "wingFrontCmd", "wingRearCmd", "reserved1", "reserved2", "gear", "raceCmd", "lightCmd", "eBrakeCmd",
                                   "wingControlMode", "singleWheelBrakeMode", "switch3", "telemetryMode"};
@@ -1670,6 +1690,7 @@ tCarSetup SDATypesConverter::GetCppCarSetupObject(PyObject *p_carSetup)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarSetupObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "wingAngle", 2);
     COPY_PYTHON_CARSETUP_ARRAY(p_target, p_data, "gearRatio", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "differentialType", 3);
@@ -1761,6 +1782,7 @@ tCarSetupItem SDATypesConverter::GetCppCarSetupItemObject(PyObject *p_carSetupIt
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarSetupItemObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[6]{"value", "min", "max", "desiredValue", "stepSize", "changed"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 }
@@ -1803,6 +1825,7 @@ tCarPitCmd SDATypesConverter::GetCppCarPitCmdObject(PyObject *p_carPitCmd)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarPitCmdObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[5]{"fuel", "repair", "stopType", "setupChanged", "tireChange"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 }
@@ -1845,6 +1868,7 @@ tSituation SDATypesConverter::GetCppSituationObject(PyObject *p_situation)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSituationObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[4]{"deltaTime", "currentTime", "accelTime", "nbPlayers"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 4);
 
@@ -1897,6 +1921,7 @@ tRaceAdmInfo SDATypesConverter::GetCppRaceInfoObject(PyObject *p_raceInfo)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonRaceInfoObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[9]{"ncars", "totLaps", "extraLaps", "totTime", "state", "type", "maxDamage", "fps", "features"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 9);
 }
@@ -1980,6 +2005,7 @@ tAero SDATypesConverter::GetCppAeroObject(PyObject *p_aero)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonAeroObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[3]{"drag", "Cd", "CdBody"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
     COPY_PYTHON_ARRAY(p_target, p_data, "lift", 2);
@@ -2068,6 +2094,7 @@ tWing SDATypesConverter::GetCppWingObject(PyObject *p_wing)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonWingObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[27]{"Kx", "Kz", "Kz_org", "angle", "AoAatMax", "AoAatZero", "AoAatZRad",
                                   "AoAOffset", "CliftMax", "CliftZero", "CliftAsymp",
                                   "a", "b", "c", "d", "f", "AoStall", "Stallw", "AR", "Kx1", "Kx2", "Kx3", "Kx4", "Kz1", "Kz2",
@@ -2112,6 +2139,7 @@ tDamperDef SDATypesConverter::GetCppDamperDefObject(PyObject *p_damperDef)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDamperDefObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[5]{"C1", "b1", "v1", "C2", "b2"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 }
@@ -2144,6 +2172,7 @@ tDamper SDATypesConverter::GetCppDamperObject(PyObject *p_damper)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDamperObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     SetPythonDamperDefObject(PyObject_GetAttrString(p_target, "bump"), PyObject_GetAttrString(p_data, "bump"));
     SetPythonDamperDefObject(PyObject_GetAttrString(p_target, "rebound"), PyObject_GetAttrString(p_data, "rebound"));
 }
@@ -2184,6 +2213,7 @@ tSpring SDATypesConverter::GetCppSpringObject(PyObject *p_spring)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSpringObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[6]{"K", "F0", "x0", "xMax", "bellcrank", "packers"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 }
@@ -2228,6 +2258,7 @@ tSuspension SDATypesConverter::GetCppSuspensionObject(PyObject *p_suspension)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSuspensionObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[6]{"inertance", "x", "v", "a", "force", "state"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 
@@ -2277,6 +2308,7 @@ tBrake SDATypesConverter::GetCppBrakeObject(PyObject *p_brake)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonBrakeObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[9]{"pressure", "Tq", "coeff", "I", "radius", "temp", "TCL", "ABS", "EnableABS"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 9);
 }
@@ -2311,6 +2343,7 @@ tBrakeSyst SDATypesConverter::GetCppBrakeSystObject(PyObject *p_brakeSyst)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonBrakeSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[3]{"rep", "coeff", "ebrake_pressure"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 }
@@ -2347,6 +2380,7 @@ tDynAxis SDATypesConverter::GetCppDynAxisSystObject(PyObject *p_dynAxis)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDynAxisSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[4]{"spinVel", "Tq", "brkTq", "I"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 4);
 }
@@ -2403,6 +2437,7 @@ tDifferential SDATypesConverter::GetCppDifferentialSystObject(PyObject *p_differ
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonDifferentialSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[12]{"type", "ratio", "I", "efficiency", "bias", "dTqMin", "dTqMax", "dSlipMax", "dCoastSlipMax",
                                   "lockInputTq", "viscosity", "viscomax"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 12);
@@ -2436,7 +2471,7 @@ tAxle SDATypesConverter::GetCppAxleSystObject(PyObject *p_axle)
     tAxle axle;
 
     axle.xpos = static_cast<float>(PyFloat_AsDouble(PyObject_GetAttrString(p_axle, "xpos")));
-    axle.arbSusp = GetCppSuspensionObject(PyObject_GetAttrString(p_axle, "arbSusparbSusp"));
+    axle.arbSusp = GetCppSuspensionObject(PyObject_GetAttrString(p_axle, "arbSusp"));
     axle.heaveSusp = GetCppSuspensionObject(PyObject_GetAttrString(p_axle, "heaveSusp"));
 
     PyObject *forceVal = PyList_AsTuple(PyObject_GetAttrString(p_axle, "force"));
@@ -2453,10 +2488,11 @@ tAxle SDATypesConverter::GetCppAxleSystObject(PyObject *p_axle)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonAxleSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[3]{"xpos", "wheight0", "I"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 
-    SetPythonSuspensionObject(PyObject_GetAttrString(p_target, "arbSusparbSusp"), PyObject_GetAttrString(p_data, "arbSusparbSusp"));
+    SetPythonSuspensionObject(PyObject_GetAttrString(p_target, "arbSusp"), PyObject_GetAttrString(p_data, "arbSusp"));
     SetPythonSuspensionObject(PyObject_GetAttrString(p_target, "heaveSusp"), PyObject_GetAttrString(p_data, "heaveSusp"));
     COPY_PYTHON_ARRAY(p_target, p_data, "force", 2);
 }
@@ -2491,6 +2527,7 @@ tSteer SDATypesConverter::GetCppSteerSystObject(PyObject *p_steer)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonSteerSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[3]{"steerLock", "maxSpeed", "steer"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 3);
 }
@@ -2649,6 +2686,7 @@ tWheel SDATypesConverter::GetCppWheelSystObject(PyObject *p_wheel)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonWheelSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[46]{"torqueAlign", "roolRes", "rideHeight", "zRoad", "driveTq", "vt", "spinTq", "spinVel", "prespinVel", "state",
                                   "axleFz", "axleFz3rd", "sa", "sx", "steer", "cosax", "sinax", "weight0", "tireSpringRate", "radius", "mu", "I", "curI", "mfC", "mfB", "mfE",
                                   "lfMax", "lfMin", "lfK", "opLoad", "AlignTqFactor", "mass", "camber", "pressure", "Ttire", "Topt", "Tinit", "muTmult", "heatingm", "aircoolm", "speedcoolm",
@@ -2708,6 +2746,7 @@ tGearbox SDATypesConverter::GetCppGearBoxObject(PyObject *p_gearBox)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonGearBoxObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[6]{"gear", "gearMin", "gearMax", "gearNext", "shiftTime", "timeToEngage"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 }
@@ -2746,6 +2785,7 @@ tClutch SDATypesConverter::GetCppClutchObject(PyObject *p_clutch)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonClutchObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[5]{"state", "mode", "timeToRelease", "releaseTime", "transferValue"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 5);
 }
@@ -2908,10 +2948,12 @@ tTransmission SDATypesConverter::GetCppTransmissionSystObject(PyObject *p_transm
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonTransmissionSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     COPY_PYTHON_OBJECT(p_target, p_data, "currI");
     COPY_PYTHON_OBJECT(p_target, p_data, "type");
     COPY_PYTHON_ARRAY(p_target, p_data, "overallRatio", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "gearI", 10);
+    COPY_PYTHON_ARRAY(p_target, p_data, "driveI", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "driveI", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "freeI", 10);
     COPY_PYTHON_ARRAY(p_target, p_data, "gearEff", 10);
@@ -2960,6 +3002,7 @@ tEngineCurve SDATypesConverter::GetCppEngineCurveObject(PyObject *p_engineCurve)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonEngineCurveObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[6]{"maxTq", "maxPw", "rpmMaxPw", "TqAtMaxPw", "rpmMaxTq", "npPts"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 6);
 }
@@ -3024,6 +3067,7 @@ tEngine SDATypesConverter::GetCppEngineSystObject(PyObject *p_engine)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonEngineSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[17]{"revsLimiter", "revsMax", "tickover", "I", "rads", "Tq", "Tq_response", "I_joint", "fuelcons",
                                   "brakeCoeff", "brakeLinCoeff", "pressure", "exhaust_pressure", "exhaust_refract", "timeInLimiter", "TCL", "EnableTCL"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 17);
@@ -3215,6 +3259,7 @@ tCar SDATypesConverter::GetCppCarSystObject(PyObject *p_car)
 /// @brief Copies the PyObject to a new PyObject
 void SDATypesConverter::SetPythonCarSystObject(PyObject *p_target, PyObject *p_data)
 {
+    if (p_target == nullptr || p_data == nullptr) return;
     const char *attributeList[17]{"mass", "Minv", "tank", "fuel", "fuel_consumption", "fuel_prev", "fuel_time", "airSpeed2", "Cosz", "Sinz", "collision", "wheelbase", "wheeltrack",
                                   "blocked", "dammage", "features", "collisionAware"};
     COPY_PYTHON_OBJECT_LIST(p_target, p_data, attributeList, 17);

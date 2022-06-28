@@ -54,6 +54,7 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData &p_data, SDAAction &p_acti
     data.Situation.cars[0]->ctrl.brakeCmd = p_action.Brake;
     data.Situation.cars[0]->ctrl.steer = p_action.Steer;
     data.Situation.cars[0]->ctrl.gear = p_action.Gear;
+    data.Situation.raceInfo.maxDammage = 0;
 
     SimCarTable[0] = CarConstructor(p_data.SimCar, data.Situation.cars[0]);
 
@@ -93,7 +94,6 @@ SDAData SDASpeedDreams::UpdateSimulator(const SDAData &p_data, SDAAction &p_acti
     }
 
     data.SimCar = SimCarTable[0];
-
     delete data.Situation.cars[0];
     delete[] data.Situation.cars;
     delete SimCarTable[0].engine.curve.data;
@@ -837,8 +837,6 @@ void SDASpeedDreams::ctrlCheck(tCar *car)
 
 void SDASpeedDreams::SimInstantReConfig(tCar *car)
 {
-    return; 
-
     tCarSetupItem *setup;
 
     if (car->ctrl->setupChangeCmd)
